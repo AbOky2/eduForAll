@@ -1,0 +1,786 @@
+{
+ "generatedAt": "2026-07-13T00:00:00.000Z",
+ "voice": "placeholder-tts",
+ "entries": [
+  {
+   "id": "hint-commence-par-ce-que-tu-connais-deja",
+   "file": "fr/hint-commence-par-ce-que-tu-connais-deja.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-compte-d-abord-le-premier-groupe-puis-ajoute-le-deuxieme",
+   "file": "fr/hint-compte-d-abord-le-premier-groupe-puis-ajoute-le-deuxieme.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-compte-dans-ta-tete-doucement",
+   "file": "fr/hint-compte-dans-ta-tete-doucement.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-dis-le-mot-lentement-dans-ta-tete",
+   "file": "fr/hint-dis-le-mot-lentement-dans-ta-tete.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-ecoute-encore-l-histoire-la-reponse-s-y-trouve",
+   "file": "fr/hint-ecoute-encore-l-histoire-la-reponse-s-y-trouve.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-ecoute-encore-le-mot",
+   "file": "fr/hint-ecoute-encore-le-mot.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-ecoute-encore-une-fois",
+   "file": "fr/hint-ecoute-encore-une-fois.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-ecoute-encore-une-fois-puis-regarde-bien-chaque-lettre",
+   "file": "fr/hint-ecoute-encore-une-fois-puis-regarde-bien-chaque-lettre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-ecoute-la-phrase-quel-est-le-premier-mot",
+   "file": "fr/hint-ecoute-la-phrase-quel-est-le-premier-mot.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-ecoute-le-mot-puis-cherche-la-premiere-syllabe",
+   "file": "fr/hint-ecoute-le-mot-puis-cherche-la-premiere-syllabe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-enleve-les-objets-un-par-un",
+   "file": "fr/hint-enleve-les-objets-un-par-un.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-imagine-la-scene-avec-des-objets",
+   "file": "fr/hint-imagine-la-scene-avec-des-objets.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-pense-a-la-file-des-nombres",
+   "file": "fr/hint-pense-a-la-file-des-nombres.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-regarde-bien-la-premiere-lettre",
+   "file": "fr/hint-regarde-bien-la-premiere-lettre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-relis-la-question-doucement",
+   "file": "fr/hint-relis-la-question-doucement.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-suis-le-chemin-en-partant-du-point",
+   "file": "fr/hint-suis-le-chemin-en-partant-du-point.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-touche-chaque-image-en-comptant-dans-ta-tete",
+   "file": "fr/hint-touche-chaque-image-en-comptant-dans-ta-tete.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-amina-va-au-marche-avec-sa-maman-elle-achete-troi",
+   "file": "fr/histoire-amina-va-au-marche-avec-sa-maman-elle-achete-troi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-la-pluie-tombe-sur-le-village-zara-met-son-livre",
+   "file": "fr/histoire-la-pluie-tombe-sur-le-village-zara-met-son-livre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-le-soir-mahamat-garde-les-chevres-pres-du-puits",
+   "file": "fr/histoire-le-soir-mahamat-garde-les-chevres-pres-du-puits.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-15-moins-6-combien-reste-t-il",
+   "file": "fr/instr-15-moins-6-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-18-moins-6-combien-reste-t-il",
+   "file": "fr/instr-18-moins-6-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-30-moins-12-combien-reste-t-il",
+   "file": "fr/instr-30-moins-12-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-45-moins-15-combien-reste-t-il",
+   "file": "fr/instr-45-moins-15-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-5-moins-2-combien-reste-t-il",
+   "file": "fr/instr-5-moins-2-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-7-moins-3-combien-reste-t-il",
+   "file": "fr/instr-7-moins-3-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-9-moins-4-combien-reste-t-il",
+   "file": "fr/instr-9-moins-4-combien-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-associe-ce-qui-va-ensemble",
+   "file": "fr/instr-associe-ce-qui-va-ensemble.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-12-et-5",
+   "file": "fr/instr-combien-font-12-et-5.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-15-et-10",
+   "file": "fr/instr-combien-font-15-et-10.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-2-et-3",
+   "file": "fr/instr-combien-font-2-et-3.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-20-et-14",
+   "file": "fr/instr-combien-font-20-et-14.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-23-et-12",
+   "file": "fr/instr-combien-font-23-et-12.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-4-et-2",
+   "file": "fr/instr-combien-font-4-et-2.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-5-et-4",
+   "file": "fr/instr-combien-font-5-et-4.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-8-et-5",
+   "file": "fr/instr-combien-font-8-et-5.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-complete-le-mot-avec-la-bonne-lettre",
+   "file": "fr/instr-complete-le-mot-avec-la-bonne-lettre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-compte-les-calebasses",
+   "file": "fr/instr-compte-les-calebasses.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-compte-les-chevres",
+   "file": "fr/instr-compte-les-chevres.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-compte-les-etoiles",
+   "file": "fr/instr-compte-les-etoiles.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-compte-les-mangues",
+   "file": "fr/instr-compte-les-mangues.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ecoute-bien",
+   "file": "fr/instr-ecoute-bien.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ecoute-bien-le-petit-probleme",
+   "file": "fr/instr-ecoute-bien-le-petit-probleme.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ecoute-la-petite-histoire",
+   "file": "fr/instr-ecoute-la-petite-histoire.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ecoute-puis-repete-a-voix-haute",
+   "file": "fr/instr-ecoute-puis-repete-a-voix-haute.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-forme-la-syllabe",
+   "file": "fr/instr-forme-la-syllabe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-forme-le-mot-que-tu-entends",
+   "file": "fr/instr-forme-le-mot-que-tu-entends.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-lis-bien-puis-choisis-la-bonne-reponse",
+   "file": "fr/instr-lis-bien-puis-choisis-la-bonne-reponse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-viens-tu-d-entendre",
+   "file": "fr/instr-que-viens-tu-d-entendre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-quel-nombre-manque",
+   "file": "fr/instr-quel-nombre-manque.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-remets-les-mots-dans-l-ordre",
+   "file": "fr/instr-remets-les-mots-dans-l-ordre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-l-image-du-mot-que-tu-entends",
+   "file": "fr/instr-touche-l-image-du-mot-que-tu-entends.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-lettre-que-tu-entends",
+   "file": "fr/instr-touche-la-lettre-que-tu-entends.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-nombre-le-plus-grand",
+   "file": "fr/instr-touche-le-nombre-le-plus-grand.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-nombre-le-plus-petit",
+   "file": "fr/instr-touche-le-nombre-le-plus-petit.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-la-lettre-avec-ton-doigt",
+   "file": "fr/instr-trace-la-lettre-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-a",
+   "file": "fr/lettre-a.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-b",
+   "file": "fr/lettre-b.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-d",
+   "file": "fr/lettre-d.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-e",
+   "file": "fr/lettre-e.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-e-accent",
+   "file": "fr/lettre-e-accent.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-i",
+   "file": "fr/lettre-i.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-l",
+   "file": "fr/lettre-l.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-m",
+   "file": "fr/lettre-m.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-o",
+   "file": "fr/lettre-o.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-p",
+   "file": "fr/lettre-p.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-s",
+   "file": "fr/lettre-s.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-t",
+   "file": "fr/lettre-t.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-u",
+   "file": "fr/lettre-u.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ami",
+   "file": "fr/mot-ami.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-banane",
+   "file": "fr/mot-banane.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-bois",
+   "file": "fr/mot-bois.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-chat",
+   "file": "fr/mot-chat.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-dodo",
+   "file": "fr/mot-dodo.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lit",
+   "file": "fr/mot-lit.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-loup",
+   "file": "fr/mot-loup.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mama",
+   "file": "fr/mot-mama.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-maman",
+   "file": "fr/mot-maman.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-melon",
+   "file": "fr/mot-melon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-moto",
+   "file": "fr/mot-moto.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mouche",
+   "file": "fr/mot-mouche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mouton",
+   "file": "fr/mot-mouton.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-papa",
+   "file": "fr/mot-papa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-roi",
+   "file": "fr/mot-roi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-salade",
+   "file": "fr/mot-salade.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-savon",
+   "file": "fr/mot-savon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tata",
+   "file": "fr/mot-tata.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tomate",
+   "file": "fr/mot-tomate.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-10",
+   "file": "fr/nombre-10.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-100",
+   "file": "fr/nombre-100.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-13",
+   "file": "fr/nombre-13.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-16",
+   "file": "fr/nombre-16.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-2",
+   "file": "fr/nombre-2.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-3",
+   "file": "fr/nombre-3.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-4",
+   "file": "fr/nombre-4.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-40",
+   "file": "fr/nombre-40.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-5",
+   "file": "fr/nombre-5.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-6",
+   "file": "fr/nombre-6.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-7",
+   "file": "fr/nombre-7.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-70",
+   "file": "fr/nombre-70.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-8",
+   "file": "fr/nombre-8.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "nombre-9",
+   "file": "fr/nombre-9.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ali-a-25-chevres-il-en-vend-10-au-marche-combien-de-chevres-",
+   "file": "fr/phrase-ali-a-25-chevres-il-en-vend-10-au-marche-combien-de-chevres-.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ali-a-6-chevres-2-chevres-partent-au-puits-combien-de-chevre",
+   "file": "fr/phrase-ali-a-6-chevres-2-chevres-partent-au-puits-combien-de-chevre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ali-lit-un-livre",
+   "file": "fr/phrase-ali-lit-un-livre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-amina-a-3-mangues-moussa-lui-donne-2-mangues-combien-de-mang",
+   "file": "fr/phrase-amina-a-3-mangues-moussa-lui-donne-2-mangues-combien-de-mang.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-amina-va-au-marche",
+   "file": "fr/phrase-amina-va-au-marche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-au-marche-khadidja-vend-14-mangues-le-matin-et-12-mangues-le",
+   "file": "fr/phrase-au-marche-khadidja-vend-14-mangues-le-matin-et-12-mangues-le.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-dans-la-classe-il-y-a-12-filles-et-13-garcons-combien-y-a-t-",
+   "file": "fr/phrase-dans-la-classe-il-y-a-12-filles-et-13-garcons-combien-y-a-t-.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-banane-de-zara",
+   "file": "fr/phrase-la-banane-de-zara.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-chevre-mange",
+   "file": "fr/phrase-la-chevre-mange.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-moto-de-papa",
+   "file": "fr/phrase-la-moto-de-papa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-chat-boit-du-lait",
+   "file": "fr/phrase-le-chat-boit-du-lait.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-chat-dort-sur-le-lit",
+   "file": "fr/phrase-le-chat-dort-sur-le-lit.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-mouton-boit-au-puits",
+   "file": "fr/phrase-le-mouton-boit-au-puits.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-petit-chat",
+   "file": "fr/phrase-le-petit-chat.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-roi-a-un-mouton",
+   "file": "fr/phrase-le-roi-a-un-mouton.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-soleil-brille",
+   "file": "fr/phrase-le-soleil-brille.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-maman-achete-un-melon",
+   "file": "fr/phrase-maman-achete-un-melon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-maman-prepare-la-salade",
+   "file": "fr/phrase-maman-prepare-la-salade.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mariam-a-8-calebasses-elle-en-remplit-3-d-eau-combien-de-cal",
+   "file": "fr/phrase-mariam-a-8-calebasses-elle-en-remplit-3-d-eau-combien-de-cal.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-moussa-cueille-20-mangues-il-en-donne-5-a-ses-amis-combien-d",
+   "file": "fr/phrase-moussa-cueille-20-mangues-il-en-donne-5-a-ses-amis-combien-d.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ou-mahamat-garde-t-il-les-chevres",
+   "file": "fr/phrase-ou-mahamat-garde-t-il-les-chevres.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-que-fait-zara-sous-l-arbre",
+   "file": "fr/phrase-que-fait-zara-sous-l-arbre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-que-partage-amina-avec-moussa",
+   "file": "fr/phrase-que-partage-amina-avec-moussa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-touche-la-bonne-image",
+   "file": "fr/phrase-touche-la-bonne-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-un-grand-mouton",
+   "file": "fr/phrase-un-grand-mouton.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-an",
+   "file": "fr/syllabe-an.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ba",
+   "file": "fr/syllabe-ba.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-banane",
+   "file": "fr/syllabe-banane.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-be",
+   "file": "fr/syllabe-be.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bi",
+   "file": "fr/syllabe-bi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bo",
+   "file": "fr/syllabe-bo.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bois",
+   "file": "fr/syllabe-bois.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ch",
+   "file": "fr/syllabe-ch.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-la",
+   "file": "fr/syllabe-la.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-le",
+   "file": "fr/syllabe-le.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-li",
+   "file": "fr/syllabe-li.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-lu",
+   "file": "fr/syllabe-lu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ma",
+   "file": "fr/syllabe-ma.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-me",
+   "file": "fr/syllabe-me.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-melon",
+   "file": "fr/syllabe-melon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-mi",
+   "file": "fr/syllabe-mi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-mouche",
+   "file": "fr/syllabe-mouche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-mouton",
+   "file": "fr/syllabe-mouton.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-oi",
+   "file": "fr/syllabe-oi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-on",
+   "file": "fr/syllabe-on.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ou",
+   "file": "fr/syllabe-ou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-papa",
+   "file": "fr/syllabe-papa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-sa",
+   "file": "fr/syllabe-sa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-salade",
+   "file": "fr/syllabe-salade.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-si",
+   "file": "fr/syllabe-si.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-so",
+   "file": "fr/syllabe-so.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ta",
+   "file": "fr/syllabe-ta.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ti",
+   "file": "fr/syllabe-ti.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-to",
+   "file": "fr/syllabe-to.m4a",
+   "placeholder": true
+  }
+ ]
+}

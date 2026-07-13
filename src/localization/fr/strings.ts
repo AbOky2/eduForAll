@@ -1,0 +1,163 @@
+/**
+ * French UI copy — V1 ships entirely in French. Keys are semantic; screens
+ * never hardcode visible text. Pedagogical content lives in the curriculum
+ * manifests, not here.
+ */
+export const fr = {
+  common: {
+    appName: 'ALIFA',
+    next: 'Suivant',
+    start: 'Commencer',
+    continue: 'Continuer',
+    verify: 'Vérifier',
+    replay: 'Rejouer',
+    skip: 'Passer',
+    back: 'Retour',
+    understood: 'C’est compris',
+    listen: 'Écouter',
+    cancel: 'Annuler',
+    confirm: 'Confirmer',
+    retry: 'Réessayer',
+  },
+  onboarding: {
+    welcomeTitle: 'Ton école t’accompagne partout.',
+    subjectsTitle: 'Lecture, dictée, écriture et calcul.',
+    subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
+    offlineTitle: 'Fonctionne sans connexion.',
+    offlineSubtitle: 'Apprends partout, tout le temps.',
+    createProfile: 'Créer mon profil',
+    tagline: 'Apprendre partout, même sans internet',
+  },
+  profile: {
+    title: 'Crée ton profil',
+    subtitle: 'Choisis ton avatar et ton niveau',
+    avatarLabel: 'Ton avatar',
+    firstNameLabel: 'Ton prénom',
+    firstNamePlaceholder: 'Écris ton prénom ici',
+    levelLabel: 'Ton niveau',
+    go: 'C’est parti !',
+    privacyNote: 'Pas d’email, pas de mot de passe. Tes données restent sur ce téléphone.',
+    whoLearns: 'Qui apprend aujourd’hui ?',
+    addProfile: 'Nouveau profil',
+  },
+  home: {
+    greeting: (firstName: string) => `Bonjour ${firstName} !`,
+    readyToLearn: 'Prête à apprendre ?',
+    readyToLearnGeneric: 'On apprend ensemble ?',
+    inProgress: 'EN COURS',
+    continueLesson: 'Continuer ma leçon',
+    startLesson: 'Ma prochaine leçon',
+    activities: 'Tes activités',
+    newBadge: 'Nouveau !',
+    lessonsDone: (count: number) =>
+      count > 1 ? `${count} leçons terminées` : `${count} leçon terminée`,
+  },
+  subjects: {
+    reading: 'Lecture',
+    writing: 'Écriture',
+    dictation: 'Dictée',
+    math: 'Calcul',
+  },
+  tabs: {
+    home: 'Accueil',
+    learn: 'Apprendre',
+    parents: 'Parents',
+  },
+  learn: {
+    chooseModule: 'Choisis ton module',
+    readyToday: 'Prêt à apprendre aujourd’hui ?',
+    levelTitle: (level: string) => `Niveau ${level}`,
+    cp1Motto: 'Continue ton aventure !',
+    cp2Motto: 'En route vers l’oasis des savoirs !',
+    locked: 'Encore un peu de patience !',
+    lockedHint: 'Termine d’abord le monde précédent.',
+  },
+  lesson: {
+    exerciseCount: (current: number, total: number) => `Exercice ${current} sur ${total}`,
+    quit: 'Quitter la leçon ?',
+    quitMessage: 'Ta progression est gardée. Tu pourras reprendre ici.',
+    quitConfirm: 'Oui, je m’arrête',
+    quitCancel: 'Je continue',
+    resumeTitle: 'Bon retour !',
+    resumeMessage: 'On reprend ta leçon là où tu t’étais arrêté.',
+    hint: 'Un indice',
+    dragHere: 'Glisse les lettres ici',
+    feedbackCorrect: ['Bien joué !', 'Bravo !', 'Tu progresses !', 'Super !', 'C’est ça !'],
+    feedbackIncorrect: [
+      'Presque ! Essayons ensemble.',
+      'Écoute encore une fois.',
+      'Regarde bien, tu vas y arriver.',
+      'On réessaie, tout doucement.',
+    ],
+    listenAndRepeat: 'Écoute, puis répète à voix haute.',
+    repeatDone: 'J’ai répété !',
+  },
+  result: {
+    title: 'Bravo ! Tu as terminé la leçon.',
+    oneMoreStar: 'Tu peux rejouer pour gagner plus d’étoiles.',
+    needsReview: 'On reverra certaines notions ensemble, tout va bien.',
+  },
+  revision: {
+    title: 'On va revoir ce qui est difficile.',
+    subtitle: 'Pas de stress, on prend notre temps pour bien comprendre.',
+    start: 'Commencer la révision',
+    empty: 'Rien à revoir pour l’instant. Continue comme ça !',
+  },
+  offline: {
+    badge: 'Mode hors-connexion actif',
+    title: 'Tu peux continuer à apprendre sans internet.',
+    subtitle: 'Tes leçons favorites sont toujours là.',
+  },
+  parent: {
+    gateTitle: 'Espace parents',
+    gateSubtitle: 'Cet espace est réservé aux parents.',
+    gateQuestion: 'Pour entrer, réponds à cette question :',
+    gateWrong: 'Ce n’est pas la bonne réponse.',
+    dashboardTitle: (firstName: string) => `Tableau de bord d’${firstName}`,
+    dashboardSubtitle: 'Suivez sa progression et ses accomplissements récents.',
+    currentLevel: 'Niveau actuel',
+    lessonsCompleted: 'Leçons complétées',
+    timeToday: 'Temps aujourd’hui',
+    minutes: (count: number) => `${count} min`,
+    progressAnalysis: 'Analyse de progression',
+    recommendation: 'RECOMMANDATION',
+    toReview: 'Notions à revoir',
+    nothingToReview: 'Aucune notion en difficulté cette semaine.',
+    proudTitle: 'Fier des résultats ?',
+    share: 'Partager la progression',
+    switchProfile: 'Changer de profil',
+  },
+  settings: {
+    title: 'Paramètres',
+    sound: 'Son',
+    language: 'Langue',
+    french: 'Français',
+    chadianArabic: 'Arabe tchadien',
+    comingSoon: 'Bientôt disponible',
+    offlineInfo: 'Informations offline',
+    offlineStatus: 'Tout est téléchargé',
+    about: 'À propos du projet',
+    privacy: 'Confidentialité',
+    diagnostics: 'Diagnostic',
+    resetProgress: 'Réinitialiser progression',
+    resetTitle: 'Tout effacer ?',
+    resetMessage:
+      'La progression, les étoiles et les profils seront supprimés pour toujours. Cette action est irréversible.',
+    resetConfirm: 'Oui, tout effacer',
+  },
+  errors: {
+    genericTitle: 'Oups, quelque chose s’est mal passé.',
+    genericMessage: 'Ce n’est pas de ta faute. Réessaie, tout est gardé.',
+    contentUnavailable: 'Ce contenu n’est pas disponible pour le moment.',
+    audioUnavailable: 'Le son ne marche pas ici, mais tu peux continuer.',
+    initFailedTitle: 'ALIFA n’arrive pas à démarrer.',
+    initFailedMessage: 'Réessaie. Si le problème continue, un parent peut voir le diagnostic.',
+  },
+} as const;
+
+export type FeedbackPool = readonly string[];
+
+/** Rotates kind feedback lines deterministically (index by attempt count). */
+export function pickFeedback(pool: FeedbackPool, seed: number): string {
+  return pool[seed % pool.length] ?? pool[0] ?? '';
+}
