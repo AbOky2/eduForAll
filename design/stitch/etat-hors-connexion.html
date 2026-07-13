@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Mode Hors-Connexion</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2b2e48",
+                        "outline": "#82756a",
+                        "primary": "#7d562d",
+                        "secondary-fixed": "#c7e7ff",
+                        "on-secondary-fixed-variant": "#064c6b",
+                        "on-secondary-container": "#255f80",
+                        "secondary-container": "#a3d8fe",
+                        "surface-tint": "#7d562d",
+                        "surface-container-high": "#e6e6ff",
+                        "on-primary-container": "#5b3912",
+                        "inverse-primary": "#f0bd8b",
+                        "tertiary-container": "#d1a741",
+                        "on-surface-variant": "#50453b",
+                        "primary-fixed-dim": "#f0bd8b",
+                        "on-tertiary-container": "#533d00",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdf9b",
+                        "surface": "#fbf8ff",
+                        "surface-dim": "#d6d8f9",
+                        "on-surface": "#161a32",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#d4a373",
+                        "secondary": "#2b6485",
+                        "secondary-fixed-dim": "#98cdf2",
+                        "surface-container": "#edecff",
+                        "inverse-on-surface": "#f1efff",
+                        "on-primary-fixed-variant": "#623f18",
+                        "tertiary-fixed-dim": "#edc157",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "outline-variant": "#d4c4b7",
+                        "surface-bright": "#fbf8ff",
+                        "on-primary-fixed": "#2c1600",
+                        "surface-container-low": "#f4f2ff",
+                        "on-secondary-fixed": "#001e2e",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dfe0ff",
+                        "on-background": "#161a32",
+                        "tertiary": "#785a00",
+                        "background": "#fbf8ff",
+                        "primary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dfe0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target-min": "56px",
+                        "stack-lg": "40px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "24px",
+                        "stack-md": "24px",
+                        "gutter-mobile": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "display-glyph": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-glyph": ["80px", { "lineHeight": "96px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dim min-h-screen flex justify-center antialiased">
+<!-- Mobile Device Container for Preview -->
+<div class="w-full max-w-md bg-surface min-h-screen flex flex-col relative overflow-hidden shadow-2xl">
+<!-- Subtle noise texture overlay for tactile feel -->
+<div class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+<!-- TopAppBar (from JSON) -->
+<header class="w-full top-0 sticky bg-surface flex justify-between items-center px-margin-mobile py-4 z-10 flat no shadows">
+<!-- Leading Avatar -->
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary-container shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">face</span>
+</div>
+<!-- Headline -->
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-display-glyph text-center flex-1">
+                ALIFA
+            </h1>
+<!-- Trailing Icon -->
+<div class="w-10 h-10 flex items-center justify-end shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[28px]" data-icon="cloud_off">cloud_off</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center px-margin-mobile gap-stack-lg z-10 pb-10">
+<!-- Illustration -->
+<div class="w-full max-w-[280px] aspect-square relative flex items-center justify-center mb-4">
+<div class="absolute inset-0 bg-tertiary-container/10 rounded-full blur-3xl transform scale-110"></div>
+<img alt="Illustration of offline mode" class="w-full h-full object-contain relative z-10 drop-shadow-xl" data-alt="A highly stylized, modern vector illustration for a children's educational app with a Premium Sahelian aesthetic. The scene features a softly rounded, tactile cloud crossed out with a gentle, organic line, positioned next to a large, friendly, smiling sun. The color palette uses warm desert sands, soft sky blues, and vibrant sun yellows against a clean ivory background. The design is inviting, reassuring, and minimalist, resembling a high-quality physical textbook illustration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-voypNxNveGzbOBt7alq8LJGh1xWZK7aTo52C_n4AhqUjCaDtp37cWiURxk8UkNaLJF9tuSkpfQXbv92MjEWSRwYrOmFu3SQEp49uWJksNXefDoy_3O4iFDhes6mSaQ_Uz6IYxTYneE1Z30-yEhKgJ2QVP52GNkzrHQt1HYU0wi_xbgr77dYke_IQSu0wPtZQ_AdA_mC0hcuLFEtd2_m98dB9c0Y9HltTEvzp7nyQUqVMjLh_CBlL_PhxqYjWaT2lywftA-bdl452"/>
+</div>
+<!-- Status Pill -->
+<div class="inline-flex items-center gap-2 bg-tertiary-container px-4 py-2 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[20px]" data-icon="wifi_off">wifi_off</span>
+<span class="font-label-md text-label-md text-on-tertiary-container">
+                    Mode hors-connexion actif
+                </span>
+</div>
+<!-- Message -->
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface text-center max-w-[320px]">
+                Tu peux continuer à apprendre sans internet.
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant text-center max-w-[280px] mt-[-8px]">
+                Tes leçons favorites sont toujours là.
+            </p>
+</main>
+<!-- Bottom Action Area -->
+<div class="px-margin-mobile pb-margin-mobile pt-4 bg-gradient-to-t from-surface via-surface to-transparent relative z-10">
+<button class="w-full h-[56px] min-h-touch-target-min bg-primary-container text-on-primary-container font-label-lg text-label-lg rounded-xl flex items-center justify-center border-b-4 border-primary hover:opacity-90 active:translate-y-1 active:border-b-0 active:mt-1 transition-all">
+                C'est compris
+            </button>
+</div>
+</div>
+</body></html>

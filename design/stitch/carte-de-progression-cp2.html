@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Niveau CP2</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2b2e48",
+                        "outline": "#82756a",
+                        "primary": "#7d562d",
+                        "secondary-fixed": "#c7e7ff",
+                        "on-secondary-fixed-variant": "#064c6b",
+                        "on-secondary-container": "#255f80",
+                        "secondary-container": "#a3d8fe",
+                        "surface-tint": "#7d562d",
+                        "surface-container-high": "#e6e6ff",
+                        "on-primary-container": "#5b3912",
+                        "inverse-primary": "#f0bd8b",
+                        "tertiary-container": "#d1a741",
+                        "on-surface-variant": "#50453b",
+                        "primary-fixed-dim": "#f0bd8b",
+                        "on-tertiary-container": "#533d00",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdf9b",
+                        "surface": "#fbf8ff",
+                        "surface-dim": "#d6d8f9",
+                        "on-surface": "#161a32",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#d4a373",
+                        "secondary": "#2b6485",
+                        "secondary-fixed-dim": "#98cdf2",
+                        "surface-container": "#edecff",
+                        "inverse-on-surface": "#f1efff",
+                        "on-primary-fixed-variant": "#623f18",
+                        "tertiary-fixed-dim": "#edc157",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "outline-variant": "#d4c4b7",
+                        "surface-bright": "#fbf8ff",
+                        "on-primary-fixed": "#2c1600",
+                        "surface-container-low": "#f4f2ff",
+                        "on-secondary-fixed": "#001e2e",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dfe0ff",
+                        "on-background": "#161a32",
+                        "tertiary": "#785a00",
+                        "background": "#fbf8ff",
+                        "primary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dfe0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target-min": "56px",
+                        "stack-lg": "40px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "24px",
+                        "stack-md": "24px",
+                        "gutter-mobile": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "display-glyph": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["16px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "18px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-glyph": ["80px", {"lineHeight": "96px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F4F1DE; /* Ivory toned */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        .path-line {
+            stroke-dasharray: 10 10;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased min-h-screen pb-[100px]">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim flat no shadows z-40">
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full">
+<div class="flex items-center gap-4">
+<img alt="Avatar" class="w-12 h-12 rounded-full border-2 border-primary-container object-cover" data-alt="A stylized, modern vector illustration of a young Chadian child's avatar smiling. The illustration uses warm earthy tones, specifically sand, soft blue, and terracotta. The style is flat, clean, and organic, reminiscent of high-end educational materials. The background is a soft ivory. The overall mood is cheerful and welcoming, perfect for a Premium Sahelian learning app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf4zJeWXrKrweSRbp87Az0IM2i8ZmvjfOyLsic0JsRHYpMAq8ccLOAov7crx0frcWb3LYXoxPG6H6KsmuB4E_6CPVLr7jhhJtIEg6VGn3AElfRiCNz2wPAAToVP9wLXSySLOLG01sEnjhJDUCWwLHTuGuBqtEPNCCi_aWOxegEmSf5-r5V_Zi5On8mf9V6c4et-bAD6_t2n_sXBIBjbE5DKQ7hjlYkTiXtLDk-mlqz3IyaHSetdWf71sCfUb-MOq7yDdUGjPdasLCi"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-inverse-primary text-center absolute left-1/2 -translate-x-1/2">ALIFA</h1>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-3xl" style="font-variation-settings: 'FILL' 0;">cloud_off</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-margin-mobile py-stack-md max-w-lg mx-auto">
+<div class="text-center mb-stack-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Niveau CP2</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">En route vers l'oasis des savoirs !</p>
+</div>
+<!-- Winding Trail Map Container -->
+<div class="relative w-full h-[800px] bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant p-6 overflow-hidden flex justify-center">
+<!-- Background Map Illustration -->
+<div class="absolute inset-0 opacity-40 z-0 pointer-events-none" data-alt="A beautifully illustrated, top-down map of a Sahelian landscape nearing an oasis. The scene features stylized rolling sand dunes in warm, muted terracotta and ochre tones, interspersed with sparse green baobab trees and a shimmering blue watering hole in the distance. The art style is premium, tactile minimalism with clean vector shapes, heavy ivory whitespace, and soft, directional earth-lit shadows. The overall aesthetic is inviting, organic, and reminiscent of a high-quality children's storybook." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBentj5HK7rt3d0Tvz6UE0uEuyp07u3wlxBVSDKbWB03zbULWu8qpTR6zZCPtK9cbGdgdrC3FxsG17tVMoZjl3WpKZFs0dJyGpt_w2_2p2uTnRhpt-KZNDADHg9E4fZ1ichnF0XVPrPuYI0JVCoAdecsLxB5vQV-Y8hrog7DOA8945tkxMFHcvHL6Xp4Ic1kyEvtKsHLv5sTdTAz7biG2mrFEHbZfQYBDjzg4X8xO_xI8Ws_IgmX025SrXu630usyoCZnTHPfkTh8Dc'); background-size: cover; background-position: center;"></div>
+<!-- SVG Path Line connecting nodes -->
+<svg class="absolute top-0 left-0 w-full h-full z-10 pointer-events-none" preserveaspectratio="none">
+<path class="path-line opacity-50" d="M 150 720 C 150 650, 50 600, 100 500 C 150 400, 250 350, 200 250 C 150 150, 50 100, 150 50" fill="none" stroke="#d4a373" stroke-linecap="round" stroke-width="8"></path>
+<path class="path-line" d="M 150 720 C 150 650, 50 600, 100 500 C 150 400, 250 350, 200 250" fill="none" stroke="#7d562d" stroke-linecap="round" stroke-width="8"></path>
+</svg>
+<!-- Map Nodes -->
+<div class="relative z-20 w-full h-full flex flex-col justify-between items-center py-8">
+<!-- Node 5: Nombres jusqu'à 100 -->
+<div class="relative w-full flex justify-end pr-8 translate-y-[-20px]">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full bg-surface-container border-4 border-outline-variant flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 z-10 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+<span class="material-symbols-outlined text-outline-variant text-4xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface/80 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm text-center max-w-[120px]">Monde 5:<br/>Nombres jusqu’à 100</span>
+</div>
+</div>
+<!-- Node 4: Dictées courtes -->
+<div class="relative w-full flex justify-start pl-4 translate-y-[20px]">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full bg-surface-container border-4 border-outline-variant flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 z-10 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+<span class="material-symbols-outlined text-outline-variant text-4xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface/80 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm text-center max-w-[120px]">Monde 4:<br/>Dictées courtes</span>
+</div>
+</div>
+<!-- Node 3: Petites phrases (Current Active) -->
+<div class="relative w-full flex justify-end pr-12 translate-y-[40px]">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[88px] h-[88px] rounded-full bg-tertiary-container border-4 border-primary flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 z-10 relative overflow-hidden animate-pulse">
+<span class="material-symbols-outlined text-on-tertiary-container text-5xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<div class="absolute -top-1 -right-1 w-6 h-6 bg-error rounded-full border-2 border-surface flex items-center justify-center">
+<span class="block w-2 h-2 bg-on-error rounded-full"></span>
+</div>
+</div>
+<span class="font-label-lg text-label-lg text-primary bg-surface shadow-md border border-primary-container px-4 py-2 rounded-full text-center max-w-[140px] z-20">Monde 3:<br/>Petites phrases</span>
+</div>
+</div>
+<!-- Node 2: Sons complexes -->
+<div class="relative w-full flex justify-start pl-8 translate-y-[60px]">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full bg-secondary-container border-4 border-secondary flex items-center justify-center shadow-md transition-transform duration-200 group-hover:scale-105 z-10 relative overflow-hidden">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface bg-surface/90 shadow-sm border border-outline-variant px-3 py-1 rounded-full text-center max-w-[120px]">Monde 2:<br/>Sons complexes</span>
+</div>
+</div>
+<!-- Node 1: Révision CP1 -->
+<div class="relative w-full flex justify-center translate-y-[80px]">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full bg-secondary-container border-4 border-secondary flex items-center justify-center shadow-md transition-transform duration-200 group-hover:scale-105 z-10 relative overflow-hidden">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface bg-surface/90 shadow-sm border border-outline-variant px-3 py-1 rounded-full text-center max-w-[120px]">Monde 1:<br/>Révision CP1</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_-4px_12px_rgba(61,64,91,0.08)] z-50 rounded-t-xl md:hidden">
+<!-- Inactive: Accueil -->
+<a class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-6 py-2 hover:bg-surface-container-high dark:hover:bg-surface-container rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md">Accueil</span>
+</a>
+<!-- Active: Apprendre -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 translate-y-1 transition-all duration-200 shadow-md" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-md text-label-md">Apprendre</span>
+</a>
+<!-- Inactive: Parents -->
+<a class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-6 py-2 hover:bg-surface-container-high dark:hover:bg-surface-container rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">family_restroom</span>
+<span class="font-label-md text-label-md">Parents</span>
+</a>
+</nav>
+</body></html>

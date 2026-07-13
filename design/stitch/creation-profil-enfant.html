@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Crée ton profil</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2b2e48",
+                        "outline": "#82756a",
+                        "primary": "#7d562d",
+                        "secondary-fixed": "#c7e7ff",
+                        "on-secondary-fixed-variant": "#064c6b",
+                        "on-secondary-container": "#255f80",
+                        "secondary-container": "#a3d8fe",
+                        "surface-tint": "#7d562d",
+                        "surface-container-high": "#e6e6ff",
+                        "on-primary-container": "#5b3912",
+                        "inverse-primary": "#f0bd8b",
+                        "tertiary-container": "#d1a741",
+                        "on-surface-variant": "#50453b",
+                        "primary-fixed-dim": "#f0bd8b",
+                        "on-tertiary-container": "#533d00",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdf9b",
+                        "surface": "#fbf8ff",
+                        "surface-dim": "#d6d8f9",
+                        "on-surface": "#161a32",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#d4a373",
+                        "secondary": "#2b6485",
+                        "secondary-fixed-dim": "#98cdf2",
+                        "surface-container": "#edecff",
+                        "inverse-on-surface": "#f1efff",
+                        "on-primary-fixed-variant": "#623f18",
+                        "tertiary-fixed-dim": "#edc157",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "outline-variant": "#d4c4b7",
+                        "surface-bright": "#fbf8ff",
+                        "on-primary-fixed": "#2c1600",
+                        "surface-container-low": "#f4f2ff",
+                        "on-secondary-fixed": "#001e2e",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dfe0ff",
+                        "on-background": "#161a32",
+                        "tertiary": "#785a00",
+                        "background": "#fbf8ff",
+                        "primary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dfe0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target-min": "56px",
+                        "stack-lg": "40px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "24px",
+                        "stack-md": "24px",
+                        "gutter-mobile": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "display-glyph": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-glyph": ["80px", { "lineHeight": "96px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F4F1DE; /* Ivory-toned background for tactile feel */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface min-h-screen flex flex-col items-center justify-center p-margin-mobile">
+<!-- Note: TopAppBar and BottomNavBar are suppressed as this is a linear/transactional onboarding screen -->
+<main class="w-full max-w-md bg-surface-container-lowest rounded-[24px] p-stack-md shadow-[0_8px_24px_rgba(61,64,91,0.08)] border border-outline-variant/30 relative overflow-hidden">
+<!-- Subtle Sahelian decoration -->
+<div class="absolute -top-10 -right-10 opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<!-- Header -->
+<header class="text-center mb-stack-lg relative z-10">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-base">Crée ton profil</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Choisis ton avatar et ton niveau</p>
+</header>
+<!-- Avatar Selection -->
+<section class="mb-stack-lg">
+<h2 class="font-label-lg text-label-lg text-primary mb-gutter-mobile text-center">Ton avatar</h2>
+<div class="flex justify-between items-center gap-gutter-mobile">
+<button aria-label="Select Avatar 1" class="relative w-16 h-16 rounded-full overflow-hidden border-[3px] border-primary-container ring-4 ring-primary-container/20 shadow-md transform scale-110 transition-transform focus:outline-none" type="button">
+<img alt="Avatar 1" class="w-full h-full object-cover" data-alt="A beautifully illustrated digital portrait of a young African boy with a bright, curious smile. The illustration style is warm, modern, and painterly, evoking a premium children's book. The color palette features earthy sahelian tones, rich browns, and a soft ivory background. The lighting is gentle and inviting, creating a tactile and organic feel suitable for an educational app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_6Y62xq8I5xljcUPUQgPUJrrVV9LGbO5Zowv7sGF-yWMjAOv_SRdeBXzF9T1Qhn1B5ev07wEHqMSYhHRp_9_uilQl4HYMA0_MCeeZ_73kpOrJrIpoBj1tFUVJjwNA92pE-2SiiWlo4YU5sDoSH19AhGzdvxIvHC_JDx8Ub5ovSWPl3yH-VKepaCqMHQ1R00vBcn875gV-6LhNnvQN07JIRhM9vCpDdrhK2CR3rxq21pZF9KAIT_rJCRvGk1zcJt2f4eqbrZdEBvb8"/>
+<div class="absolute inset-0 bg-primary-container/20 rounded-full"></div>
+</button>
+<button aria-label="Select Avatar 2" class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors focus:outline-none" type="button">
+<img alt="Avatar 2" class="w-full h-full object-cover" data-alt="A beautifully illustrated digital portrait of a young African girl with braided hair and a joyful expression. The illustration style is warm, modern, and painterly, evoking a premium children's book. The color palette features earthy sahelian tones, vibrant ochre accents, and a soft ivory background. The lighting is gentle and inviting, creating a tactile and organic feel suitable for an educational app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmvA9WkwpoVwJ1vqlBqgSIHx9TftXWimcL_zTECZ4wu13zfzGbRFoBK_rFHs5AvqE4EQ3XSngf86ycxzaeeGqhWWpP7naGoDnpJm5xN0czRJuEo-tqjyLCnbHqx4frF9Xy_-cl_cNyUSBf2LoF-dmdmTt1XZYGm9Nl26cBzrSZmZZLhTNSZ-jzzm3LTi23TFjoC6L1kU8UPzlXUWTc7g2xCmosUvGzl9rMBLQLDXZM7DLsqQsUyqZCbNQDngngw_keuT5NM8T0U89J"/>
+</button>
+<button aria-label="Select Avatar 3" class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors focus:outline-none" type="button">
+<img alt="Avatar 3" class="w-full h-full object-cover" data-alt="A beautifully illustrated digital portrait of a young African boy wearing a colorful patterned shirt, looking determined. The illustration style is warm, modern, and painterly, evoking a premium children's book. The color palette features earthy sahelian tones, deep terracotta, and a soft ivory background. The lighting is gentle and inviting, creating a tactile and organic feel suitable for an educational app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrJQPSUqA_K5JmCaeAL7_QXMVw_pMO3mLH9TpfMmtZWdQl8z2YK-IrISe0MQD91kCKBBGGTESOD4FtStfAExYDVlknL2JMrrrb3daj_6y4TQt77-Zw-JTQdXhk-8HwzJ-xAaRnNcLnBKBNGKOn9bkONDRxlj8-CzRrbKh5Im6uzZM2b1XI81KCWFF1UDbLAfcXJ6gsC0MkX_oLDU9nd0Fm5Qm6tQa_wNvhHTJZ77eyHLDM6dgTIAJha9wD0ZdoeIpUXcQAzkcPYSK-"/>
+</button>
+<button aria-label="Select Avatar 4" class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors focus:outline-none" type="button">
+<img alt="Avatar 4" class="w-full h-full object-cover" data-alt="A beautifully illustrated digital portrait of a young African girl with a soft, thoughtful smile. The illustration style is warm, modern, and painterly, evoking a premium children's book. The color palette features earthy sahelian tones, gentle greens, and a soft ivory background. The lighting is gentle and inviting, creating a tactile and organic feel suitable for an educational app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8OAR0EYF3xn8gGciWJ-5Zb03NRgHSMnGGz8p92xvEemp7qhcGWSHeTRHYm0KJW4ogQ_7BhWPC54jpGzeIiZBlW4C3aMy7atsWwZ0AF-5_WjRXGSzD1vTsAbikqHEV6kPXvW0aQNhM67f3vG1XB4MX7LrX-UBc0aXtGeo5ahE9lD3Ps5qUQvrlibmoQRTh520y-tj1dKBkAl5DuuUIgpVr_SJBJvkrG0QfCtsrDuSePLLnrSYuYR4Yg4iUt_GBS8zueHDKJcK3W6wQ"/>
+</button>
+</div>
+</section>
+<!-- Input Field -->
+<section class="mb-stack-lg">
+<label class="block font-label-lg text-label-lg text-primary mb-base" for="firstName">Ton prénom</label>
+<input class="w-full h-touch-target-min bg-[#F4F1DE] border-2 border-primary-container rounded-xl px-4 font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-on-surface-variant/50 transition-colors shadow-inner" id="firstName" name="firstName" placeholder="Écris ton prénom ici" type="text"/>
+</section>
+<!-- Level Choice -->
+<section class="mb-stack-lg">
+<h2 class="font-label-lg text-label-lg text-primary mb-gutter-mobile">Ton niveau</h2>
+<div class="grid grid-cols-2 gap-gutter-mobile">
+<!-- Selected State -->
+<button class="h-24 rounded-xl border-[3px] border-secondary bg-secondary-container/20 flex flex-col items-center justify-center relative overflow-hidden focus:outline-none shadow-[0_4px_12px_rgba(61,64,91,0.05)]" type="button">
+<span class="material-symbols-outlined text-secondary text-3xl mb-1" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-headline-md text-headline-md text-secondary">CP1</span>
+<div class="absolute top-2 right-2 text-secondary">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<!-- Unselected State -->
+<button class="h-24 rounded-xl border-2 border-outline-variant bg-surface-container-lowest flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors focus:outline-none shadow-sm" type="button">
+<span class="material-symbols-outlined text-3xl mb-1">menu_book</span>
+<span class="font-headline-md text-headline-md">CP2</span>
+</button>
+</div>
+</section>
+<!-- Action Button -->
+<button class="w-full h-touch-target-min bg-primary-container rounded-xl flex items-center justify-center border-b-4 border-[#B8865A] active:border-b-0 active:translate-y-[4px] transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mb-stack-md" type="button">
+<span class="font-headline-md text-headline-md text-[#3D405B]">C'est parti !</span>
+</button>
+<!-- Footer Note -->
+<footer class="flex items-start gap-2 px-2">
+<span class="material-symbols-outlined text-primary-container text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<p class="font-body-md text-body-md text-on-surface-variant text-[13px] leading-tight">
+                Pas d'email, pas de mot de passe. Tes données restent sur ce téléphone.
+            </p>
+</footer>
+</main>
+</body></html>

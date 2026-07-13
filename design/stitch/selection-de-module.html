@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Choix de Module</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2b2e48",
+                        "outline": "#82756a",
+                        "primary": "#7d562d",
+                        "secondary-fixed": "#c7e7ff",
+                        "on-secondary-fixed-variant": "#064c6b",
+                        "on-secondary-container": "#255f80",
+                        "secondary-container": "#a3d8fe",
+                        "surface-tint": "#7d562d",
+                        "surface-container-high": "#e6e6ff",
+                        "on-primary-container": "#5b3912",
+                        "inverse-primary": "#f0bd8b",
+                        "tertiary-container": "#d1a741",
+                        "on-surface-variant": "#50453b",
+                        "primary-fixed-dim": "#f0bd8b",
+                        "on-tertiary-container": "#533d00",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdf9b",
+                        "surface": "#fbf8ff",
+                        "surface-dim": "#d6d8f9",
+                        "on-surface": "#161a32",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#d4a373",
+                        "secondary": "#2b6485",
+                        "secondary-fixed-dim": "#98cdf2",
+                        "surface-container": "#edecff",
+                        "inverse-on-surface": "#f1efff",
+                        "on-primary-fixed-variant": "#623f18",
+                        "tertiary-fixed-dim": "#edc157",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "outline-variant": "#d4c4b7",
+                        "surface-bright": "#fbf8ff",
+                        "on-primary-fixed": "#2c1600",
+                        "surface-container-low": "#f4f2ff",
+                        "on-secondary-fixed": "#001e2e",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dfe0ff",
+                        "on-background": "#161a32",
+                        "tertiary": "#785a00",
+                        "background": "#fbf8ff",
+                        "primary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dfe0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "touch-target-min": "56px",
+                        "stack-lg": "40px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "24px",
+                        "stack-md": "24px",
+                        "gutter-mobile": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "display-glyph": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["16px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-glyph": ["80px", { "lineHeight": "96px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F4F1DE; /* Ivory override as per prompt */
+            background-image: radial-gradient(#d4a373 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .tactile-shadow {
+            box-shadow: 0 8px 16px -4px rgba(61, 64, 91, 0.08), inset 0 0 0 1px rgba(212, 163, 115, 0.2);
+        }
+        .tactile-shadow-active:active {
+            box-shadow: inset 0 4px 8px rgba(61, 64, 91, 0.1);
+            transform: translateY(2px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen flex flex-col relative pb-[100px] md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim w-full top-0 sticky z-40 flex justify-between items-center px-margin-mobile py-4 shadow-[0_4px_12px_rgba(61,64,91,0.05)]">
+<div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+<img alt="Avatar enfant illustré" class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="A stylized, cheerful vector portrait of a young Chadian child with bright eyes and a warm smile, set against a soft sand-colored background. The illustration uses thick, clean lines and a modern vector art style reminiscent of high-end educational apps. The color palette focuses on warm earth tones, deep browns, and subtle highlights, capturing a premium, tactile Sahelian aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbnTRGYchClckMafdNlcn7HKmmLa4QwjAxQjQ3dBlXdWWspFtuRMimHzftHWf-bjnYVX4kOkEdawiOufuuk9lGY_mJeb-eVWmpOIG-53TFdd5Z9-HsD33gBTKUm-6Cxp2qowzmr9FxutbCTTlDVqi7SpakdjXY8epARln3Z1YxQWZmoIyLp7wZqDCXMU81TFCdnUbiKGoEGXRn6ebf7aMWcbuFA-O-KeonmROIsClrAUDGSSRj0h_y2SN41RCn5Ga-JD3aA2xx17jC"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim">ALIFA</h1>
+<button class="text-on-surface-variant dark:text-outline-variant hover:opacity-80 transition-opacity active:scale-95 duration-150">
+<span class="material-symbols-outlined" style="font-size: 28px;">cloud_off</span>
+</button>
+</header>
+<!-- Main Content: Bento Grid Layout -->
+<main class="flex-grow px-margin-mobile py-stack-lg max-w-5xl mx-auto w-full">
+<div class="mb-stack-md text-center md:text-left">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Choisis ton module</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Prêt à apprendre aujourd'hui ?</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Card 1: Lecture (Primary Blue vibe - using secondary colors from theme) -->
+<button class="bg-surface rounded-3xl p-6 flex flex-col items-center md:items-start text-left tactile-shadow tactile-shadow-active transition-all group overflow-hidden relative min-h-[220px]">
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-fixed rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+<div class="w-16 h-16 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center mb-6 z-10 shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 36px; font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div class="z-10 mt-auto w-full flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Lecture</h3>
+<span class="inline-block bg-surface-container px-3 py-1 rounded-full font-label-md text-label-md text-secondary">
+                            12 leçons terminées
+                        </span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary transition-colors" style="font-size: 32px;">arrow_forward_ios</span>
+</div>
+</button>
+<!-- Card 2: Écriture (Ocre/Tertiary vibe) -->
+<button class="bg-surface rounded-3xl p-6 flex flex-col items-center md:items-start text-left tactile-shadow tactile-shadow-active transition-all group overflow-hidden relative min-h-[220px]">
+<div class="absolute -bottom-10 -right-10 w-32 h-32 bg-tertiary-fixed rounded-full opacity-20 group-hover:scale-110 transition-transform duration-300"></div>
+<div class="w-16 h-16 rounded-2xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-6 z-10 shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 36px; font-variation-settings: 'FILL' 1;">edit_document</span>
+</div>
+<div class="z-10 mt-auto w-full flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Écriture</h3>
+<span class="inline-block bg-surface-container px-3 py-1 rounded-full font-label-md text-label-md text-tertiary">
+                            8 leçons terminées
+                        </span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-tertiary transition-colors" style="font-size: 32px;">arrow_forward_ios</span>
+</div>
+</button>
+<!-- Card 3: Dictée (Turquoise/Primary container vibe) -->
+<button class="bg-surface rounded-3xl p-6 flex flex-col items-center md:items-start text-left tactile-shadow tactile-shadow-active transition-all group overflow-hidden relative min-h-[220px]">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary-fixed rounded-full opacity-10 group-hover:scale-110 transition-transform duration-300"></div>
+<div class="w-16 h-16 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center mb-6 z-10 shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 36px; font-variation-settings: 'FILL' 1;">hearing</span>
+</div>
+<div class="z-10 mt-auto w-full flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Dictée</h3>
+<span class="inline-block bg-surface-container px-3 py-1 rounded-full font-label-md text-label-md text-primary">
+                            5 leçons terminées
+                        </span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" style="font-size: 32px;">arrow_forward_ios</span>
+</div>
+</button>
+<!-- Card 4: Calcul (Sage Green mapped to a custom theme combo or neutral variant) -->
+<button class="bg-surface rounded-3xl p-6 flex flex-col items-center md:items-start text-left tactile-shadow tactile-shadow-active transition-all group overflow-hidden relative min-h-[220px]">
+<div class="absolute -top-10 -left-10 w-32 h-32 bg-surface-variant rounded-full opacity-40 group-hover:scale-110 transition-transform duration-300"></div>
+<div class="w-16 h-16 rounded-2xl bg-surface-variant text-on-surface-variant flex items-center justify-center mb-6 z-10 shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 36px; font-variation-settings: 'FILL' 1;">calculate</span>
+</div>
+<div class="z-10 mt-auto w-full flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Calcul</h3>
+<span class="inline-block bg-surface-container px-3 py-1 rounded-full font-label-md text-label-md text-on-surface-variant">
+                            Nouveau !
+                        </span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors" style="font-size: 32px;">arrow_forward_ios</span>
+</div>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Visible only on mobile/md:hidden) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_-4px_12px_rgba(61,64,91,0.08)] z-50 rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-6 py-2 hover:bg-surface-container-high dark:hover:bg-surface-container rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" style="font-size: 24px;">home</span>
+<span class="font-label-md text-label-md mt-1">Accueil</span>
+</button>
+<!-- Active Tab: Apprendre -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 translate-y-[-4px] shadow-sm transition-all duration-200">
+<span class="material-symbols-outlined" style="font-size: 24px; font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-md text-label-md mt-1">Apprendre</span>
+</button>
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-6 py-2 hover:bg-surface-container-high dark:hover:bg-surface-container rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" style="font-size: 24px;">family_restroom</span>
+<span class="font-label-md text-label-md mt-1">Parents</span>
+</button>
+</nav>
+<!-- Top Navigation cluster (Web only / hidden md:flex) -->
+<nav class="hidden md:flex fixed top-4 right-24 bg-surface rounded-full shadow-lg border border-outline-variant/30 z-50">
+<div class="flex items-center p-1">
+<button class="flex items-center gap-2 text-outline px-4 py-2 hover:bg-surface-container rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" style="font-size: 20px;">home</span>
+<span class="font-label-md text-label-md">Accueil</span>
+</button>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary-container rounded-full px-4 py-2 shadow-sm transition-all duration-200">
+<span class="material-symbols-outlined" style="font-size: 20px; font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-md text-label-md">Apprendre</span>
+</button>
+<button class="flex items-center gap-2 text-outline px-4 py-2 hover:bg-surface-container rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" style="font-size: 20px;">family_restroom</span>
+<span class="font-label-md text-label-md">Parents</span>
+</button>
+</div>
+</nav>
+</body></html>

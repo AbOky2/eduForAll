@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Écoute le son</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#2b2e48",
+                      "outline": "#82756a",
+                      "primary": "#7d562d",
+                      "secondary-fixed": "#c7e7ff",
+                      "on-secondary-fixed-variant": "#064c6b",
+                      "on-secondary-container": "#255f80",
+                      "secondary-container": "#a3d8fe",
+                      "surface-tint": "#7d562d",
+                      "surface-container-high": "#e6e6ff",
+                      "on-primary-container": "#5b3912",
+                      "inverse-primary": "#f0bd8b",
+                      "tertiary-container": "#d1a741",
+                      "on-surface-variant": "#50453b",
+                      "primary-fixed-dim": "#f0bd8b",
+                      "on-tertiary-container": "#533d00",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdf9b",
+                      "surface": "#fbf8ff",
+                      "surface-dim": "#d6d8f9",
+                      "on-surface": "#161a32",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#d4a373",
+                      "secondary": "#2b6485",
+                      "secondary-fixed-dim": "#98cdf2",
+                      "surface-container": "#edecff",
+                      "inverse-on-surface": "#f1efff",
+                      "on-primary-fixed-variant": "#623f18",
+                      "tertiary-fixed-dim": "#edc157",
+                      "on-tertiary-fixed-variant": "#5b4300",
+                      "outline-variant": "#d4c4b7",
+                      "surface-bright": "#fbf8ff",
+                      "on-primary-fixed": "#2c1600",
+                      "surface-container-low": "#f4f2ff",
+                      "on-secondary-fixed": "#001e2e",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed": "#251a00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#dfe0ff",
+                      "on-background": "#161a32",
+                      "tertiary": "#785a00",
+                      "background": "#fbf8ff",
+                      "primary-fixed": "#ffdcbd",
+                      "surface-container-highest": "#dfe0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "touch-target-min": "56px",
+                      "stack-lg": "40px",
+                      "stack-sm": "12px",
+                      "margin-mobile": "24px",
+                      "stack-md": "24px",
+                      "gutter-mobile": "16px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "label-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Quicksand"
+                      ],
+                      "headline-lg": [
+                              "Quicksand"
+                      ],
+                      "display-glyph": [
+                              "Quicksand"
+                      ],
+                      "body-lg": [
+                              "Quicksand"
+                      ],
+                      "headline-md": [
+                              "Quicksand"
+                      ],
+                      "body-md": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "label-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-glyph": [
+                              "80px",
+                              {
+                                      "lineHeight": "96px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "30px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      }
+              }
+            },
+          }
+    </script>
+<style>
+        body {
+            background-color: #F4F1DE; /* Fallback for ambient texture */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface min-h-screen flex flex-col font-body-md">
+<!-- TopAppBar (Suppressed for focused linear task, but keeping structural space) -->
+<header class="w-full flex justify-between items-center px-margin-mobile py-4 sticky top-0 z-10">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-lowest shadow-[0_2px_8px_rgba(61,64,91,0.08)] active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+<!-- Progress Bar -->
+<div class="flex-1 mx-4 h-4 bg-secondary-fixed rounded-full overflow-hidden border-b-2 border-secondary-fixed-dim/50 shadow-inner">
+<div class="h-full bg-primary-container w-1/4 rounded-full relative">
+<div class="absolute right-0 top-0 bottom-0 w-4 bg-white/30 rounded-r-full"></div>
+</div>
+</div>
+<div class="w-12 h-12"></div> <!-- Spacer -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center px-margin-mobile pb-stack-lg pt-stack-md w-full max-w-md mx-auto">
+<!-- Instruction -->
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary text-center mb-stack-lg">
+            Écoute le son
+        </h1>
+<!-- Main Card -->
+<div class="w-full aspect-square bg-surface-container-lowest rounded-[32px] flex items-center justify-center shadow-[0_8px_24px_rgba(61,64,91,0.12)] border-t border-white border-b-4 border-outline-variant mb-stack-lg relative overflow-hidden">
+<!-- Subtle Sahelian Element (Background) -->
+<div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<span class="font-display-glyph text-display-glyph text-primary-fixed-dim">
+                ba
+            </span>
+</div>
+<!-- Audio Button -->
+<button class="w-24 h-24 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-[0_6px_0_#1a4560,0_12px_24px_rgba(61,64,91,0.15)] active:translate-y-2 active:shadow-[0_0px_0_#1a4560,0_4px_8px_rgba(61,64,91,0.1)] transition-all duration-150 relative">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<!-- Pulse Rings (CSS representation via static borders for this output as animations are banned, normally would animate) -->
+<div class="absolute inset-0 rounded-full border-4 border-secondary opacity-30 scale-110"></div>
+<div class="absolute inset-0 rounded-full border-2 border-secondary opacity-10 scale-125"></div>
+</button>
+</main>
+<!-- Footer Action -->
+<div class="px-margin-mobile pb-margin-mobile pt-stack-sm w-full max-w-md mx-auto">
+<button class="w-full min-h-[56px] rounded-xl bg-primary-container text-on-primary-container font-label-lg text-label-lg shadow-[0_4px_0_#b58452] active:translate-y-1 active:shadow-[0_0px_0_#b58452] transition-all duration-150 flex items-center justify-center">
+            Suivant
+        </button>
+</div>
+</body></html>

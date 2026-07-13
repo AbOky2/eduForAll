@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect x="112" y="112" width="800" height="800" rx="176" fill="#f2efe1"/>
+  <circle cx="512" cy="440" r="180" fill="#ffd166"/>
+  <path d="M 368 508 L 512 364 L 656 508 Z" fill="#3d7194"/>
+  <path d="M 280 660 Q 360 630 440 658 Q 520 686 600 656 Q 680 626 744 654 Q 764 662 760 676 Q 754 698 726 692 Q 664 676 596 700 Q 516 728 436 700 Q 366 676 306 694 Q 278 702 272 684 Q 268 670 280 660 Z" fill="#d4a373"/>
+  <text x="512" y="810" font-family="Helvetica, Arial, sans-serif" font-size="120" font-weight="800" fill="#2b2e48" text-anchor="middle" letter-spacing="14">ALIFA</text>
+</svg>

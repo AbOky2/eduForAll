@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Exercice de Mathématiques CP1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2b2e48",
+                    "outline": "#82756a",
+                    "primary": "#7d562d",
+                    "secondary-fixed": "#c7e7ff",
+                    "on-secondary-fixed-variant": "#064c6b",
+                    "on-secondary-container": "#255f80",
+                    "secondary-container": "#a3d8fe",
+                    "surface-tint": "#7d562d",
+                    "surface-container-high": "#e6e6ff",
+                    "on-primary-container": "#5b3912",
+                    "inverse-primary": "#f0bd8b",
+                    "tertiary-container": "#d1a741",
+                    "on-surface-variant": "#50453b",
+                    "primary-fixed-dim": "#f0bd8b",
+                    "on-tertiary-container": "#533d00",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#ffdf9b",
+                    "surface": "#fbf8ff",
+                    "surface-dim": "#d6d8f9",
+                    "on-surface": "#161a32",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#d4a373",
+                    "secondary": "#2b6485",
+                    "secondary-fixed-dim": "#98cdf2",
+                    "surface-container": "#edecff",
+                    "inverse-on-surface": "#f1efff",
+                    "on-primary-fixed-variant": "#623f18",
+                    "tertiary-fixed-dim": "#edc157",
+                    "on-tertiary-fixed-variant": "#5b4300",
+                    "outline-variant": "#d4c4b7",
+                    "surface-bright": "#fbf8ff",
+                    "on-primary-fixed": "#2c1600",
+                    "surface-container-low": "#f4f2ff",
+                    "on-secondary-fixed": "#001e2e",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#251a00",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#dfe0ff",
+                    "on-background": "#161a32",
+                    "tertiary": "#785a00",
+                    "background": "#fbf8ff",
+                    "primary-fixed": "#ffdcbd",
+                    "surface-container-highest": "#dfe0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "touch-target-min": "56px",
+                    "stack-lg": "40px",
+                    "stack-sm": "12px",
+                    "margin-mobile": "24px",
+                    "stack-md": "24px",
+                    "gutter-mobile": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Quicksand"],
+                    "headline-lg": ["Quicksand"],
+                    "display-glyph": ["Quicksand"],
+                    "body-lg": ["Quicksand"],
+                    "headline-md": ["Quicksand"],
+                    "body-md": ["Quicksand"]
+            },
+            "fontSize": {
+                    "label-lg": ["16px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "18px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-glyph": ["80px", {"lineHeight": "96px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #F4F1DE; /* Ivory/Cream background for tactile feel */
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"/%3E%3C/svg%3E'); /* Subtle sand grain */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased text-on-background min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface-dim flex justify-between items-center px-margin-mobile py-4 w-full flat no shadows">
+<div class="flex items-center gap-4">
+<button aria-label="Retour" class="flex items-center justify-center w-10 h-10 rounded-full hover:opacity-80 transition-opacity text-primary dark:text-inverse-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_back</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="A stylized, warm vector illustration of a young Chadian child's face, smiling gently. The avatar is designed with soft curves, warm brown skin tones, and bright eyes, fitting a premium, organic EdTech aesthetic. The background of the avatar is a soft, earthy yellow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADDDQYYmSXa_Vurc91hc3p3fV3_0C8swx_9gDlCVSHkF1I_49hstNdrL6EV3nimvwTJIlySagiuUjfCEzMUwQMIKmaqpFvzl5K7p_NvFyBjC1Q_QX_zPfo6jEmYVL4JN6IO4Xg0u5Q-2qEqMwnWAMYfMgvwlaMxaZMH1GBi72nK2cwuKkaj6sEeUA1QkO-3Ci7gzhDBd_lNnoNgb5U2UI79qKJ31JEcSIdsWKwumqTDjahAdR1HXykOPje_t8bo068CjTfnqmVc_RE"/>
+</div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-inverse-primary font-bold tracking-tight">ALIFA</h1>
+<button aria-label="Status" class="flex items-center justify-center w-10 h-10 rounded-full hover:opacity-80 transition-opacity text-on-surface-variant dark:text-outline-variant">
+<span class="material-symbols-outlined">cloud_off</span>
+</button>
+</header>
+<!-- Main Canvas: Exercise Area -->
+<main class="flex-grow flex flex-col px-margin-mobile pt-stack-md md:pt-stack-lg max-w-3xl mx-auto w-full gap-stack-lg">
+<!-- Progress Bar -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center px-2">
+<span class="font-label-md text-label-md text-outline">Exercice 1 sur 5</span>
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="w-full h-4 bg-secondary-fixed rounded-full overflow-hidden border border-outline-variant/30 relative shadow-inner">
+<div class="h-full bg-primary-container rounded-full w-1/5 relative">
+<!-- Bead highlight effect -->
+<div class="absolute top-0 left-0 w-full h-1/2 bg-white/20 rounded-t-full"></div>
+</div>
+</div>
+</div>
+<!-- Question Context -->
+<section class="flex flex-col gap-stack-md">
+<div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-[0_8px_24px_rgba(61,64,91,0.08)] border border-primary-container/20">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-3xl">volume_up</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface pt-2">
+                        Compte les chèvres.
+                    </h2>
+</div>
+</div>
+<!-- Illustration -->
+<div class="w-full aspect-[4/3] md:aspect-[16/9] rounded-2xl overflow-hidden shadow-[0_12px_32px_rgba(61,64,91,0.12)] border-2 border-surface-container border-b-4 border-b-primary-container relative">
+<img alt="Illustration de chèvres" class="w-full h-full object-cover" data-alt="A beautiful, warm vector illustration of 5 goats standing in a stylized Sahelian landscape. The landscape features soft rolling sand dunes in shades of warm ivory and cream, with a few stylized baobab trees in the background. The lighting suggests late afternoon sun, casting soft, directional earth-lit shadows. The style is modern, organic, and tactile, resembling high-quality digital paper cutouts tailored for a premium children's educational app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwI69wwtW86SyJRIaJqhN3tUDK0DTO0qMvAuuKcXRBtZtmNptg74V63Xm9jLsoVRDiVwUl8lVyX_JtM4gyWwsWMwlgx4GegefvQaXUiTAhACZkE23ys03s-BRQQoycAZUB9J472JTqwJyLwWao93F_OMslD3wCksf3DxceoNI50w4viOJUWiD6NN0LKdxArNGRLBx3mP3Qgn5rmSsjJVM5B1e--R7Pw-U52PSzNUHTH2u1i0rQHa7PbF6U9DqyJRK4TlI9SBO8aCn7"/>
+</div>
+</section>
+<!-- Options (Bento Grid Style) -->
+<section class="grid grid-cols-3 gap-gutter-mobile md:gap-stack-md pb-stack-lg">
+<!-- Option 1 -->
+<button class="group flex flex-col items-center justify-center aspect-square bg-surface-container-lowest rounded-xl border border-primary-container/30 shadow-[0_4px_12px_rgba(61,64,91,0.06)] border-b-4 border-b-primary-container/40 active:border-b active:translate-y-[3px] active:shadow-none transition-all duration-150">
+<span class="font-display-glyph text-display-glyph text-primary group-hover:text-primary-container transition-colors">3</span>
+</button>
+<!-- Option 2 (Correct visually, but logic handled elsewhere) -->
+<button class="group flex flex-col items-center justify-center aspect-square bg-surface-container-lowest rounded-xl border border-primary-container/30 shadow-[0_4px_12px_rgba(61,64,91,0.06)] border-b-4 border-b-primary-container/40 active:border-b active:translate-y-[3px] active:shadow-none transition-all duration-150">
+<span class="font-display-glyph text-display-glyph text-primary group-hover:text-primary-container transition-colors">5</span>
+</button>
+<!-- Option 3 -->
+<button class="group flex flex-col items-center justify-center aspect-square bg-surface-container-lowest rounded-xl border border-primary-container/30 shadow-[0_4px_12px_rgba(61,64,91,0.06)] border-b-4 border-b-primary-container/40 active:border-b active:translate-y-[3px] active:shadow-none transition-all duration-150">
+<span class="font-display-glyph text-display-glyph text-primary group-hover:text-primary-container transition-colors">7</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar (Hidden on desktop, shown on mobile as this is part of learning flow, though technically transactional, instructions implied a destination if nav is requested. Will suppress as it's a linear task based on "Linear/Transactional" rule in prompt, but keeping a bottom fixed action bar instead for "Valider" which fits the task context better). 
+    Wait, the prompt dictates "Automatic Suppression: You MUST exclude the navigation shell if the page intent is: Linear/Transactional". A Math Exercise is transactional. I will replace it with a contextual action bar. -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile bg-gradient-to-t from-surface to-transparent md:static md:bg-none md:p-0 mt-auto md:max-w-3xl md:mx-auto">
+<button class="w-full min-h-[56px] bg-primary-container text-on-primary-container font-label-lg text-label-lg rounded-xl shadow-[0_4px_12px_rgba(61,64,91,0.15)] border-b-4 border-b-primary active:border-b-0 active:translate-y-[4px] active:shadow-none transition-all duration-150 flex items-center justify-center gap-2">
+            Vérifier
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+</div>
+</body></html>

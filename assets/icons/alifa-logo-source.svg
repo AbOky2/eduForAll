@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- ALIFA app icon — sun over dune with sand wave, from Stitch mockup S21 -->
+  <rect width="1024" height="1024" rx="224" fill="#f2efe1"/>
+  <circle cx="512" cy="420" r="240" fill="#ffd166"/>
+  <path d="M 320 512 L 512 320 L 704 512 Z" fill="#3d7194"/>
+  <path d="M 200 700 Q 300 660 400 696 Q 500 732 600 692 Q 700 652 800 690 Q 824 700 820 716 Q 812 744 776 736 Q 700 716 612 748 Q 512 784 412 748 Q 324 716 248 740 Q 212 750 204 726 Q 198 710 200 700 Z" fill="#d4a373"/>
+</svg>

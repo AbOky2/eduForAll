@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Exercice de Mathématiques CP2 - ALIFA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#2b2e48",
+                      "outline": "#82756a",
+                      "primary": "#7d562d",
+                      "secondary-fixed": "#c7e7ff",
+                      "on-secondary-fixed-variant": "#064c6b",
+                      "on-secondary-container": "#255f80",
+                      "secondary-container": "#a3d8fe",
+                      "surface-tint": "#7d562d",
+                      "surface-container-high": "#e6e6ff",
+                      "on-primary-container": "#5b3912",
+                      "inverse-primary": "#f0bd8b",
+                      "tertiary-container": "#d1a741",
+                      "on-surface-variant": "#50453b",
+                      "primary-fixed-dim": "#f0bd8b",
+                      "on-tertiary-container": "#533d00",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdf9b",
+                      "surface": "#fbf8ff",
+                      "surface-dim": "#d6d8f9",
+                      "on-surface": "#161a32",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#d4a373",
+                      "secondary": "#2b6485",
+                      "secondary-fixed-dim": "#98cdf2",
+                      "surface-container": "#edecff",
+                      "inverse-on-surface": "#f1efff",
+                      "on-primary-fixed-variant": "#623f18",
+                      "tertiary-fixed-dim": "#edc157",
+                      "on-tertiary-fixed-variant": "#5b4300",
+                      "outline-variant": "#d4c4b7",
+                      "surface-bright": "#fbf8ff",
+                      "on-primary-fixed": "#2c1600",
+                      "surface-container-low": "#f4f2ff",
+                      "on-secondary-fixed": "#001e2e",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed": "#251a00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#dfe0ff",
+                      "on-background": "#161a32",
+                      "tertiary": "#785a00",
+                      "background": "#fbf8ff",
+                      "primary-fixed": "#ffdcbd",
+                      "surface-container-highest": "#dfe0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "touch-target-min": "56px",
+                      "stack-lg": "40px",
+                      "stack-sm": "12px",
+                      "margin-mobile": "24px",
+                      "stack-md": "24px",
+                      "gutter-mobile": "16px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "label-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Quicksand"
+                      ],
+                      "headline-lg": [
+                              "Quicksand"
+                      ],
+                      "display-glyph": [
+                              "Quicksand"
+                      ],
+                      "body-lg": [
+                              "Quicksand"
+                      ],
+                      "headline-md": [
+                              "Quicksand"
+                      ],
+                      "body-md": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "label-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-glyph": [
+                              "80px",
+                              {
+                                      "lineHeight": "96px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "30px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #F4F1DE;
+            /* Subtle noise texture */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen flex flex-col relative pb-[100px] md:pb-0">
+<!-- TopAppBar (From JSON) -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface-dim flat no shadows md:hidden">
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-container flex items-center justify-center shadow-inner">
+<img alt="Child's illustrated profile avatar" class="w-full h-full object-cover" data-alt="A stylized vector illustration of a young Chadian child's face, smiling warmly. The artwork is clean and modern, using the app's warm sand and sky blue color palette. The background of the avatar is a soft ivory. The style is reminiscent of high-quality educational materials, avoiding harsh outlines in favor of smooth, organic shapes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkzFUHCbBzaDAzQ-N9ctJ9vs6heRgXFJ55V2UfImqxkmuSPVN7faQgnmHSqxamAPDC9YsViFZm2XPk9cXKsc-3mbXpX8w9YlMnYEVAA0lfZUAvinQgQJwzd8uaK9z07z7Ud-JzvlnRi6QcXzabjwmMXwMCuLBAdtb-9D_3Cmeru6Q6Bynbe8COYeHsE1D9NjT0E6-SS-lImU51h3fH7G2fN0J_lm2l_cBfie5AkoAZTy0ZOwaqbOB3MGRiLJeVCbJx61IS4mDm9P-K"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-inverse-primary tracking-tight">ALIFA</h1>
+<button class="text-on-surface-variant dark:text-outline-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="cloud_off" style="font-size: 28px;">cloud_off</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile py-stack-lg max-w-2xl mx-auto w-full relative">
+<!-- Progress Bar -->
+<div class="w-full mb-stack-lg">
+<div class="flex items-center justify-between font-label-md text-label-md text-on-surface-variant mb-2">
+<span>Exercice 3 sur 10</span>
+</div>
+<div class="h-4 bg-secondary-fixed rounded-full overflow-hidden relative">
+<div class="h-full bg-primary-container w-[30%] rounded-full absolute left-0 top-0 shadow-[inset_0_-2px_0_rgba(0,0,0,0.1)]"></div>
+</div>
+</div>
+<!-- Question Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-stack-md shadow-[0_8px_24px_rgba(61,64,91,0.08)] border border-primary-container/20 w-full mb-stack-lg relative overflow-hidden">
+<!-- Decorative Sahelian Element -->
+<div class="absolute -top-10 -right-10 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-primary" data-icon="wb_sun">wb_sunny</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface text-center mb-stack-md">Combien font 12 et 5 ?</h2>
+<!-- Visual Aid -->
+<div class="flex flex-col items-center gap-6 mb-stack-lg">
+<div class="flex items-center gap-4">
+<!-- Group of 12 -->
+<div class="grid grid-cols-4 gap-2 bg-surface-container-low p-4 rounded-xl shadow-inner border border-outline-variant/30">
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm"></div>
+<span class="col-span-4 text-center font-label-md text-label-md text-on-surface-variant mt-1">12</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-primary">+</span>
+<!-- Group of 5 -->
+<div class="grid grid-cols-3 gap-2 bg-surface-container-low p-4 rounded-xl shadow-inner border border-outline-variant/30">
+<div class="w-4 h-4 rounded-full bg-secondary shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-secondary shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-secondary shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-secondary shadow-sm"></div>
+<div class="w-4 h-4 rounded-full bg-secondary shadow-sm"></div>
+<div class="w-4 h-4"></div> <!-- Spacer -->
+<span class="col-span-3 text-center font-label-md text-label-md text-on-surface-variant mt-1">5</span>
+</div>
+</div>
+<!-- Equation Text -->
+<div class="font-display-glyph text-[64px] leading-none text-primary font-bold tracking-tight text-center">
+                    12 + 5 = ?
+                </div>
+</div>
+<!-- Options Grid -->
+<div class="grid grid-cols-3 gap-gutter-mobile w-full">
+<!-- Option 15 -->
+<button class="h-[80px] rounded-xl bg-surface-container border-2 border-outline-variant hover:border-primary-container hover:bg-surface flex items-center justify-center transition-all focus:outline-none focus:ring-4 focus:ring-primary-container/30 relative">
+<span class="font-headline-lg text-headline-lg text-on-surface">15</span>
+</button>
+<!-- Option 17 (Selected State Example) -->
+<button class="h-[80px] rounded-xl bg-surface border-2 border-primary ring-4 ring-primary-container/20 flex items-center justify-center transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5"></div>
+<span class="font-headline-lg text-headline-lg text-primary z-10">17</span>
+<!-- Selection Indicator -->
+<div class="absolute top-2 right-2 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[12px] font-bold" data-icon="check">check</span>
+</div>
+</button>
+<!-- Option 18 -->
+<button class="h-[80px] rounded-xl bg-surface-container border-2 border-outline-variant hover:border-primary-container hover:bg-surface flex items-center justify-center transition-all focus:outline-none focus:ring-4 focus:ring-primary-container/30 relative">
+<span class="font-headline-lg text-headline-lg text-on-surface">18</span>
+</button>
+</div>
+</div>
+<!-- Call to Action -->
+<button class="w-full h-touch-target-min bg-primary-container text-on-primary-container font-headline-md text-headline-md rounded-xl flex items-center justify-center shadow-[0_4px_0_#b58455,0_8px_16px_rgba(61,64,91,0.15)] active:translate-y-1 active:shadow-[0_0px_0_#b58455,0_2px_4px_rgba(61,64,91,0.1)] transition-all">
+            Vérifier
+        </button>
+</main>
+<!-- BottomNavBar (From JSON) - Suppressed for task-focused screen, but requested to render active state logic. -->
+<!-- Note: Since this is an exercise/task screen, the Nav should ideally be suppressed to focus on the canvas per rules. However, I am rendering it to demonstrate the requested Active State Logic mapping for "Apprendre". -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 z-50 rounded-t-xl bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_-4px_12px_rgba(61,64,91,0.08)] md:hidden">
+<!-- Inactive Tab: Accueil -->
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-6 py-2 hover:bg-surface-container-high dark:hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Accueil</span>
+</button>
+<!-- Active Tab: Apprendre (Matches Exercise intent) -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-6 py-2 shadow-sm transition-transform duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="menu_book" data-weight="fill" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-md text-label-md">Apprendre</span>
+</button>
+<!-- Inactive Tab: Parents -->
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-6 py-2 hover:bg-surface-container-high dark:hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="family_restroom">family_restroom</span>
+<span class="font-label-md text-label-md">Parents</span>
+</button>
+</nav>
+</body></html>

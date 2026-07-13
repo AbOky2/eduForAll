@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALIFA - Niveau CP1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-surface": "#2b2e48",
+                        "outline": "#82756a",
+                        "primary": "#7d562d",
+                        "secondary-fixed": "#c7e7ff",
+                        "on-secondary-fixed-variant": "#064c6b",
+                        "on-secondary-container": "#255f80",
+                        "secondary-container": "#a3d8fe",
+                        "surface-tint": "#7d562d",
+                        "surface-container-high": "#e6e6ff",
+                        "on-primary-container": "#5b3912",
+                        "inverse-primary": "#f0bd8b",
+                        "tertiary-container": "#d1a741",
+                        "on-surface-variant": "#50453b",
+                        "primary-fixed-dim": "#f0bd8b",
+                        "on-tertiary-container": "#533d00",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdf9b",
+                        "surface": "#fbf8ff",
+                        "surface-dim": "#d6d8f9",
+                        "on-surface": "#161a32",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#d4a373",
+                        "secondary": "#2b6485",
+                        "secondary-fixed-dim": "#98cdf2",
+                        "surface-container": "#edecff",
+                        "inverse-on-surface": "#f1efff",
+                        "on-primary-fixed-variant": "#623f18",
+                        "tertiary-fixed-dim": "#edc157",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "outline-variant": "#d4c4b7",
+                        "surface-bright": "#fbf8ff",
+                        "on-primary-fixed": "#2c1600",
+                        "surface-container-low": "#f4f2ff",
+                        "on-secondary-fixed": "#001e2e",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dfe0ff",
+                        "on-background": "#161a32",
+                        "tertiary": "#785a00",
+                        "background": "#fbf8ff",
+                        "primary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dfe0ff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "touch-target-min": "56px",
+                        "stack-lg": "40px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "24px",
+                        "stack-md": "24px",
+                        "gutter-mobile": "16px",
+                        "base": "8px"
+                    },
+                    fontFamily: {
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "display-glyph": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-md": ["Quicksand"]
+                    },
+                    fontSize: {
+                        "label-lg": ["16px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "600" }],
+                        "label-md": ["14px", { lineHeight: "18px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "36px", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+                        "display-glyph": ["80px", { lineHeight: "96px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["20px", { lineHeight: "30px", fontWeight: "500" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen relative overflow-x-hidden font-body-md">
+<!-- Pattern Overlay for Tactile Feel -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100\' height=\'100\' filter=\'url(%23noise)\'/%3E%3C/svg%3E');"></div>
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface shadow-sm">
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full h-[72px]">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden border-2 border-primary-container relative">
+<img alt="Child Avatar" class="w-full h-full object-cover" data-alt="A stylized, modern 3D illustration of a young African child's face, smiling warmly. The rendering style is smooth and clay-like, fitting a premium educational app. The lighting is soft and bright, casting gentle shadows. The color palette features warm earth tones and a soft ivory background, ensuring a high-end, tactile aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARGosggfObjVPuJDUncE3K-pjtQyKUwVGPRVfi0VeTw30xn7dQcXALoGHqIBi7ZyqZ4DWTfrMu6iZAUF1TQDMEtb3zGnugYHtIHyFNTZMogoKHBbEc_L5UgfHMwsCTucXJFApD79Q7SHpesq5-vStaBqkBLyJBk4GoC38F_VMLmDi1CzD-u_vMnEl4lXGkH6Hc-ux9IpiRQQiDirhUWU_IUm-q_4d6cRLGgaumjEqWmcRQV3mtc5q40IYf1GHhZ29pflc4faNQMc2n"/>
+</div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">ALIFA</h1>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-outline" style="font-variation-settings: 'FILL' 0;">cloud_off</span>
+</div>
+</div>
+</header>
+<main class="relative z-10 pb-[120px]">
+<!-- Header Section -->
+<div class="px-margin-mobile py-stack-md text-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Niveau CP1</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Continue ton aventure !</p>
+</div>
+<!-- Progress Map Container -->
+<div class="relative max-w-md mx-auto px-margin-mobile py-stack-lg min-h-[600px] flex flex-col items-center">
+<!-- SVG Winding Path -->
+<div class="absolute inset-0 pointer-events-none z-0 flex justify-center w-full">
+<svg class="opacity-30" height="100%" preserveaspectratio="none" viewbox="0 0 200 600" width="200">
+<path d="M100,50 C180,150 20,250 100,350 C180,450 20,550 100,650" fill="none" stroke="#d4a373" stroke-dasharray="20 20" stroke-linecap="round" stroke-width="12"></path>
+</svg>
+</div>
+<!-- Environmental Decor -->
+<div class="absolute left-8 top-32 opacity-60 pointer-events-none text-tertiary-container">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="absolute right-12 top-1/2 opacity-50 pointer-events-none text-primary-container">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">terrain</span>
+</div>
+<div class="absolute left-16 bottom-40 opacity-40 pointer-events-none text-outline-variant">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<!-- Nodes List -->
+<div class="relative z-10 w-full flex flex-col items-center gap-20">
+<!-- Node 1 (Current) -->
+<div class="relative flex flex-col items-center group w-full translate-x-8">
+<div class="mb-3 flex gap-1">
+<span class="material-symbols-outlined text-tertiary-container text-xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-container text-xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-surface-variant text-xl" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<button class="w-24 h-24 rounded-full bg-surface-container-lowest border-4 border-primary-container shadow-[0_8px_16px_rgba(61,64,91,0.12)] flex items-center justify-center relative overflow-hidden transition-transform duration-200 hover:scale-105 hover:-translate-y-1 active:scale-95 active:translate-y-0 active:shadow-sm">
+<!-- Inner pulse effect simulated with rings -->
+<div class="absolute inset-0 border-4 border-primary-container rounded-full opacity-30 scale-110"></div>
+<div class="absolute inset-2 bg-primary-container opacity-10 rounded-full"></div>
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</button>
+<div class="mt-4 bg-surface-container-lowest px-4 py-2 rounded-xl shadow-sm border border-surface-variant max-w-[200px] text-center">
+<span class="font-label-lg text-label-lg text-on-surface block">Monde 1</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-sm">Les lettres</span>
+</div>
+</div>
+<!-- Node 2 (Locked) -->
+<div class="relative flex flex-col items-center group w-full -translate-x-6">
+<button class="w-20 h-20 rounded-full bg-surface-variant border-4 border-outline-variant shadow-sm flex items-center justify-center cursor-not-allowed opacity-80">
+<span class="material-symbols-outlined text-outline text-3xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</button>
+<div class="mt-3 text-center max-w-[180px]">
+<span class="font-label-md text-label-md text-outline block">Monde 2</span>
+<span class="font-body-md text-body-md text-outline-variant text-xs">Les syllabes</span>
+</div>
+</div>
+<!-- Node 3 (Locked) -->
+<div class="relative flex flex-col items-center group w-full translate-x-4">
+<button class="w-20 h-20 rounded-full bg-surface-variant border-4 border-outline-variant shadow-sm flex items-center justify-center cursor-not-allowed opacity-70">
+<span class="material-symbols-outlined text-outline text-3xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</button>
+<div class="mt-3 text-center max-w-[180px]">
+<span class="font-label-md text-label-md text-outline block">Monde 3</span>
+<span class="font-body-md text-body-md text-outline-variant text-xs">Les premiers mots</span>
+</div>
+</div>
+<!-- Node 4 (Locked) -->
+<div class="relative flex flex-col items-center group w-full -translate-x-2">
+<button class="w-20 h-20 rounded-full bg-surface-variant border-4 border-outline-variant shadow-sm flex items-center justify-center cursor-not-allowed opacity-60">
+<span class="material-symbols-outlined text-outline text-3xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</button>
+<div class="mt-3 text-center max-w-[180px]">
+<span class="font-label-md text-label-md text-outline block">Monde 4</span>
+<span class="font-body-md text-body-md text-outline-variant text-xs">Les nombres</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-surface-container-lowest shadow-[0_-4px_12px_rgba(61,64,91,0.08)] z-50 rounded-t-xl md:hidden">
+<!-- Accueil (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Accueil</span>
+</a>
+<!-- Apprendre (Inactive) -->
+<a class="flex flex-col items-center justify-center text-outline px-6 py-2 hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">menu_book</span>
+<span class="font-label-md text-label-md">Apprendre</span>
+</a>
+<!-- Parents (Inactive) -->
+<a class="flex flex-col items-center justify-center text-outline px-6 py-2 hover:bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">family_restroom</span>
+<span class="font-label-md text-label-md">Parents</span>
+</a>
+</nav>
+</body></html>
