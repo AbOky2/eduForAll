@@ -59,7 +59,6 @@ export function ComposeExercise({
   const [placed, setPlaced] = useState<Tile[]>([]);
 
   useEffect(() => {
-    setPlaced([]);
     if (step.audioId) {
       playAudio(step.audioId);
     }

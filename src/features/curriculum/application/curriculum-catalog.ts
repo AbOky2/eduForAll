@@ -13,7 +13,7 @@ import {
  * validated bundled manifest (single load, then cached lookups).
  */
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const rawManifest: unknown = require('../../../content/manifests/curriculum-v1.json');
 
 let cached: CurriculumManifest | null = null;

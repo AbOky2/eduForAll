@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { createElement, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { resolveAudioSource } from '@/content/audio-registry.generated';
@@ -170,7 +170,7 @@ function SessionBody({
   }, [state.phase, profileId, lesson, state.outcomes, router]);
 
   const step = state.phase === 'completed' ? null : currentStep(state);
-  const Renderer = step ? rendererFor(step) : null;
+  const renderer = step ? rendererFor(step) : null;
   const progress = state.stepIndex / lesson.steps.length;
 
   return (
@@ -211,14 +211,18 @@ function SessionBody({
 
       {/* Exercise body */}
       <View style={styles.body}>
-        {step && Renderer ? (
-          <Renderer
-            step={step}
-            interactive={state.phase === 'awaiting_answer'}
-            onSubmit={(answer) => dispatch({ type: 'ANSWER_SUBMITTED', answer })}
-            playAudio={playAudio}
-            playingAudioId={playingAudioId}
-          />
+        {step && renderer ? (
+          // key remounts the renderer per step: fresh local state, no reset effects.
+          // playAudio only touches the audio ref inside event handlers, never during render.
+          // eslint-disable-next-line react-hooks/refs
+          createElement(renderer, {
+            key: step.id,
+            step,
+            interactive: state.phase === 'awaiting_answer',
+            onSubmit: (answer) => dispatch({ type: 'ANSWER_SUBMITTED', answer }),
+            playAudio,
+            playingAudioId,
+          })
         ) : step ? (
           <View style={styles.missing}>
             <AlifaText variant="bodyLg" align="center" color={colors.textSecondary}>

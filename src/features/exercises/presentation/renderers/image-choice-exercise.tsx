@@ -21,7 +21,6 @@ export function ImageChoiceExercise({
   const [pressedId, setPressedId] = useState<string | null>(null);
 
   useEffect(() => {
-    setPressedId(null);
     if (step.audioId) {
       playAudio(step.audioId);
     }

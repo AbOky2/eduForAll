@@ -4,7 +4,7 @@
  * Deliberately coarse: the exercise validates passage through checkpoints
  * with a generous radius, not calligraphic accuracy (see docs/design-decisions.md).
  */
-export type Stroke = ReadonlyArray<readonly [number, number]>;
+export type Stroke = readonly (readonly [number, number])[];
 
 const circle: Stroke = [
   [0.72, 0.35],

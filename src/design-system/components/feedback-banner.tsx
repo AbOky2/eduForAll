@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
@@ -20,17 +20,19 @@ interface FeedbackBannerProps {
  */
 export function FeedbackBanner({ kind, message, actionLabel, onAction }: FeedbackBannerProps) {
   const reducedMotion = useReducedMotion();
-  const translate = useRef(new Animated.Value(reducedMotion ? 0 : 120)).current;
+  const [translate] = useState(() => new Animated.Value(120));
 
   useEffect(() => {
-    if (!reducedMotion) {
-      Animated.spring(translate, {
-        toValue: 0,
-        useNativeDriver: true,
-        speed: 16,
-        bounciness: 6,
-      }).start();
+    if (reducedMotion) {
+      translate.setValue(0);
+      return;
     }
+    Animated.spring(translate, {
+      toValue: 0,
+      useNativeDriver: true,
+      speed: 16,
+      bounciness: 6,
+    }).start();
   }, [reducedMotion, translate]);
 
   const isCorrect = kind === 'correct';

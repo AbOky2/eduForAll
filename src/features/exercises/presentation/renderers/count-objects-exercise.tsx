@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
@@ -17,10 +17,6 @@ export function CountObjectsExercise({
   onSubmit,
 }: ExerciseRendererProps<CountStep>) {
   const [pressed, setPressed] = useState<number | null>(null);
-
-  useEffect(() => {
-    setPressed(null);
-  }, [step.id]);
 
   return (
     <View style={styles.container}>

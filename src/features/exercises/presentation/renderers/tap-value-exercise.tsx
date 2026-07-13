@@ -24,7 +24,6 @@ export function TapValueExercise({
   const audioId = step.audioId ?? null;
 
   useEffect(() => {
-    setPressed(null);
     if (audioId) {
       playAudio(audioId);
     }

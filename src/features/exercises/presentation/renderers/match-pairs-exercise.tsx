@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
@@ -27,20 +27,7 @@ export function MatchPairsExercise({
   );
 
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
-  const [matches, setMatches] = useState<Array<{ pairId: string; matchedPairId: string }>>([]);
-
-  useEffect(() => {
-    setSelectedLeft(null);
-    setMatches([]);
-  }, [step.id]);
-
-  // After a kind "try again", clear the board for a fresh attempt.
-  useEffect(() => {
-    if (interactive && matches.length === step.pairs.length) {
-      setMatches([]);
-      setSelectedLeft(null);
-    }
-  }, [interactive, matches.length, step.pairs.length]);
+  const [matches, setMatches] = useState<{ pairId: string; matchedPairId: string }[]>([]);
 
   const matchedLeft = new Set(matches.map((match) => match.pairId));
   const matchedRight = new Set(matches.map((match) => match.matchedPairId));
@@ -76,7 +63,13 @@ export function MatchPairsExercise({
                     ? 'default'
                     : 'disabled'
               }
-              onPress={() => setSelectedLeft(pair.id)}
+              onPress={() => {
+                // A tap after a wrong attempt clears the board for a fresh try.
+                if (matches.length === step.pairs.length) {
+                  setMatches([]);
+                }
+                setSelectedLeft(pair.id);
+              }}
             />
           ))}
         </View>

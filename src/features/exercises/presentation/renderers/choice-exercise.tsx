@@ -28,7 +28,6 @@ export function ChoiceExercise({
   const grid = isAudio && step.layout === 'grid';
 
   useEffect(() => {
-    setPressedId(null);
     if (step.type === 'audio_multiple_choice') {
       playAudio(step.audioId);
     }

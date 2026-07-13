@@ -9,5 +9,5 @@ export type ExerciseAnswer =
   | { kind: 'value'; value: string }
   | { kind: 'sequence'; values: string[] }
   | { kind: 'number'; value: number }
-  | { kind: 'pairs'; matches: Array<{ pairId: string; matchedPairId: string }> }
+  | { kind: 'pairs'; matches: { pairId: string; matchedPairId: string }[] }
   | { kind: 'trace'; reachedAllCheckpoints: boolean };

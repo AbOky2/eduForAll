@@ -45,7 +45,6 @@ export function OrderWordsExercise({
   const [chosen, setChosen] = useState<Chip[]>([]);
 
   useEffect(() => {
-    setChosen([]);
     if (step.audioId) {
       playAudio(step.audioId);
     }

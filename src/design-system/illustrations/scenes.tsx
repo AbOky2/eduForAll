@@ -15,7 +15,6 @@ const TREE = '#7d562d';
 const LEAF = '#5b7a4a';
 const SKIN = '#8a5a3b';
 const CLOTH = '#2b6485';
-const CLOTH_LIGHT = '#a3d8fe';
 const INK = '#161a32';
 
 interface SceneProps {

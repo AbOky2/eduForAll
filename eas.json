@@ -1,0 +1,43 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "ALIFA_ANDROID_PACKAGE": "td.alifa.app.dev",
+        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.dev"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "ALIFA_ANDROID_PACKAGE": "td.alifa.app.preview",
+        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.preview"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "ALIFA_ANDROID_PACKAGE": "td.alifa.app",
+        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal"
+      }
+    }
+  }
+}

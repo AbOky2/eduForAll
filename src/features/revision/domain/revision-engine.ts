@@ -36,7 +36,7 @@ const STALE_AFTER_DAYS = 7;
  * Known confusable pairs (visually or phonetically close). If both sides
  * accumulate errors, revise them together with an audio+visual contrast.
  */
-const CONFUSION_PAIRS: ReadonlyArray<readonly [string, string]> = [
+const CONFUSION_PAIRS: readonly (readonly [string, string])[] = [
   ['skill-son-ba', 'skill-son-ma'],
   ['skill-son-ta', 'skill-son-da'],
   ['skill-lettre-b', 'skill-lettre-d'],

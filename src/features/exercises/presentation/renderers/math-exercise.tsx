@@ -50,7 +50,6 @@ export function MathExercise({
   const [pressed, setPressed] = useState<number | null>(null);
 
   useEffect(() => {
-    setPressed(null);
     if (step.type === 'visual_word_problem' && step.statementAudioId) {
       playAudio(step.statementAudioId);
     }

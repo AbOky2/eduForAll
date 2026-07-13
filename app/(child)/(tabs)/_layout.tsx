@@ -2,16 +2,16 @@ import { Tabs } from 'expo-router';
 import { StyleSheet, View, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-/** Minimal shape of the tab-bar props we consume (no direct react-navigation import). */
-interface AlifaTabBarProps {
-  state: { index: number; routes: Array<{ key: string; name: string }> };
-  navigation: { navigate: (name: string) => void };
-}
-
 import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
 import { AlifaText } from '@/design-system/primitives';
 import { a11y, colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+
+/** Minimal shape of the tab-bar props we consume (no direct react-navigation import). */
+interface AlifaTabBarProps {
+  state: { index: number; routes: { key: string; name: string }[] };
+  navigation: { navigate: (name: string) => void };
+}
 
 const TAB_META: Record<string, { label: string; icon: IconName }> = {
   index: { label: fr.tabs.home, icon: 'home' },

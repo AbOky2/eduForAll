@@ -20,7 +20,6 @@ export function MiniStoryExercise({
   const [pressedId, setPressedId] = useState<string | null>(null);
 
   useEffect(() => {
-    setPressedId(null);
     playAudio(step.storyAudioId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);

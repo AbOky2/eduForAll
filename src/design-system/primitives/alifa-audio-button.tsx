@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, Pressable, StyleSheet } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
@@ -39,7 +39,7 @@ export function AlifaAudioButton({
 }: AlifaAudioButtonProps) {
   const palette = VARIANTS[variant];
   const reducedMotion = useReducedMotion();
-  const pulse = useRef(new Animated.Value(1)).current;
+  const [pulse] = useState(() => new Animated.Value(1));
 
   useEffect(() => {
     if (playing && !reducedMotion) {

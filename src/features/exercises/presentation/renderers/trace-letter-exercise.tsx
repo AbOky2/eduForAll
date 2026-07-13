@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Polyline } from 'react-native-svg';
@@ -30,15 +30,7 @@ export function TraceLetterExercise({
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
   const [strokeIndex, setStrokeIndex] = useState(0);
   const [checkpointIndex, setCheckpointIndex] = useState(0);
-  const [fingerTrail, setFingerTrail] = useState<string>('');
-  const trailRef = useRef<string[]>([]);
-
-  useEffect(() => {
-    setStrokeIndex(0);
-    setCheckpointIndex(0);
-    setFingerTrail('');
-    trailRef.current = [];
-  }, [step.id]);
+  const [trail, setTrail] = useState<string[]>([]);
 
   const scaled = useMemo(() => {
     if (!strokes || boardSize.width === 0) {
@@ -69,8 +61,7 @@ export function TraceLetterExercise({
       if (nextCheckpoint >= currentStroke.length) {
         setStrokeIndex((index) => index + 1);
         setCheckpointIndex(0);
-        trailRef.current = [];
-        setFingerTrail('');
+        setTrail([]);
       } else {
         setCheckpointIndex(nextCheckpoint);
       }
@@ -80,16 +71,12 @@ export function TraceLetterExercise({
   const pan = Gesture.Pan()
     .enabled(interactive && !done)
     .onUpdate((event) => {
-      trailRef.current.push(`${Math.round(event.x)},${Math.round(event.y)}`);
-      if (trailRef.current.length > 120) {
-        trailRef.current.shift();
-      }
-      setFingerTrail(trailRef.current.join(' '));
+      const point = `${Math.round(event.x)},${Math.round(event.y)}`;
+      setTrail((current) => [...current.slice(-119), point]);
       advance(event.x, event.y);
     })
     .onEnd(() => {
-      trailRef.current = [];
-      setFingerTrail('');
+      setTrail([]);
     })
     .runOnJS(true);
 
@@ -152,9 +139,9 @@ export function TraceLetterExercise({
                   );
                 }),
               )}
-              {fingerTrail.length > 0 ? (
+              {trail.length > 0 ? (
                 <Polyline
-                  points={fingerTrail}
+                  points={trail.join(' ')}
                   fill="none"
                   stroke={colors.secondary}
                   strokeWidth={10}
