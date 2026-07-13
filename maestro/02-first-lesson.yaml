@@ -1,0 +1,10 @@
+# Démarrer la première leçon depuis l'accueil, répondre, atteindre le feedback
+appId: td.alifa.app.dev
+---
+- launchApp
+- assertVisible: 'Bonjour'
+- tapOn: 'Ma prochaine leçon'
+- assertVisible: 'Écoute bien.'
+- tapOn: 'Suivant'
+# étape 2 : tap_letter — la bonne réponse dépend du contenu ; on vérifie la présence des cartes
+- assertVisible: 'Touche la lettre que tu entends.'

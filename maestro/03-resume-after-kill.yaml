@@ -1,0 +1,12 @@
+# Fermer l'app en pleine leçon puis vérifier la reprise
+appId: td.alifa.app.dev
+---
+- launchApp
+- tapOn: 'Ma prochaine leçon'
+- assertVisible: 'Écoute bien.'
+- tapOn: 'Suivant'
+- stopApp
+- launchApp
+- tapOn: 'Continuer ma leçon'
+# La leçon reprend à l'étape sauvegardée (étape 2, pas l'étape 1)
+- assertNotVisible: 'Écoute bien.'

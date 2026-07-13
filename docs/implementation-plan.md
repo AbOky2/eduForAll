@@ -8,43 +8,40 @@ Application éducative CP1–CP2 offline-first pour le Tchad. Expo SDK 56, RN 0.
 - [x] Récupération des 21 maquettes Stitch via MCP (`design/stitch/` : PNG + HTML + index.json)
 - [x] `docs/design-audit.md`, `docs/design-traceability.md`, `docs/risk-register.md`, ce plan
 
-### Phase 2 — Fondation
-- [ ] Scaffold Expo SDK 56 (template default, expo-router), `app.config.ts`, tsconfig strict renforcé
-- [ ] ESLint + Prettier + scripts qualité
-- [ ] Design tokens extraits de Stitch (`src/design-system/tokens/`)
-- [ ] Polices Quicksand + Plus Jakarta Sans embarquées (`assets/fonts/`)
-- [ ] Connexion SQLite + runner de migrations versionnées + tables V1
-- [ ] Hiérarchie d'erreurs (`src/core/errors`), Result type, logger local
-- [ ] Bootstrap : init DB → migrations → import contenu → route initiale
-- [ ] Tests unitaires fondation (migrations, result, erreurs)
+### Phase 2 — Fondation ✅
+- [x] Scaffold Expo SDK 56, `app.config.ts`, tsconfig strict renforcé (expo-doctor 21/21)
+- [x] ESLint + Prettier + scripts qualité
+- [x] Design tokens extraits de Stitch, polices embarquées, icônes générées
+- [x] SQLite + runner de migrations + 14 tables V1
+- [x] Erreurs typées, Result, logger local, bootstrap transactionnel idempotent
 
-### Phase 3 — Parcours enfant minimal complet
-- [ ] Onboarding (3 écrans + création profil, S02–S05)
-- [ ] Accueil enfant (S06), sélection module (S07), carte de progression (S08)
-- [ ] Session de leçon : machine d'état + 3 premiers types d'exercices (listen, audio_multiple_choice, tap_letter)
-- [ ] Sauvegarde progression + écran réussite (S16) + reprise après fermeture
+### Phase 3 — Parcours enfant minimal complet ✅
+- [x] Onboarding (S02–S05), accueil (S06), modules (S07), carte (S08/S09)
+- [x] Session de leçon (machine d'état) + résultat (S16) + reprise après fermeture
 
-### Phase 4 — Moteur complet
-- [ ] Registry des 20 types d'exercices + renderers + validations pures + tests
-- [ ] Service audio expo-audio (preload/play/replay/rate) + manifest audio
-- [ ] Tracé de lettre (SVG + gesture + checkpoints)
-- [ ] Scoring, étoiles, déverrouillage, moteur de révision déterministe (S17)
+### Phase 4 — Moteur complet ✅
+- [x] Registry 20 types + renderers + évaluation pure + tests
+- [x] Service audio expo-audio + registre généré ; tracé de lettre (gesture + checkpoints)
+- [x] Scoring/étoiles, révision déterministe (S17)
 
-### Phase 5 — Contenu CP1 et CP2
-- [ ] Schémas Zod des manifestes ; 25 leçons CP1 (5 mondes) ; 25 leçons CP2 (5 mondes)
-- [ ] Scripts `validate:content` / `validate:audio` ; pipeline TTS temporaire documentée (gate release)
+### Phase 5 — Contenu CP1 et CP2 ✅
+- [x] 28 leçons CP1 + 26 CP2 (générateur déterministe, Zod), 258 étapes
+- [x] validate:content/assets/audio ; pipeline TTS placeholder + gate release
 
-### Phase 6 — Parent et paramètres
-- [ ] Parent gate PIN (secure-store + crypto), dashboard (S18), paramètres (S19), diagnostics, reset confirmé
+### Phase 6 — Parent et paramètres ✅
+- [x] Parent gate, dashboard (S18), paramètres (S19), confidentialité, diagnostics, reset double confirmation
 
-### Phase 7 — Polissage AAA
-- [ ] Animations (réussite, feedback, transitions), haptique, textures de fond, illustrations locales, responsive, accessibilité
+### Phase 7 — Polissage AAA 🔶 (partiel)
+- [x] Feedback animé interrompable, haptique légère, réduction de mouvement, responsive de base
+- [ ] Fresque carte CP2, drag-and-drop composition, QA visuelle on-device (docs/visual-qa.md)
 
-### Phase 8 — Qualité
-- [ ] Tests intégration + Maestro, audits offline/perf/a11y/sécurité, refactoring
+### Phase 8 — Qualité 🔶 (partiel)
+- [x] 33 tests (domaine + composants + manifeste), lint/tsc 0 erreur, export Metro 7,8 Mo
+- [ ] Tests intégration SQLite on-device, audits perf/a11y sur appareil réel
 
-### Phase 9 — Release
-- [ ] eas.json (dev/preview/production), CI, docs store/, validate:release, documentation complète
+### Phase 9 — Release 🔶 (prêt hors gates externes)
+- [x] eas.json (3 profils), CI GitHub Actions, docs store/, validate:release (8/9 gates vertes)
+- [ ] Voix définitives (gate bloquante), identifiants légaux stores (propriétaire)
 
 ## Décisions structurantes (ADR courtes)
 

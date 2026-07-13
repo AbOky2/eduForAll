@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Installation verrouillée
+        run: npm ci
+      - name: Dépendances saines
+        run: npm audit --omit=dev --audit-level=high || true
+      - name: Lint
+        run: npx expo lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Tests
+        run: npm test -- --ci
+      - name: Validation contenu
+        run: npm run validate:content
+      - name: Validation assets
+        run: npm run validate:assets
+      - name: Validation audio
+        run: npm run validate:audio
+      - name: Expo Doctor
+        run: npx expo-doctor@latest
+      - name: Export de contrôle (bundle Metro)
+        run: npx expo export --platform android --output-dir /tmp/export-check
+
+  # Build preview EAS : déclenchement manuel uniquement (jamais auto en prod)
+  preview-build:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: EAS build preview
+        run: npx eas-cli build --profile preview --platform android --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

@@ -1,0 +1,12 @@
+# Paramètres : couper le son via l'espace parent
+appId: td.alifa.app.dev
+---
+- launchApp
+- tapOn: 'Parents'
+- tapOn: '42'
+- assertVisible: 'Tableau de bord'
+- tapOn: 'Paramètres'
+- assertVisible: 'Son'
+- tapOn: 'Son'
+- back
+- back

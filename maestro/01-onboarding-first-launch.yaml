@@ -1,0 +1,18 @@
+# Premier lancement (à exécuter en mode avion) : onboarding → création profil → accueil
+appId: td.alifa.app.dev
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Ton école'
+- tapOn: 'Commencer'
+- assertVisible: 'Lecture, dictée, écriture et calcul.'
+- tapOn: 'Suivant'
+- assertVisible: 'Fonctionne sans connexion.'
+- tapOn: 'Créer mon profil'
+- assertVisible: 'Crée ton profil'
+- tapOn: 'Écris ton prénom ici'
+- inputText: 'Amina'
+- hideKeyboard
+- tapOn: 'CP1'
+- tapOn: 'C’est parti !'
+- assertVisible: 'Bonjour Amina !'
