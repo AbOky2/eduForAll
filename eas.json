@@ -22,7 +22,8 @@
       },
       "env": {
         "ALIFA_ANDROID_PACKAGE": "td.alifa.app.preview",
-        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.preview"
+        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.preview",
+        "ALIFA_RELEASE": "1"
       }
     },
     "production": {
@@ -32,7 +33,8 @@
       },
       "env": {
         "ALIFA_ANDROID_PACKAGE": "td.alifa.app",
-        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app"
+        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app",
+        "ALIFA_RELEASE": "1"
       }
     },
     "production-apk": {

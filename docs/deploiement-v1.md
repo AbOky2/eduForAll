@@ -7,24 +7,18 @@ Ce document est la marche à suivre, dans l'ordre. Ce qui est marqué
 
 ---
 
-## 0. Ce qu'il faut ouvrir avant tout
+## 0. Point de départ
 
-| Compte | Coût | Délai | Pour quoi |
-|---|---|---|---|
-| Expo / EAS | gratuit pour commencer | immédiat | construire les binaires ✅ (tu l'as) |
-| Google Play Console | 25 $ une fois | vérification d'identité : **quelques jours** | publier sur Android |
-| Apple Developer Program | 99 $/an | vérification : **1 à 2 jours**, parfois plus | publier sur iOS |
+Les deux comptes développeur sont déjà ouverts et une application a déjà été
+publiée depuis ce compte Play : la vérification d'identité est faite, et la
+règle des 12 testeurs pendant 14 jours — qui ne vise que les comptes
+particuliers récents n'ayant jamais publié — ne s'applique pas ici.
 
-> 🔴 **Ouvre les deux comptes maintenant.** La vérification d'identité est le
-> plus long délai du projet, et elle tourne pendant que tu fais le reste.
-> Depuis 2024, Google exige une vérification renforcée pour les comptes
-> particuliers, et impose à un compte particulier créé récemment **un test
-> fermé de 12 testeurs pendant 14 jours** avant de pouvoir passer en
-> production. Un compte **organisation** (association, ONG) échappe à cette
-> règle — si le projet doit être porté par une structure, c'est le moment de
-> le décider, pas après.
+Le CLI EAS est installé globalement (`/usr/local/bin/eas`) et connecté au
+compte `okimy`. Les commandes ci-dessous utilisent donc `eas`, pas
+`npx eas`.
 
----
+**Format visé : téléphone ET tablette, la tablette en priorité.**
 
 ## 1. Les trois trous à combler
 
@@ -57,8 +51,7 @@ Il faut donc un build installé. Voir §3, la liste de plans est en §4.
 ```bash
 npm ci
 npm run validate:release      # doit finir sur « Gates automatisables : OK »
-npx eas login
-npx eas init                  # une seule fois : crée le projet côté EAS
+eas init                      # une seule fois : crée le projet côté EAS
 ```
 
 `eas init` affiche un **identifiant de projet**. La configuration d'ALIFA
@@ -73,7 +66,7 @@ export EAS_PROJECT_ID="celui-affiche-par-eas-init"
 Puis le build de test :
 
 ```bash
-npx eas build --profile preview --platform android
+eas build --profile preview --platform android
 ```
 
 Un APK, un lien, un QR code. Installable directement sur une tablette
@@ -83,8 +76,8 @@ Pour iOS, un build de test passe par TestFlight et exige déjà le compte
 Apple :
 
 ```bash
-npx eas build --profile production --platform ios
-npx eas submit -p ios --latest      # → TestFlight
+eas build --profile production --platform ios
+eas submit -p ios --latest          # → TestFlight
 ```
 
 ---
@@ -143,8 +136,13 @@ terminées. Aucune donnée réelle, aucun écran de développement.
 | App Store — iPhone 6,9" | 1320 × 2868 (ou paysage) | 1 min, 10 max |
 | App Store — iPad 13" | 2064 × 2752 (ou paysage) | 1 min — **obligatoire**, l'app déclare `supportsTablet` |
 
-Comme ALIFA vise la tablette, mets les captures tablette en premier : c'est
-ce que verront les bailleurs et les ONG.
+**L'app se présente en téléphone et en tablette, la tablette en avant.**
+Concrètement : les deux jeux de captures sont renseignés, mais on prend les
+captures tablette d'abord et en paysage, puisque c'est ainsi que les enfants
+tiendront l'appareil et que les mises en page passent en deux volets.
+
+Sans captures tablette, Play affiche la fiche comme une « application
+téléphone » sur les tablettes, et c'est exactement le contraire du message.
 
 ---
 
@@ -169,8 +167,8 @@ ce que verront les bailleurs et les ONG.
 5. Build et envoi :
 
 ```bash
-npm run build:production                 # AAB + IPA
-npx eas submit -p android --latest       # → piste de test interne
+npm run build:production             # AAB + IPA
+eas submit -p android --latest       # → piste de test interne
 ```
 
 > `eas.json` envoie sur la piste `internal` en statut `draft`. La promotion
@@ -199,7 +197,7 @@ npx eas submit -p android --latest       # → piste de test interne
    nécessaire** — sinon un examinateur peut chercher un identifiant de test.
 
 ```bash
-npx eas submit -p ios --latest           # → TestFlight, puis soumission
+eas submit -p ios --latest           # → TestFlight, puis soumission
 ```
 
 ---

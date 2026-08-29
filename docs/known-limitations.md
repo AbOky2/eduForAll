@@ -54,6 +54,7 @@
   des bundles Metro complets pour les deux plateformes livrées (iOS 5,5 Mo,
   Android 5,7 Mo). **L'app n'a pas été vue tourner.**
 
-  ⚠️ `npx expo export --platform all` inclut le web, que le projet n'embarque
-  pas : la commande échoue sans rien produire **tout en sortant en code 0**.
-  Toujours nommer `ios` et `android` explicitement — c'est ce que fait la CI.
+  `app.config.ts` déclare `platforms: ['ios', 'android']`. Sans cette
+  déclaration, `expo export --platform all` partait aussi sur le web —
+  absent du projet — et échouait sans rien produire **tout en sortant en
+  code 0** : une vérification qui passe en ne vérifiant rien.

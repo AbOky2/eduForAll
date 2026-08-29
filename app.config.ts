@@ -17,6 +17,31 @@ const IOS_BUNDLE_IDENTIFIER = process.env.ALIFA_IOS_BUNDLE_ID ?? 'td.alifa.app.d
  */
 const EAS_PROJECT_ID = process.env.EAS_PROJECT_ID ?? '';
 
+/**
+ * Vrai pour tout build destiné à quelqu'un d'autre que le développeur
+ * (profils preview, production, production-apk d'eas.json).
+ *
+ * React Native déclare par défaut des permissions dont il n'a besoin qu'en
+ * développement : INTERNET pour joindre Metro, SYSTEM_ALERT_WINDOW pour
+ * l'overlay du menu dev. Les laisser dans une app pour enfants qui promet
+ * de ne jamais accéder au réseau serait une contradiction visible dans la
+ * liste des autorisations du Play Store.
+ */
+const IS_RELEASE_BUILD = process.env.ALIFA_RELEASE === '1';
+
+/**
+ * Autorisations retirées des builds livrés. ALIFA n'effectue aucun appel
+ * réseau (règle n° 1 du projet) et n'écrit que dans sa base privée : rien de
+ * tout cela ne lui sert. VIBRATE est conservée — le retour haptique de fin
+ * d'exercice s'en sert.
+ */
+const BLOCKED_PERMISSIONS = [
+  'android.permission.INTERNET',
+  'android.permission.SYSTEM_ALERT_WINDOW',
+  'android.permission.READ_EXTERNAL_STORAGE',
+  'android.permission.WRITE_EXTERNAL_STORAGE',
+];
+
 const config: ExpoConfig = {
   name: 'ALIFA',
   slug: 'alifa',
@@ -25,6 +50,9 @@ const config: ExpoConfig = {
   // src/design-system/responsive.
   orientation: 'default',
   scheme: 'alifa',
+  // Le projet n'embarque pas react-native-web. Le déclarer évite que
+  // `expo export --platform all` parte sur une plateforme absente.
+  platforms: ['ios', 'android'],
   // Light-only for V1: the Stitch design system is light mode only.
   userInterfaceStyle: 'light',
   icon: './assets/icons/app-icon.png',
@@ -45,6 +73,12 @@ const config: ExpoConfig = {
   },
   android: {
     package: ANDROID_PACKAGE,
+    // La progression de l'enfant ne doit pas partir dans la sauvegarde Google
+    // Drive : la politique de confidentialité affirme que les données ne
+    // quittent jamais l'appareil, et c'est ce qui est déclaré dans le
+    // formulaire Data Safety.
+    allowBackup: false,
+    ...(IS_RELEASE_BUILD ? { blockedPermissions: BLOCKED_PERMISSIONS } : {}),
     adaptiveIcon: {
       backgroundColor: '#f2efe1',
       foregroundImage: './assets/icons/adaptive-icon-foreground.png',
