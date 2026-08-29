@@ -21,7 +21,9 @@ export function MatchPairsExercise({
   const rightShuffled = useMemo(
     () =>
       [...step.pairs].sort(
-        (a, b) => ((a.id.charCodeAt(1) * 7) % 5) - ((b.id.charCodeAt(1) * 7) % 5) || a.id.localeCompare(b.id),
+        (a, b) =>
+          ((a.id.charCodeAt(1) * 7) % 5) - ((b.id.charCodeAt(1) * 7) % 5) ||
+          a.id.localeCompare(b.id),
       ),
     [step],
   );

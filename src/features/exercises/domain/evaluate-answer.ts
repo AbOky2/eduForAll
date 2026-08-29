@@ -34,6 +34,8 @@ export function evaluateAnswer(step: ExerciseStep, answer: ExerciseAnswer): Eval
     case 'text_multiple_choice':
     case 'image_multiple_choice':
     case 'mini_story_question':
+    case 'attribute_choice':
+    case 'spatial_position':
       if (answer.kind !== 'choice') {
         return invalid(`expected choice, got ${answer.kind}`);
       }
@@ -66,7 +68,9 @@ export function evaluateAnswer(step: ExerciseStep, answer: ExerciseAnswer): Eval
       if (answer.values.length !== step.sentence.length) {
         return incorrect;
       }
-      return answer.values.every((word, index) => normalize(word) === normalize(step.sentence[index] ?? ''))
+      return answer.values.every(
+        (word, index) => normalize(word) === normalize(step.sentence[index] ?? ''),
+      )
         ? correct
         : incorrect;
 
@@ -83,6 +87,7 @@ export function evaluateAnswer(step: ExerciseStep, answer: ExerciseAnswer): Eval
     }
 
     case 'trace_letter':
+    case 'trace_graphism':
       if (answer.kind !== 'trace') {
         return invalid(`expected trace, got ${answer.kind}`);
       }
@@ -106,9 +111,7 @@ export function evaluateAnswer(step: ExerciseStep, answer: ExerciseAnswer): Eval
         return invalid(`expected number, got ${answer.kind}`);
       }
       const expected =
-        step.mode === 'greater'
-          ? Math.max(step.left, step.right)
-          : Math.min(step.left, step.right);
+        step.mode === 'greater' ? Math.max(step.left, step.right) : Math.min(step.left, step.right);
       return answer.value === expected ? correct : incorrect;
     }
 
@@ -129,6 +132,31 @@ export function evaluateAnswer(step: ExerciseStep, answer: ExerciseAnswer): Eval
         return invalid(`expected number, got ${answer.kind}`);
       }
       return answer.value === step.answer ? correct : incorrect;
+
+    case 'simple_multiplication':
+      if (answer.kind !== 'number') {
+        return invalid(`expected number, got ${answer.kind}`);
+      }
+      return answer.value === step.a * step.b ? correct : incorrect;
+
+    case 'simple_division':
+      if (answer.kind !== 'number') {
+        return invalid(`expected number, got ${answer.kind}`);
+      }
+      // Content schema guarantees an exact division at CP level.
+      return answer.value === step.a / step.b ? correct : incorrect;
+
+    case 'count_money':
+      if (answer.kind !== 'number') {
+        return invalid(`expected number, got ${answer.kind}`);
+      }
+      return answer.value === step.answer ? correct : incorrect;
+
+    case 'sound_position':
+      if (answer.kind !== 'value') {
+        return invalid(`expected value, got ${answer.kind}`);
+      }
+      return normalize(answer.value) === step.answer ? correct : incorrect;
 
     default: {
       // Compile-time exhaustiveness: adding a type without handling it breaks the build.

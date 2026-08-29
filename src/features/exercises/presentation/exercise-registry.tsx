@@ -3,16 +3,21 @@ import type { ComponentType } from 'react';
 import type { ExerciseStep, ExerciseType } from '@/content/schemas/exercise-schema';
 
 import type { ExerciseRendererProps } from './exercise-props';
+import { AttributeExercise } from './renderers/attribute-exercise';
 import { ChoiceExercise } from './renderers/choice-exercise';
 import { ComposeExercise } from './renderers/compose-exercise';
 import { CountObjectsExercise } from './renderers/count-objects-exercise';
+import { GraphismExercise } from './renderers/graphism-exercise';
 import { ImageChoiceExercise } from './renderers/image-choice-exercise';
 import { ListenExercise } from './renderers/listen-exercise';
 import { ListenRepeatExercise } from './renderers/listen-repeat-exercise';
 import { MatchPairsExercise } from './renderers/match-pairs-exercise';
 import { MathExercise } from './renderers/math-exercise';
 import { MiniStoryExercise } from './renderers/mini-story-exercise';
+import { MoneyExercise } from './renderers/money-exercise';
 import { OrderWordsExercise } from './renderers/order-words-exercise';
+import { SoundPositionExercise } from './renderers/sound-position-exercise';
+import { SpatialPositionExercise } from './renderers/spatial-position-exercise';
 import { TapValueExercise } from './renderers/tap-value-exercise';
 import { TraceLetterExercise } from './renderers/trace-letter-exercise';
 
@@ -42,6 +47,13 @@ const registry: Record<ExerciseType, ComponentType<ExerciseRendererProps<any>>> 
   visual_word_problem: MathExercise,
   listen_and_repeat: ListenRepeatExercise,
   mini_story_question: MiniStoryExercise,
+  attribute_choice: AttributeExercise,
+  spatial_position: SpatialPositionExercise,
+  simple_multiplication: MathExercise,
+  simple_division: MathExercise,
+  count_money: MoneyExercise,
+  trace_graphism: GraphismExercise,
+  sound_position: SoundPositionExercise,
 };
 
 export function rendererFor(step: ExerciseStep): ComponentType<ExerciseRendererProps> | null {

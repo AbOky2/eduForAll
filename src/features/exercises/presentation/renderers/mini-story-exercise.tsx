@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAnswerCard, AlifaAudioButton, AlifaCard, AlifaText } from '@/design-system/primitives';
+import {
+  AlifaAnswerCard,
+  AlifaAudioButton,
+  AlifaCard,
+  AlifaText,
+} from '@/design-system/primitives';
 import { colors, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';

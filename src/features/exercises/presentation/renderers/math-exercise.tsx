@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAnswerCard, AlifaAudioButton, AlifaCard, AlifaText } from '@/design-system/primitives';
+import {
+  AlifaAnswerCard,
+  AlifaAudioButton,
+  AlifaCard,
+  AlifaExerciseLayout,
+  AlifaText,
+} from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { colors, radius, spacing } from '@/design-system/tokens';
 
@@ -14,14 +20,36 @@ type MathStep = Extract<
   | { type: 'compare_numbers' }
   | { type: 'simple_addition' }
   | { type: 'simple_subtraction' }
+  | { type: 'simple_multiplication' }
+  | { type: 'simple_division' }
   | { type: 'visual_word_problem' }
 >;
+
+/** Operator glyphs of the programme: « les signes de l'addition, de la
+ *  soustraction, d'égalité, de la multiplication et de la division » (p. 58). */
+const OPERATOR = {
+  simple_addition: '+',
+  simple_subtraction: '−',
+  simple_multiplication: '×',
+  simple_division: '÷',
+} as const;
+
+type OperationType = keyof typeof OPERATOR;
+type OperationStep = Extract<MathStep, { type: OperationType }>;
+
+function isOperation(step: MathStep): step is OperationStep {
+  return step.type in OPERATOR;
+}
 
 /** Dot cluster showing a quantity as tens (gold) and units (blue) — mockup S15. */
 function QuantityCard({ value }: { value: number }) {
   const dots = Math.min(value, 20);
   return (
-    <AlifaCard padded={false} style={quantityStyles.card} backgroundColor={colors.surfaceContainerLow}>
+    <AlifaCard
+      padded={false}
+      style={quantityStyles.card}
+      backgroundColor={colors.surfaceContainerLow}
+    >
       <View style={quantityStyles.dots}>
         {Array.from({ length: dots }, (_, index) => (
           <View
@@ -64,91 +92,98 @@ export function MathExercise({
     onSubmit({ kind: 'number', value });
   };
 
-  return (
-    <View style={styles.container}>
-      <AlifaCard rounded="xl" style={styles.board}>
-        {step.type === 'simple_addition' || step.type === 'simple_subtraction' ? (
-          <>
-            {step.showQuantities ? (
-              <View style={styles.quantities}>
-                <QuantityCard value={step.a} />
-                <AlifaText variant="displayGlyphSmall" color={colors.primary}>
-                  {step.type === 'simple_addition' ? '+' : '−'}
-                </AlifaText>
-                <QuantityCard value={step.b} />
-              </View>
-            ) : null}
-            <AlifaText variant="displayGlyph" align="center" color={colors.primary}>
-              {step.a} {step.type === 'simple_addition' ? '+' : '−'} {step.b} = ?
-            </AlifaText>
-          </>
-        ) : null}
-
-        {step.type === 'number_sequence' ? (
-          <View style={styles.sequence}>
-            {step.sequence.map((value, index) => (
-              <View
-                key={index}
-                style={[styles.sequenceCell, value === null && styles.sequenceGap]}
-              >
-                <AlifaText
-                  variant="displayGlyphSmall"
-                  color={value === null ? colors.outline : colors.textPrimary}
-                >
-                  {value === null ? '?' : String(value)}
-                </AlifaText>
-              </View>
-            ))}
-          </View>
-        ) : null}
-
-        {step.type === 'compare_numbers' ? (
-          <AlifaText variant="headlineMd" align="center">
-            {step.instruction.text}
+  const prompt = (
+    <AlifaCard rounded="xl" style={styles.board}>
+      {isOperation(step) ? (
+        <>
+          {step.showQuantities ? (
+            <View style={styles.quantities}>
+              {step.type === 'simple_multiplication' ? (
+                // « a × b » is read as b groups of a — show the groups.
+                Array.from({ length: step.b }, (_, index) => (
+                  <QuantityCard key={index} value={step.a} />
+                ))
+              ) : (
+                <>
+                  <QuantityCard value={step.a} />
+                  <AlifaText variant="displayGlyphSmall" color={colors.primary}>
+                    {OPERATOR[step.type]}
+                  </AlifaText>
+                  <QuantityCard value={step.b} />
+                </>
+              )}
+            </View>
+          ) : null}
+          <AlifaText variant="displayGlyph" align="center" color={colors.primary}>
+            {step.a} {OPERATOR[step.type]} {step.b} = ?
           </AlifaText>
-        ) : null}
+        </>
+      ) : null}
 
-        {step.type === 'visual_word_problem' ? (
-          <View style={styles.problem}>
-            {step.illustrationId ? <ObjectIcon id={step.illustrationId} size={64} /> : null}
-            <AlifaText variant="bodyLg" align="center">
-              {step.statement}
-            </AlifaText>
-            {step.statementAudioId ? (
-              <AlifaAudioButton
-                variant="sky"
-                size={48}
-                playing={playingAudioId === step.statementAudioId}
-                onPress={() => step.statementAudioId && playAudio(step.statementAudioId)}
-              />
-            ) : null}
-          </View>
-        ) : null}
-      </AlifaCard>
+      {step.type === 'number_sequence' ? (
+        <View style={styles.sequence}>
+          {step.sequence.map((value, index) => (
+            <View key={index} style={[styles.sequenceCell, value === null && styles.sequenceGap]}>
+              <AlifaText
+                variant="displayGlyphSmall"
+                color={value === null ? colors.outline : colors.textPrimary}
+              >
+                {value === null ? '?' : String(value)}
+              </AlifaText>
+            </View>
+          ))}
+        </View>
+      ) : null}
 
-      <View style={styles.options}>
-        {options.map((option, index) => (
-          <AlifaAnswerCard
-            key={`${option}-${index}`}
-            label={String(option)}
-            state={
-              !interactive && pressed !== option
-                ? 'disabled'
-                : pressed === option
-                  ? 'selected'
-                  : 'default'
-            }
-            onPress={() => submit(option)}
-            style={styles.numberCard}
-          />
-        ))}
-      </View>
+      {step.type === 'compare_numbers' ? (
+        <AlifaText variant="headlineMd" align="center">
+          {step.instruction.text}
+        </AlifaText>
+      ) : null}
+
+      {step.type === 'visual_word_problem' ? (
+        <View style={styles.problem}>
+          {step.illustrationId ? <ObjectIcon id={step.illustrationId} size={64} /> : null}
+          <AlifaText variant="bodyLg" align="center">
+            {step.statement}
+          </AlifaText>
+          {step.statementAudioId ? (
+            <AlifaAudioButton
+              variant="sky"
+              size={48}
+              playing={playingAudioId === step.statementAudioId}
+              onPress={() => step.statementAudioId && playAudio(step.statementAudioId)}
+            />
+          ) : null}
+        </View>
+      ) : null}
+    </AlifaCard>
+  );
+
+  const answers = (
+    <View style={styles.options}>
+      {options.map((option, index) => (
+        <AlifaAnswerCard
+          key={`${option}-${index}`}
+          label={String(option)}
+          state={
+            !interactive && pressed !== option
+              ? 'disabled'
+              : pressed === option
+                ? 'selected'
+                : 'default'
+          }
+          onPress={() => submit(option)}
+          style={styles.numberCard}
+        />
+      ))}
     </View>
   );
+
+  return <AlifaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.3} />;
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.xl, justifyContent: 'center' },
   board: { gap: spacing.lg, alignItems: 'center', paddingVertical: spacing.xl },
   quantities: {
     flexDirection: 'row',

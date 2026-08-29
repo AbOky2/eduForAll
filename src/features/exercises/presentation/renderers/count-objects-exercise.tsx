@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAnswerCard, AlifaCard } from '@/design-system/primitives';
+import { AlifaAnswerCard, AlifaCard, AlifaExerciseLayout } from '@/design-system/primitives';
+import { useResponsive } from '@/design-system/responsive';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { colors, radius, spacing } from '@/design-system/tokens';
 
@@ -17,42 +18,45 @@ export function CountObjectsExercise({
   onSubmit,
 }: ExerciseRendererProps<CountStep>) {
   const [pressed, setPressed] = useState<number | null>(null);
+  const { isTablet } = useResponsive();
 
-  return (
-    <View style={styles.container}>
-      <AlifaCard rounded="xl" style={styles.scene} backgroundColor="#f9ecd8">
-        <View style={styles.objects} accessibilityLabel={`${step.count} ${step.objectName}`}>
-          {Array.from({ length: step.count }, (_, index) => (
-            <ObjectIcon key={index} id={step.illustrationId} size={62} />
-          ))}
-        </View>
-      </AlifaCard>
-      <View style={styles.options}>
-        {step.options.map((option) => (
-          <AlifaAnswerCard
-            key={option}
-            label={String(option)}
-            state={
-              !interactive && pressed !== option
-                ? 'disabled'
-                : pressed === option
-                  ? 'selected'
-                  : 'default'
-            }
-            onPress={() => {
-              setPressed(option);
-              onSubmit({ kind: 'number', value: option });
-            }}
-            style={styles.numberCard}
-          />
+  const prompt = (
+    <AlifaCard rounded="xl" style={styles.scene} backgroundColor="#f9ecd8">
+      <View style={styles.objects} accessibilityLabel={`${step.count} ${step.objectName}`}>
+        {Array.from({ length: step.count }, (_, index) => (
+          <ObjectIcon key={index} id={step.illustrationId} size={isTablet ? 80 : 62} />
         ))}
       </View>
+    </AlifaCard>
+  );
+
+  const answers = (
+    <View style={styles.options}>
+      {step.options.map((option) => (
+        <AlifaAnswerCard
+          key={option}
+          label={String(option)}
+          state={
+            !interactive && pressed !== option
+              ? 'disabled'
+              : pressed === option
+                ? 'selected'
+                : 'default'
+          }
+          onPress={() => {
+            setPressed(option);
+            onSubmit({ kind: 'number', value: option });
+          }}
+          style={styles.numberCard}
+        />
+      ))}
     </View>
   );
+
+  return <AlifaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.2} />;
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.xl, justifyContent: 'center' },
   scene: { borderRadius: radius.lg, minHeight: 190, justifyContent: 'center' },
   objects: {
     flexDirection: 'row',

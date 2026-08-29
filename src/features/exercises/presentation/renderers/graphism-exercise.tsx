@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Svg, { Circle, Polyline } from 'react-native-svg';
+import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { AlifaButton, AlifaCard, AlifaText } from '@/design-system/primitives';
@@ -10,44 +10,47 @@ import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
-import { strokesForLetter } from './letter-paths';
+import { PATTERN_LABELS, strokesForPattern } from './graphism-paths';
 
-type TraceStep = Extract<ExerciseStep, { type: 'trace_letter' }>;
+type GraphismStep = Extract<ExerciseStep, { type: 'trace_graphism' }>;
 
-/** Generous checkpoint radius: little fingers, small screens, no false failures. */
-const TOLERANCE = 42;
+/** Same generous tolerance as letter tracing — little fingers, never punished. */
+const TOLERANCE = 44;
 
 /**
- * Guided letter tracing (trace_letter). The child follows numbered dots
- * stroke by stroke; passing near each checkpoint in order lights it up.
- * Completing every stroke enables success — precision is never punished.
+ * Pre-writing graphism (trace_graphism) — the phase the programme places
+ * before any letter (p. 26). The board reproduces the « cahier à double
+ * lignes » the child uses in class, and the pattern is repeated across the
+ * row, left to right, as on a real writing line.
  */
-export function TraceLetterExercise({
+export function GraphismExercise({
   step,
   interactive,
   onSubmit,
-}: ExerciseRendererProps<TraceStep>) {
-  const strokes = useMemo(() => strokesForLetter(step.letter), [step.letter]);
-  const { isTablet, scale } = useResponsive();
+}: ExerciseRendererProps<GraphismStep>) {
+  const strokes = useMemo(() => strokesForPattern(step.pattern), [step.pattern]);
+  const { isTablet } = useResponsive();
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
   const [strokeIndex, setStrokeIndex] = useState(0);
   const [checkpointIndex, setCheckpointIndex] = useState(0);
   const [trail, setTrail] = useState<string[]>([]);
 
+  const insetX = 24;
+  const insetY = 26;
+
   const scaled = useMemo(() => {
-    if (!strokes || boardSize.width === 0) {
+    if (boardSize.width === 0) {
       return [];
     }
-    const inset = 30;
-    const width = boardSize.width - inset * 2;
-    const height = boardSize.height - inset * 2;
+    const width = boardSize.width - insetX * 2;
+    const height = boardSize.height - insetY * 2;
     return strokes.map((stroke) =>
-      stroke.map(([x, y]) => [inset + x * width, inset + y * height] as const),
+      stroke.map(([x, y]) => [insetX + x * width, insetY + y * height] as const),
     );
   }, [strokes, boardSize]);
 
   const currentStroke = scaled[strokeIndex] ?? null;
-  const done = strokes !== null && strokeIndex >= (strokes?.length ?? 0);
+  const done = strokeIndex >= strokes.length;
 
   const advance = (x: number, y: number) => {
     if (!currentStroke || done) {
@@ -57,15 +60,14 @@ export function TraceLetterExercise({
     if (!target) {
       return;
     }
-    const distance = Math.hypot(x - target[0], y - target[1]);
-    if (distance <= TOLERANCE) {
-      const nextCheckpoint = checkpointIndex + 1;
-      if (nextCheckpoint >= currentStroke.length) {
+    if (Math.hypot(x - target[0], y - target[1]) <= TOLERANCE) {
+      const next = checkpointIndex + 1;
+      if (next >= currentStroke.length) {
         setStrokeIndex((index) => index + 1);
         setCheckpointIndex(0);
         setTrail([]);
       } else {
-        setCheckpointIndex(nextCheckpoint);
+        setCheckpointIndex(next);
       }
     }
   };
@@ -73,13 +75,13 @@ export function TraceLetterExercise({
   const pan = Gesture.Pan()
     .enabled(interactive && !done)
     .onUpdate((event) => {
-      const point = `${Math.round(event.x)},${Math.round(event.y)}`;
-      setTrail((current) => [...current.slice(-119), point]);
+      setTrail((current) => [
+        ...current.slice(-119),
+        `${Math.round(event.x)},${Math.round(event.y)}`,
+      ]);
       advance(event.x, event.y);
     })
-    .onEnd(() => {
-      setTrail([]);
-    })
+    .onEnd(() => setTrail([]))
     .runOnJS(true);
 
   const onLayout = (event: LayoutChangeEvent) => {
@@ -87,50 +89,45 @@ export function TraceLetterExercise({
     setBoardSize({ width, height });
   };
 
-  if (!strokes) {
-    // Explicit content fallback: unknown letter → acknowledge step, no dead end.
-    return (
-      <View style={styles.container}>
-        <AlifaText variant="displayGlyph" align="center">
-          {step.letter}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
-          {fr.errors.contentUnavailable}
-        </AlifaText>
-        <AlifaButton
-          label={fr.common.next}
-          onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
-        />
-      </View>
-    );
-  }
+  // The two guide lines of the school notebook the programme names (p. 26).
+  const topLine = insetY + (boardSize.height - insetY * 2) * 0.12;
+  const bottomLine = insetY + (boardSize.height - insetY * 2) * 0.9;
 
   return (
     <View style={styles.container}>
       <AlifaCard
         rounded="xl"
         padded={false}
-        // A tracing board has to be big enough for a whole hand movement —
-        // on a tablet that means noticeably more than a phone's 340 dp.
-        style={[styles.board, { height: isTablet ? 460 : 340 }]}
+        style={[styles.board, { height: isTablet ? 360 : 260 }]}
         backgroundColor="#faf7ec"
       >
-        <View style={styles.letterUnderlay} pointerEvents="none">
-          <AlifaText
-            variant="displayGlyph"
-            color={colors.surfaceContainerHighest}
-            style={[styles.letterGlyph, { fontSize: 240 * scale, lineHeight: 300 * scale }]}
-          >
-            {step.letter}
-          </AlifaText>
-        </View>
         <GestureDetector gesture={pan}>
           <View
             style={styles.canvas}
             onLayout={onLayout}
-            accessibilityLabel={`Trace la lettre ${step.letter}`}
+            accessibilityLabel={`Trace ${PATTERN_LABELS[step.pattern]}`}
           >
             <Svg width="100%" height="100%">
+              {boardSize.height > 0 ? (
+                <>
+                  <Line
+                    x1={insetX / 2}
+                    y1={topLine}
+                    x2={boardSize.width - insetX / 2}
+                    y2={topLine}
+                    stroke={colors.outlineVariant}
+                    strokeWidth={1.5}
+                  />
+                  <Line
+                    x1={insetX / 2}
+                    y1={bottomLine}
+                    x2={boardSize.width - insetX / 2}
+                    y2={bottomLine}
+                    stroke={colors.secondaryFixedDim}
+                    strokeWidth={2}
+                  />
+                </>
+              ) : null}
               {scaled.map((stroke, sIndex) =>
                 stroke.map(([x, y], cIndex) => {
                   const isDone =
@@ -141,7 +138,7 @@ export function TraceLetterExercise({
                       key={`${sIndex}-${cIndex}`}
                       cx={x}
                       cy={y}
-                      r={isNext ? 14 : 9}
+                      r={isNext ? 13 : 7}
                       fill={
                         isDone
                           ? colors.feedbackCorrect
@@ -149,7 +146,7 @@ export function TraceLetterExercise({
                             ? colors.primaryContainer
                             : colors.outlineVariant
                       }
-                      opacity={sIndex > strokeIndex ? 0.4 : 1}
+                      opacity={sIndex > strokeIndex ? 0.35 : 1}
                     />
                   );
                 }),
@@ -171,7 +168,7 @@ export function TraceLetterExercise({
       </AlifaCard>
 
       <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
-        {done ? '' : 'Pars du gros point et suis le chemin.'}
+        {done ? '' : 'Pars du gros point et va vers la droite.'}
       </AlifaText>
 
       <AlifaButton
@@ -186,15 +183,5 @@ export function TraceLetterExercise({
 const styles = StyleSheet.create({
   container: { flex: 1, gap: spacing.md, justifyContent: 'center' },
   board: { overflow: 'hidden' },
-  letterUnderlay: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  letterGlyph: { fontSize: 240, lineHeight: 300 },
   canvas: { flex: 1 },
 });

@@ -83,8 +83,7 @@ export function OrderWordsExercise({
                 accessibilityRole="button"
                 accessibilityLabel={`Retirer ${chip.word}`}
                 onPress={() =>
-                  interactive &&
-                  setChosen((current) => current.filter((c) => c.key !== chip.key))
+                  interactive && setChosen((current) => current.filter((c) => c.key !== chip.key))
                 }
                 style={[styles.chip, styles.chipChosen, shadows.card]}
               >
