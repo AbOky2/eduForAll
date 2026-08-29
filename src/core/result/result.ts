@@ -3,7 +3,8 @@
  * failures are expected outcomes (validation, persistence, content import)
  * rather than programming errors.
  */
-export type Result<T, E> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: E };
+export type Result<T, E> =
+  { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: E };
 
 export const ok = <T>(value: T): { ok: true; value: T } => ({ ok: true, value });
 

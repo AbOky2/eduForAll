@@ -161,7 +161,11 @@ export function createProgressRepository(db: SQLiteDatabase): ProgressRepository
 
     async findNextRecommendedLesson(childProfileId) {
       // 1) Resume an in-progress lesson if any.
-      const inProgress = await db.getFirstAsync<{ lesson_id: string; world_id: string; title: string }>(
+      const inProgress = await db.getFirstAsync<{
+        lesson_id: string;
+        world_id: string;
+        title: string;
+      }>(
         `SELECT lp.lesson_id, l.world_id, l.title
          FROM lesson_progress lp
          JOIN lessons l ON l.id = lp.lesson_id

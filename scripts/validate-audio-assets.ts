@@ -15,7 +15,9 @@ interface AudioManifest {
   entries: Array<{ id: string; file: string; placeholder: boolean }>;
 }
 
-const manifest = JSON.parse(readFileSync(join(AUDIO_DIR, 'manifest.json'), 'utf8')) as AudioManifest;
+const manifest = JSON.parse(
+  readFileSync(join(AUDIO_DIR, 'manifest.json'), 'utf8'),
+) as AudioManifest;
 
 const problems: string[] = [];
 let placeholders = 0;

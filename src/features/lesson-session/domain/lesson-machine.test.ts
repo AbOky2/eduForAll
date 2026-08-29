@@ -106,7 +106,10 @@ describe('lesson state machine', () => {
 
   it('ignores invalid answers entirely (no attempt burned)', () => {
     let state = present(createLessonMachine(buildLesson(), 1));
-    state = lessonReducer(state, { type: 'ANSWER_SUBMITTED', answer: { kind: 'number', value: 4 } });
+    state = lessonReducer(state, {
+      type: 'ANSWER_SUBMITTED',
+      answer: { kind: 'number', value: 4 },
+    });
     expect(state.phase).toBe('awaiting_answer');
     expect(state.attemptsOnCurrentStep).toBe(0);
   });

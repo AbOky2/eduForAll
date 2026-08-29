@@ -9,11 +9,7 @@ import { evaluateAnswer } from '@/features/exercises/domain/evaluate-answer';
  */
 
 export type LessonPhase =
-  | 'presenting'
-  | 'awaiting_answer'
-  | 'showing_feedback'
-  | 'showing_hint'
-  | 'completed';
+  'presenting' | 'awaiting_answer' | 'showing_feedback' | 'showing_hint' | 'completed';
 
 export interface StepOutcome {
   readonly stepId: string;

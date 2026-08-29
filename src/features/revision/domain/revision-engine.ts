@@ -16,10 +16,7 @@ export interface SkillSnapshot {
 }
 
 export type RevisionReason =
-  | 'repeated_errors'
-  | 'needed_hints'
-  | 'not_practiced_recently'
-  | 'confusion_pair';
+  'repeated_errors' | 'needed_hints' | 'not_practiced_recently' | 'confusion_pair';
 
 export interface RevisionRecommendation {
   readonly skillId: string;

@@ -4,7 +4,7 @@ import { createLogger } from '@/core/logging/logger';
 import { getDatabase } from '@/database/connection/database';
 import { migrations } from '@/database/migrations';
 import { runMigrations } from '@/database/migrations/runner';
-import { loadCurriculum } from '@/features/curriculum/application/curriculum-catalog';
+import { rawCurriculumManifest } from '@/features/curriculum/application/curriculum-catalog';
 import { importCurriculum } from '@/features/curriculum/infrastructure/curriculum-import';
 import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
@@ -27,8 +27,7 @@ export async function bootstrapApp(): Promise<BootstrapOutcome> {
     const db = await getDatabase();
     await runMigrations(db, migrations);
 
-    const manifest = loadCurriculum();
-    await importCurriculum(db, manifest);
+    await importCurriculum(db, rawCurriculumManifest());
 
     const settings = createSettingsRepository(db);
     const soundEnabled = (await settings.get('sound_enabled')) !== 'false';

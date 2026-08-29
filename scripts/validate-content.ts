@@ -123,7 +123,12 @@ for (const level of manifest.levels) {
         }
       }
       for (const prerequisite of lesson.prerequisiteLessonIds) {
-        if (!lessonIds.has(prerequisite) && ![...manifest.levels].some((l) => l.worlds.some((w) => w.lessons.some((candidate) => candidate.id === prerequisite)))) {
+        if (
+          !lessonIds.has(prerequisite) &&
+          ![...manifest.levels].some((l) =>
+            l.worlds.some((w) => w.lessons.some((candidate) => candidate.id === prerequisite)),
+          )
+        ) {
           problems.push(`${lesson.id}: unknown prerequisite ${prerequisite}`);
         }
       }
