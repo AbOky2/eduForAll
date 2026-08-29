@@ -77,9 +77,9 @@ export async function loadParentDashboard(
   );
 
   const subjectNames: Record<string, string> = {
+    language: 'langage',
     reading: 'lecture',
     writing: 'écriture',
-    dictation: 'dictée',
     math: 'calcul',
   };
 

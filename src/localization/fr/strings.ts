@@ -21,7 +21,7 @@ export const fr = {
   },
   onboarding: {
     welcomeTitle: 'Ton école t’accompagne partout.',
-    subjectsTitle: 'Lecture, dictée, écriture et calcul.',
+    subjectsTitle: 'Langage, lecture, écriture et calcul.',
     subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
     offlineTitle: 'Fonctionne sans connexion.',
     offlineSubtitle: 'Apprends partout, tout le temps.',
@@ -53,9 +53,9 @@ export const fr = {
       count > 1 ? `${count} leçons terminées` : `${count} leçon terminée`,
   },
   subjects: {
+    language: 'Langage',
     reading: 'Lecture',
     writing: 'Écriture',
-    dictation: 'Dictée',
     math: 'Calcul',
   },
   tabs: {

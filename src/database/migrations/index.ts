@@ -1,5 +1,6 @@
 import { initialSchema } from './001-initial-schema';
+import { officialCurriculum } from './002-official-curriculum';
 import type { Migration } from './types';
 
 /** Ordered registry. Append only — never edit a shipped migration. */
-export const migrations: readonly Migration[] = [initialSchema];
+export const migrations: readonly Migration[] = [initialSchema, officialCurriculum];

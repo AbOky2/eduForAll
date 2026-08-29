@@ -2,7 +2,10 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { ContentValidationError } from '@/core/errors/app-errors';
 import { createLogger } from '@/core/logging/logger';
-import { curriculumManifestSchema, type CurriculumManifest } from '@/content/schemas/curriculum-schema';
+import {
+  curriculumManifestSchema,
+  type CurriculumManifest,
+} from '@/content/schemas/curriculum-schema';
 
 const log = createLogger('curriculum-import');
 
@@ -18,6 +21,22 @@ export async function importCurriculum(
   db: SQLiteDatabase,
   rawManifest: unknown,
 ): Promise<{ imported: boolean; lessonCount: number }> {
+  // Cheap version probe first: validating a full school year of content costs
+  // real time on a low-end tablet, and on every launch but the first there is
+  // nothing to import. Only an actual import pays for full validation.
+  const declaredVersion = (rawManifest as { contentVersion?: unknown } | null)?.contentVersion;
+  if (typeof declaredVersion !== 'string') {
+    throw new ContentValidationError('Curriculum manifest has no contentVersion');
+  }
+  const existing = await db.getFirstAsync<{ content_version: string }>(
+    'SELECT content_version FROM content_versions WHERE content_version = ?',
+    declaredVersion,
+  );
+  if (existing) {
+    log.info(`content ${declaredVersion} already imported`);
+    return { imported: false, lessonCount: 0 };
+  }
+
   const parsed = curriculumManifestSchema.safeParse(rawManifest);
   if (!parsed.success) {
     throw new ContentValidationError(
@@ -28,15 +47,6 @@ export async function importCurriculum(
     );
   }
   const manifest = parsed.data;
-
-  const existing = await db.getFirstAsync<{ content_version: string }>(
-    'SELECT content_version FROM content_versions WHERE content_version = ?',
-    manifest.contentVersion,
-  );
-  if (existing) {
-    log.info(`content ${manifest.contentVersion} already imported`);
-    return { imported: false, lessonCount: 0 };
-  }
 
   let lessonCount = 0;
   await db.withExclusiveTransactionAsync(async (txn) => {
@@ -66,13 +76,16 @@ export async function importCurriculum(
         for (const [lessonIndex, lesson] of world.lessons.entries()) {
           await txn.runAsync(
             `INSERT INTO lessons
-               (id, world_id, title, short_description, estimated_duration_minutes, sort_order, step_count)
-             VALUES (?, ?, ?, ?, ?, ?, ?)
+               (id, world_id, title, short_description, estimated_duration_minutes,
+                sort_order, step_count, term, week, official_reference)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
              ON CONFLICT(id) DO UPDATE SET
                world_id = excluded.world_id, title = excluded.title,
                short_description = excluded.short_description,
                estimated_duration_minutes = excluded.estimated_duration_minutes,
-               sort_order = excluded.sort_order, step_count = excluded.step_count`,
+               sort_order = excluded.sort_order, step_count = excluded.step_count,
+               term = excluded.term, week = excluded.week,
+               official_reference = excluded.official_reference`,
             lesson.id,
             world.id,
             lesson.title,
@@ -80,6 +93,9 @@ export async function importCurriculum(
             lesson.estimatedDurationMinutes,
             lessonIndex,
             lesson.steps.length,
+            lesson.term,
+            lesson.week,
+            lesson.officialReference,
           );
           await txn.runAsync('DELETE FROM lesson_prerequisites WHERE lesson_id = ?', lesson.id);
           for (const prerequisiteId of lesson.prerequisiteLessonIds) {

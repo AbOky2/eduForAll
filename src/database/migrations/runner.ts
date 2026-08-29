@@ -49,10 +49,7 @@ export async function runMigrations(
       appliedVersions.push(migration.version);
       log.info(`applied migration ${migration.version} (${migration.name})`);
     } catch (cause) {
-      throw new MigrationError(
-        `Migration ${migration.version} (${migration.name}) failed`,
-        cause,
-      );
+      throw new MigrationError(`Migration ${migration.version} (${migration.name}) failed`, cause);
     }
   }
 

@@ -4,7 +4,14 @@ import { exerciseStepSchema } from './exercise-schema';
 
 const idSchema = z.string().min(1).max(80);
 
-export const subjectSchema = z.enum(['reading', 'writing', 'dictation', 'math']);
+/**
+ * Les quatre disciplines instrumentales du CP tchadien, dans l'ordre de la
+ * grille horaire officielle (p. 128 du programme national) :
+ * Lecture 7h40 · Langage 6h · Mathématiques 3h30 · Écriture 2h45.
+ * La dictée n'est pas une discipline du CP : c'est une famille d'exercices
+ * de l'écriture (« copie de mots et de phrases tirés de la lecture », p. 26).
+ */
+export const subjectSchema = z.enum(['language', 'reading', 'writing', 'math']);
 export const levelIdSchema = z.enum(['CP1', 'CP2']);
 
 export const lessonSchema = z
@@ -14,7 +21,14 @@ export const lessonSchema = z
     shortDescription: z.string().min(1).max(160),
     learningObjectives: z.array(z.string().min(1).max(200)).min(1),
     skills: z.array(idSchema).min(1),
+    /** Séance du CP : « 10 à 20 mn » (programme national p. 126). */
     estimatedDurationMinutes: z.number().int().min(2).max(20),
+    /** Trimestre officiel (l'année scolaire tchadienne en compte trois). */
+    term: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+    /** Semaine de classe (année de 30 semaines effectives, 1er oct. – 30 juin). */
+    week: z.number().int().min(1).max(30),
+    /** Contenu officiel couvert, référencé dans official-program.ts. */
+    officialReference: z.string().min(1).max(200),
     prerequisiteLessonIds: z.array(idSchema).default([]),
     steps: z.array(exerciseStepSchema).min(3).max(10),
     completionRule: z
@@ -53,7 +67,7 @@ export const worldSchema = z.object({
 export const levelManifestSchema = z.object({
   id: levelIdSchema,
   title: z.string().min(1).max(40),
-  worlds: z.array(worldSchema).min(1).max(8),
+  worlds: z.array(worldSchema).min(1).max(40),
 });
 
 export const assetManifestEntrySchema = z.object({

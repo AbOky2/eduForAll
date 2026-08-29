@@ -218,6 +218,139 @@ export const exerciseStepSchema = z.discriminatedUnion('type', [
     choices: z.array(choiceSchema).min(2).max(4),
     correctChoiceId: idSchema,
   }),
+  // ---------------------------------------------------------------------
+  // Types couvrant les contenus officiels du programme tchadien qui
+  // n'étaient traités par aucun exercice (voir official-program.ts).
+  // ---------------------------------------------------------------------
+  // 21 — tailles / couleurs / formes / quantités (programme p. 58)
+  z.object({
+    ...baseStep,
+    type: z.literal('attribute_choice'),
+    /** Famille de contenu officiel visée. */
+    attribute: z.enum(['size', 'color', 'shape', 'quantity']),
+    audioId: audioIdSchema.optional(),
+    /** Figures dessinées par le renderer — aucune illustration à produire. */
+    choices: z
+      .array(
+        z.object({
+          id: idSchema,
+          shape: z.enum(['rond', 'carre', 'rectangle', 'triangle', 'ligne']),
+          /** Couleurs de la liste officielle uniquement. */
+          color: z.enum(['rouge', 'bleu', 'jaune', 'vert', 'blanc', 'noir']).default('bleu'),
+          /** Échelle relative — famille « grand / petit / long / court ». */
+          scale: z.number().min(0.3).max(1).default(1),
+          /** Répétition — famille « peu / beaucoup / rien / nul ». */
+          count: z.number().int().min(0).max(12).default(1),
+          label: z.string().max(30).optional(),
+        }),
+      )
+      .min(2)
+      .max(4),
+    correctChoiceId: idSchema,
+  }),
+  // 22 — les repères : sur, sous, devant, derrière, entre… (programme p. 58)
+  z.object({
+    ...baseStep,
+    type: z.literal('spatial_position'),
+    audioId: audioIdSchema.optional(),
+    objectIllustrationId: illustrationIdSchema,
+    referenceIllustrationId: illustrationIdSchema,
+    choices: z
+      .array(
+        z.object({
+          id: idSchema,
+          relation: z.enum([
+            'sur',
+            'sous',
+            'dans',
+            'devant',
+            'derriere',
+            'a-gauche',
+            'a-droite',
+            'au-dessus',
+            'en-dessous',
+            'entre',
+            'a-cote',
+          ]),
+        }),
+      )
+      .min(2)
+      .max(4),
+    correctChoiceId: idSchema,
+  }),
+  // 23 — « la multiplication […] par 2 et par 5 » (programme p. 59)
+  z.object({
+    ...baseStep,
+    type: z.literal('simple_multiplication'),
+    a: z.number().int().min(0).max(20),
+    b: z.number().int().min(2).max(5),
+    options: z.array(z.number().int().min(0).max(100)).min(2).max(4),
+    showQuantities: z.boolean().default(true),
+  }),
+  // 24 — « […] et la division par 2 et par 5 » (programme p. 59)
+  z
+    .object({
+      ...baseStep,
+      type: z.literal('simple_division'),
+      a: z.number().int().min(0).max(100),
+      b: z.number().int().min(2).max(5),
+      options: z.array(z.number().int().min(0).max(50)).min(2).max(4),
+      showQuantities: z.boolean().default(true),
+    })
+    .refine((step) => step.a % step.b === 0, {
+      message: 'division must be exact at CP level',
+      path: ['a'],
+    }),
+  // 25 — « les pièces de monnaie » (programme p. 59), en francs CFA
+  z.object({
+    ...baseStep,
+    type: z.literal('count_money'),
+    /** Pièces réellement en circulation au Tchad (XAF). */
+    coins: z
+      .array(
+        z.union([
+          z.literal(5),
+          z.literal(10),
+          z.literal(25),
+          z.literal(50),
+          z.literal(100),
+          z.literal(500),
+        ]),
+      )
+      .min(1)
+      .max(8),
+    answer: z.number().int().min(0).max(2000),
+    options: z.array(z.number().int().min(0).max(2000)).min(2).max(4),
+  }),
+  // 26 — graphisme préparatoire, avant toute lettre (programme p. 26)
+  z.object({
+    ...baseStep,
+    type: z.literal('trace_graphism'),
+    /** Tracés listés nommément par le programme. */
+    pattern: z.enum([
+      'points',
+      'ligne-verticale',
+      'ligne-horizontale',
+      'oblique',
+      'rond',
+      'courbe',
+      'boucle-haut',
+      'boucle-bas',
+      'pont',
+      'enchainement',
+    ]),
+    audioId: audioIdSchema.optional(),
+  }),
+  // 27 — situer un son dans un mot : « connaître les éléments composant un
+  //      mot (sons, syllabes) », « maîtriser la combinatoire » (p. 18, 23)
+  z.object({
+    ...baseStep,
+    type: z.literal('sound_position'),
+    word: z.string().min(2).max(20),
+    sound: z.string().min(1).max(4),
+    audioId: audioIdSchema,
+    answer: z.enum(['debut', 'milieu', 'fin']),
+  }),
 ]);
 
 export type ExerciseStep = z.infer<typeof exerciseStepSchema>;
@@ -245,4 +378,11 @@ export const EXERCISE_TYPES = [
   'visual_word_problem',
   'listen_and_repeat',
   'mini_story_question',
+  'attribute_choice',
+  'spatial_position',
+  'simple_multiplication',
+  'simple_division',
+  'count_money',
+  'trace_graphism',
+  'sound_position',
 ] as const satisfies readonly ExerciseType[];
