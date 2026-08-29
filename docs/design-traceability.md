@@ -13,7 +13,7 @@
 | S09 | `carte-de-progression-cp2` | `(child)/level-map` (CP2) | `LevelMapScreen` (variante fond) | WorldNode, fond illustré | idem | à valider | composant |
 | S10 | `lecon-ecoute` | `(child)/lesson/[lessonId]` (step listen) | `ListenExercise` | AlifaAudioButton, ProgressBar | lecture, replay, désactivé | à valider | unit + composant |
 | S11 | `exercice-choix-multiple` | idem (step audio_multiple_choice) | `AudioMultipleChoiceExercise` | AlifaAnswerCard | default/pressed/correct/incorrect/disabled | à valider | unit + composant |
-| S12 | `ecran-dictee` | idem (step dictation grid) | `AudioMultipleChoiceExercise` (grille 2×2) | AlifaAnswerCard | idem | à valider | unit + composant |
+| S12 | `ecran-dictee` | dictée = exercice d’écriture, pas une discipline | `ChoiceExercise` (grille 2×2) | AlifaAnswerCard | idem | à valider | unit + composant |
 | S13 | `exercice-former-une-syllabe` | idem (step compose_syllable) | `ComposeSyllableExercise` | LetterTile, DropSlot, HintButton | vide/rempli/correct/incorrect/indice | à valider | unit + composant |
 | S14 | `calcul-cp1` | idem (step count_objects) | `CountObjectsExercise` | AlifaAnswerCard, AlifaIllustration | sélection/vérification | à valider | unit + composant |
 | S15 | `calcul-cp2` | idem (step simple_addition) | `SimpleAdditionExercise` | QuantityCard, AlifaAnswerCard | sélection/vérification | à valider | unit + composant |

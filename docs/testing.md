@@ -2,7 +2,7 @@
 
 ## Pyramide
 
-1. **Unitaires (domaine pur)** — `src/**/*.test.ts` : évaluation des 20 types
+1. **Unitaires (domaine pur)** — `src/**/*.test.ts` : évaluation des 27 types
    de réponses, machine d'état (double tap, retry bienveillant, indices,
    reprise bornée), scoring des étoiles, moteur de révision (déterminisme,
    paires de confusion, priorités). Sans natif, < 2 s.

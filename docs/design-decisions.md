@@ -31,3 +31,41 @@ Référence : `docs/design-audit.md`, matrice : `docs/design-traceability.md`.
    remplacée par l'ampoule d'indice quand la leçon en offre un (fonction
    réelle plutôt qu'ornement, brief §26 « aucun élément purement décoratif
    qui semble interactif »).
+
+---
+
+## Tablette : classes de fenêtre plutôt que type d'appareil
+
+Les maquettes Stitch sont dessinées en 412 × 917 — un téléphone. La cible
+réelle du projet est une tablette d'entrée de gamme, tenue dans les deux sens.
+Plutôt que de brancher sur « est-ce une tablette ? », la mise en page branche
+sur la **classe de fenêtre** (Material 3), ce qui couvre aussi la rotation et
+l'écran partagé : `compact` (< 600 dp), `medium` (600–904), `expanded` (≥ 905).
+Tout est dans `src/design-system/responsive`.
+
+Quatre décisions en découlent.
+
+**1. Colonne centrée de largeur lisible.** `AlifaScreen` borne le contenu à
+560 / 720 / 1000 dp selon la classe. Une ligne de texte étirée sur toute la
+largeur d'un écran de 10 pouces est illisible pour un enfant qui déchiffre
+encore lettre à lettre ; le fond, lui, occupe tout l'écran.
+
+**2. Typographie mise à l'échelle, pas étirée.** ×1 / ×1,15 / ×1,3 sur toute
+l'échelle typographique, glyphes pédagogiques compris. Une tablette se tient à
+bout de bras : il faut des lettres plus grandes, pas les mêmes lettres plus
+espacées. Les tailles sont arrondies au dp entier — les dalles bon marché sont
+souvent en 1x ou 1,5x et un demi-pixel s'y voit.
+
+**3. Deux volets en paysage.** `AlifaExerciseLayout` place le stimulus et les
+réponses côte à côte dès qu'on est en `expanded` + paysage. Empilés sur une
+fenêtre large et basse, les cartes-réponses passent sous la ligne de flottaison
+et l'enfant doit faire défiler pour répondre — l'exercice cesse d'être un
+exercice de lecture.
+
+**4. Surfaces de travail agrandies.** Les plans de tracé passent de 340 à
+460 dp (lettres) et de 260 à 360 dp (graphisme) : un tracé se fait avec tout
+l'avant-bras, pas du bout du doigt.
+
+`app.config.ts` passe de `orientation: 'portrait'` à `'default'` : verrouiller
+le portrait sur un appareil dont c'est le mode le moins naturel n'avait pas de
+justification.

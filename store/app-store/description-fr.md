@@ -1,18 +1,30 @@
-# ALIFA — Description App Store (brouillon)
+# ALIFA — Description App Store
 
-**Sous-titre** : Lire, écrire et compter, sans internet.
+**Sous-titre** (30 car. max) : `Le CP tchadien, sans internet`
+
+## Description
 
 ALIFA accompagne les enfants de CP1 et CP2 dans leurs premiers pas en
-lecture, écriture, dictée et calcul — **entièrement hors connexion**.
+langage, lecture, écriture et calcul — **entièrement hors connexion**.
 
-Pensée pour le Tchad et les zones où internet est rare ou coûteux, ALIFA
-fonctionne à 100 % sans réseau, dès le premier lancement.
+Le contenu n'est pas une méthode générique : il suit le programme officiel
+de l'enseignement primaire de la République du Tchad, discipline par
+discipline, dans les proportions horaires fixées par le ministère.
+
+Pensée pour les zones où internet est rare ou coûteux — campagnes,
+communautés nomades, familles sans connexion fiable — ALIFA fonctionne à
+100 % sans réseau, dès le premier lancement.
 
 **Ce que votre enfant y trouve :**
-- 54 leçons progressives (CP1 et CP2), des lettres aux petites histoires
+- Une année scolaire complète par niveau : 308 leçons réparties sur les
+  trois trimestres, du graphisme aux petites histoires
+- Les quatre disciplines du CP : langage, lecture, écriture, calcul
 - Des consignes lues à voix haute : pas besoin de savoir lire pour commencer
-- 20 types d'activités : écouter, toucher, tracer les lettres, former des
-  syllabes, compter, résoudre de petits problèmes
+- 27 types d'activités : écouter, toucher, tracer les lettres et les
+  chiffres, former des syllabes, compter, compter la monnaie, résoudre de
+  petits problèmes du quotidien
+- Un vocabulaire familier : la case, le puits, le mil, la calebasse, le
+  marché, le berger
 - Des encouragements bienveillants — jamais de punition, jamais de pression
 - Des étoiles et un parcours illustré pour voir ses progrès
 
@@ -20,7 +32,14 @@ fonctionne à 100 % sans réseau, dès le premier lancement.
 - Un espace parent protégé : progression claire, notions à revoir, temps
   d'apprentissage
 - Aucune publicité, aucun achat, aucun abonnement
-- Aucune donnée collectée : tout reste sur le téléphone
+- Aucune donnée collectée : tout reste sur l'appareil
 - Gratuit, pour tous
 
 Apprendre partout, même sans internet.
+
+## Notes
+
+- Optimisée pour tablette, utilisable dans les deux orientations.
+- Source du programme : *Programmes Réactualisés de l'Enseignement Primaire*,
+  République du Tchad, Ministère de l'Éducation Nationale / Centre National
+  des Curricula, N'Djaména, septembre 2004.

@@ -6,7 +6,7 @@ Cible : Android 3 Go RAM, CPU modeste, stockage lent, écran compact.
 |---|---|---|
 | Démarrage à froid → écran interactif | < 3,5 s | — |
 | Bootstrap (DB + migrations + import déjà fait) | < 400 ms | — |
-| Premier import de contenu (54 leçons) | < 2 s | — |
+| Premier import de contenu (308 leçons) | < 4 s | — |
 | Ouverture d'une leçon | < 500 ms | — |
 | Latence bouton audio → son | < 300 ms perçu | — |
 | Mémoire au repos (accueil) | < 220 Mo | — |

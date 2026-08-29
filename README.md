@@ -1,13 +1,21 @@
 # ALIFA — Apprendre partout, même sans internet
 
-Application éducative **CP1–CP2 offline-first** pour les enfants du Tchad.
-Lecture, écriture, dictée et calcul — entièrement utilisable **sans connexion**,
-sans compte, sans publicité, sans collecte de données.
+Application éducative **CP1–CP2 offline-first** pour les enfants du Tchad,
+**conçue pour tablette**. Langage, lecture, écriture et calcul — l'année
+scolaire complète du programme national, entièrement utilisable **sans
+connexion**, sans compte, sans publicité, sans collecte de données.
+
+Le contenu n'est pas une progression CP générique : il est construit à partir
+des *Programmes Réactualisés de l'Enseignement Primaire* (République du Tchad,
+Ministère de l'Éducation Nationale / Centre National des Curricula, N'Djaména,
+septembre 2004). Chaque leçon cite le contenu officiel auquel elle répond et
+sa page — voir [docs/couverture-programme.md](docs/couverture-programme.md).
 
 | | |
 |---|---|
 | Stack | Expo SDK 56 · React Native 0.85 · React 19.2 · TypeScript 6 strict · Hermes · New Architecture |
-| Contenu | 54 leçons (28 CP1 + 26 CP2), 258 étapes, 20 types d'exercices, 156 audios embarqués |
+| Contenu | 308 leçons (147 CP1 + 161 CP2) sur 30 semaines, 1 625 exercices, 27 types, 821 audios, 113 pictogrammes |
+| Programme | Grille horaire officielle du CP respectée : lecture 7 h 40, langage 6 h, maths 3 h 30, écriture 2 h 45 |
 | Base | SQLite (expo-sqlite), migrations versionnées, progression locale |
 | Design | Design system « Premium Sahelian » extrait des maquettes Stitch (`design/stitch/`) |
 
@@ -40,7 +48,7 @@ Expo Go ne suffit pas pour tout tester (SQLite, audio) — utilisez un dev build
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm test` / `test:coverage` | Tests unitaires + composants |
 | `npm run test:e2e` | Flows Maestro (`maestro/`) |
-| `npm run validate:content` | Schémas Zod + cohérence des 54 leçons |
+| `npm run validate:content` | Schémas Zod + cohérence des 308 leçons |
 | `npm run validate:assets` | Polices, icônes, registre d'illustrations |
 | `npm run validate:audio` | 156 fichiers audio vs manifeste |
 | `npm run validate:release` | **Toutes les release gates** automatisables |
@@ -72,7 +80,7 @@ src/design-system/      tokens Stitch, primitives Alifa*, icônes et illustratio
 src/features/<f>/       domain / application / infrastructure / presentation
 src/database/           connexion SQLite, migrations versionnées
 src/content/            manifestes générés + schémas Zod + registre audio
-assets/                 polices, icônes, 156 audios m4a
+assets/                 polices, icônes, 820 audios m4a
 design/stitch/          les 21 maquettes source de vérité (PNG + HTML)
 docs/                   audits, décisions, guides
 store/                  métadonnées App Store / Google Play (brouillons)
@@ -82,7 +90,7 @@ Détails : `docs/architecture.md`, décisions : `docs/architecture-decisions/`.
 
 ## Limites connues et release
 
-- **Voix TTS placeholder** : les 156 audios sont générés par synthèse vocale et
+- **Voix TTS placeholder** : les 820 audios sont générés par synthèse vocale et
   marqués `placeholder`. `npm run validate:release` **bloque la production**
   tant que de vraies voix enregistrées ne les remplacent pas
   (`docs/audio-pipeline.md`).

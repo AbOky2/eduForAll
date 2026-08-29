@@ -20,12 +20,13 @@ Application éducative CP1–CP2 offline-first pour le Tchad. Expo SDK 56, RN 0.
 - [x] Session de leçon (machine d'état) + résultat (S16) + reprise après fermeture
 
 ### Phase 4 — Moteur complet ✅
-- [x] Registry 20 types + renderers + évaluation pure + tests
+- [x] Registry 27 types + renderers + évaluation pure + tests
 - [x] Service audio expo-audio + registre généré ; tracé de lettre (gesture + checkpoints)
 - [x] Scoring/étoiles, révision déterministe (S17)
 
 ### Phase 5 — Contenu CP1 et CP2 ✅
-- [x] 28 leçons CP1 + 26 CP2 (générateur déterministe, Zod), 258 étapes
+- [x] 147 leçons CP1 + 161 CP2 (générateur déterministe, Zod), 1 625 exercices,
+      calqués sur le programme officiel tchadien (couverture vérifiée au build)
 - [x] validate:content/assets/audio ; pipeline TTS placeholder + gate release
 
 ### Phase 6 — Parent et paramètres ✅
