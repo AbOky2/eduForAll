@@ -30,10 +30,14 @@ jobs:
         run: npm run validate:assets
       - name: Validation audio
         run: npm run validate:audio
-      - name: Expo Doctor
-        run: npx expo-doctor@latest
-      - name: Export de contrôle (bundle Metro)
-        run: npx expo export --platform android --output-dir /tmp/export-check
+      # Verdict faisant foi : rejoue les vérifications ci-dessus et y ajoute
+      # expo-doctor et la gate anti-SDK tiers, en tenant compte des exceptions
+      # explicitement acceptées (release-acceptances.json). Les étapes
+      # granulaires au-dessus servent à échouer vite et clairement.
+      - name: Gates de release
+        run: npm run validate:release
+      - name: Export de contrôle (bundle Metro, iOS et Android)
+        run: npx expo export --platform all --output-dir /tmp/export-check
 
   # Build preview EAS : déclenchement manuel uniquement (jamais auto en prod)
   preview-build:
