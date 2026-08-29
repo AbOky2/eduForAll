@@ -31,8 +31,20 @@ export function ReadingChildScene({ width = 280, height = 200 }: SceneProps) {
       <Ellipse cx={140} cy={185} rx={170} ry={45} fill={SAND_LIGHT} />
       <Ellipse cx={215} cy={175} rx={120} ry={32} fill={SAND} opacity={0.55} />
       {/* Acacia */}
-      <Path d="M78 155c-2-28 -6-48 -18-70" stroke={TREE} strokeWidth={7} strokeLinecap="round" fill="none" />
-      <Path d="M62 88c-14-6-26-4-38 3M62 88c2-12 10-20 22-24M62 88c12-4 26-2 36 6" stroke={TREE} strokeWidth={4} strokeLinecap="round" fill="none" />
+      <Path
+        d="M78 155c-2-28 -6-48 -18-70"
+        stroke={TREE}
+        strokeWidth={7}
+        strokeLinecap="round"
+        fill="none"
+      />
+      <Path
+        d="M62 88c-14-6-26-4-38 3M62 88c2-12 10-20 22-24M62 88c12-4 26-2 36 6"
+        stroke={TREE}
+        strokeWidth={4}
+        strokeLinecap="round"
+        fill="none"
+      />
       <Ellipse cx={30} cy={86} rx={22} ry={9} fill={LEAF} />
       <Ellipse cx={84} cy={58} rx={26} ry={10} fill={LEAF} />
       <Ellipse cx={104} cy={92} rx={22} ry={9} fill={LEAF} />
@@ -55,13 +67,26 @@ export function OfflineReadyScene({ width = 280, height = 200 }: SceneProps) {
         <Rect x={105} y={45} width={90} height={150} rx={16} fill={INK} />
         <Rect x={111} y={51} width={78} height={138} rx={11} fill="#fdfaf2" />
         <Circle cx={150} cy={106} r={26} fill="#3e6837" />
-        <Path d="M139 106l8 8 15-17" stroke="#fff" strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <Path
+          d="M139 106l8 8 15-17"
+          stroke="#fff"
+          strokeWidth={5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
       </G>
       {/* Smiling pebble friend */}
       <Ellipse cx={78} cy={162} rx={26} ry={22} fill={SUN} />
       <Circle cx={70} cy={158} r={2.6} fill={INK} />
       <Circle cx={88} cy={158} r={2.6} fill={INK} />
-      <Path d="M70 168c5 4 12 4 17 0" stroke={INK} strokeWidth={2.4} strokeLinecap="round" fill="none" />
+      <Path
+        d="M70 168c5 4 12 4 17 0"
+        stroke={INK}
+        strokeWidth={2.4}
+        strokeLinecap="round"
+        fill="none"
+      />
     </Svg>
   );
 }
@@ -86,7 +111,13 @@ export function SunCloudScene({ width = 280, height = 200 }: SceneProps) {
       })}
       <Circle cx={138} cy={80} r={3.4} fill={INK} />
       <Circle cx={162} cy={80} r={3.4} fill={INK} />
-      <Path d="M138 94c8 7 17 7 25 0" stroke={INK} strokeWidth={3} strokeLinecap="round" fill="none" />
+      <Path
+        d="M138 94c8 7 17 7 25 0"
+        stroke={INK}
+        strokeWidth={3}
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Cloud */}
       <G>
         <Circle cx={98} cy={122} r={24} fill="#fdfaf2" />
@@ -100,13 +131,7 @@ export function SunCloudScene({ width = 280, height = 200 }: SceneProps) {
 }
 
 /** Avatar portraits — four distinct children, flat and dignified (S05). */
-export function AvatarFace({
-  variant,
-  size = 64,
-}: {
-  variant: 1 | 2 | 3 | 4;
-  size?: number;
-}) {
+export function AvatarFace({ variant, size = 64 }: { variant: 1 | 2 | 3 | 4; size?: number }) {
   const skins = ['#8a5a3b', '#6e452c', '#9c6b46', '#7a4f33'] as const;
   const cloths = [CLOTH, '#c96f2f', '#5b7a4a', '#8c5fa8'] as const;
   const skin = skins[variant - 1] ?? skins[0];
@@ -126,7 +151,13 @@ export function AvatarFace({
       <Circle cx={32} cy={30} r={13} fill={skin} />
       <Circle cx={27} cy={28} r={1.8} fill={INK} />
       <Circle cx={37} cy={28} r={1.8} fill={INK} />
-      <Path d="M27 35c3 2.6 7 2.6 10 0" stroke={INK} strokeWidth={1.8} strokeLinecap="round" fill="none" />
+      <Path
+        d="M27 35c3 2.6 7 2.6 10 0"
+        stroke={INK}
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        fill="none"
+      />
       <Path d="M17 58c3-10 8-15 15-15s12 5 15 15z" fill={cloth} />
     </Svg>
   );
