@@ -1,0 +1,19 @@
+# Tablette : l'app doit rester utilisable dans les deux orientations, et une
+# rotation en pleine leçon ne doit rien perdre.
+appId: td.alifa.app.dev
+---
+- launchApp
+- setOrientation: LANDSCAPE
+- assertVisible: 'Bonjour'
+- assertVisible: 'Tes activités'
+
+- tapOn: 'Ma prochaine leçon'
+- assertVisible: 'Exercice 1 sur 6'
+# En paysage sur tablette, consigne et réponses sont côte à côte
+- assertVisible: 'Touche l’image du mot que tu entends.'
+
+# Rotation en pleine séance : on reste sur le même exercice
+- setOrientation: PORTRAIT
+- assertVisible: 'Exercice 1 sur 6'
+- setOrientation: LANDSCAPE
+- assertVisible: 'Exercice 1 sur 6'

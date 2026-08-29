@@ -1,10 +1,18 @@
-# Démarrer la première leçon depuis l'accueil, répondre, atteindre le feedback
+# Première leçon d'un CP1 : « À l'école » (langage) — écouter un mot, toucher
+# l'image. Vérifie que la séance démarre, avance et se compte.
 appId: td.alifa.app.dev
 ---
 - launchApp
 - assertVisible: 'Bonjour'
 - tapOn: 'Ma prochaine leçon'
-- assertVisible: 'Écoute bien.'
-- tapOn: 'Suivant'
-# étape 2 : tap_letter — la bonne réponse dépend du contenu ; on vérifie la présence des cartes
-- assertVisible: 'Touche la lettre que tu entends.'
+
+# La consigne du premier exercice de l'année
+- assertVisible: 'Touche l’image du mot que tu entends.'
+# Le compteur de séance est exposé aux lecteurs d'écran
+- assertVisible: 'Exercice 1 sur 6'
+
+# Répondre : quelle que soit la carte touchée, la séance doit avancer
+- tapOn:
+    index: 0
+    point: '50%,70%'
+- assertVisible: 'Exercice 2 sur 6'

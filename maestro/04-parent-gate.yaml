@@ -1,10 +1,11 @@
-# L'espace parent est protégé ; une mauvaise réponse ne passe pas
+# L'espace parent est protégé : une mauvaise réponse ne passe pas.
 appId: td.alifa.app.dev
 ---
 - launchApp
 - tapOn: 'Parents'
 - assertVisible: 'Espace parents'
 - assertVisible: 'Pour entrer, réponds à cette question :'
-# Mauvaise réponse → reste sur le gate
+# 7 × 6 : 36 est faux
 - tapOn: '36'
 - assertVisible: 'Ce n’est pas la bonne réponse.'
+- assertNotVisible: 'Tableau de bord'

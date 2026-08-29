@@ -1,18 +1,37 @@
-# Premier lancement (à exécuter en mode avion) : onboarding → création profil → accueil
+# Premier lancement (à exécuter en mode avion) : onboarding → profil → accueil.
+# appId : celui du profil de build utilisé (dev / preview / production).
 appId: td.alifa.app.dev
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Ton école'
+
+# Onboarding 1/3
+- assertVisible: 'Ton école t’accompagne partout.'
 - tapOn: 'Commencer'
-- assertVisible: 'Lecture, dictée, écriture et calcul.'
+
+# Onboarding 2/3 — les quatre disciplines de la grille officielle du CP
+- assertVisible: 'Langage, lecture, écriture et calcul.'
+- assertVisible: 'Langage'
+- assertVisible: 'Lecture'
+- assertVisible: 'Écriture'
+- assertVisible: 'Calcul'
 - tapOn: 'Suivant'
+
+# Onboarding 3/3 — la promesse hors connexion
 - assertVisible: 'Fonctionne sans connexion.'
 - tapOn: 'Créer mon profil'
+
+# Création du profil : aucun email, aucun mot de passe
 - assertVisible: 'Crée ton profil'
+- assertVisible: 'Pas d’email, pas de mot de passe. Tes données restent sur ce téléphone.'
 - tapOn: 'Écris ton prénom ici'
 - inputText: 'Amina'
 - hideKeyboard
 - tapOn: 'CP1'
 - tapOn: 'C’est parti !'
+
+# Accueil enfant : les quatre disciplines sont ouvertes dès le premier jour
 - assertVisible: 'Bonjour Amina !'
+- assertVisible: 'Tes activités'
+- assertVisible: 'Langage'
+- assertVisible: 'Calcul'
