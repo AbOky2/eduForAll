@@ -58,7 +58,16 @@ Il faut donc un build installé. Voir §3, la liste de plans est en §4.
 npm ci
 npm run validate:release      # doit finir sur « Gates automatisables : OK »
 npx eas login
-npx eas build:configure       # une seule fois : crée le projet côté EAS
+npx eas init                  # une seule fois : crée le projet côté EAS
+```
+
+`eas init` affiche un **identifiant de projet**. La configuration d'ALIFA
+étant dynamique (`app.config.ts`, pas `app.json`), EAS ne peut pas l'écrire
+tout seul : colle-le dans `app.config.ts` à la place de la chaîne vide de
+`EAS_PROJECT_ID`, ou exporte-le :
+
+```bash
+export EAS_PROJECT_ID="celui-affiche-par-eas-init"
 ```
 
 Puis le build de test :

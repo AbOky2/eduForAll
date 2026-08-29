@@ -8,6 +8,15 @@ import type { ExpoConfig } from 'expo/config';
 const ANDROID_PACKAGE = process.env.ALIFA_ANDROID_PACKAGE ?? 'td.alifa.app.dev';
 const IOS_BUNDLE_IDENTIFIER = process.env.ALIFA_IOS_BUNDLE_ID ?? 'td.alifa.app.dev';
 
+/**
+ * Identifiant du projet EAS, donné par `npx eas init`.
+ *
+ * La configuration étant dynamique (app.config.ts et non app.json), EAS ne
+ * peut pas l'écrire lui-même : coller ici la valeur affichée, ou la fournir
+ * par la variable d'environnement. Voir docs/deploiement-v1.md §2.
+ */
+const EAS_PROJECT_ID = process.env.EAS_PROJECT_ID ?? '';
+
 const config: ExpoConfig = {
   name: 'ALIFA',
   slug: 'alifa',
@@ -74,6 +83,7 @@ const config: ExpoConfig = {
   },
   extra: {
     contentVersion: '2.0.0',
+    ...(EAS_PROJECT_ID ? { eas: { projectId: EAS_PROJECT_ID } } : {}),
   },
 };
 
