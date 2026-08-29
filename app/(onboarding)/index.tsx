@@ -85,10 +85,30 @@ export default function OnboardingScreen() {
           <View style={styles.subjectGrid}>
             {(
               [
-                { label: fr.subjects.reading, icon: 'book', tile: colors.secondaryContainer, tint: colors.onSecondaryContainer },
-                { label: fr.subjects.writing, icon: 'pencil', tile: colors.tertiaryFixed, tint: colors.onTertiaryContainer },
-                { label: fr.subjects.dictation, icon: 'ear', tile: colors.primaryFixedDim, tint: colors.onPrimaryContainer },
-                { label: fr.subjects.math, icon: 'calculator', tile: colors.secondary, tint: colors.onSecondary },
+                {
+                  label: fr.subjects.language,
+                  icon: 'speech',
+                  tile: colors.primaryFixedDim,
+                  tint: colors.onPrimaryContainer,
+                },
+                {
+                  label: fr.subjects.reading,
+                  icon: 'book',
+                  tile: colors.secondaryContainer,
+                  tint: colors.onSecondaryContainer,
+                },
+                {
+                  label: fr.subjects.writing,
+                  icon: 'pencil',
+                  tile: colors.tertiaryFixed,
+                  tint: colors.onTertiaryContainer,
+                },
+                {
+                  label: fr.subjects.math,
+                  icon: 'calculator',
+                  tile: colors.secondary,
+                  tint: colors.onSecondary,
+                },
               ] as const
             ).map((subject) => (
               <AlifaCard key={subject.label} style={styles.subjectCard}>

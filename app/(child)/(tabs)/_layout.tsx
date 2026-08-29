@@ -23,7 +23,9 @@ const TAB_META: Record<string, { label: string; icon: IconName }> = {
 function AlifaTabBar({ state, navigation }: AlifaTabBarProps) {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.bar, shadows.raised, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}>
+    <View
+      style={[styles.bar, shadows.raised, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}
+    >
       {state.routes.map((route, index) => {
         const meta = TAB_META[route.name];
         if (!meta) {
@@ -60,10 +62,7 @@ function AlifaTabBar({ state, navigation }: AlifaTabBarProps) {
 
 export default function TabsLayout() {
   return (
-    <Tabs
-      tabBar={(props) => <AlifaTabBar {...props} />}
-      screenOptions={{ headerShown: false }}
-    >
+    <Tabs tabBar={(props) => <AlifaTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" />
       <Tabs.Screen name="learn" />
       <Tabs.Screen name="parents" />

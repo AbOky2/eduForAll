@@ -7,7 +7,13 @@ import {
   loadParentDashboard,
   type ParentDashboardData,
 } from '@/features/parent-space/application/parent-dashboard';
-import { AlifaButton, AlifaCard, AlifaProgressBar, AlifaScreen, AlifaText } from '@/design-system/primitives';
+import {
+  AlifaButton,
+  AlifaCard,
+  AlifaProgressBar,
+  AlifaScreen,
+  AlifaText,
+} from '@/design-system/primitives';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -107,7 +113,9 @@ export default function ParentDashboardScreen() {
               </AlifaText>
             </AlifaText>
             <AlifaProgressBar
-              progress={data && data.totalLessons > 0 ? data.completedLessons / data.totalLessons : 0}
+              progress={
+                data && data.totalLessons > 0 ? data.completedLessons / data.totalLessons : 0
+              }
               tone="brown"
               height={8}
             />
@@ -143,7 +151,11 @@ export default function ParentDashboardScreen() {
                 {fr.parent.recommendation}
               </AlifaText>
               {data.recommendations.map((recommendation) => (
-                <AlifaText key={recommendation} variant="bodyMd" color={colors.onSecondaryContainer}>
+                <AlifaText
+                  key={recommendation}
+                  variant="bodyMd"
+                  color={colors.onSecondaryContainer}
+                >
                   {recommendation}
                 </AlifaText>
               ))}

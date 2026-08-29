@@ -16,14 +16,15 @@ interface AlifaAudioButtonProps {
   accessibilityLabel?: string;
 }
 
-const VARIANTS: Record<AudioButtonVariant, { background: string; icon: string; border?: string }> = {
-  // Big sand circle of the exercise screens (mockups S11, S12, S14).
-  sand: { background: colors.primaryContainer, icon: colors.onPrimaryContainer },
-  // Small sky-blue circle next to the greeting (mockup S06).
-  sky: { background: colors.secondaryContainer, icon: colors.onSecondaryContainer },
-  // White circle with a blue ring (mockup S10).
-  bordered: { background: colors.card, icon: colors.secondary, border: colors.secondary },
-};
+const VARIANTS: Record<AudioButtonVariant, { background: string; icon: string; border?: string }> =
+  {
+    // Big sand circle of the exercise screens (mockups S11, S12, S14).
+    sand: { background: colors.primaryContainer, icon: colors.onPrimaryContainer },
+    // Small sky-blue circle next to the greeting (mockup S06).
+    sky: { background: colors.secondaryContainer, icon: colors.onSecondaryContainer },
+    // White circle with a blue ring (mockup S10).
+    bordered: { background: colors.card, icon: colors.secondary, border: colors.secondary },
+  };
 
 /**
  * The always-recognizable "listen" button. Pulses gently while audio plays

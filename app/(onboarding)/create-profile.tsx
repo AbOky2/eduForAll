@@ -1,12 +1,23 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { createSettingsRepository } from '@/features/settings/infrastructure/settings-repository';
-import { AVATAR_IDS, isValidFirstName, type AvatarId } from '@/features/child-profile/domain/child-profile';
+import {
+  AVATAR_IDS,
+  isValidFirstName,
+  type AvatarId,
+} from '@/features/child-profile/domain/child-profile';
 import type { LevelId } from '@/content/schemas/curriculum-schema';
 import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';

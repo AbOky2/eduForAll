@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { colors, radius, shadows, spacing } from '../tokens';
 
@@ -11,7 +11,7 @@ interface AlifaCardProps {
   padded?: boolean;
   backgroundColor?: string;
   accessibilityLabel?: string | undefined;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }
 
 /** White soft-shadow card used across every mockup. */
@@ -43,7 +43,7 @@ export function AlifaCard({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}
-      style={({ pressed }) => [...base, { transform: [{ scale: pressed ? 0.98 : 1 }] }]}
+      style={({ pressed }) => [base, { transform: [{ scale: pressed ? 0.98 : 1 }] }]}
     >
       {children}
     </Pressable>

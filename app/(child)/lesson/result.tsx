@@ -12,11 +12,15 @@ import { fr } from '@/localization/fr/strings';
 /** Lesson success (mockup S16): stars, avatar with check badge, warm words. */
 export default function LessonResultScreen() {
   const router = useRouter();
-  const { stars: starsParam, lessonId } = useLocalSearchParams<{ stars?: string; lessonId?: string }>();
+  const { stars: starsParam, lessonId } = useLocalSearchParams<{
+    stars?: string;
+    lessonId?: string;
+  }>();
   const profile = useActiveProfile((state) => state.profile);
 
   const stars = Math.min(3, Math.max(1, Number(starsParam ?? '1')));
-  const avatarVariant = ((Math.max(1, Number(profile?.avatarId.split('-')[1] ?? '1')) - 1) % 4 + 1) as 1 | 2 | 3 | 4;
+  const avatarVariant = (((Math.max(1, Number(profile?.avatarId.split('-')[1] ?? '1')) - 1) % 4) +
+    1) as 1 | 2 | 3 | 4;
 
   return (
     <AlifaScreen background="default">

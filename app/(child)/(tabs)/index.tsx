@@ -3,7 +3,10 @@ import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { loadHomeSummary, type HomeSummary } from '@/features/learning-path/application/home-summary';
+import {
+  loadHomeSummary,
+  type HomeSummary,
+} from '@/features/learning-path/application/home-summary';
 import type { Subject } from '@/content/schemas/curriculum-schema';
 import { AlifaCard, AlifaProgressBar, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
@@ -11,11 +14,38 @@ import { AvatarFace } from '@/design-system/illustrations/scenes';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
-const SUBJECT_META: Record<Subject, { label: string; icon: IconName; tile: string; tint: string; bar: 'sand' | 'brown' | 'blue' }> = {
-  reading: { label: fr.subjects.reading, icon: 'book', tile: colors.primaryFixedDim, tint: colors.onPrimaryContainer, bar: 'brown' },
-  writing: { label: fr.subjects.writing, icon: 'pencil', tile: colors.surfaceContainerHighest, tint: colors.onSurfaceVariant, bar: 'sand' },
-  dictation: { label: fr.subjects.dictation, icon: 'ear', tile: colors.secondary, tint: colors.onSecondary, bar: 'blue' },
-  math: { label: fr.subjects.math, icon: 'calculator', tile: colors.secondaryContainer, tint: colors.onSecondaryContainer, bar: 'blue' },
+const SUBJECT_META: Record<
+  Subject,
+  { label: string; icon: IconName; tile: string; tint: string; bar: 'sand' | 'brown' | 'blue' }
+> = {
+  language: {
+    label: fr.subjects.language,
+    icon: 'speech',
+    tile: colors.secondary,
+    tint: colors.onSecondary,
+    bar: 'blue',
+  },
+  reading: {
+    label: fr.subjects.reading,
+    icon: 'book',
+    tile: colors.primaryFixedDim,
+    tint: colors.onPrimaryContainer,
+    bar: 'brown',
+  },
+  writing: {
+    label: fr.subjects.writing,
+    icon: 'pencil',
+    tile: colors.tertiaryFixed,
+    tint: colors.onTertiaryContainer,
+    bar: 'sand',
+  },
+  math: {
+    label: fr.subjects.math,
+    icon: 'calculator',
+    tile: colors.secondaryContainer,
+    tint: colors.onSecondaryContainer,
+    bar: 'blue',
+  },
 };
 
 /** Child home — mockup S06. */
@@ -44,7 +74,8 @@ export default function ChildHomeScreen() {
     return null;
   }
   const recommendation = summary?.recommendation ?? null;
-  const avatarVariant = (Math.max(1, Number(profile.avatarId.split('-')[1] ?? '1')) % 4 || 4) as 1 | 2 | 3 | 4;
+  const avatarVariant = (Math.max(1, Number(profile.avatarId.split('-')[1] ?? '1')) % 4 || 4) as
+    1 | 2 | 3 | 4;
 
   return (
     <AlifaScreen background="default" withBottomInset={false}>
@@ -80,7 +111,11 @@ export default function ChildHomeScreen() {
             accessibilityRole="button"
             accessibilityLabel={`${fr.home.continueLesson} : ${recommendation.title}`}
             onPress={() => router.push(`/(child)/lesson/${recommendation.lessonId}`)}
-            style={({ pressed }) => [styles.hero, shadows.raised, pressed && { transform: [{ scale: 0.98 }] }]}
+            style={({ pressed }) => [
+              styles.hero,
+              shadows.raised,
+              pressed && { transform: [{ scale: 0.98 }] },
+            ]}
           >
             <View style={styles.heroBadge}>
               <AlifaText variant="labelSm" color={colors.primaryFixed}>
@@ -113,10 +148,18 @@ export default function ChildHomeScreen() {
                 key={subject.subject}
                 onPress={subject.locked ? undefined : () => router.push('/(child)/(tabs)/learn')}
                 accessibilityLabel={`${meta.label}${subject.locked ? ', verrouillé' : ''}`}
-                style={StyleSheet.flatten([styles.activityCard, subject.locked && styles.lockedCard])}
+                style={StyleSheet.flatten([
+                  styles.activityCard,
+                  subject.locked && styles.lockedCard,
+                ])}
               >
                 <View style={styles.activityHeader}>
-                  <View style={[styles.activityTile, { backgroundColor: subject.locked ? colors.lockedContainer : meta.tile }]}>
+                  <View
+                    style={[
+                      styles.activityTile,
+                      { backgroundColor: subject.locked ? colors.lockedContainer : meta.tile },
+                    ]}
+                  >
                     <AlifaIcon
                       name={meta.icon}
                       size={22}
@@ -127,7 +170,10 @@ export default function ChildHomeScreen() {
                     <AlifaIcon name="lock" size={16} color={colors.locked} />
                   ) : null}
                 </View>
-                <AlifaText variant="labelLg" color={subject.locked ? colors.locked : colors.textPrimary}>
+                <AlifaText
+                  variant="labelLg"
+                  color={subject.locked ? colors.locked : colors.textPrimary}
+                >
                   {meta.label}
                 </AlifaText>
                 <AlifaProgressBar

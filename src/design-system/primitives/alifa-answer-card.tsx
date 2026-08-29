@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 
 import { a11y, colors, radius, shadows, spacing } from '../tokens';
 import { AlifaIcon } from '../icons/alifa-icon';
@@ -15,7 +15,7 @@ interface AlifaAnswerCardProps {
   /** Large pedagogical glyph (syllables, numbers) vs body text. */
   glyph?: boolean;
   accessibilityLabel?: string | undefined;
-  style?: ViewStyle | undefined;
+  style?: StyleProp<ViewStyle> | undefined;
 }
 
 /**
@@ -82,9 +82,7 @@ export function AlifaAnswerCard({
       {state === 'correct' ? (
         <AlifaIcon name="check" size={22} color={colors.feedbackCorrect} />
       ) : null}
-      {state === 'incorrect' ? (
-        <AlifaIcon name="close" size={20} color={colors.secondary} />
-      ) : null}
+      {state === 'incorrect' ? <AlifaIcon name="close" size={20} color={colors.secondary} /> : null}
     </Pressable>
   );
 }

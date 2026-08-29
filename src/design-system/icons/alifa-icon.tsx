@@ -18,6 +18,7 @@ export type IconName =
   | 'book'
   | 'pencil'
   | 'ear'
+  | 'speech'
   | 'calculator'
   | 'parents'
   | 'cloud-off'
@@ -40,15 +41,30 @@ interface AlifaIconProps {
  * Original hand-drawn icon set on a 24×24 grid, matching the light outlined
  * style of the mockups (no @expo/vector-icons — see ADR notes).
  */
-export function AlifaIcon({ name, size = 24, color = colors.onSurface, filled = false }: AlifaIconProps) {
-  const stroke = { stroke: color, strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, fill: 'none' as const };
+export function AlifaIcon({
+  name,
+  size = 24,
+  color = colors.onSurface,
+  filled = false,
+}: AlifaIconProps) {
+  const stroke = {
+    stroke: color,
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    fill: 'none' as const,
+  };
   const box = { width: size, height: size, viewBox: '0 0 24 24' };
 
   switch (name) {
     case 'speaker':
       return (
         <Svg {...box}>
-          <Path {...stroke} d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4z" fill={filled ? color : 'none'} />
+          <Path
+            {...stroke}
+            d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4z"
+            fill={filled ? color : 'none'}
+          />
           <Path {...stroke} d="M15 9.2a4 4 0 0 1 0 5.6" />
           <Path {...stroke} d="M17.6 7a7.4 7.4 0 0 1 0 10" />
         </Svg>
@@ -56,7 +72,10 @@ export function AlifaIcon({ name, size = 24, color = colors.onSurface, filled = 
     case 'play':
       return (
         <Svg {...box}>
-          <Path d="M8.5 5.8v12.4c0 .8.9 1.3 1.6.9l9.4-6.2c.6-.4.6-1.3 0-1.7L10.1 4.9c-.7-.4-1.6 0-1.6.9z" fill={color} />
+          <Path
+            d="M8.5 5.8v12.4c0 .8.9 1.3 1.6.9l9.4-6.2c.6-.4.6-1.3 0-1.7L10.1 4.9c-.7-.4-1.6 0-1.6.9z"
+            fill={color}
+          />
         </Svg>
       );
     case 'pause':
@@ -113,7 +132,10 @@ export function AlifaIcon({ name, size = 24, color = colors.onSurface, filled = 
     case 'lightbulb':
       return (
         <Svg {...box}>
-          <Path {...stroke} d="M12 3.5a5.5 5.5 0 0 1 3.2 10c-.7.5-1.2 1.1-1.2 1.9v.6h-4v-.6c0-.8-.5-1.4-1.2-1.9A5.5 5.5 0 0 1 12 3.5z" />
+          <Path
+            {...stroke}
+            d="M12 3.5a5.5 5.5 0 0 1 3.2 10c-.7.5-1.2 1.1-1.2 1.9v.6h-4v-.6c0-.8-.5-1.4-1.2-1.9A5.5 5.5 0 0 1 12 3.5z"
+          />
           <Line {...stroke} x1={10} y1={19.5} x2={14} y2={19.5} />
         </Svg>
       );
@@ -143,13 +165,20 @@ export function AlifaIcon({ name, size = 24, color = colors.onSurface, filled = 
     case 'home':
       return (
         <Svg {...box}>
-          <Path {...stroke} d="M4.5 11.5 12 4.5l7.5 7v7.5a1.5 1.5 0 0 1-1.5 1.5h-3.5v-5.5h-5V20.5H6a1.5 1.5 0 0 1-1.5-1.5z" fill={filled ? color : 'none'} />
+          <Path
+            {...stroke}
+            d="M4.5 11.5 12 4.5l7.5 7v7.5a1.5 1.5 0 0 1-1.5 1.5h-3.5v-5.5h-5V20.5H6a1.5 1.5 0 0 1-1.5-1.5z"
+            fill={filled ? color : 'none'}
+          />
         </Svg>
       );
     case 'book':
       return (
         <Svg {...box}>
-          <Path {...stroke} d="M12 6.5c-1.6-1.3-3.8-1.8-7-1.5v13c3.2-.3 5.4.2 7 1.5 1.6-1.3 3.8-1.8 7-1.5v-13c-3.2-.3-5.4.2-7 1.5z" />
+          <Path
+            {...stroke}
+            d="M12 6.5c-1.6-1.3-3.8-1.8-7-1.5v13c3.2-.3 5.4.2 7 1.5 1.6-1.3 3.8-1.8 7-1.5v-13c-3.2-.3-5.4.2-7 1.5z"
+          />
           <Line {...stroke} x1={12} y1={6.8} x2={12} y2={19} />
         </Svg>
       );
@@ -162,8 +191,23 @@ export function AlifaIcon({ name, size = 24, color = colors.onSurface, filled = 
     case 'ear':
       return (
         <Svg {...box}>
-          <Path {...stroke} d="M7.5 9a4.8 4.8 0 0 1 9.6 0c0 2.6-2.3 3.5-2.6 5.4-.2 1.6-1 2.9-2.6 2.9" />
+          <Path
+            {...stroke}
+            d="M7.5 9a4.8 4.8 0 0 1 9.6 0c0 2.6-2.3 3.5-2.6 5.4-.2 1.6-1 2.9-2.6 2.9"
+          />
           <Path {...stroke} d="M10.4 9.1a2.2 2.2 0 0 1 4 1.2c0 1.3-1.3 1.9-1.7 3" />
+        </Svg>
+      );
+    case 'speech':
+      // Langage/élocution — a spoken bubble, not a listening ear.
+      return (
+        <Svg {...box}>
+          <Path
+            {...stroke}
+            d="M4.5 7.2c0-1.5 1.2-2.7 2.7-2.7h9.6c1.5 0 2.7 1.2 2.7 2.7v6.1c0 1.5-1.2 2.7-2.7 2.7H10l-4.1 3.2c-.5.4-1.2 0-1.2-.6v-2.7c-.1-.3-.2-1-.2-2.6V7.2z"
+          />
+          <Line {...stroke} x1={8.2} y1={9} x2={15.8} y2={9} />
+          <Line {...stroke} x1={8.2} y1={12.2} x2={13.2} y2={12.2} />
         </Svg>
       );
     case 'calculator':
@@ -189,7 +233,10 @@ export function AlifaIcon({ name, size = 24, color = colors.onSurface, filled = 
     case 'cloud-off':
       return (
         <Svg {...box}>
-          <Path {...stroke} d="M8 17.5h9a3.5 3.5 0 0 0 .8-6.9A5.5 5.5 0 0 0 8.2 8.5 4 4 0 0 0 8 17.5z" />
+          <Path
+            {...stroke}
+            d="M8 17.5h9a3.5 3.5 0 0 0 .8-6.9A5.5 5.5 0 0 0 8.2 8.5 4 4 0 0 0 8 17.5z"
+          />
           <Line {...stroke} x1={4.5} y1={4.5} x2={19.5} y2={19.5} stroke={colors.error} />
         </Svg>
       );

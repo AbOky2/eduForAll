@@ -5,9 +5,12 @@ import Svg, { Line } from 'react-native-svg';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { worldsForLevel } from '@/features/curriculum/application/curriculum-catalog';
+import {
+  worldsForLevel,
+  type WorldSummary,
+} from '@/features/curriculum/application/curriculum-catalog';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
-import type { Subject, World } from '@/content/schemas/curriculum-schema';
+import type { Subject } from '@/content/schemas/curriculum-schema';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { colors, shadows, spacing } from '@/design-system/tokens';
@@ -16,7 +19,7 @@ import { fr } from '@/localization/fr/strings';
 type WorldNodeState = 'completed' | 'current' | 'locked';
 
 interface WorldNode {
-  world: World;
+  world: WorldSummary;
   state: WorldNodeState;
   stars: number;
   totalLessons: number;
@@ -120,16 +123,40 @@ export default function LevelMapScreen() {
           return (
             <View key={node.world.id} style={styles.nodeRow}>
               {index > 0 ? (
-                <Svg width={2} height={44} style={[styles.connector, alignLeft ? styles.connectorLeft : styles.connectorRight]}>
-                  <Line x1={1} y1={0} x2={1} y2={44} stroke={colors.primaryContainer} strokeWidth={2.5} strokeDasharray="2 8" strokeLinecap="round" />
+                <Svg
+                  width={2}
+                  height={44}
+                  style={[
+                    styles.connector,
+                    alignLeft ? styles.connectorLeft : styles.connectorRight,
+                  ]}
+                >
+                  <Line
+                    x1={1}
+                    y1={0}
+                    x2={1}
+                    y2={44}
+                    stroke={colors.primaryContainer}
+                    strokeWidth={2.5}
+                    strokeDasharray="2 8"
+                    strokeLinecap="round"
+                  />
                 </Svg>
               ) : null}
               <View style={[styles.nodeWrap, alignLeft ? styles.nodeLeft : styles.nodeRight]}>
                 {node.state === 'current' && node.stars > 0 ? (
                   <View style={styles.starsRow} accessibilityLabel={`${node.stars} étoiles`}>
-                    {Array.from({ length: Math.min(3, Math.max(1, Math.round(node.stars / Math.max(1, node.completedLessons)))) }, (_, i) => (
-                      <AlifaIcon key={i} name="star" size={16} color={colors.starActive} />
-                    ))}
+                    {Array.from(
+                      {
+                        length: Math.min(
+                          3,
+                          Math.max(1, Math.round(node.stars / Math.max(1, node.completedLessons))),
+                        ),
+                      },
+                      (_, i) => (
+                        <AlifaIcon key={i} name="star" size={16} color={colors.starActive} />
+                      ),
+                    )}
                   </View>
                 ) : null}
                 <Pressable

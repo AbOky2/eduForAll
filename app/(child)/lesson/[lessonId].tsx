@@ -21,7 +21,13 @@ import { createProgressRepository } from '@/features/progress/infrastructure/pro
 import { useSettings } from '@/features/settings/application/settings-store';
 import { FeedbackBanner } from '@/design-system/components/feedback-banner';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
-import { AlifaButton, AlifaCard, AlifaProgressBar, AlifaScreen, AlifaText } from '@/design-system/primitives';
+import {
+  AlifaButton,
+  AlifaCard,
+  AlifaProgressBar,
+  AlifaScreen,
+  AlifaText,
+} from '@/design-system/primitives';
 import { a11y, colors, spacing } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
 
@@ -110,7 +116,10 @@ function SessionBody({
       .play(audioId)
       .then(() => {
         setPlayingAudioId(audioId);
-        setTimeout(() => setPlayingAudioId((current) => (current === audioId ? null : current)), 2500);
+        setTimeout(
+          () => setPlayingAudioId((current) => (current === audioId ? null : current)),
+          2500,
+        );
       })
       .catch((cause) => log.warn(`audio failed for ${audioId}: ${String(cause)}`));
   };
@@ -145,7 +154,9 @@ function SessionBody({
       }),
     );
     if (state.lastFeedback === 'correct') {
-      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => undefined);
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
+        () => undefined,
+      );
     }
   }, [state.phase, state.lastFeedback, profileId, lesson, state]);
 
@@ -186,7 +197,10 @@ function SessionBody({
           <AlifaIcon name="close" size={22} color={colors.onSurfaceVariant} />
         </Pressable>
         <View style={styles.progressWrap}>
-          <AlifaProgressBar progress={progress} accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)} />
+          <AlifaProgressBar
+            progress={progress}
+            accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
+          />
         </View>
         {step?.hint ? (
           <Pressable
@@ -230,7 +244,9 @@ function SessionBody({
             </AlifaText>
             <AlifaButton
               label={fr.common.next}
-              onPress={() => dispatch({ type: 'ANSWER_SUBMITTED', answer: { kind: 'acknowledge' } })}
+              onPress={() =>
+                dispatch({ type: 'ANSWER_SUBMITTED', answer: { kind: 'acknowledge' } })
+              }
             />
           </View>
         ) : null}
@@ -241,7 +257,9 @@ function SessionBody({
         <FeedbackBanner
           kind={state.lastFeedback}
           message={pickFeedback(
-            state.lastFeedback === 'correct' ? fr.lesson.feedbackCorrect : fr.lesson.feedbackIncorrect,
+            state.lastFeedback === 'correct'
+              ? fr.lesson.feedbackCorrect
+              : fr.lesson.feedbackIncorrect,
             state.stepIndex + state.attemptsOnCurrentStep,
           )}
           actionLabel={state.lastFeedback === 'correct' ? fr.common.continue : fr.common.retry}
@@ -258,13 +276,21 @@ function SessionBody({
               <AlifaText variant="headlineSm">{fr.lesson.hint}</AlifaText>
             </View>
             <AlifaText variant="bodyLg">{step.hint.text}</AlifaText>
-            <AlifaButton label={fr.common.understood} onPress={() => dispatch({ type: 'HINT_DISMISSED' })} />
+            <AlifaButton
+              label={fr.common.understood}
+              onPress={() => dispatch({ type: 'HINT_DISMISSED' })}
+            />
           </AlifaCard>
         </View>
       ) : null}
 
       {/* Quit confirmation */}
-      <Modal transparent visible={quitVisible} animationType="fade" onRequestClose={() => setQuitVisible(false)}>
+      <Modal
+        transparent
+        visible={quitVisible}
+        animationType="fade"
+        onRequestClose={() => setQuitVisible(false)}
+      >
         <View style={styles.modalBackdrop}>
           <AlifaCard rounded="xl" style={styles.modalCard}>
             <AlifaText variant="headlineSm" align="center">

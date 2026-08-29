@@ -11,8 +11,10 @@ const IOS_BUNDLE_IDENTIFIER = process.env.ALIFA_IOS_BUNDLE_ID ?? 'td.alifa.app.d
 const config: ExpoConfig = {
   name: 'ALIFA',
   slug: 'alifa',
-  version: '0.1.0',
-  orientation: 'portrait',
+  version: '1.0.0',
+  // Tablet-first: the app must work held either way. Layouts adapt through
+  // src/design-system/responsive.
+  orientation: 'default',
   scheme: 'alifa',
   // Light-only for V1: the Stitch design system is light mode only.
   userInterfaceStyle: 'light',
@@ -71,7 +73,7 @@ const config: ExpoConfig = {
     reactCompiler: true,
   },
   extra: {
-    contentVersion: '1.0.0',
+    contentVersion: '2.0.0',
   },
 };
 

@@ -15,7 +15,10 @@ describe('AlifaAnswerCard', () => {
     render(<AlifaAnswerCard label="ma" state="correct" onPress={onPress} />);
     fireEvent.press(screen.getByLabelText('ma'));
     expect(onPress).not.toHaveBeenCalled();
-    expect(screen.getByLabelText('ma')).toHaveProp('accessibilityState', expect.objectContaining({ disabled: true }));
+    expect(screen.getByLabelText('ma')).toHaveProp(
+      'accessibilityState',
+      expect.objectContaining({ disabled: true }),
+    );
   });
 
   it('exposes the selected state to assistive technologies', () => {

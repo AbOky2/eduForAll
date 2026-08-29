@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { loadCurriculum } from '@/features/curriculum/application/curriculum-catalog';
+import { lessonForSkill } from '@/features/curriculum/application/curriculum-catalog';
 import { describeSkill } from '@/features/parent-space/application/parent-dashboard';
 import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
@@ -37,24 +37,11 @@ export default function RevisionScreen() {
            ORDER BY due_at LIMIT 4`,
           profile.id,
         );
-        // Map each struggled skill back to a lesson that trains it.
-        const manifest = loadCurriculum();
-        const bySkill = new Map<string, string>();
-        for (const level of manifest.levels) {
-          for (const world of level.worlds) {
-            for (const lesson of world.lessons) {
-              for (const skill of lesson.skills) {
-                if (!bySkill.has(skill)) {
-                  bySkill.set(skill, lesson.id);
-                }
-              }
-            }
-          }
-        }
+        // Each struggled skill maps back to the first lesson that trains it.
         const built = rows.map((row) => ({
           skillId: row.skill_id,
           label: describeSkill(row.skill_id),
-          lessonId: bySkill.get(row.skill_id) ?? null,
+          lessonId: lessonForSkill(row.skill_id),
         }));
         if (!cancelled) {
           setItems(built);
@@ -99,7 +86,14 @@ export default function RevisionScreen() {
                   <View
                     style={[
                       styles.underline,
-                      { backgroundColor: [colors.primaryContainer, colors.secondaryContainer, '#f3c6c2', colors.tertiaryFixed][index % 4] },
+                      {
+                        backgroundColor: [
+                          colors.primaryContainer,
+                          colors.secondaryContainer,
+                          '#f3c6c2',
+                          colors.tertiaryFixed,
+                        ][index % 4],
+                      },
                     ]}
                   />
                 </AlifaCard>

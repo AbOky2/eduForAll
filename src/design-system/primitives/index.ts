@@ -6,3 +6,4 @@ export { AlifaAnswerCard } from './alifa-answer-card';
 export type { AnswerCardState } from './alifa-answer-card';
 export { AlifaProgressBar } from './alifa-progress-bar';
 export { AlifaAudioButton } from './alifa-audio-button';
+export { AlifaExerciseLayout } from './alifa-exercise-layout';

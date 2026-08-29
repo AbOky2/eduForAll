@@ -150,7 +150,12 @@ export default function SettingsScreen() {
       </View>
 
       {/* Double confirmation */}
-      <Modal transparent visible={resetStep > 0} animationType="fade" onRequestClose={() => setResetStep(0)}>
+      <Modal
+        transparent
+        visible={resetStep > 0}
+        animationType="fade"
+        onRequestClose={() => setResetStep(0)}
+      >
         <View style={styles.modalBackdrop}>
           <AlifaCard rounded="xl" style={styles.modalCard}>
             <AlifaText variant="headlineSm" align="center">
