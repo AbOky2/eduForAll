@@ -1,0 +1,21 @@
+{
+  "$comment": "Exceptions de release explicitement acceptées. Une gate en échec ne passe QUE si elle figure ici. Chaque entrée porte la raison, qui a décidé, et la version où elle doit disparaître. Une acceptation qui ne correspond plus à aucun échec fait échouer la validation : on ne laisse pas traîner d'exception périmée.",
+  "acceptances": [
+    {
+      "gate": "Expo Doctor",
+      "reason": "Régression mémoire Hermes V1 (RN 0.85.3). Le correctif n'existe qu'à partir de RN 0.86.2 / Expo SDK 57 : c'est une montée de version majeure, à faire tablette en main et non à l'aveugle avant la première livraison. Toutes les autres vérifications de expo-doctor passent (21/22).",
+      "decidedBy": "propriétaire du projet",
+      "decidedOn": "2026-08-26",
+      "clearBy": "1.1.0",
+      "matches": "Hermes V1"
+    },
+    {
+      "gate": "Aucune voix placeholder en production",
+      "reason": "Les 820 consignes sont en synthèse vocale. Décision assumée : livrer la v1 pour lancer le pilote, enregistrer les voix définitives (idéalement une voix d'enseignant·e tchadien·ne) dans la mise à jour suivante. À signaler dans les notes de version et la fiche store.",
+      "decidedBy": "propriétaire du projet",
+      "decidedOn": "2026-08-26",
+      "clearBy": "1.1.0",
+      "matches": "placeholders TTS"
+    }
+  ]
+}

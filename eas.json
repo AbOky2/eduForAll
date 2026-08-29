@@ -17,6 +17,9 @@
       "android": {
         "buildType": "apk"
       },
+      "ios": {
+        "simulator": false
+      },
       "env": {
         "ALIFA_ANDROID_PACKAGE": "td.alifa.app.preview",
         "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.preview"
@@ -31,12 +34,25 @@
         "ALIFA_ANDROID_PACKAGE": "td.alifa.app",
         "ALIFA_IOS_BUNDLE_ID": "td.alifa.app"
       }
+    },
+    "production-apk": {
+      "extends": "production",
+      "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      }
     }
   },
   "submit": {
     "production": {
       "android": {
-        "track": "internal"
+        "track": "internal",
+        "releaseStatus": "draft"
+      },
+      "ios": {
+        "appleId": "REMPLACER_PAR_EMAIL_APPLE_ID",
+        "ascAppId": "REMPLACER_PAR_APP_STORE_CONNECT_APP_ID",
+        "appleTeamId": "REMPLACER_PAR_TEAM_ID"
       }
     }
   }
