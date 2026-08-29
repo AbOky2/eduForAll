@@ -3,7 +3,7 @@
  * Validates non-audio assets: fonts, icons, and that every illustration id
  * referenced by the manifest has a renderer in the object-icons registry.
  */
-import { readFileSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = join(__dirname, '..');
@@ -36,14 +36,30 @@ for (const file of REQUIRED_FILES) {
 const manifest = JSON.parse(
   readFileSync(join(ROOT, 'src/content/manifests/curriculum-v1.json'), 'utf8'),
 ) as { assets: Array<{ id: string; kind: string }> };
-const registrySource = readFileSync(
-  join(ROOT, 'src/design-system/illustrations/object-icons.tsx'),
-  'utf8',
-);
-for (const asset of manifest.assets) {
-  if (asset.kind === 'illustration' && !registrySource.includes(`'${asset.id}'`)) {
-    problems.push(`illustration "${asset.id}" has no renderer in object-icons.tsx`);
+// The pictogram set is split across several files by theme; collect every
+// registry entry (`'icon-x': Component`) rather than grepping one file.
+const ILLUSTRATIONS_DIR = join(ROOT, 'src/design-system/illustrations');
+const registered = new Set<string>();
+for (const file of readdirSync(ILLUSTRATIONS_DIR)) {
+  if (!file.endsWith('.tsx')) {
+    continue;
   }
+  const source = readFileSync(join(ILLUSTRATIONS_DIR, file), 'utf8');
+  for (const match of source.matchAll(/'(icon-[a-z0-9-]+)':\s*[A-Z]/g)) {
+    registered.add(match[1] as string);
+  }
+}
+for (const asset of manifest.assets) {
+  if (asset.kind === 'illustration' && !registered.has(asset.id)) {
+    problems.push(`illustration "${asset.id}" has no renderer in the pictogram registry`);
+  }
+}
+const referenced = new Set(
+  manifest.assets.filter((asset) => asset.kind === 'illustration').map((asset) => asset.id),
+);
+const unused = [...registered].filter((id) => !referenced.has(id)).sort();
+if (unused.length > 0) {
+  console.log(`ℹ️  ${unused.length} pictogram(s) drawn but not used by any lesson: ${unused.join(', ')}`);
 }
 
 if (problems.length > 0) {
