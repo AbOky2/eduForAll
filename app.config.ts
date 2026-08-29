@@ -9,13 +9,13 @@ const ANDROID_PACKAGE = process.env.ALIFA_ANDROID_PACKAGE ?? 'td.alifa.app.dev';
 const IOS_BUNDLE_IDENTIFIER = process.env.ALIFA_IOS_BUNDLE_ID ?? 'td.alifa.app.dev';
 
 /**
- * Identifiant du projet EAS, donné par `npx eas init`.
- *
- * La configuration étant dynamique (app.config.ts et non app.json), EAS ne
- * peut pas l'écrire lui-même : coller ici la valeur affichée, ou la fournir
- * par la variable d'environnement. Voir docs/deploiement-v1.md §2.
+ * Projet EAS @okimy/alifa. Ce n'est pas un secret : c'est l'équivalent de ce
+ * qu'Expo écrit dans app.json sur un projet à configuration statique. La
+ * configuration d'ALIFA étant dynamique, EAS ne peut pas l'écrire lui-même.
+ * La variable d'environnement permet de pointer un autre projet.
  */
-const EAS_PROJECT_ID = process.env.EAS_PROJECT_ID ?? '';
+const EAS_PROJECT_ID =
+  process.env.EAS_PROJECT_ID ?? 'aa1d821b-49a3-4a56-aad8-9cd2a0b0afa3';
 
 /**
  * Vrai pour tout build destiné à quelqu'un d'autre que le développeur
@@ -45,6 +45,7 @@ const BLOCKED_PERMISSIONS = [
 const config: ExpoConfig = {
   name: 'ALIFA',
   slug: 'alifa',
+  owner: 'okimy',
   version: '1.0.0',
   // Tablet-first: the app must work held either way. Layouts adapt through
   // src/design-system/responsive.

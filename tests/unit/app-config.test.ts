@@ -59,10 +59,13 @@ describe('configuration de l’application', () => {
     expect(loadConfig({ ALIFA_RELEASE: undefined }).android?.blockedPermissions).toBeUndefined();
   });
 
-  it('n’ajoute la clé EAS que lorsque l’identifiant de projet est renseigné', () => {
-    // Une chaîne vide ferait échouer le build de façon obscure.
-    expect((loadConfig({ EAS_PROJECT_ID: undefined }).extra as Record<string, unknown>).eas)
-      .toBeUndefined();
+  it('pointe le projet EAS, et laisse l’environnement en désigner un autre', () => {
+    const byDefault = loadConfig({ EAS_PROJECT_ID: undefined });
+    expect((byDefault.extra as Record<string, unknown>).eas).toEqual({
+      projectId: 'aa1d821b-49a3-4a56-aad8-9cd2a0b0afa3',
+    });
+    expect(byDefault.owner).toBe('okimy');
+
     expect((loadConfig({ EAS_PROJECT_ID: 'abc-123' }).extra as Record<string, unknown>).eas)
       .toEqual({ projectId: 'abc-123' });
   });

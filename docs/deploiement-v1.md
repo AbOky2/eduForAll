@@ -42,25 +42,21 @@ Détails dans `store/shared/privacy-policy/README.md`.
 ### 🔴 1.3 Captures d'écran
 
 Elles doivent montrer l'app réelle — les fabriquer est un motif de refus.
-Il faut donc un build installé. Voir §3, la liste de plans est en §4.
+Il faut donc un build installé, **sur une tablette et sur un téléphone**.
+La liste de plans et les formats sont en §4.
 
 ---
 
 ## 2. Premier build de test
 
+Le projet EAS est déjà créé et câblé : **@okimy/alifa**
+(`aa1d821b-49a3-4a56-aad8-9cd2a0b0afa3`, dans `app.config.ts`). Rien à
+initialiser.
+
 ```bash
 npm ci
 npm run validate:release      # doit finir sur « Gates automatisables : OK »
-eas init                      # une seule fois : crée le projet côté EAS
-```
-
-`eas init` affiche un **identifiant de projet**. La configuration d'ALIFA
-étant dynamique (`app.config.ts`, pas `app.json`), EAS ne peut pas l'écrire
-tout seul : colle-le dans `app.config.ts` à la place de la chaîne vide de
-`EAS_PROJECT_ID`, ou exporte-le :
-
-```bash
-export EAS_PROJECT_ID="celui-affiche-par-eas-init"
+eas project:info              # doit afficher @okimy/alifa
 ```
 
 Puis le build de test :
