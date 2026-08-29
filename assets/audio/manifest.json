@@ -1,75 +1,160 @@
 {
- "generatedAt": "2026-07-13T00:00:00.000Z",
+ "generatedAt": "2026-08-26T00:00:00.000Z",
  "voice": "placeholder-tts",
  "entries": [
   {
-   "id": "hint-commence-par-ce-que-tu-connais-deja",
-   "file": "fr/hint-commence-par-ce-que-tu-connais-deja.m4a",
+   "id": "graphisme-la-ligne-couche1e",
+   "file": "fr/graphisme-la-ligne-couche1e.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-compte-d-abord-le-premier-groupe-puis-ajoute-le-deuxieme",
-   "file": "fr/hint-compte-d-abord-le-premier-groupe-puis-ajoute-le-deuxieme.m4a",
+   "id": "graphisme-la-ligne-courbe",
+   "file": "fr/graphisme-la-ligne-courbe.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-compte-dans-ta-tete-doucement",
-   "file": "fr/hint-compte-dans-ta-tete-doucement.m4a",
+   "id": "graphisme-la-ligne-droite",
+   "file": "fr/graphisme-la-ligne-droite.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-dis-le-mot-lentement-dans-ta-tete",
-   "file": "fr/hint-dis-le-mot-lentement-dans-ta-tete.m4a",
+   "id": "graphisme-les-boucles-enchai1ne1es",
+   "file": "fr/graphisme-les-boucles-enchai1ne1es.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-ecoute-encore-l-histoire-la-reponse-s-y-trouve",
-   "file": "fr/hint-ecoute-encore-l-histoire-la-reponse-s-y-trouve.m4a",
+   "id": "graphisme-les-boucles-vers-le-bas",
+   "file": "fr/graphisme-les-boucles-vers-le-bas.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-ecoute-encore-le-mot",
-   "file": "fr/hint-ecoute-encore-le-mot.m4a",
+   "id": "graphisme-les-boucles-vers-le-haut",
+   "file": "fr/graphisme-les-boucles-vers-le-haut.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-ecoute-encore-une-fois",
-   "file": "fr/hint-ecoute-encore-une-fois.m4a",
+   "id": "graphisme-les-courbes",
+   "file": "fr/graphisme-les-courbes.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-ecoute-encore-une-fois-puis-regarde-bien-chaque-lettre",
-   "file": "fr/hint-ecoute-encore-une-fois-puis-regarde-bien-chaque-lettre.m4a",
+   "id": "graphisme-les-lignes-debout",
+   "file": "fr/graphisme-les-lignes-debout.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-ecoute-la-phrase-quel-est-le-premier-mot",
-   "file": "fr/hint-ecoute-la-phrase-quel-est-le-premier-mot.m4a",
+   "id": "graphisme-les-lignes-penche1es",
+   "file": "fr/graphisme-les-lignes-penche1es.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-ecoute-le-mot-puis-cherche-la-premiere-syllabe",
-   "file": "fr/hint-ecoute-le-mot-puis-cherche-la-premiere-syllabe.m4a",
+   "id": "graphisme-les-points",
+   "file": "fr/graphisme-les-points.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-enleve-les-objets-un-par-un",
-   "file": "fr/hint-enleve-les-objets-un-par-un.m4a",
+   "id": "graphisme-les-ponts",
+   "file": "fr/graphisme-les-ponts.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-imagine-la-scene-avec-des-objets",
-   "file": "fr/hint-imagine-la-scene-avec-des-objets.m4a",
+   "id": "graphisme-les-ronds",
+   "file": "fr/graphisme-les-ronds.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-pense-a-la-file-des-nombres",
-   "file": "fr/hint-pense-a-la-file-des-nombres.m4a",
+   "id": "hint-commence-par-ce-que-tu-connais-de1ja1",
+   "file": "fr/hint-commence-par-ce-que-tu-connais-de1ja1.m4a",
    "placeholder": true
   },
   {
-   "id": "hint-regarde-bien-la-premiere-lettre",
-   "file": "fr/hint-regarde-bien-la-premiere-lettre.m4a",
+   "id": "hint-compte-a1-voix-haute-en-partant-du-de1but",
+   "file": "fr/hint-compte-a1-voix-haute-en-partant-du-de1but.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-compte-les-grosses-pie2ces-d-abord",
+   "file": "fr/hint-compte-les-grosses-pie2ces-d-abord.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-compte-les-points-sur-les-cartes",
+   "file": "fr/hint-compte-les-points-sur-les-cartes.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-dis-le-mot-lentement-dans-ta-te3te",
+   "file": "fr/hint-dis-le-mot-lentement-dans-ta-te3te.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-dis-le-mot-lentement-syllabe-par-syllabe",
+   "file": "fr/hint-dis-le-mot-lentement-syllabe-par-syllabe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-encore-le-mot",
+   "file": "fr/hint-e1coute-encore-le-mot.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-encore-le-mot-qui-dit-ou1-c-est",
+   "file": "fr/hint-e1coute-encore-le-mot-qui-dit-ou1-c-est.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-encore-quelle-est-la-premie2re-lettre",
+   "file": "fr/hint-e1coute-encore-quelle-est-la-premie2re-lettre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-encore-une-fois",
+   "file": "fr/hint-e1coute-encore-une-fois.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-encore-une-fois-puis-regarde-bien-chaque-lettre",
+   "file": "fr/hint-e1coute-encore-une-fois-puis-regarde-bien-chaque-lettre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-la-phrase-quel-est-le-premier-mot",
+   "file": "fr/hint-e1coute-la-phrase-quel-est-le-premier-mot.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-e1coute-le-mot-puis-cherche-la-premie2re-syllabe",
+   "file": "fr/hint-e1coute-le-mot-puis-cherche-la-premie2re-syllabe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-le-nombre-le-plus-grand-est-celui-qu-on-dit-en-dernier-quand",
+   "file": "fr/hint-le-nombre-le-plus-grand-est-celui-qu-on-dit-en-dernier-quand.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-pars-du-gros-point-et-va-vers-la-droite",
+   "file": "fr/hint-pars-du-gros-point-et-va-vers-la-droite.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-re1e1coute-l-histoire-qu-est-ce-qu-on-ajoute-qu-est-ce-qu-on",
+   "file": "fr/hint-re1e1coute-l-histoire-qu-est-ce-qu-on-ajoute-qu-est-ce-qu-on.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-re1e1coute-l-histoire-si-tu-veux",
+   "file": "fr/hint-re1e1coute-l-histoire-si-tu-veux.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-regarde-bien-chaque-image-avant-de-choisir",
+   "file": "fr/hint-regarde-bien-chaque-image-avant-de-choisir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-regarde-bien-la-premie2re-lettre",
+   "file": "fr/hint-regarde-bien-la-premie2re-lettre.m4a",
    "placeholder": true
   },
   {
@@ -83,58 +168,103 @@
    "placeholder": true
   },
   {
-   "id": "hint-touche-chaque-image-en-comptant-dans-ta-tete",
-   "file": "fr/hint-touche-chaque-image-en-comptant-dans-ta-tete.m4a",
+   "id": "hint-touche-chaque-image-en-comptant-a1-voix-haute",
+   "file": "fr/hint-touche-chaque-image-en-comptant-a1-voix-haute.m4a",
    "placeholder": true
   },
   {
-   "id": "histoire-amina-va-au-marche-avec-sa-maman-elle-achete-troi",
-   "file": "fr/histoire-amina-va-au-marche-avec-sa-maman-elle-achete-troi.m4a",
+   "id": "histoire-ali-est-cultivateur-chaque-matin-il-part",
+   "file": "fr/histoire-ali-est-cultivateur-chaque-matin-il-part.m4a",
    "placeholder": true
   },
   {
-   "id": "histoire-la-pluie-tombe-sur-le-village-zara-met-son-livre",
-   "file": "fr/histoire-la-pluie-tombe-sur-le-village-zara-met-son-livre.m4a",
+   "id": "histoire-amina-a-perdu-son-crayon-elle-est-triste",
+   "file": "fr/histoire-amina-a-perdu-son-crayon-elle-est-triste.m4a",
    "placeholder": true
   },
   {
-   "id": "histoire-le-soir-mahamat-garde-les-chevres-pres-du-puits",
-   "file": "fr/histoire-le-soir-mahamat-garde-les-chevres-pres-du-puits.m4a",
+   "id": "histoire-amina-arrive-a1-l-e1cole-elle-pose-son-c",
+   "file": "fr/histoire-amina-arrive-a1-l-e1cole-elle-pose-son-c.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-15-moins-6-combien-reste-t-il",
-   "file": "fr/instr-15-moins-6-combien-reste-t-il.m4a",
+   "id": "histoire-aujourd-hui-c-est-le-bapte3me-du-petit-f",
+   "file": "fr/histoire-aujourd-hui-c-est-le-bapte3me-du-petit-f.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-18-moins-6-combien-reste-t-il",
-   "file": "fr/instr-18-moins-6-combien-reste-t-il.m4a",
+   "id": "histoire-c-est-jour-de-fe3te-fatime1-met-sa-robe",
+   "file": "fr/histoire-c-est-jour-de-fe3te-fatime1-met-sa-robe.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-30-moins-12-combien-reste-t-il",
-   "file": "fr/instr-30-moins-12-combien-reste-t-il.m4a",
+   "id": "histoire-c-est-la-re1cre1ation-moussa-et-ses-amis",
+   "file": "fr/histoire-c-est-la-re1cre1ation-moussa-et-ses-amis.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-45-moins-15-combien-reste-t-il",
-   "file": "fr/instr-45-moins-15-combien-reste-t-il.m4a",
+   "id": "histoire-le-berger-conduit-ses-che2vres-au-puits",
+   "file": "fr/histoire-le-berger-conduit-ses-che2vres-au-puits.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-5-moins-2-combien-reste-t-il",
-   "file": "fr/instr-5-moins-2-combien-reste-t-il.m4a",
+   "id": "histoire-le-ciel-devient-noir-le-vent-souffle-tre",
+   "file": "fr/histoire-le-ciel-devient-noir-le-vent-souffle-tre.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-7-moins-3-combien-reste-t-il",
-   "file": "fr/instr-7-moins-3-combien-reste-t-il.m4a",
+   "id": "histoire-le-matin-halime1-prend-son-seau-elle-mar",
+   "file": "fr/histoire-le-matin-halime1-prend-son-seau-elle-mar.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-9-moins-4-combien-reste-t-il",
-   "file": "fr/instr-9-moins-4-combien-reste-t-il.m4a",
+   "id": "histoire-le-soir-grand-pe2re-s-assoit-sous-l-arbr",
+   "file": "fr/histoire-le-soir-grand-pe2re-s-assoit-sous-l-arbr.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-le-soir-la-famille-se-re1unit-dans-la-co",
+   "file": "fr/histoire-le-soir-la-famille-se-re1unit-dans-la-co.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-maman-pre1pare-la-boule-de-mil-elle-fait",
+   "file": "fr/histoire-maman-pre1pare-la-boule-de-mil-elle-fait.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-maman-va-au-marche1-avec-son-panier-elle",
+   "file": "fr/histoire-maman-va-au-marche1-avec-son-panier-elle.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-moussa-a-de-la-fie2vre-sa-maman-l-emme2n",
+   "file": "fr/histoire-moussa-a-de-la-fie2vre-sa-maman-l-emme2n.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-moussa-court-dans-la-cour-il-tombe-et-so",
+   "file": "fr/histoire-moussa-court-dans-la-cour-il-tombe-et-so.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-papa-met-les-sacs-de-mil-sur-la-charrett",
+   "file": "fr/histoire-papa-met-les-sacs-de-mil-sur-la-charrett.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-papa-plante-une-graine-de-mangue-derrie2",
+   "file": "fr/histoire-papa-plante-une-graine-de-mangue-derrie2.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "histoire-papa-pre1pare-sa-valise-il-part-en-ville",
+   "file": "fr/histoire-papa-pre1pare-sa-valise-il-part-en-ville.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-a1-quoi-joues-tu",
+   "file": "fr/instr-a1-quoi-joues-tu.m4a",
    "placeholder": true
   },
   {
@@ -143,48 +273,108 @@
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-12-et-5",
-   "file": "fr/instr-combien-font-12-et-5.m4a",
+   "id": "instr-associe-chaque-calcul-a1-son-re1sultat",
+   "file": "fr/instr-associe-chaque-calcul-a1-son-re1sultat.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-15-et-10",
-   "file": "fr/instr-combien-font-15-et-10.m4a",
+   "id": "instr-associe-chaque-son-a1-un-mot",
+   "file": "fr/instr-associe-chaque-son-a1-un-mot.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-2-et-3",
-   "file": "fr/instr-combien-font-2-et-3.m4a",
+   "id": "instr-associe-la-forme-a1-un-objet",
+   "file": "fr/instr-associe-la-forme-a1-un-objet.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-20-et-14",
-   "file": "fr/instr-combien-font-20-et-14.m4a",
+   "id": "instr-associe-la-majuscule-et-la-minuscule",
+   "file": "fr/instr-associe-la-majuscule-et-la-minuscule.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-23-et-12",
-   "file": "fr/instr-combien-font-23-et-12.m4a",
+   "id": "instr-associe-le-chiffre-et-son-nom",
+   "file": "fr/instr-associe-le-chiffre-et-son-nom.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-4-et-2",
-   "file": "fr/instr-combien-font-4-et-2.m4a",
+   "id": "instr-associe-le-mot-et-le-signe",
+   "file": "fr/instr-associe-le-mot-et-le-signe.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-5-et-4",
-   "file": "fr/instr-combien-font-5-et-4.m4a",
+   "id": "instr-associe-le-nombre-e1crit-en-chiffres-et-en-lettres",
+   "file": "fr/instr-associe-le-nombre-e1crit-en-chiffres-et-en-lettres.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-combien-font-8-et-5",
-   "file": "fr/instr-combien-font-8-et-5.m4a",
+   "id": "instr-associe-le-nombre-et-son-nom",
+   "file": "fr/instr-associe-le-nombre-et-son-nom.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-complete-le-mot-avec-la-bonne-lettre",
-   "file": "fr/instr-complete-le-mot-avec-la-bonne-lettre.m4a",
+   "id": "instr-associe-le-signe-et-son-nom",
+   "file": "fr/instr-associe-le-signe-et-son-nom.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-avec-quoi-manges-tu",
+   "file": "fr/instr-avec-quoi-manges-tu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-avec-quoi-traverse-t-on-le-fleuve",
+   "file": "fr/instr-avec-quoi-traverse-t-on-le-fleuve.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-cela-fait-il-en-tout",
+   "file": "fr/instr-combien-cela-fait-il-en-tout.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-chacun-en-a-t-il",
+   "file": "fr/instr-combien-chacun-en-a-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-en-reste-t-il",
+   "file": "fr/instr-combien-en-reste-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-combien-font-ils-en-tout",
+   "file": "fr/instr-combien-font-ils-en-tout.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-comment-s-appelle-ta-maman",
+   "file": "fr/instr-comment-s-appelle-ta-maman.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-comment-te-sens-tu-aujourd-hui",
+   "file": "fr/instr-comment-te-sens-tu-aujourd-hui.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-comment-vas-tu-a1-l-e1cole",
+   "file": "fr/instr-comment-vas-tu-a1-l-e1cole.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-comple2te-le-mot-avec-la-bonne-lettre",
+   "file": "fr/instr-comple2te-le-mot-avec-la-bonne-lettre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-compte-l-argent-combien-y-a-t-il",
+   "file": "fr/instr-compte-l-argent-combien-y-a-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-compte-les-arbres",
+   "file": "fr/instr-compte-les-arbres.m4a",
    "placeholder": true
   },
   {
@@ -193,13 +383,13 @@
    "placeholder": true
   },
   {
-   "id": "instr-compte-les-chevres",
-   "file": "fr/instr-compte-les-chevres.m4a",
+   "id": "instr-compte-les-cases",
+   "file": "fr/instr-compte-les-cases.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-compte-les-etoiles",
-   "file": "fr/instr-compte-les-etoiles.m4a",
+   "id": "instr-compte-les-che2vres",
+   "file": "fr/instr-compte-les-che2vres.m4a",
    "placeholder": true
   },
   {
@@ -208,23 +398,278 @@
    "placeholder": true
   },
   {
-   "id": "instr-ecoute-bien",
-   "file": "fr/instr-ecoute-bien.m4a",
+   "id": "instr-compte-les-oe1ufs",
+   "file": "fr/instr-compte-les-oe1ufs.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-ecoute-bien-le-petit-probleme",
-   "file": "fr/instr-ecoute-bien-le-petit-probleme.m4a",
+   "id": "instr-compte-les-poissons",
+   "file": "fr/instr-compte-les-poissons.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-ecoute-la-petite-histoire",
-   "file": "fr/instr-ecoute-la-petite-histoire.m4a",
+   "id": "instr-compte-les-poules",
+   "file": "fr/instr-compte-les-poules.m4a",
    "placeholder": true
   },
   {
-   "id": "instr-ecoute-puis-repete-a-voix-haute",
-   "file": "fr/instr-ecoute-puis-repete-a-voix-haute.m4a",
+   "id": "instr-e1coute-l-histoire-puis-re1ponds",
+   "file": "fr/instr-e1coute-l-histoire-puis-re1ponds.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-la-syllabe",
+   "file": "fr/instr-e1coute-la-syllabe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-mot-puis-touche-la-bonne-e1criture",
+   "file": "fr/instr-e1coute-le-mot-puis-touche-la-bonne-e1criture.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-proble2me-et-trouve-la-re1ponse",
+   "file": "fr/instr-e1coute-le-proble2me-et-trouve-la-re1ponse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-a",
+   "file": "fr/instr-e1coute-le-son-a.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-ac",
+   "file": "fr/instr-e1coute-le-son-ac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-ai",
+   "file": "fr/instr-e1coute-le-son-ai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-al",
+   "file": "fr/instr-e1coute-le-son-al.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-an",
+   "file": "fr/instr-e1coute-le-son-an.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-ar",
+   "file": "fr/instr-e1coute-le-son-ar.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-au",
+   "file": "fr/instr-e1coute-le-son-au.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-b",
+   "file": "fr/instr-e1coute-le-son-b.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-bl",
+   "file": "fr/instr-e1coute-le-son-bl.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-br",
+   "file": "fr/instr-e1coute-le-son-br.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-c",
+   "file": "fr/instr-e1coute-le-son-c.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-c-s-c1",
+   "file": "fr/instr-e1coute-le-son-c-s-c1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-ch",
+   "file": "fr/instr-e1coute-le-son-ch.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-d",
+   "file": "fr/instr-e1coute-le-son-d.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-e",
+   "file": "fr/instr-e1coute-le-son-e.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-e1",
+   "file": "fr/instr-e1coute-le-son-e1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-e1-er-ez",
+   "file": "fr/instr-e1coute-le-son-e1-er-ez.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-er",
+   "file": "fr/instr-e1coute-le-son-er.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-eu",
+   "file": "fr/instr-e1coute-le-son-eu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-eur",
+   "file": "fr/instr-e1coute-le-son-eur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-f",
+   "file": "fr/instr-e1coute-le-son-f.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-g",
+   "file": "fr/instr-e1coute-le-son-g.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-gn",
+   "file": "fr/instr-e1coute-le-son-gn.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-h",
+   "file": "fr/instr-e1coute-le-son-h.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-i",
+   "file": "fr/instr-e1coute-le-son-i.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-in",
+   "file": "fr/instr-e1coute-le-son-in.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-j",
+   "file": "fr/instr-e1coute-le-son-j.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-k",
+   "file": "fr/instr-e1coute-le-son-k.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-l",
+   "file": "fr/instr-e1coute-le-son-l.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-m",
+   "file": "fr/instr-e1coute-le-son-m.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-n",
+   "file": "fr/instr-e1coute-le-son-n.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-o",
+   "file": "fr/instr-e1coute-le-son-o.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-o-au-eau",
+   "file": "fr/instr-e1coute-le-son-o-au-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-oi",
+   "file": "fr/instr-e1coute-le-son-oi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-oir",
+   "file": "fr/instr-e1coute-le-son-oir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-on",
+   "file": "fr/instr-e1coute-le-son-on.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-ou",
+   "file": "fr/instr-e1coute-le-son-ou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-p",
+   "file": "fr/instr-e1coute-le-son-p.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-r",
+   "file": "fr/instr-e1coute-le-son-r.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-s",
+   "file": "fr/instr-e1coute-le-son-s.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-t",
+   "file": "fr/instr-e1coute-le-son-t.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-tr",
+   "file": "fr/instr-e1coute-le-son-tr.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-u",
+   "file": "fr/instr-e1coute-le-son-u.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-ui",
+   "file": "fr/instr-e1coute-le-son-ui.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-un",
+   "file": "fr/instr-e1coute-le-son-un.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-v",
+   "file": "fr/instr-e1coute-le-son-v.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-le-son-z",
+   "file": "fr/instr-e1coute-le-son-z.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-e1coute-puis-re1pe2te-a1-voix-haute",
+   "file": "fr/instr-e1coute-puis-re1pe2te-a1-voix-haute.m4a",
    "placeholder": true
   },
   {
@@ -238,8 +683,308 @@
    "placeholder": true
   },
   {
-   "id": "instr-lis-bien-puis-choisis-la-bonne-reponse",
-   "file": "fr/instr-lis-bien-puis-choisis-la-bonne-reponse.m4a",
+   "id": "instr-l-oiseau-est-au-dessus-de-la-case-touche-la-bonne-image",
+   "file": "fr/instr-l-oiseau-est-au-dessus-de-la-case-touche-la-bonne-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-la-calebasse-est-a1-co1te1-du-canari-touche-la-bonne-image",
+   "file": "fr/instr-la-calebasse-est-a1-co1te1-du-canari-touche-la-bonne-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-la-che2vre-est-entre-les-deux-arbres-touche-la-bonne-image",
+   "file": "fr/instr-la-che2vre-est-entre-les-deux-arbres-touche-la-bonne-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-le-chat-est-sous-la-natte-touche-la-bonne-image",
+   "file": "fr/instr-le-chat-est-sous-la-natte-touche-la-bonne-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-le-chat-est-sur-la-natte-touche-la-bonne-image",
+   "file": "fr/instr-le-chat-est-sur-la-natte-touche-la-bonne-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-lis-et-choisis-la-bonne-re1ponse",
+   "file": "fr/instr-lis-et-choisis-la-bonne-re1ponse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-dors-tu",
+   "file": "fr/instr-ou1-dors-tu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-a",
+   "file": "fr/instr-ou1-entends-tu-a.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-ac",
+   "file": "fr/instr-ou1-entends-tu-ac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-ai",
+   "file": "fr/instr-ou1-entends-tu-ai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-al",
+   "file": "fr/instr-ou1-entends-tu-al.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-an",
+   "file": "fr/instr-ou1-entends-tu-an.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-ar",
+   "file": "fr/instr-ou1-entends-tu-ar.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-au",
+   "file": "fr/instr-ou1-entends-tu-au.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-b",
+   "file": "fr/instr-ou1-entends-tu-b.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-bl",
+   "file": "fr/instr-ou1-entends-tu-bl.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-br",
+   "file": "fr/instr-ou1-entends-tu-br.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-c",
+   "file": "fr/instr-ou1-entends-tu-c.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-ch",
+   "file": "fr/instr-ou1-entends-tu-ch.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-d",
+   "file": "fr/instr-ou1-entends-tu-d.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-e",
+   "file": "fr/instr-ou1-entends-tu-e.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-e1",
+   "file": "fr/instr-ou1-entends-tu-e1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-er",
+   "file": "fr/instr-ou1-entends-tu-er.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-eu",
+   "file": "fr/instr-ou1-entends-tu-eu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-eur",
+   "file": "fr/instr-ou1-entends-tu-eur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-f",
+   "file": "fr/instr-ou1-entends-tu-f.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-g",
+   "file": "fr/instr-ou1-entends-tu-g.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-gn",
+   "file": "fr/instr-ou1-entends-tu-gn.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-h",
+   "file": "fr/instr-ou1-entends-tu-h.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-i",
+   "file": "fr/instr-ou1-entends-tu-i.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-in",
+   "file": "fr/instr-ou1-entends-tu-in.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-j",
+   "file": "fr/instr-ou1-entends-tu-j.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-k",
+   "file": "fr/instr-ou1-entends-tu-k.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-l",
+   "file": "fr/instr-ou1-entends-tu-l.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-m",
+   "file": "fr/instr-ou1-entends-tu-m.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-n",
+   "file": "fr/instr-ou1-entends-tu-n.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-o",
+   "file": "fr/instr-ou1-entends-tu-o.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-oi",
+   "file": "fr/instr-ou1-entends-tu-oi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-oir",
+   "file": "fr/instr-ou1-entends-tu-oir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-on",
+   "file": "fr/instr-ou1-entends-tu-on.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-ou",
+   "file": "fr/instr-ou1-entends-tu-ou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-p",
+   "file": "fr/instr-ou1-entends-tu-p.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-r",
+   "file": "fr/instr-ou1-entends-tu-r.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-s",
+   "file": "fr/instr-ou1-entends-tu-s.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-t",
+   "file": "fr/instr-ou1-entends-tu-t.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-tr",
+   "file": "fr/instr-ou1-entends-tu-tr.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-u",
+   "file": "fr/instr-ou1-entends-tu-u.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-ui",
+   "file": "fr/instr-ou1-entends-tu-ui.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-un",
+   "file": "fr/instr-ou1-entends-tu-un.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-v",
+   "file": "fr/instr-ou1-entends-tu-v.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-entends-tu-z",
+   "file": "fr/instr-ou1-entends-tu-z.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-vas-tu-chercher-l-eau",
+   "file": "fr/instr-ou1-vas-tu-chercher-l-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-ou1-vas-tu-le-matin",
+   "file": "fr/instr-ou1-vas-tu-le-matin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-bois-tu-le-matin",
+   "file": "fr/instr-que-bois-tu-le-matin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-fais-tu-au-marche1",
+   "file": "fr/instr-que-fais-tu-au-marche1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-fais-tu-avant-de-manger",
+   "file": "fr/instr-que-fais-tu-avant-de-manger.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-fais-tu-le-jour-de-la-fe3te",
+   "file": "fr/instr-que-fais-tu-le-jour-de-la-fe3te.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-fait-le-pe3cheur",
+   "file": "fr/instr-que-fait-le-pe3cheur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-fait-le-vent",
+   "file": "fr/instr-que-fait-le-vent.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-portes-tu-sur-la-te3te",
+   "file": "fr/instr-que-portes-tu-sur-la-te3te.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-que-pousse-au-champ",
+   "file": "fr/instr-que-pousse-au-champ.m4a",
    "placeholder": true
   },
   {
@@ -248,8 +993,18 @@
    "placeholder": true
   },
   {
+   "id": "instr-quel-animal-garde-la-maison",
+   "file": "fr/instr-quel-animal-garde-la-maison.m4a",
+   "placeholder": true
+  },
+  {
    "id": "instr-quel-nombre-manque",
    "file": "fr/instr-quel-nombre-manque.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-regarde-bien-plusieurs-e1critures-font-le-me3me-son",
+   "file": "fr/instr-regarde-bien-plusieurs-e1critures-font-le-me3me-son.m4a",
    "placeholder": true
   },
   {
@@ -263,8 +1018,58 @@
    "placeholder": true
   },
   {
+   "id": "instr-touche-la-carte-ou1-il-n-y-a-rien",
+   "file": "fr/instr-touche-la-carte-ou1-il-n-y-a-rien.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-carte-ou1-il-y-a-beaucoup-de-ronds",
+   "file": "fr/instr-touche-la-carte-ou1-il-y-a-beaucoup-de-ronds.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-carte-ou1-il-y-a-beaucoup-de-triangles",
+   "file": "fr/instr-touche-la-carte-ou1-il-y-a-beaucoup-de-triangles.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-carte-ou1-il-y-a-peu-de-carre1s",
+   "file": "fr/instr-touche-la-carte-ou1-il-y-a-peu-de-carre1s.m4a",
+   "placeholder": true
+  },
+  {
    "id": "instr-touche-la-lettre-que-tu-entends",
    "file": "fr/instr-touche-la-lettre-que-tu-entends.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-ligne-la-plus-courte",
+   "file": "fr/instr-touche-la-ligne-la-plus-courte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-ligne-la-plus-longue",
+   "file": "fr/instr-touche-la-ligne-la-plus-longue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-la-syllabe-que-tu-entends",
+   "file": "fr/instr-touche-la-syllabe-que-tu-entends.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-carre1",
+   "file": "fr/instr-touche-le-carre1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-grand-rond",
+   "file": "fr/instr-touche-le-grand-rond.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-grand-triangle",
+   "file": "fr/instr-touche-le-grand-triangle.m4a",
    "placeholder": true
   },
   {
@@ -278,8 +1083,228 @@
    "placeholder": true
   },
   {
+   "id": "instr-touche-le-nombre-que-tu-entends",
+   "file": "fr/instr-touche-le-nombre-que-tu-entends.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-petit-carre1",
+   "file": "fr/instr-touche-le-petit-carre1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rectangle",
+   "file": "fr/instr-touche-le-rectangle.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rond",
+   "file": "fr/instr-touche-le-rond.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rond-bleu",
+   "file": "fr/instr-touche-le-rond-bleu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rond-jaune",
+   "file": "fr/instr-touche-le-rond-jaune.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rond-noir",
+   "file": "fr/instr-touche-le-rond-noir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rond-rouge",
+   "file": "fr/instr-touche-le-rond-rouge.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-rond-vert",
+   "file": "fr/instr-touche-le-rond-vert.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-trait-le-plus-court",
+   "file": "fr/instr-touche-le-trait-le-plus-court.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-trait-le-plus-long",
+   "file": "fr/instr-touche-le-trait-le-plus-long.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-touche-le-triangle",
+   "file": "fr/instr-touche-le-triangle.m4a",
+   "placeholder": true
+  },
+  {
    "id": "instr-trace-la-lettre-avec-ton-doigt",
    "file": "fr/instr-trace-la-lettre-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-la-ligne-couche1e-avec-ton-doigt",
+   "file": "fr/instr-trace-la-ligne-couche1e-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-la-ligne-courbe-avec-ton-doigt",
+   "file": "fr/instr-trace-la-ligne-courbe-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-la-ligne-droite-avec-ton-doigt",
+   "file": "fr/instr-trace-la-ligne-droite-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-boucles-enchai1ne1es-avec-ton-doigt",
+   "file": "fr/instr-trace-les-boucles-enchai1ne1es-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-boucles-vers-le-bas-avec-ton-doigt",
+   "file": "fr/instr-trace-les-boucles-vers-le-bas-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-boucles-vers-le-haut-avec-ton-doigt",
+   "file": "fr/instr-trace-les-boucles-vers-le-haut-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-courbes-avec-ton-doigt",
+   "file": "fr/instr-trace-les-courbes-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-lignes-debout-avec-ton-doigt",
+   "file": "fr/instr-trace-les-lignes-debout-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-lignes-penche1es-avec-ton-doigt",
+   "file": "fr/instr-trace-les-lignes-penche1es-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-points-avec-ton-doigt",
+   "file": "fr/instr-trace-les-points-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-ponts-avec-ton-doigt",
+   "file": "fr/instr-trace-les-ponts-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "instr-trace-les-ronds-avec-ton-doigt",
+   "file": "fr/instr-trace-les-ronds-avec-ton-doigt.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-1",
+   "file": "fr/lettre-1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-10",
+   "file": "fr/lettre-10.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-11",
+   "file": "fr/lettre-11.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-12",
+   "file": "fr/lettre-12.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-2",
+   "file": "fr/lettre-2.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-20",
+   "file": "fr/lettre-20.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-3",
+   "file": "fr/lettre-3.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-30",
+   "file": "fr/lettre-30.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-4",
+   "file": "fr/lettre-4.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-40",
+   "file": "fr/lettre-40.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-5",
+   "file": "fr/lettre-5.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-50",
+   "file": "fr/lettre-50.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-6",
+   "file": "fr/lettre-6.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-60",
+   "file": "fr/lettre-60.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-7",
+   "file": "fr/lettre-7.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-70",
+   "file": "fr/lettre-70.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-8",
+   "file": "fr/lettre-8.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-80",
+   "file": "fr/lettre-80.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-9",
+   "file": "fr/lettre-9.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-90",
+   "file": "fr/lettre-90.m4a",
    "placeholder": true
   },
   {
@@ -293,6 +1318,16 @@
    "placeholder": true
   },
   {
+   "id": "lettre-c",
+   "file": "fr/lettre-c.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-ch",
+   "file": "fr/lettre-ch.m4a",
+   "placeholder": true
+  },
+  {
    "id": "lettre-d",
    "file": "fr/lettre-d.m4a",
    "placeholder": true
@@ -303,13 +1338,38 @@
    "placeholder": true
   },
   {
-   "id": "lettre-e-accent",
-   "file": "fr/lettre-e-accent.m4a",
+   "id": "lettre-e1",
+   "file": "fr/lettre-e1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-f",
+   "file": "fr/lettre-f.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-g",
+   "file": "fr/lettre-g.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-h",
+   "file": "fr/lettre-h.m4a",
    "placeholder": true
   },
   {
    "id": "lettre-i",
    "file": "fr/lettre-i.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-j",
+   "file": "fr/lettre-j.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-k",
+   "file": "fr/lettre-k.m4a",
    "placeholder": true
   },
   {
@@ -323,6 +1383,11 @@
    "placeholder": true
   },
   {
+   "id": "lettre-n",
+   "file": "fr/lettre-n.m4a",
+   "placeholder": true
+  },
+  {
    "id": "lettre-o",
    "file": "fr/lettre-o.m4a",
    "placeholder": true
@@ -330,6 +1395,11 @@
   {
    "id": "lettre-p",
    "file": "fr/lettre-p.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-r",
+   "file": "fr/lettre-r.m4a",
    "placeholder": true
   },
   {
@@ -348,8 +1418,83 @@
    "placeholder": true
   },
   {
+   "id": "lettre-v",
+   "file": "fr/lettre-v.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-w",
+   "file": "fr/lettre-w.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "lettre-x",
+   "file": "fr/lettre-x.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-a2ne",
+   "file": "fr/mot-a2ne.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-acacia",
+   "file": "fr/mot-acacia.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-agneau",
+   "file": "fr/mot-agneau.m4a",
+   "placeholder": true
+  },
+  {
    "id": "mot-ami",
    "file": "fr/mot-ami.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-animal",
+   "file": "fr/mot-animal.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-arachide",
+   "file": "fr/mot-arachide.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-arbre",
+   "file": "fr/mot-arbre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ardoise",
+   "file": "fr/mot-ardoise.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-argent",
+   "file": "fr/mot-argent.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-bagage",
+   "file": "fr/mot-bagage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-balai",
+   "file": "fr/mot-balai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-balance",
+   "file": "fr/mot-balance.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ballon",
+   "file": "fr/mot-ballon.m4a",
    "placeholder": true
   },
   {
@@ -358,8 +1503,113 @@
    "placeholder": true
   },
   {
+   "id": "mot-baobab",
+   "file": "fr/mot-baobab.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-be1be1",
+   "file": "fr/mot-be1be1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-berger",
+   "file": "fr/mot-berger.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-bille",
+   "file": "fr/mot-bille.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-blanc",
+   "file": "fr/mot-blanc.m4a",
+   "placeholder": true
+  },
+  {
    "id": "mot-bois",
    "file": "fr/mot-bois.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-bol",
+   "file": "fr/mot-bol.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-boubou",
+   "file": "fr/mot-boubou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-bouton",
+   "file": "fr/mot-bouton.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-bras",
+   "file": "fr/mot-bras.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-brun",
+   "file": "fr/mot-brun.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cafe1",
+   "file": "fr/mot-cafe1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-calebasse",
+   "file": "fr/mot-calebasse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-canari",
+   "file": "fr/mot-canari.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-car",
+   "file": "fr/mot-car.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cartable",
+   "file": "fr/mot-cartable.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-case",
+   "file": "fr/mot-case.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ce1re1monie",
+   "file": "fr/mot-ce1re1monie.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-chaleur",
+   "file": "fr/mot-chaleur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-chameau",
+   "file": "fr/mot-chameau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-chapeau",
+   "file": "fr/mot-chapeau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-charrette",
+   "file": "fr/mot-charrette.m4a",
    "placeholder": true
   },
   {
@@ -368,8 +1618,328 @@
    "placeholder": true
   },
   {
+   "id": "mot-chauffeur",
+   "file": "fr/mot-chauffeur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-chaussure",
+   "file": "fr/mot-chaussure.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-che2vre",
+   "file": "fr/mot-che2vre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-chemise",
+   "file": "fr/mot-chemise.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cheval",
+   "file": "fr/mot-cheval.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cine1ma",
+   "file": "fr/mot-cine1ma.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-classe",
+   "file": "fr/mot-classe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cole2re",
+   "file": "fr/mot-cole2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-commerc1ant",
+   "file": "fr/mot-commerc1ant.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-content",
+   "file": "fr/mot-content.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-corde",
+   "file": "fr/mot-corde.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cordonnier",
+   "file": "fr/mot-cordonnier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-courage",
+   "file": "fr/mot-courage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-course",
+   "file": "fr/mot-course.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-craie",
+   "file": "fr/mot-craie.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-crayon",
+   "file": "fr/mot-crayon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-cultivateur",
+   "file": "fr/mot-cultivateur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-danse",
+   "file": "fr/mot-danse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-dent",
+   "file": "fr/mot-dent.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-directeur",
+   "file": "fr/mot-directeur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-docteur",
+   "file": "fr/mot-docteur.m4a",
+   "placeholder": true
+  },
+  {
    "id": "mot-dodo",
    "file": "fr/mot-dodo.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-e1cole",
+   "file": "fr/mot-e1cole.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-e1glise",
+   "file": "fr/mot-e1glise.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-e1le1phant",
+   "file": "fr/mot-e1le1phant.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-e1leveur",
+   "file": "fr/mot-e1leveur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-e1quipe",
+   "file": "fr/mot-e1quipe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-eau",
+   "file": "fr/mot-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-enfant",
+   "file": "fr/mot-enfant.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fa2che1",
+   "file": "fr/mot-fa2che1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-farine",
+   "file": "fr/mot-farine.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fe3te",
+   "file": "fr/mot-fe3te.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-feu",
+   "file": "fr/mot-feu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-feuille",
+   "file": "fr/mot-feuille.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fie2vre",
+   "file": "fr/mot-fie2vre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-figue",
+   "file": "fr/mot-figue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fil",
+   "file": "fr/mot-fil.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fleur",
+   "file": "fr/mot-fleur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fleuve",
+   "file": "fr/mot-fleuve.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-forgeron",
+   "file": "fr/mot-forgeron.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-fre2re",
+   "file": "fr/mot-fre2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-gare",
+   "file": "fr/mot-gare.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-gomme",
+   "file": "fr/mot-gomme.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-graine",
+   "file": "fr/mot-graine.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-grand",
+   "file": "fr/mot-grand.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-grand-me2re",
+   "file": "fr/mot-grand-me2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-grand-pe2re",
+   "file": "fr/mot-grand-pe2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-herbe",
+   "file": "fr/mot-herbe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-hibou",
+   "file": "fr/mot-hibou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ho1pital",
+   "file": "fr/mot-ho1pital.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-invite1",
+   "file": "fr/mot-invite1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-jambe",
+   "file": "fr/mot-jambe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-jardin",
+   "file": "fr/mot-jardin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-jeu",
+   "file": "fr/mot-jeu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-joie",
+   "file": "fr/mot-joie.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-joli",
+   "file": "fr/mot-joli.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-jupe",
+   "file": "fr/mot-jupe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ke1pi",
+   "file": "fr/mot-ke1pi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-kilo",
+   "file": "fr/mot-kilo.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lac",
+   "file": "fr/mot-lac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lait",
+   "file": "fr/mot-lait.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lapin",
+   "file": "fr/mot-lapin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-le1gume",
+   "file": "fr/mot-le1gume.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lec1on",
+   "file": "fr/mot-lec1on.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lion",
+   "file": "fr/mot-lion.m4a",
    "placeholder": true
   },
   {
@@ -383,8 +1953,38 @@
    "placeholder": true
   },
   {
-   "id": "mot-mama",
-   "file": "fr/mot-mama.m4a",
+   "id": "mot-lundi",
+   "file": "fr/mot-lundi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-lune",
+   "file": "fr/mot-lune.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mai1tre",
+   "file": "fr/mot-mai1tre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-main",
+   "file": "fr/mot-main.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-maire",
+   "file": "fr/mot-maire.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-maison",
+   "file": "fr/mot-maison.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-malade",
+   "file": "fr/mot-malade.m4a",
    "placeholder": true
   },
   {
@@ -393,8 +1993,58 @@
    "placeholder": true
   },
   {
+   "id": "mot-marche1",
+   "file": "fr/mot-marche1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mari",
+   "file": "fr/mot-mari.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mariage",
+   "file": "fr/mot-mariage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-marmite",
+   "file": "fr/mot-marmite.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-me1dicament",
+   "file": "fr/mot-me1dicament.m4a",
+   "placeholder": true
+  },
+  {
    "id": "mot-melon",
    "file": "fr/mot-melon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-midi",
+   "file": "fr/mot-midi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mil",
+   "file": "fr/mot-mil.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-monnaie",
+   "file": "fr/mot-monnaie.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-montagne",
+   "file": "fr/mot-montagne.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-mosque1e",
+   "file": "fr/mot-mosque1e.m4a",
    "placeholder": true
   },
   {
@@ -403,8 +2053,13 @@
    "placeholder": true
   },
   {
-   "id": "mot-mouche",
-   "file": "fr/mot-mouche.m4a",
+   "id": "mot-moustiquaire",
+   "file": "fr/mot-moustiquaire.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-moustique",
+   "file": "fr/mot-moustique.m4a",
    "placeholder": true
   },
   {
@@ -413,8 +2068,203 @@
    "placeholder": true
   },
   {
+   "id": "mot-natte",
+   "file": "fr/mot-natte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-noir",
+   "file": "fr/mot-noir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-nuage",
+   "file": "fr/mot-nuage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-nuit",
+   "file": "fr/mot-nuit.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-oe1il",
+   "file": "fr/mot-oe1il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-oe1uf",
+   "file": "fr/mot-oe1uf.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-oiseau",
+   "file": "fr/mot-oiseau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-oncle",
+   "file": "fr/mot-oncle.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-orage",
+   "file": "fr/mot-orage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-oreille",
+   "file": "fr/mot-oreille.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-os",
+   "file": "fr/mot-os.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pain",
+   "file": "fr/mot-pain.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-paludisme",
+   "file": "fr/mot-paludisme.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-panier",
+   "file": "fr/mot-panier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pantalon",
+   "file": "fr/mot-pantalon.m4a",
+   "placeholder": true
+  },
+  {
    "id": "mot-papa",
    "file": "fr/mot-papa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-parfum",
+   "file": "fr/mot-parfum.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-parler",
+   "file": "fr/mot-parler.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pe3cheur",
+   "file": "fr/mot-pe3cheur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-petit",
+   "file": "fr/mot-petit.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-peur",
+   "file": "fr/mot-peur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pied",
+   "file": "fr/mot-pied.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pile",
+   "file": "fr/mot-pile.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pirogue",
+   "file": "fr/mot-pirogue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-pluie",
+   "file": "fr/mot-pluie.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-plume",
+   "file": "fr/mot-plume.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-poche",
+   "file": "fr/mot-poche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-poisson",
+   "file": "fr/mot-poisson.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-porte",
+   "file": "fr/mot-porte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-poule",
+   "file": "fr/mot-poule.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-poussie2re",
+   "file": "fr/mot-poussie2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-prix",
+   "file": "fr/mot-prix.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-puits",
+   "file": "fr/mot-puits.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-quartier",
+   "file": "fr/mot-quartier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-quatre",
+   "file": "fr/mot-quatre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-racine",
+   "file": "fr/mot-racine.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-radio",
+   "file": "fr/mot-radio.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-reste",
+   "file": "fr/mot-reste.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-riz",
+   "file": "fr/mot-riz.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-robe",
+   "file": "fr/mot-robe.m4a",
    "placeholder": true
   },
   {
@@ -423,8 +2273,38 @@
    "placeholder": true
   },
   {
+   "id": "mot-roue",
+   "file": "fr/mot-roue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-route",
+   "file": "fr/mot-route.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-rue",
+   "file": "fr/mot-rue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-sac",
+   "file": "fr/mot-sac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-saison",
+   "file": "fr/mot-saison.m4a",
+   "placeholder": true
+  },
+  {
    "id": "mot-salade",
    "file": "fr/mot-salade.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-sandale",
+   "file": "fr/mot-sandale.m4a",
    "placeholder": true
   },
   {
@@ -433,13 +2313,128 @@
    "placeholder": true
   },
   {
-   "id": "mot-tata",
-   "file": "fr/mot-tata.m4a",
+   "id": "mot-sel",
+   "file": "fr/mot-sel.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-soe1ur",
+   "file": "fr/mot-soe1ur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-soir",
+   "file": "fr/mot-soir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-soleil",
+   "file": "fr/mot-soleil.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-table-banc",
+   "file": "fr/mot-table-banc.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tailleur",
+   "file": "fr/mot-tailleur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tambour",
+   "file": "fr/mot-tambour.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tante",
+   "file": "fr/mot-tante.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tasse",
+   "file": "fr/mot-tasse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-taxi",
+   "file": "fr/mot-taxi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-te3te",
+   "file": "fr/mot-te3te.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-toit",
+   "file": "fr/mot-toit.m4a",
    "placeholder": true
   },
   {
    "id": "mot-tomate",
    "file": "fr/mot-tomate.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-triste",
+   "file": "fr/mot-triste.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-tristesse",
+   "file": "fr/mot-tristesse.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-vache",
+   "file": "fr/mot-vache.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-valise",
+   "file": "fr/mot-valise.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ve1lo",
+   "file": "fr/mot-ve1lo.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-vent",
+   "file": "fr/mot-vent.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-viande",
+   "file": "fr/mot-viande.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-village",
+   "file": "fr/mot-village.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ville",
+   "file": "fr/mot-ville.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-voiture",
+   "file": "fr/mot-voiture.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-voyage",
+   "file": "fr/mot-voyage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "mot-ze1bu",
+   "file": "fr/mot-ze1bu.m4a",
    "placeholder": true
   },
   {
@@ -453,33 +2448,13 @@
    "placeholder": true
   },
   {
-   "id": "nombre-13",
-   "file": "fr/nombre-13.m4a",
+   "id": "nombre-15",
+   "file": "fr/nombre-15.m4a",
    "placeholder": true
   },
   {
-   "id": "nombre-16",
-   "file": "fr/nombre-16.m4a",
-   "placeholder": true
-  },
-  {
-   "id": "nombre-2",
-   "file": "fr/nombre-2.m4a",
-   "placeholder": true
-  },
-  {
-   "id": "nombre-3",
-   "file": "fr/nombre-3.m4a",
-   "placeholder": true
-  },
-  {
-   "id": "nombre-4",
-   "file": "fr/nombre-4.m4a",
-   "placeholder": true
-  },
-  {
-   "id": "nombre-40",
-   "file": "fr/nombre-40.m4a",
+   "id": "nombre-20",
+   "file": "fr/nombre-20.m4a",
    "placeholder": true
   },
   {
@@ -488,13 +2463,8 @@
    "placeholder": true
   },
   {
-   "id": "nombre-6",
-   "file": "fr/nombre-6.m4a",
-   "placeholder": true
-  },
-  {
-   "id": "nombre-7",
-   "file": "fr/nombre-7.m4a",
+   "id": "nombre-50",
+   "file": "fr/nombre-50.m4a",
    "placeholder": true
   },
   {
@@ -503,143 +2473,1278 @@
    "placeholder": true
   },
   {
-   "id": "nombre-8",
-   "file": "fr/nombre-8.m4a",
+   "id": "phrase-a1-la-re1cre1ation-nous-jouons-au-ballon-dans-la-cour",
+   "file": "fr/phrase-a1-la-re1cre1ation-nous-jouons-au-ballon-dans-la-cour.m4a",
    "placeholder": true
   },
   {
-   "id": "nombre-9",
-   "file": "fr/nombre-9.m4a",
+   "id": "phrase-amina-a-3-mangues-sa-maman-lui-en-donne-2-combien-a-t-elle-d",
+   "file": "fr/phrase-amina-a-3-mangues-sa-maman-lui-en-donne-2-combien-a-t-elle-d.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-ali-a-25-chevres-il-en-vend-10-au-marche-combien-de-chevres-",
-   "file": "fr/phrase-ali-a-25-chevres-il-en-vend-10-au-marche-combien-de-chevres-.m4a",
+   "id": "phrase-amina-a-4-mangues-elle-en-ajoute-3-combien-en-a-t-elle",
+   "file": "fr/phrase-amina-a-4-mangues-elle-en-ajoute-3-combien-en-a-t-elle.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-ali-a-6-chevres-2-chevres-partent-au-puits-combien-de-chevre",
-   "file": "fr/phrase-ali-a-6-chevres-2-chevres-partent-au-puits-combien-de-chevre.m4a",
+   "id": "phrase-amina-a-9-billes-elle-en-perd-3-combien-lui-reste-t-il-de-bi",
+   "file": "fr/phrase-amina-a-9-billes-elle-en-perd-3-combien-lui-reste-t-il-de-bi.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-ali-lit-un-livre",
-   "file": "fr/phrase-ali-lit-un-livre.m4a",
+   "id": "phrase-amina-range-30-oe1ufs-dans-des-boi1tes-de-5-combien-de-boi1t",
+   "file": "fr/phrase-amina-range-30-oe1ufs-dans-des-boi1tes-de-5-combien-de-boi1t.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-amina-a-3-mangues-moussa-lui-donne-2-mangues-combien-de-mang",
-   "file": "fr/phrase-amina-a-3-mangues-moussa-lui-donne-2-mangues-combien-de-mang.m4a",
+   "id": "phrase-arbre-feuille-fleur",
+   "file": "fr/phrase-arbre-feuille-fleur.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-amina-va-au-marche",
-   "file": "fr/phrase-amina-va-au-marche.m4a",
+   "id": "phrase-au-champ-le-mil-pousse-plus-haut-que-moi",
+   "file": "fr/phrase-au-champ-le-mil-pousse-plus-haut-que-moi.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-au-marche-khadidja-vend-14-mangues-le-matin-et-12-mangues-le",
-   "file": "fr/phrase-au-marche-khadidja-vend-14-mangues-le-matin-et-12-mangues-le.m4a",
+   "id": "phrase-avec-la-pirogue",
+   "file": "fr/phrase-avec-la-pirogue.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-dans-la-classe-il-y-a-12-filles-et-13-garcons-combien-y-a-t-",
-   "file": "fr/phrase-dans-la-classe-il-y-a-12-filles-et-13-garcons-combien-y-a-t-.m4a",
+   "id": "phrase-balai-canari-calebasse",
+   "file": "fr/phrase-balai-canari-calebasse.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-la-banane-de-zara",
-   "file": "fr/phrase-la-banane-de-zara.m4a",
+   "id": "phrase-balance-commerc1ant-prix",
+   "file": "fr/phrase-balance-commerc1ant-prix.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-la-chevre-mange",
-   "file": "fr/phrase-la-chevre-mange.m4a",
+   "id": "phrase-ballon-corde-bille",
+   "file": "fr/phrase-ballon-corde-bille.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-la-moto-de-papa",
-   "file": "fr/phrase-la-moto-de-papa.m4a",
+   "id": "phrase-baobab-acacia-racine",
+   "file": "fr/phrase-baobab-acacia-racine.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-le-chat-boit-du-lait",
-   "file": "fr/phrase-le-chat-boit-du-lait.m4a",
+   "id": "phrase-boubou-chemise-pantalon",
+   "file": "fr/phrase-boubou-chemise-pantalon.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-le-chat-dort-sur-le-lit",
-   "file": "fr/phrase-le-chat-dort-sur-le-lit.m4a",
+   "id": "phrase-c-est-la-fe3te",
+   "file": "fr/phrase-c-est-la-fe3te.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-le-mouton-boit-au-puits",
-   "file": "fr/phrase-le-mouton-boit-au-puits.m4a",
+   "id": "phrase-c-est-le-chien",
+   "file": "fr/phrase-c-est-le-chien.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-le-petit-chat",
-   "file": "fr/phrase-le-petit-chat.m4a",
+   "id": "phrase-c-est-ma-maman",
+   "file": "fr/phrase-c-est-ma-maman.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-le-roi-a-un-mouton",
-   "file": "fr/phrase-le-roi-a-un-mouton.m4a",
+   "id": "phrase-c-est-mon-ardoise",
+   "file": "fr/phrase-c-est-mon-ardoise.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-le-soleil-brille",
-   "file": "fr/phrase-le-soleil-brille.m4a",
+   "id": "phrase-cartable-table-banc-classe",
+   "file": "fr/phrase-cartable-table-banc-classe.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-maman-achete-un-melon",
-   "file": "fr/phrase-maman-achete-un-melon.m4a",
+   "id": "phrase-case-porte-natte",
+   "file": "fr/phrase-case-porte-natte.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-maman-prepare-la-salade",
-   "file": "fr/phrase-maman-prepare-la-salade.m4a",
+   "id": "phrase-ce1re1monie-mariage-danse",
+   "file": "fr/phrase-ce1re1monie-mariage-danse.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-mariam-a-8-calebasses-elle-en-remplit-3-d-eau-combien-de-cal",
-   "file": "fr/phrase-mariam-a-8-calebasses-elle-en-remplit-3-d-eau-combien-de-cal.m4a",
+   "id": "phrase-chaque-invite1-apporte-un-petit-cadeau",
+   "file": "fr/phrase-chaque-invite1-apporte-un-petit-cadeau.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-moussa-cueille-20-mangues-il-en-donne-5-a-ses-amis-combien-d",
-   "file": "fr/phrase-moussa-cueille-20-mangues-il-en-donne-5-a-ses-amis-combien-d.m4a",
+   "id": "phrase-chaque-matin-je-vais-a1-l-e1cole-avec-mon-fre2re",
+   "file": "fr/phrase-chaque-matin-je-vais-a1-l-e1cole-avec-mon-fre2re.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-ou-mahamat-garde-t-il-les-chevres",
-   "file": "fr/phrase-ou-mahamat-garde-t-il-les-chevres.m4a",
+   "id": "phrase-charrette-chameau-chauffeur",
+   "file": "fr/phrase-charrette-chameau-chauffeur.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-que-fait-zara-sous-l-arbre",
-   "file": "fr/phrase-que-fait-zara-sous-l-arbre.m4a",
+   "id": "phrase-che2vre-mouton-poule",
+   "file": "fr/phrase-che2vre-mouton-poule.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-que-partage-amina-avec-moussa",
-   "file": "fr/phrase-que-partage-amina-avec-moussa.m4a",
+   "id": "phrase-content-triste-fa2che1",
+   "file": "fr/phrase-content-triste-fa2che1.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-touche-la-bonne-image",
-   "file": "fr/phrase-touche-la-bonne-image.m4a",
+   "id": "phrase-cultivateur-e1leveur-pe3cheur",
+   "file": "fr/phrase-cultivateur-e1leveur-pe3cheur.m4a",
    "placeholder": true
   },
   {
-   "id": "phrase-un-grand-mouton",
-   "file": "fr/phrase-un-grand-mouton.m4a",
+   "id": "phrase-e1cole-mai1tre-ardoise",
+   "file": "fr/phrase-e1cole-mai1tre-ardoise.m4a",
    "placeholder": true
   },
   {
-   "id": "syllabe-an",
-   "file": "fr/syllabe-an.m4a",
+   "id": "phrase-fe3te-tambour-boubou",
+   "file": "fr/phrase-fe3te-tambour-boubou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-forgeron-cordonnier-berger",
+   "file": "fr/phrase-forgeron-cordonnier-berger.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-grand-pe2re-grand-me2re-oncle",
+   "file": "fr/phrase-grand-pe2re-grand-me2re-oncle.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-est-triste",
+   "file": "fr/phrase-il-est-triste.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-fait-chaud-je-bois-de-l-eau",
+   "file": "fr/phrase-il-fait-chaud-je-bois-de-l-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-pleut",
+   "file": "fr/phrase-il-pleut.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-prend-des-poissons",
+   "file": "fr/phrase-il-prend-des-poissons.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-y-a-18-poules-dans-la-cour-papa-en-ache2te-12-combien-y-a",
+   "file": "fr/phrase-il-y-a-18-poules-dans-la-cour-papa-en-ache2te-12-combien-y-a.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-y-a-5-paniers-de-5-tomates-combien-y-a-t-il-de-tomates",
+   "file": "fr/phrase-il-y-a-5-paniers-de-5-tomates-combien-y-a-t-il-de-tomates.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-y-a-6-che2vres-au-puits-2-che2vres-partent-combien-reste-",
+   "file": "fr/phrase-il-y-a-6-che2vres-au-puits-2-che2vres-partent-combien-reste-.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-il-y-a-7-calebasses-fatime1-en-apporte-2-combien-y-a-t-il-de",
+   "file": "fr/phrase-il-y-a-7-calebasses-fatime1-en-apporte-2-combien-y-a-t-il-de.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-j-ache2te-des-tomates",
+   "file": "fr/phrase-j-ache2te-des-tomates.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-j-ai-de-la-fie2vre",
+   "file": "fr/phrase-j-ai-de-la-fie2vre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-j-ai-deux-mains",
+   "file": "fr/phrase-j-ai-deux-mains.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-j-e1coute-avec-mes-deux-oreilles",
+   "file": "fr/phrase-j-e1coute-avec-mes-deux-oreilles.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-j-habite-au-village",
+   "file": "fr/phrase-j-habite-au-village.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-balaie-la-cour-avec-le-balai",
+   "file": "fr/phrase-je-balaie-la-cour-avec-le-balai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-bois-de-l-eau",
+   "file": "fr/phrase-je-bois-de-l-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-bois-du-lait",
+   "file": "fr/phrase-je-bois-du-lait.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-bois-du-lait-le-matin-avant-l-e1cole",
+   "file": "fr/phrase-je-bois-du-lait-le-matin-avant-l-e1cole.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-dors-sous-la-moustiquaire-chaque-nuit",
+   "file": "fr/phrase-je-dors-sous-la-moustiquaire-chaque-nuit.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-dors-sur-la-natte",
+   "file": "fr/phrase-je-dors-sur-la-natte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-joue-au-ballon",
+   "file": "fr/phrase-je-joue-au-ballon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-mange-avec-ma-bouche",
+   "file": "fr/phrase-je-mange-avec-ma-bouche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-mange-du-riz",
+   "file": "fr/phrase-je-mange-du-riz.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-me-lave-les-mains",
+   "file": "fr/phrase-je-me-lave-les-mains.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-me-lave-les-mains-avant-de-manger",
+   "file": "fr/phrase-je-me-lave-les-mains-avant-de-manger.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-me-lave-les-mains-avec-du-savon-avant-de-manger",
+   "file": "fr/phrase-je-me-lave-les-mains-avec-du-savon-avant-de-manger.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-mets-mes-sandales-pour-aller-au-marche1",
+   "file": "fr/phrase-je-mets-mes-sandales-pour-aller-au-marche1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-mets-mon-boubou",
+   "file": "fr/phrase-je-mets-mon-boubou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-montre-mon-bras-droit-et-mon-bras-gauche",
+   "file": "fr/phrase-je-montre-mon-bras-droit-et-mon-bras-gauche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-pars-en-voyage",
+   "file": "fr/phrase-je-pars-en-voyage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-porte-un-boubou",
+   "file": "fr/phrase-je-porte-un-boubou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-porte-un-chapeau",
+   "file": "fr/phrase-je-porte-un-chapeau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-range-mon-cartable-sous-le-table-banc",
+   "file": "fr/phrase-je-range-mon-cartable-sous-le-table-banc.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-suis-content",
+   "file": "fr/phrase-je-suis-content.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-suis-malade",
+   "file": "fr/phrase-je-suis-malade.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-vais-a1-l-e1cole",
+   "file": "fr/phrase-je-vais-a1-l-e1cole.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-vais-a1-pied",
+   "file": "fr/phrase-je-vais-a1-pied.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-vais-a1-ve1lo",
+   "file": "fr/phrase-je-vais-a1-ve1lo.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-vais-au-marche1",
+   "file": "fr/phrase-je-vais-au-marche1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-je-vais-au-puits",
+   "file": "fr/phrase-je-vais-au-puits.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-jeu-e1quipe-course",
+   "file": "fr/phrase-jeu-e1quipe-course.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-joie-cole2re-courage",
+   "file": "fr/phrase-joie-cole2re-courage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-l-agneau-monte-sur-la-montagne",
+   "file": "fr/phrase-l-agneau-monte-sur-la-montagne.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-l-arbre-est-grand",
+   "file": "fr/phrase-l-arbre-est-grand.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-l-e1leveur-garde-les-animaux",
+   "file": "fr/phrase-l-e1leveur-garde-les-animaux.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-l-enfant-marche-dans-le-champ",
+   "file": "fr/phrase-l-enfant-marche-dans-le-champ.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-l-harmattan-apporte-beaucoup-de-poussie2re",
+   "file": "fr/phrase-l-harmattan-apporte-beaucoup-de-poussie2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-l-oiseau-boit-de-l-eau",
+   "file": "fr/phrase-l-oiseau-boit-de-l-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-banane-est-bonne",
+   "file": "fr/phrase-la-banane-est-bonne.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-boule-de-mil-se-mange-avec-une-sauce",
+   "file": "fr/phrase-la-boule-de-mil-se-mange-avec-une-sauce.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-case-de-papa-est-la1",
+   "file": "fr/phrase-la-case-de-papa-est-la1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-charrette-est-tire1e-par-un-a2ne",
+   "file": "fr/phrase-la-charrette-est-tire1e-par-un-a2ne.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-che2vre-mange-l-herbe",
+   "file": "fr/phrase-la-che2vre-mange-l-herbe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-farine-est-dans-le-bol",
+   "file": "fr/phrase-la-farine-est-dans-le-bol.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-feuille-est-verte",
+   "file": "fr/phrase-la-feuille-est-verte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-fleur-blanche-est-dans-la-classe",
+   "file": "fr/phrase-la-fleur-blanche-est-dans-la-classe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-gomme-est-dans-le-sac",
+   "file": "fr/phrase-la-gomme-est-dans-le-sac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-graine-devient-une-plante-quand-il-pleut",
+   "file": "fr/phrase-la-graine-devient-une-plante-quand-il-pleut.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-joie-se-lit-sur-son-visage",
+   "file": "fr/phrase-la-joie-se-lit-sur-son-visage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-lec1on-commence",
+   "file": "fr/phrase-la-lec1on-commence.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-natte-est-par-terre",
+   "file": "fr/phrase-la-natte-est-par-terre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-porte-du-jardin-est-ouverte",
+   "file": "fr/phrase-la-porte-du-jardin-est-ouverte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-poule-a-8-poussins-3-se-cachent-combien-en-vois-tu",
+   "file": "fr/phrase-la-poule-a-8-poussins-3-se-cachent-combien-en-vois-tu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-route-du-village-me2ne-a1-n-djame1na",
+   "file": "fr/phrase-la-route-du-village-me2ne-a1-n-djame1na.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-salade-est-sur-la-natte",
+   "file": "fr/phrase-la-salade-est-sur-la-natte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-tomate-est-petite",
+   "file": "fr/phrase-la-tomate-est-petite.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-la-vache-est-la1",
+   "file": "fr/phrase-la-vache-est-la1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-baobab-a-un-tronc-tre2s-gros",
+   "file": "fr/phrase-le-baobab-a-un-tronc-tre2s-gros.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-be1be1-a-un-boubou",
+   "file": "fr/phrase-le-be1be1-a-un-boubou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-be1be1-va-parler",
+   "file": "fr/phrase-le-be1be1-va-parler.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-berger-a-40-che2vres-15-boivent-au-puits-combien-n-ont-pa",
+   "file": "fr/phrase-le-berger-a-40-che2vres-15-boivent-au-puits-combien-n-ont-pa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-berger-a-9-che2vres-il-en-o1te-2-du-troupeau-combien-en-r",
+   "file": "fr/phrase-le-berger-a-9-che2vres-il-en-o1te-2-du-troupeau-combien-en-r.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-berger-compte-10-moutons-4-entrent-dans-l-enclos-combien-",
+   "file": "fr/phrase-le-berger-compte-10-moutons-4-entrent-dans-l-enclos-combien-.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-berger-reste-pre2s-du-puits",
+   "file": "fr/phrase-le-berger-reste-pre2s-du-puits.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-car-est-sur-la-route",
+   "file": "fr/phrase-le-car-est-sur-la-route.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-car-part-de-la-gare-tre2s-to1t-le-matin",
+   "file": "fr/phrase-le-car-part-de-la-gare-tre2s-to1t-le-matin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-chameau-traverse-le-de1sert-sans-boire",
+   "file": "fr/phrase-le-chameau-traverse-le-de1sert-sans-boire.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-chat-est-sur-la-natte",
+   "file": "fr/phrase-le-chat-est-sur-la-natte.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-chauffeur-du-car-klaxonne-avant-de-partir",
+   "file": "fr/phrase-le-chauffeur-du-car-klaxonne-avant-de-partir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-commerc1ant-a-25-mangues-il-en-vend-10-combien-lui-en-res",
+   "file": "fr/phrase-le-commerc1ant-a-25-mangues-il-en-vend-10-combien-lui-en-res.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-commerc1ant-pe2se-les-arachides-sur-la-balance",
+   "file": "fr/phrase-le-commerc1ant-pe2se-les-arachides-sur-la-balance.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-cordonnier-re1pare-mes-sandales",
+   "file": "fr/phrase-le-cordonnier-re1pare-mes-sandales.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-crayon-est-sous-l-arbre",
+   "file": "fr/phrase-le-crayon-est-sous-l-arbre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-cultivateur-travaille-au-champ",
+   "file": "fr/phrase-le-cultivateur-travaille-au-champ.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-forgeron-fabrique-des-houes-pour-les-cultivateurs",
+   "file": "fr/phrase-le-forgeron-fabrique-des-houes-pour-les-cultivateurs.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-hibou-est-dans-le-baobab",
+   "file": "fr/phrase-le-hibou-est-dans-le-baobab.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-jardin-est-joli",
+   "file": "fr/phrase-le-jardin-est-joli.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-jour-de-la-fe3te-je-porte-des-habits-neufs",
+   "file": "fr/phrase-le-jour-de-la-fe3te-je-porte-des-habits-neufs.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-jour-du-mariage-tout-le-quartier-est-invite1",
+   "file": "fr/phrase-le-jour-du-mariage-tout-le-quartier-est-invite1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-lait-est-dans-la-maison",
+   "file": "fr/phrase-le-lait-est-dans-la-maison.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-lit-est-la1",
+   "file": "fr/phrase-le-lit-est-la1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-mai1tre-e1crit-la-lec1on-au-tableau",
+   "file": "fr/phrase-le-mai1tre-e1crit-la-lec1on-au-tableau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-mil-pousse-au-champ",
+   "file": "fr/phrase-le-mil-pousse-au-champ.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-moustique-donne-le-paludisme",
+   "file": "fr/phrase-le-moustique-donne-le-paludisme.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-moustique-est-sur-le-ke1pi",
+   "file": "fr/phrase-le-moustique-est-sur-le-ke1pi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-mouton-et-la-poule-sont-la1",
+   "file": "fr/phrase-le-mouton-et-la-poule-sont-la1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-mouton-mange-le-melon",
+   "file": "fr/phrase-le-mouton-mange-le-melon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-pe3cheur-prend-45-poissons-il-en-vend-20-au-marche1-combi",
+   "file": "fr/phrase-le-pe3cheur-prend-45-poissons-il-en-vend-20-au-marche1-combi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-puits-du-village-est-pre2s-de-la-mosque1e",
+   "file": "fr/phrase-le-puits-du-village-est-pre2s-de-la-mosque1e.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-puits-est-la1-bas",
+   "file": "fr/phrase-le-puits-est-la1-bas.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-puits-est-loin",
+   "file": "fr/phrase-le-puits-est-loin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-riz-est-dans-la-rue",
+   "file": "fr/phrase-le-riz-est-dans-la-rue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-roi-a-le-poisson",
+   "file": "fr/phrase-le-roi-a-le-poisson.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-sac-est-pre2s-du-lac",
+   "file": "fr/phrase-le-sac-est-pre2s-du-lac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-sel-est-dans-le-bol",
+   "file": "fr/phrase-le-sel-est-dans-le-bol.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-soir-le-ciel-est-noir",
+   "file": "fr/phrase-le-soir-le-ciel-est-noir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-soir-les-enfants-dansent-au-son-du-tambour",
+   "file": "fr/phrase-le-soir-les-enfants-dansent-au-son-du-tambour.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-soleil-est-chaud",
+   "file": "fr/phrase-le-soleil-est-chaud.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-tailleur-coud-une-belle-robe",
+   "file": "fr/phrase-le-tailleur-coud-une-belle-robe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-vent-souffle",
+   "file": "fr/phrase-le-vent-souffle.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-le-ze1bu-boit-dans-le-puits",
+   "file": "fr/phrase-le-ze1bu-boit-dans-le-puits.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-les-animaux-domestiques-vivent-pre2s-de-la-maison",
+   "file": "fr/phrase-les-animaux-domestiques-vivent-pre2s-de-la-maison.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-les-femmes-dansent-au-son-du-tambour",
+   "file": "fr/phrase-les-femmes-dansent-au-son-du-tambour.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-les-filles-sautent-a1-la-corde-en-chantant",
+   "file": "fr/phrase-les-filles-sautent-a1-la-corde-en-chantant.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-lundi-chacun-va-a1-l-e1cole",
+   "file": "fr/phrase-lundi-chacun-va-a1-l-e1cole.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-lundi-mardi-mercredi-jeudi",
+   "file": "fr/phrase-lundi-mardi-mercredi-jeudi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-main-prend-le-pain",
+   "file": "fr/phrase-ma-main-prend-le-pain.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-maman-a-la-moto",
+   "file": "fr/phrase-ma-maman-a-la-moto.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-maman-s-appelle-halime1",
+   "file": "fr/phrase-ma-maman-s-appelle-halime1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-soe1ur-a-une-fleur",
+   "file": "fr/phrase-ma-soe1ur-a-une-fleur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-soe1ur-aime-le-jeu",
+   "file": "fr/phrase-ma-soe1ur-aime-le-jeu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-tante-habite-dans-le-quartier-voisin",
+   "file": "fr/phrase-ma-tante-habite-dans-le-quartier-voisin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-ma-tante-habite-en-ville-dans-un-grand-quartier",
+   "file": "fr/phrase-ma-tante-habite-en-ville-dans-un-grand-quartier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-malade-fie2vre-moustique",
+   "file": "fr/phrase-malade-fie2vre-moustique.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-maman-demande-le-prix-des-tomates",
+   "file": "fr/phrase-maman-demande-le-prix-des-tomates.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-maman-fait-griller-des-arachides",
+   "file": "fr/phrase-maman-fait-griller-des-arachides.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-maman-partage-20-arachides-entre-2-enfants-combien-chacun-en",
+   "file": "fr/phrase-maman-partage-20-arachides-entre-2-enfants-combien-chacun-en.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-maman-range-la-calebasse-pre2s-du-canari",
+   "file": "fr/phrase-maman-range-la-calebasse-pre2s-du-canari.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-marche1-panier-argent",
+   "file": "fr/phrase-marche1-panier-argent.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mil-riz-lait",
+   "file": "fr/phrase-mil-riz-lait.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mon-e1quipe-a-gagne1-la-course",
+   "file": "fr/phrase-mon-e1quipe-a-gagne1-la-course.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mon-fre2re-garde-trois-che2vres",
+   "file": "fr/phrase-mon-fre2re-garde-trois-che2vres.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mon-grand-pe2re-raconte-des-histoires-le-soir",
+   "file": "fr/phrase-mon-grand-pe2re-raconte-des-histoires-le-soir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mon-oncle-est-parti-au-marche1-avec-mon-cousin",
+   "file": "fr/phrase-mon-oncle-est-parti-au-marche1-avec-mon-cousin.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-mosque1e-e1glise-quartier",
+   "file": "fr/phrase-mosque1e-e1glise-quartier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-moto-ve1lo-voiture",
+   "file": "fr/phrase-moto-ve1lo-voiture.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-moussa-ramasse-4-oe1ufs-il-en-trouve-3-autres-combien-a-t-il",
+   "file": "fr/phrase-moussa-ramasse-4-oe1ufs-il-en-trouve-3-autres-combien-a-t-il.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-nous-allons-au-marche1-le-mercredi",
+   "file": "fr/phrase-nous-allons-au-marche1-le-mercredi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-nous-sautons-a1-la-corde",
+   "file": "fr/phrase-nous-sautons-a1-la-corde.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-o-o-o",
+   "file": "fr/phrase-o-o-o.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-octobre-novembre-de1cembre-janvier",
+   "file": "fr/phrase-octobre-novembre-de1cembre-janvier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-on-joue-du-tambour",
+   "file": "fr/phrase-on-joue-du-tambour.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-orage-saison-chaleur",
+   "file": "fr/phrase-orage-saison-chaleur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-oreille-dent-bras",
+   "file": "fr/phrase-oreille-dent-bras.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-paludisme-docteur-moustiquaire",
+   "file": "fr/phrase-paludisme-docteur-moustiquaire.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-papa-a-le-pain",
+   "file": "fr/phrase-papa-a-le-pain.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-papa-a-une-moto",
+   "file": "fr/phrase-papa-a-une-moto.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-papa-ache2te-5-poissons-il-en-donne-1-au-voisin-combien-lui-",
+   "file": "fr/phrase-papa-ache2te-5-poissons-il-en-donne-1-au-voisin-combien-lui-.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-papa-maman-be1be1",
+   "file": "fr/phrase-papa-maman-be1be1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-papa-revient-de-voyage-avec-des-cadeaux",
+   "file": "fr/phrase-papa-revient-de-voyage-avec-des-cadeaux.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-pendant-la-saison-des-pluies-le-champ-devient-vert",
+   "file": "fr/phrase-pendant-la-saison-des-pluies-le-champ-devient-vert.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-pluie-vent-soleil",
+   "file": "fr/phrase-pluie-vent-soleil.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-pour-aller-au-champ-je-marche-je-suis-pie1ton",
+   "file": "fr/phrase-pour-aller-au-champ-je-marche-je-suis-pie1ton.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-pour-le-bapte3me-du-be1be1-on-pre1pare-beaucoup-de-viande",
+   "file": "fr/phrase-pour-le-bapte3me-du-be1be1-on-pre1pare-beaucoup-de-viande.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-pour-traverser-le-fleuve-on-prend-la-pirogue",
+   "file": "fr/phrase-pour-traverser-le-fleuve-on-prend-la-pirogue.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-quand-l-orage-arrive-nous-rentrons-dans-la-case",
+   "file": "fr/phrase-quand-l-orage-arrive-nous-rentrons-dans-la-case.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-quand-mon-ami-part-je-suis-triste",
+   "file": "fr/phrase-quand-mon-ami-part-je-suis-triste.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-robe-sandale-poche",
+   "file": "fr/phrase-robe-sandale-poche.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-route-car-valise",
+   "file": "fr/phrase-route-car-valise.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-sali-a-le-savon",
+   "file": "fr/phrase-sali-a-le-savon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-te3te-main-pied",
+   "file": "fr/phrase-te3te-main-pied.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-un-sac-de-mil-cou2te-50-francs-papa-en-ache2te-2-combien-pai",
+   "file": "fr/phrase-un-sac-de-mil-cou2te-50-francs-papa-en-ache2te-2-combien-pai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-vache-chameau-lion",
+   "file": "fr/phrase-vache-chameau-lion.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-viande-poisson-arachide",
+   "file": "fr/phrase-viande-poisson-arachide.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-village-puits-route",
+   "file": "fr/phrase-village-puits-route.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voici-ma-case",
+   "file": "fr/phrase-voici-ma-case.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voici-ma-te3te",
+   "file": "fr/phrase-voici-ma-te3te.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voici-mes-chaussures",
+   "file": "fr/phrase-voici-mes-chaussures.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voici-mon-panier",
+   "file": "fr/phrase-voici-mon-panier.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voici-mon-papa",
+   "file": "fr/phrase-voici-mon-papa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voici-une-poule",
+   "file": "fr/phrase-voici-une-poule.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "phrase-voyage-gare-bagage",
+   "file": "fr/phrase-voyage-gare-bagage.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-avec-quoi-maman-fait-elle-la-sauce",
+   "file": "fr/question-avec-quoi-maman-fait-elle-la-sauce.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-combien-de-tomates-ache2te-maman",
+   "file": "fr/question-combien-de-tomates-ache2te-maman.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-ou1-e1tait-la-petite-che2vre",
+   "file": "fr/question-ou1-e1tait-la-petite-che2vre.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-ou1-maman-emme2ne-t-elle-moussa",
+   "file": "fr/question-ou1-maman-emme2ne-t-elle-moussa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-ou1-s-assoient-les-enfants",
+   "file": "fr/question-ou1-s-assoient-les-enfants.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-ou1-va-halime1",
+   "file": "fr/question-ou1-va-halime1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-pourquoi-amina-sourit-elle",
+   "file": "fr/question-pourquoi-amina-sourit-elle.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-qu-est-ce-qui-fait-mal-a1-moussa",
+   "file": "fr/question-qu-est-ce-qui-fait-mal-a1-moussa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-fait-amina",
+   "file": "fr/question-que-fait-amina.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-fait-grand-pe2re",
+   "file": "fr/question-que-fait-grand-pe2re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-font-les-enfants",
+   "file": "fr/question-que-font-les-enfants.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-met-fatime1",
+   "file": "fr/question-que-met-fatime1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-prend-amina",
+   "file": "fr/question-que-prend-amina.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-rapporte-papa-pour-amina",
+   "file": "fr/question-que-rapporte-papa-pour-amina.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-que-se2me-ali",
+   "file": "fr/question-que-se2me-ali.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-quelle-fe3te-a-lieu",
+   "file": "fr/question-quelle-fe3te-a-lieu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-qui-donne-de-l-eau-a1-la-graine",
+   "file": "fr/question-qui-donne-de-l-eau-a1-la-graine.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "question-qui-tire-la-charrette",
+   "file": "fr/question-qui-tire-la-charrette.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-a",
+   "file": "fr/son-a.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-ac",
+   "file": "fr/son-ac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-ai",
+   "file": "fr/son-ai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-al",
+   "file": "fr/son-al.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-an",
+   "file": "fr/son-an.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-ar",
+   "file": "fr/son-ar.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-au",
+   "file": "fr/son-au.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-bl",
+   "file": "fr/son-bl.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-br",
+   "file": "fr/son-br.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-c-s-c1",
+   "file": "fr/son-c-s-c1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-e",
+   "file": "fr/son-e.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-e1",
+   "file": "fr/son-e1.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-e1-er-ez",
+   "file": "fr/son-e1-er-ez.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-er",
+   "file": "fr/son-er.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-eu",
+   "file": "fr/son-eu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-eur",
+   "file": "fr/son-eur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-gn",
+   "file": "fr/son-gn.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-h",
+   "file": "fr/son-h.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-i",
+   "file": "fr/son-i.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-in",
+   "file": "fr/son-in.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-k",
+   "file": "fr/son-k.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-o",
+   "file": "fr/son-o.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-o-au-eau",
+   "file": "fr/son-o-au-eau.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-oi",
+   "file": "fr/son-oi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-oir",
+   "file": "fr/son-oir.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-on",
+   "file": "fr/son-on.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-ou",
+   "file": "fr/son-ou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-tr",
+   "file": "fr/son-tr.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-u",
+   "file": "fr/son-u.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-ui",
+   "file": "fr/son-ui.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-un",
+   "file": "fr/son-un.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "son-z",
+   "file": "fr/son-z.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ac",
+   "file": "fr/syllabe-ac.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-al",
+   "file": "fr/syllabe-al.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ar",
+   "file": "fr/syllabe-ar.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-as",
+   "file": "fr/syllabe-as.m4a",
    "placeholder": true
   },
   {
@@ -648,8 +3753,18 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-banane",
-   "file": "fr/syllabe-banane.m4a",
+   "id": "syllabe-bai",
+   "file": "fr/syllabe-bai.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ban",
+   "file": "fr/syllabe-ban.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bau",
+   "file": "fr/syllabe-bau.m4a",
    "placeholder": true
   },
   {
@@ -658,23 +3773,188 @@
    "placeholder": true
   },
   {
+   "id": "syllabe-beu",
+   "file": "fr/syllabe-beu.m4a",
+   "placeholder": true
+  },
+  {
    "id": "syllabe-bi",
    "file": "fr/syllabe-bi.m4a",
    "placeholder": true
   },
   {
-   "id": "syllabe-bo",
-   "file": "fr/syllabe-bo.m4a",
+   "id": "syllabe-bin",
+   "file": "fr/syllabe-bin.m4a",
    "placeholder": true
   },
   {
-   "id": "syllabe-bois",
-   "file": "fr/syllabe-bois.m4a",
+   "id": "syllabe-bla",
+   "file": "fr/syllabe-bla.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-boi",
+   "file": "fr/syllabe-boi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bon",
+   "file": "fr/syllabe-bon.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bou",
+   "file": "fr/syllabe-bou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-bra",
+   "file": "fr/syllabe-bra.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-brun",
+   "file": "fr/syllabe-brun.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ca",
+   "file": "fr/syllabe-ca.m4a",
    "placeholder": true
   },
   {
    "id": "syllabe-ch",
    "file": "fr/syllabe-ch.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-cha",
+   "file": "fr/syllabe-cha.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-che",
+   "file": "fr/syllabe-che.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-chi",
+   "file": "fr/syllabe-chi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-co",
+   "file": "fr/syllabe-co.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-cou",
+   "file": "fr/syllabe-cou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-cu",
+   "file": "fr/syllabe-cu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-da",
+   "file": "fr/syllabe-da.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-de",
+   "file": "fr/syllabe-de.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-di",
+   "file": "fr/syllabe-di.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-dou",
+   "file": "fr/syllabe-dou.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-eur",
+   "file": "fr/syllabe-eur.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-fa",
+   "file": "fr/syllabe-fa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-fe",
+   "file": "fr/syllabe-fe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-fi",
+   "file": "fr/syllabe-fi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-foi",
+   "file": "fr/syllabe-foi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-fra",
+   "file": "fr/syllabe-fra.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ga",
+   "file": "fr/syllabe-ga.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-gna",
+   "file": "fr/syllabe-gna.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-go",
+   "file": "fr/syllabe-go.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-gu",
+   "file": "fr/syllabe-gu.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ha",
+   "file": "fr/syllabe-ha.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ja",
+   "file": "fr/syllabe-ja.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-je",
+   "file": "fr/syllabe-je.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ji",
+   "file": "fr/syllabe-ji.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-joi",
+   "file": "fr/syllabe-joi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ka",
+   "file": "fr/syllabe-ka.m4a",
    "placeholder": true
   },
   {
@@ -693,11 +3973,6 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-lu",
-   "file": "fr/syllabe-lu.m4a",
-   "placeholder": true
-  },
-  {
    "id": "syllabe-ma",
    "file": "fr/syllabe-ma.m4a",
    "placeholder": true
@@ -708,23 +3983,23 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-melon",
-   "file": "fr/syllabe-melon.m4a",
-   "placeholder": true
-  },
-  {
    "id": "syllabe-mi",
    "file": "fr/syllabe-mi.m4a",
    "placeholder": true
   },
   {
-   "id": "syllabe-mouche",
-   "file": "fr/syllabe-mouche.m4a",
+   "id": "syllabe-na",
+   "file": "fr/syllabe-na.m4a",
    "placeholder": true
   },
   {
-   "id": "syllabe-mouton",
-   "file": "fr/syllabe-mouton.m4a",
+   "id": "syllabe-ne",
+   "file": "fr/syllabe-ne.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ni",
+   "file": "fr/syllabe-ni.m4a",
    "placeholder": true
   },
   {
@@ -733,8 +4008,8 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-on",
-   "file": "fr/syllabe-on.m4a",
+   "id": "syllabe-oir",
+   "file": "fr/syllabe-oir.m4a",
    "placeholder": true
   },
   {
@@ -743,8 +4018,33 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-papa",
-   "file": "fr/syllabe-papa.m4a",
+   "id": "syllabe-pa",
+   "file": "fr/syllabe-pa.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-pe",
+   "file": "fr/syllabe-pe.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-pi",
+   "file": "fr/syllabe-pi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ra",
+   "file": "fr/syllabe-ra.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-re",
+   "file": "fr/syllabe-re.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ri",
+   "file": "fr/syllabe-ri.m4a",
    "placeholder": true
   },
   {
@@ -753,8 +4053,8 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-salade",
-   "file": "fr/syllabe-salade.m4a",
+   "id": "syllabe-se",
+   "file": "fr/syllabe-se.m4a",
    "placeholder": true
   },
   {
@@ -763,13 +4063,13 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-so",
-   "file": "fr/syllabe-so.m4a",
+   "id": "syllabe-ta",
+   "file": "fr/syllabe-ta.m4a",
    "placeholder": true
   },
   {
-   "id": "syllabe-ta",
-   "file": "fr/syllabe-ta.m4a",
+   "id": "syllabe-te",
+   "file": "fr/syllabe-te.m4a",
    "placeholder": true
   },
   {
@@ -778,8 +4078,28 @@
    "placeholder": true
   },
   {
-   "id": "syllabe-to",
-   "file": "fr/syllabe-to.m4a",
+   "id": "syllabe-ui",
+   "file": "fr/syllabe-ui.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-va",
+   "file": "fr/syllabe-va.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-ve",
+   "file": "fr/syllabe-ve.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-vi",
+   "file": "fr/syllabe-vi.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "syllabe-za",
+   "file": "fr/syllabe-za.m4a",
    "placeholder": true
   }
  ]
