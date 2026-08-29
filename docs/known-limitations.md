@@ -51,4 +51,9 @@
 - **Aucun appareil de test disponible** : la session de développement s'est
   faite sans simulateur iOS ni émulateur Android. La vérification a porté sur
   le typecheck, le lint, 38 tests, les validateurs de contenu et d'assets, et
-  un bundle Metro complet (5,4 Mo, exit 0). **L'app n'a pas été vue tourner.**
+  des bundles Metro complets pour les deux plateformes livrées (iOS 5,5 Mo,
+  Android 5,7 Mo). **L'app n'a pas été vue tourner.**
+
+  ⚠️ `npx expo export --platform all` inclut le web, que le projet n'embarque
+  pas : la commande échoue sans rien produire **tout en sortant en code 0**.
+  Toujours nommer `ios` et `android` explicitement — c'est ce que fait la CI.

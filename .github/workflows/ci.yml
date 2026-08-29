@@ -36,8 +36,13 @@ jobs:
       # granulaires au-dessus servent à échouer vite et clairement.
       - name: Gates de release
         run: npm run validate:release
-      - name: Export de contrôle (bundle Metro, iOS et Android)
-        run: npx expo export --platform all --output-dir /tmp/export-check
+      # `--platform all` inclut le web, que le projet n'embarque pas : il
+      # échoue sans rien produire tout en sortant en code 0. On nomme donc
+      # explicitement les deux plateformes livrées.
+      - name: Export de contrôle Android
+        run: npx expo export --platform android --output-dir /tmp/export-android
+      - name: Export de contrôle iOS
+        run: npx expo export --platform ios --output-dir /tmp/export-ios
 
   # Build preview EAS : déclenchement manuel uniquement (jamais auto en prod)
   preview-build:
