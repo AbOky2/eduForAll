@@ -40,6 +40,21 @@ const baseStep = {
   hint: hintSchema.optional(),
 };
 
+/**
+ * Concrete quantities for an operation.
+ *
+ * Le programme demande que le calcul parte du réel : « à partir de situations
+ * concrètes vécues par l'enfant » (p. 58). Une opération qui porte un objet
+ * comptable se dessine donc en chèvres ou en mangues, pas en jetons abstraits.
+ * Absent = repli sur les cartes de points, utilisé au-delà de ce qui se compte
+ * d'un coup d'œil.
+ */
+const concreteQuantity = {
+  illustrationId: illustrationIdSchema.optional(),
+  /** Pluriel de l'objet, pour l'étiquette d'accessibilité. */
+  objectName: z.string().min(1).max(40).optional(),
+};
+
 export const exerciseStepSchema = z.discriminatedUnion('type', [
   // 1 — passive presentation of a sound/letter/syllable
   z.object({
@@ -176,6 +191,7 @@ export const exerciseStepSchema = z.discriminatedUnion('type', [
   z.object({
     ...baseStep,
     type: z.literal('simple_addition'),
+    ...concreteQuantity,
     a: z.number().int().min(0).max(100),
     b: z.number().int().min(0).max(100),
     options: z.array(z.number().int().min(0).max(200)).min(2).max(4),
@@ -185,6 +201,7 @@ export const exerciseStepSchema = z.discriminatedUnion('type', [
   z.object({
     ...baseStep,
     type: z.literal('simple_subtraction'),
+    ...concreteQuantity,
     a: z.number().int().min(0).max(100),
     b: z.number().int().min(0).max(100),
     options: z.array(z.number().int().min(0).max(100)).min(2).max(4),
@@ -197,6 +214,18 @@ export const exerciseStepSchema = z.discriminatedUnion('type', [
     statement: z.string().min(1).max(300),
     statementAudioId: audioIdSchema.optional(),
     illustrationId: illustrationIdSchema.optional(),
+    /**
+     * L'histoire dessinée : ce qu'il y avait, puis ce qu'on ajoute ou ce qu'on
+     * enlève. Un CP1 résout « 4 mangues et 3 mangues » en comptant les images
+     * bien avant de savoir lire l'énoncé.
+     */
+    visual: z
+      .object({
+        first: z.number().int().min(1).max(12),
+        second: z.number().int().min(1).max(12),
+        mode: z.enum(['add', 'remove']),
+      })
+      .optional(),
     answer: z.number().int().min(0).max(100),
     options: z.array(z.number().int().min(0).max(100)).min(2).max(4),
   }),
@@ -282,6 +311,7 @@ export const exerciseStepSchema = z.discriminatedUnion('type', [
   z.object({
     ...baseStep,
     type: z.literal('simple_multiplication'),
+    ...concreteQuantity,
     a: z.number().int().min(0).max(20),
     b: z.number().int().min(2).max(5),
     options: z.array(z.number().int().min(0).max(100)).min(2).max(4),
@@ -292,6 +322,7 @@ export const exerciseStepSchema = z.discriminatedUnion('type', [
     .object({
       ...baseStep,
       type: z.literal('simple_division'),
+      ...concreteQuantity,
       a: z.number().int().min(0).max(100),
       b: z.number().int().min(2).max(5),
       options: z.array(z.number().int().min(0).max(50)).min(2).max(4),

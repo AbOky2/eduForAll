@@ -10,7 +10,46 @@
  * two hundred steps costs exactly one recording.
  */
 
-const ttsMap = new Map<string, string>();
+import { SPOKEN_PHONEMES } from './data/pronunciation';
+
+/**
+ * Nature de chaque son. C'est le champ que lit la chaîne de synthèse pour
+ * choisir le moteur et la diction — jamais le préfixe de l'identifiant.
+ */
+export type AudioKind =
+  | 'instr'
+  | 'hint'
+  | 'question'
+  | 'graphisme'
+  | 'lettre'
+  | 'son'
+  | 'syllabe'
+  | 'mot'
+  | 'phrase'
+  | 'histoire'
+  | 'nombre'
+  | 'monnaie';
+
+export interface AudioEntry {
+  readonly text: string;
+  readonly kind: AudioKind;
+  /** Phonèmes imposés — seuls les sons présentés isolément en ont besoin. */
+  readonly phonemes?: string;
+}
+
+const ttsMap = new Map<string, AudioEntry>();
+
+/**
+ * La table est indexée sur ce qui est DIT, pas sur ce qui est écrit : le
+ * programme note « é = er = ez » là où la voix doit produire « é, er, ez ».
+ */
+function registerPhonemes(audioId: string, written: string): void {
+  const phonemes = SPOKEN_PHONEMES[spokenSound(written)];
+  const entry = ttsMap.get(audioId);
+  if (phonemes !== undefined && entry) {
+    ttsMap.set(audioId, { ...entry, phonemes });
+  }
+}
 
 /**
  * Accents carry meaning here: « le son é » and « le son e » are two different
@@ -49,18 +88,20 @@ export function slug(text: string): string {
 }
 
 /** Registers an audio asset and returns its stable id. */
-export function audio(kind: string, text: string, spokenOverride?: string): string {
+export function audio(kind: AudioKind, text: string, spokenOverride?: string): string {
   const id = `${kind}-${slug(text)}`;
   const spoken = spokenOverride ?? text;
   const existing = ttsMap.get(id);
-  if (existing !== undefined && existing !== spoken) {
-    throw new Error(`audio id collision: ${id} ("${existing}" vs "${spoken}")`);
+  if (existing !== undefined && existing.text !== spoken) {
+    throw new Error(`audio id collision: ${id} ("${existing.text}" vs "${spoken}")`);
   }
-  ttsMap.set(id, spoken);
+  if (existing === undefined) {
+    ttsMap.set(id, { text: spoken, kind });
+  }
   return id;
 }
 
-export function audioEntries(): [string, string][] {
+export function audioEntries(): [string, AudioEntry][] {
   return [...ttsMap.entries()].sort(([a], [b]) => a.localeCompare(b));
 }
 
@@ -137,12 +178,47 @@ export function numberToWords(value: number): string {
  * narrator (and the TTS placeholder) articulates them instead of running them
  * into the next token.
  */
+/** Remplace les équivalences notées « a = b = c » par une énumération dite. */
+function spokenSound(text: string): string {
+  return text.includes('=')
+    ? text
+        .split('=')
+        .map((part) => part.trim())
+        .join(', ')
+    : text;
+}
+
 export const say = {
-  instruction: (text: string) => ({ text, audioId: audio('instr', text) }),
+  /**
+   * Le texte affiché et le texte dit peuvent diverger : « le son o = au = eau »
+   * s'écrit ainsi (programme p. 24) mais se dit « le son o, au, eau ».
+   */
+  instruction: (text: string) => ({
+    text,
+    audioId: audio('instr', text, spokenSound(text)),
+  }),
   hint: (text: string) => ({ text, audioId: audio('hint', text) }),
-  letter: (letter: string) => audio('lettre', letter, `${letter}.`),
-  sound: (sound: string) => audio('son', sound, `${sound}.`),
-  syllable: (syllable: string) => audio('syllabe', syllable, `${syllable}.`),
+  letter: (letter: string) => {
+    const id = audio('lettre', letter, `${letter}.`);
+    registerPhonemes(id, letter);
+    return id;
+  },
+  /**
+   * Un son se dit, il ne s'épelle pas — et surtout il ne se lit pas comme une
+   * équation. Le programme note les équivalences « o = au = eau » (p. 24) :
+   * c'est juste à l'écran, mais dit tel quel ça donne « o égale au égale eau ».
+   * On énumère à la place.
+   */
+  sound: (sound: string) => {
+    const id = audio('son', sound, `${spokenSound(sound)}.`);
+    registerPhonemes(id, sound);
+    return id;
+  },
+  syllable: (syllable: string) => {
+    const id = audio('syllabe', syllable, `${syllable}.`);
+    registerPhonemes(id, syllable);
+    return id;
+  },
   word: (word: string) => audio('mot', word, `${word}.`),
   sentence: (sentence: string) => audio('phrase', sentence),
   number: (value: number) => audio('nombre', String(value), numberToWords(value)),

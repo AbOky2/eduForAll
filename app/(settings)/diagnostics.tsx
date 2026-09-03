@@ -1,13 +1,13 @@
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { ScrollView, Share, StyleSheet, View } from 'react-native';
 
 import { logSnapshot } from '@/core/logging/logger';
 import { getDatabase } from '@/database/connection/database';
 import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 interface DiagnosticsInfo {
   migrations: number;
@@ -21,7 +21,7 @@ interface DiagnosticsInfo {
  * voluntarily through the OS share sheet — no name, no voice, no location.
  */
 export default function DiagnosticsScreen() {
-  const router = useRouter();
+  const goBack = useSafeBack();
   const [info, setInfo] = useState<DiagnosticsInfo | null>(null);
 
   const load = async () => {
@@ -67,20 +67,7 @@ export default function DiagnosticsScreen() {
 
   return (
     <AlifaScreen background="default">
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.common.back}
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <AlifaIcon name="arrow-back" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
-        <AlifaText variant="headlineMd" color={colors.primary}>
-          {fr.settings.diagnostics}
-        </AlifaText>
-        <View style={styles.backButton} />
-      </View>
+      <AlifaScreenHeader onBack={goBack} title={fr.settings.diagnostics} titleVariant="headlineMd" />
       <ScrollView contentContainerStyle={styles.scroll}>
         <AlifaCard rounded="xl" style={styles.card}>
           <Row label="Version du contenu" value={info?.contentVersion ?? '…'} />
@@ -109,14 +96,6 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   scroll: { padding: spacing.screenMargin, gap: spacing.lg },
   card: { gap: spacing.md },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },

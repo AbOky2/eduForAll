@@ -27,7 +27,10 @@ export type IconName =
   | 'leaf'
   | 'sparkle'
   | 'trash'
-  | 'share';
+  | 'share'
+  | 'trophy'
+  | 'flame'
+  | 'medal';
 
 interface AlifaIconProps {
   name: IconName;
@@ -252,6 +255,54 @@ export function AlifaIcon({
         <Svg {...box}>
           <Path d="M12 3.5l1.8 5.2 5.2 1.8-5.2 1.8L12 17.5l-1.8-5.2L5 10.5l5.2-1.8z" fill={color} />
           <Circle cx={18.5} cy={17.5} r={1.6} fill={color} />
+        </Svg>
+      );
+    case 'trophy':
+      return (
+        <Svg {...box}>
+          <Path {...stroke} d="M7.5 4h9v5.2a4.5 4.5 0 0 1-9 0z" fill={filled ? color : 'none'} />
+          <Path {...stroke} d="M7.5 5.5H5a2.5 2.5 0 0 0 2.5 4.2" />
+          <Path {...stroke} d="M16.5 5.5H19a2.5 2.5 0 0 1-2.5 4.2" />
+          <Line {...stroke} x1={12} y1={13.8} x2={12} y2={17} />
+          <Path {...stroke} d="M8.6 20h6.8l-.7-3H9.3z" />
+        </Svg>
+      );
+    case 'flame':
+      return (
+        <Svg {...box}>
+          {/* Pointe marquée + épaule creusée : sans elles la flamme lit
+              comme une goutte d'eau. */}
+          <Path
+            {...stroke}
+            d="M12.6 2.6c-.5 2.6-1.8 3.7-3.4 5.3C7.4 9.6 6.4 11 6.4 13a5.6 5.6 0 0 0 11.2 0c0-2.2-1-3.6-2.4-5-.6.9-1.2 1.4-1.9 1.6.8-2.4.5-4.6-.7-7z"
+            fill={filled ? color : 'none'}
+          />
+          {/* Cœur de flamme : en version pleine il doit se détacher du corps,
+              sinon la flamme redevient une tache. */}
+          <Path
+            d="M12 13c1.4 1.4 2.1 2.4 2.1 3.4a2.1 2.1 0 0 1-4.2 0c0-1 .7-2 2.1-3.4z"
+            fill={filled ? colors.card : color}
+          />
+        </Svg>
+      );
+    case 'medal':
+      return (
+        <Svg {...box}>
+          {/* Deux rubans qui s'écartent vers le haut, puis le disque. */}
+          <Path {...stroke} d="M7.6 2.8l2.6 5.4" />
+          <Path {...stroke} d="M16.4 2.8l-2.6 5.4" />
+          <Circle
+            cx={12}
+            cy={14.6}
+            r={6.4}
+            stroke={color}
+            strokeWidth={1.8}
+            fill={filled ? color : 'none'}
+          />
+          <Path
+            d="M12 10.7l1.15 2.33 2.57.37-1.86 1.81.44 2.56L12 16.57l-2.3 1.19.44-2.56-1.86-1.81 2.57-.37z"
+            fill={filled ? colors.card : color}
+          />
         </Svg>
       );
     case 'trash':

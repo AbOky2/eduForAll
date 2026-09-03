@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { AlifaAnswerCard, AlifaText } from '@/design-system/primitives';
-import { colors, spacing } from '@/design-system/tokens';
+import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -103,4 +103,3 @@ const styles = StyleSheet.create({
   column: { flex: 1, gap: spacing.md },
 });
 
-export { colors };

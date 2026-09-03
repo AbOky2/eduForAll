@@ -1,822 +1,3322 @@
 {
- "graphisme-la-ligne-couche1e": "Trace la ligne couchée.",
- "graphisme-la-ligne-courbe": "Trace la ligne courbe.",
- "graphisme-la-ligne-droite": "Trace la ligne droite.",
- "graphisme-les-boucles-enchai1ne1es": "Trace les boucles enchaînées.",
- "graphisme-les-boucles-vers-le-bas": "Trace les boucles vers le bas.",
- "graphisme-les-boucles-vers-le-haut": "Trace les boucles vers le haut.",
- "graphisme-les-courbes": "Trace les courbes.",
- "graphisme-les-lignes-debout": "Trace les lignes debout.",
- "graphisme-les-lignes-penche1es": "Trace les lignes penchées.",
- "graphisme-les-points": "Trace les points.",
- "graphisme-les-ponts": "Trace les ponts.",
- "graphisme-les-ronds": "Trace les ronds.",
- "hint-commence-par-ce-que-tu-connais-de1ja1": "Commence par ce que tu connais déjà.",
- "hint-compte-a1-voix-haute-en-partant-du-de1but": "Compte à voix haute en partant du début.",
- "hint-compte-les-grosses-pie2ces-d-abord": "Compte les grosses pièces d’abord.",
- "hint-compte-les-points-sur-les-cartes": "Compte les points sur les cartes.",
- "hint-dis-le-mot-lentement-dans-ta-te3te": "Dis le mot lentement dans ta tête.",
- "hint-dis-le-mot-lentement-syllabe-par-syllabe": "Dis le mot lentement, syllabe par syllabe.",
- "hint-e1coute-encore-le-mot": "Écoute encore le mot.",
- "hint-e1coute-encore-le-mot-qui-dit-ou1-c-est": "Écoute encore le mot qui dit où c’est.",
- "hint-e1coute-encore-quelle-est-la-premie2re-lettre": "Écoute encore : quelle est la première lettre ?",
- "hint-e1coute-encore-une-fois": "Écoute encore une fois.",
- "hint-e1coute-encore-une-fois-puis-regarde-bien-chaque-lettre": "Écoute encore une fois, puis regarde bien chaque lettre.",
- "hint-e1coute-la-phrase-quel-est-le-premier-mot": "Écoute la phrase : quel est le premier mot ?",
- "hint-e1coute-le-mot-puis-cherche-la-premie2re-syllabe": "Écoute le mot, puis cherche la première syllabe.",
- "hint-le-nombre-le-plus-grand-est-celui-qu-on-dit-en-dernier-quand": "Le nombre le plus grand est celui qu’on dit en dernier quand on compte.",
- "hint-pars-du-gros-point-et-va-vers-la-droite": "Pars du gros point et va vers la droite.",
- "hint-re1e1coute-l-histoire-qu-est-ce-qu-on-ajoute-qu-est-ce-qu-on": "Réécoute l’histoire : qu’est-ce qu’on ajoute, qu’est-ce qu’on enlève ?",
- "hint-re1e1coute-l-histoire-si-tu-veux": "Réécoute l’histoire si tu veux.",
- "hint-regarde-bien-chaque-image-avant-de-choisir": "Regarde bien chaque image avant de choisir.",
- "hint-regarde-bien-la-premie2re-lettre": "Regarde bien la première lettre.",
- "hint-relis-la-question-doucement": "Relis la question doucement.",
- "hint-suis-le-chemin-en-partant-du-point": "Suis le chemin en partant du point.",
- "hint-touche-chaque-image-en-comptant-a1-voix-haute": "Touche chaque image en comptant à voix haute.",
- "histoire-ali-est-cultivateur-chaque-matin-il-part": "Ali est cultivateur. Chaque matin, il part au champ avec sa houe. Il sème le mil. Quand la pluie tombe, le mil pousse bien.",
- "histoire-amina-a-perdu-son-crayon-elle-est-triste": "Amina a perdu son crayon. Elle est triste. Son ami Moussa lui donne le sien. Amina sourit et dit merci. Les deux amis rentrent ensemble.",
- "histoire-amina-arrive-a1-l-e1cole-elle-pose-son-c": "Amina arrive à l’école. Elle pose son cartable sur le table-banc. Le maître écrit la leçon au tableau. Amina prend son ardoise et sa craie.",
- "histoire-aujourd-hui-c-est-le-bapte3me-du-petit-f": "Aujourd’hui, c’est le baptême du petit frère d’Amina. Les voisins arrivent avec des cadeaux. Les femmes préparent la viande. Le soir, tout le monde danse au son du tambour.",
- "histoire-c-est-jour-de-fe3te-fatime1-met-sa-robe": "C’est jour de fête. Fatimé met sa robe neuve et son foulard. Sa maman lui donne des sandales. Fatimé est contente.",
- "histoire-c-est-la-re1cre1ation-moussa-et-ses-amis": "C’est la récréation. Moussa et ses amis jouent au ballon. Amina saute à la corde avec Fatimé. La cloche sonne et tout le monde rentre en classe.",
- "histoire-le-berger-conduit-ses-che2vres-au-puits": "Le berger conduit ses chèvres au puits. Une petite chèvre reste derrière. Le berger la cherche et la retrouve sous l’acacia. Il la ramène au troupeau.",
- "histoire-le-ciel-devient-noir-le-vent-souffle-tre": "Le ciel devient noir. Le vent souffle très fort. La pluie tombe sur le village. Les enfants rentrent vite dans la case et regardent la pluie par la porte.",
- "histoire-le-matin-halime1-prend-son-seau-elle-mar": "Le matin, Halimé prend son seau. Elle marche jusqu’au puits du village. Elle remplit son seau et rentre à la maison. Sa maman la remercie.",
- "histoire-le-soir-grand-pe2re-s-assoit-sous-l-arbr": "Le soir, grand-père s’assoit sous l’arbre. Les enfants viennent l’écouter. Il raconte l’histoire du lièvre et de l’hyène. Tout le monde rit.",
- "histoire-le-soir-la-famille-se-re1unit-dans-la-co": "Le soir, la famille se réunit dans la cour. Maman pose la marmite sur le feu. Les enfants s’assoient sur la natte. On mange ensemble.",
- "histoire-maman-pre1pare-la-boule-de-mil-elle-fait": "Maman prépare la boule de mil. Elle fait une sauce avec du poisson. Toute la famille mange ensemble. Amina dit merci à sa maman.",
- "histoire-maman-va-au-marche1-avec-son-panier-elle": "Maman va au marché avec son panier. Elle achète un kilo de riz et trois tomates. Elle donne cent francs au commerçant. Il lui rend la monnaie.",
- "histoire-moussa-a-de-la-fie2vre-sa-maman-l-emme2n": "Moussa a de la fièvre. Sa maman l’emmène à l’hôpital. Le docteur l’examine et donne un médicament. Le soir, Moussa dort sous la moustiquaire.",
- "histoire-moussa-court-dans-la-cour-il-tombe-et-so": "Moussa court dans la cour. Il tombe et son pied lui fait mal. Sa maman lave son pied avec de l’eau. Moussa ne pleure pas.",
- "histoire-papa-met-les-sacs-de-mil-sur-la-charrett": "Papa met les sacs de mil sur la charrette. L’âne tire la charrette jusqu’au marché. La route est longue mais l’âne marche bien.",
- "histoire-papa-plante-une-graine-de-mangue-derrie2": "Papa plante une graine de mangue derrière la case. Chaque jour, Amina lui donne de l’eau. Après la saison des pluies, une petite feuille sort de la terre.",
- "histoire-papa-pre1pare-sa-valise-il-part-en-ville": "Papa prépare sa valise. Il part en ville avec le car. Il revient trois jours après. Il rapporte du sucre et un livre pour Amina.",
- "instr-a1-quoi-joues-tu": "À quoi joues-tu ?",
- "instr-associe-ce-qui-va-ensemble": "Associe ce qui va ensemble.",
- "instr-associe-chaque-calcul-a1-son-re1sultat": "Associe chaque calcul à son résultat.",
- "instr-associe-chaque-son-a1-un-mot": "Associe chaque son à un mot.",
- "instr-associe-la-forme-a1-un-objet": "Associe la forme à un objet.",
- "instr-associe-la-majuscule-et-la-minuscule": "Associe la majuscule et la minuscule.",
- "instr-associe-le-chiffre-et-son-nom": "Associe le chiffre et son nom.",
- "instr-associe-le-mot-et-le-signe": "Associe le mot et le signe.",
- "instr-associe-le-nombre-e1crit-en-chiffres-et-en-lettres": "Associe le nombre écrit en chiffres et en lettres.",
- "instr-associe-le-nombre-et-son-nom": "Associe le nombre et son nom.",
- "instr-associe-le-signe-et-son-nom": "Associe le signe et son nom.",
- "instr-avec-quoi-manges-tu": "Avec quoi manges-tu ?",
- "instr-avec-quoi-traverse-t-on-le-fleuve": "Avec quoi traverse-t-on le fleuve ?",
- "instr-combien-cela-fait-il-en-tout": "Combien cela fait-il en tout ?",
- "instr-combien-chacun-en-a-t-il": "Combien chacun en a-t-il ?",
- "instr-combien-en-reste-t-il": "Combien en reste-t-il ?",
- "instr-combien-font-ils-en-tout": "Combien font-ils en tout ?",
- "instr-comment-s-appelle-ta-maman": "Comment s’appelle ta maman ?",
- "instr-comment-te-sens-tu-aujourd-hui": "Comment te sens-tu aujourd’hui ?",
- "instr-comment-vas-tu-a1-l-e1cole": "Comment vas-tu à l’école ?",
- "instr-comple2te-le-mot-avec-la-bonne-lettre": "Complète le mot avec la bonne lettre.",
- "instr-compte-l-argent-combien-y-a-t-il": "Compte l’argent. Combien y a-t-il ?",
- "instr-compte-les-arbres": "Compte les arbres.",
- "instr-compte-les-calebasses": "Compte les calebasses.",
- "instr-compte-les-cases": "Compte les cases.",
- "instr-compte-les-che2vres": "Compte les chèvres.",
- "instr-compte-les-mangues": "Compte les mangues.",
- "instr-compte-les-oe1ufs": "Compte les œufs.",
- "instr-compte-les-poissons": "Compte les poissons.",
- "instr-compte-les-poules": "Compte les poules.",
- "instr-e1coute-l-histoire-puis-re1ponds": "Écoute l’histoire, puis réponds.",
- "instr-e1coute-la-syllabe": "Écoute la syllabe.",
- "instr-e1coute-le-mot-puis-touche-la-bonne-e1criture": "Écoute le mot, puis touche la bonne écriture.",
- "instr-e1coute-le-proble2me-et-trouve-la-re1ponse": "Écoute le problème et trouve la réponse.",
- "instr-e1coute-le-son-a": "Écoute le son « a ».",
- "instr-e1coute-le-son-ac": "Écoute le son « ac ».",
- "instr-e1coute-le-son-ai": "Écoute le son « ai ».",
- "instr-e1coute-le-son-al": "Écoute le son « al ».",
- "instr-e1coute-le-son-an": "Écoute le son « an ».",
- "instr-e1coute-le-son-ar": "Écoute le son « ar ».",
- "instr-e1coute-le-son-au": "Écoute le son « au ».",
- "instr-e1coute-le-son-b": "Écoute le son « b ».",
- "instr-e1coute-le-son-bl": "Écoute le son « bl ».",
- "instr-e1coute-le-son-br": "Écoute le son « br ».",
- "instr-e1coute-le-son-c": "Écoute le son « c ».",
- "instr-e1coute-le-son-c-s-c1": "Écoute le son « c = s = ç ».",
- "instr-e1coute-le-son-ch": "Écoute le son « ch ».",
- "instr-e1coute-le-son-d": "Écoute le son « d ».",
- "instr-e1coute-le-son-e": "Écoute le son « e ».",
- "instr-e1coute-le-son-e1": "Écoute le son « é ».",
- "instr-e1coute-le-son-e1-er-ez": "Écoute le son « é = er = ez ».",
- "instr-e1coute-le-son-er": "Écoute le son « er ».",
- "instr-e1coute-le-son-eu": "Écoute le son « eu ».",
- "instr-e1coute-le-son-eur": "Écoute le son « eur ».",
- "instr-e1coute-le-son-f": "Écoute le son « f ».",
- "instr-e1coute-le-son-g": "Écoute le son « g ».",
- "instr-e1coute-le-son-gn": "Écoute le son « gn ».",
- "instr-e1coute-le-son-h": "Écoute le son « h ».",
- "instr-e1coute-le-son-i": "Écoute le son « i ».",
- "instr-e1coute-le-son-in": "Écoute le son « in ».",
- "instr-e1coute-le-son-j": "Écoute le son « j ».",
- "instr-e1coute-le-son-k": "Écoute le son « k ».",
- "instr-e1coute-le-son-l": "Écoute le son « l ».",
- "instr-e1coute-le-son-m": "Écoute le son « m ».",
- "instr-e1coute-le-son-n": "Écoute le son « n ».",
- "instr-e1coute-le-son-o": "Écoute le son « o ».",
- "instr-e1coute-le-son-o-au-eau": "Écoute le son « o = au = eau ».",
- "instr-e1coute-le-son-oi": "Écoute le son « oi ».",
- "instr-e1coute-le-son-oir": "Écoute le son « oir ».",
- "instr-e1coute-le-son-on": "Écoute le son « on ».",
- "instr-e1coute-le-son-ou": "Écoute le son « ou ».",
- "instr-e1coute-le-son-p": "Écoute le son « p ».",
- "instr-e1coute-le-son-r": "Écoute le son « r ».",
- "instr-e1coute-le-son-s": "Écoute le son « s ».",
- "instr-e1coute-le-son-t": "Écoute le son « t ».",
- "instr-e1coute-le-son-tr": "Écoute le son « tr ».",
- "instr-e1coute-le-son-u": "Écoute le son « u ».",
- "instr-e1coute-le-son-ui": "Écoute le son « ui ».",
- "instr-e1coute-le-son-un": "Écoute le son « un ».",
- "instr-e1coute-le-son-v": "Écoute le son « v ».",
- "instr-e1coute-le-son-z": "Écoute le son « z ».",
- "instr-e1coute-puis-re1pe2te-a1-voix-haute": "Écoute, puis répète à voix haute.",
- "instr-forme-la-syllabe": "Forme la syllabe.",
- "instr-forme-le-mot-que-tu-entends": "Forme le mot que tu entends.",
- "instr-l-oiseau-est-au-dessus-de-la-case-touche-la-bonne-image": "L’oiseau est au-dessus de la case. Touche la bonne image.",
- "instr-la-calebasse-est-a1-co1te1-du-canari-touche-la-bonne-image": "La calebasse est à côté du canari. Touche la bonne image.",
- "instr-la-che2vre-est-entre-les-deux-arbres-touche-la-bonne-image": "La chèvre est entre les deux arbres. Touche la bonne image.",
- "instr-le-chat-est-sous-la-natte-touche-la-bonne-image": "Le chat est sous la natte. Touche la bonne image.",
- "instr-le-chat-est-sur-la-natte-touche-la-bonne-image": "Le chat est sur la natte. Touche la bonne image.",
- "instr-lis-et-choisis-la-bonne-re1ponse": "Lis et choisis la bonne réponse.",
- "instr-ou1-dors-tu": "Où dors-tu ?",
- "instr-ou1-entends-tu-a": "Où entends-tu « a » ?",
- "instr-ou1-entends-tu-ac": "Où entends-tu « ac » ?",
- "instr-ou1-entends-tu-ai": "Où entends-tu « ai » ?",
- "instr-ou1-entends-tu-al": "Où entends-tu « al » ?",
- "instr-ou1-entends-tu-an": "Où entends-tu « an » ?",
- "instr-ou1-entends-tu-ar": "Où entends-tu « ar » ?",
- "instr-ou1-entends-tu-au": "Où entends-tu « au » ?",
- "instr-ou1-entends-tu-b": "Où entends-tu « b » ?",
- "instr-ou1-entends-tu-bl": "Où entends-tu « bl » ?",
- "instr-ou1-entends-tu-br": "Où entends-tu « br » ?",
- "instr-ou1-entends-tu-c": "Où entends-tu « c » ?",
- "instr-ou1-entends-tu-ch": "Où entends-tu « ch » ?",
- "instr-ou1-entends-tu-d": "Où entends-tu « d » ?",
- "instr-ou1-entends-tu-e": "Où entends-tu « e » ?",
- "instr-ou1-entends-tu-e1": "Où entends-tu « é » ?",
- "instr-ou1-entends-tu-er": "Où entends-tu « er » ?",
- "instr-ou1-entends-tu-eu": "Où entends-tu « eu » ?",
- "instr-ou1-entends-tu-eur": "Où entends-tu « eur » ?",
- "instr-ou1-entends-tu-f": "Où entends-tu « f » ?",
- "instr-ou1-entends-tu-g": "Où entends-tu « g » ?",
- "instr-ou1-entends-tu-gn": "Où entends-tu « gn » ?",
- "instr-ou1-entends-tu-h": "Où entends-tu « h » ?",
- "instr-ou1-entends-tu-i": "Où entends-tu « i » ?",
- "instr-ou1-entends-tu-in": "Où entends-tu « in » ?",
- "instr-ou1-entends-tu-j": "Où entends-tu « j » ?",
- "instr-ou1-entends-tu-k": "Où entends-tu « k » ?",
- "instr-ou1-entends-tu-l": "Où entends-tu « l » ?",
- "instr-ou1-entends-tu-m": "Où entends-tu « m » ?",
- "instr-ou1-entends-tu-n": "Où entends-tu « n » ?",
- "instr-ou1-entends-tu-o": "Où entends-tu « o » ?",
- "instr-ou1-entends-tu-oi": "Où entends-tu « oi » ?",
- "instr-ou1-entends-tu-oir": "Où entends-tu « oir » ?",
- "instr-ou1-entends-tu-on": "Où entends-tu « on » ?",
- "instr-ou1-entends-tu-ou": "Où entends-tu « ou » ?",
- "instr-ou1-entends-tu-p": "Où entends-tu « p » ?",
- "instr-ou1-entends-tu-r": "Où entends-tu « r » ?",
- "instr-ou1-entends-tu-s": "Où entends-tu « s » ?",
- "instr-ou1-entends-tu-t": "Où entends-tu « t » ?",
- "instr-ou1-entends-tu-tr": "Où entends-tu « tr » ?",
- "instr-ou1-entends-tu-u": "Où entends-tu « u » ?",
- "instr-ou1-entends-tu-ui": "Où entends-tu « ui » ?",
- "instr-ou1-entends-tu-un": "Où entends-tu « un » ?",
- "instr-ou1-entends-tu-v": "Où entends-tu « v » ?",
- "instr-ou1-entends-tu-z": "Où entends-tu « z » ?",
- "instr-ou1-vas-tu-chercher-l-eau": "Où vas-tu chercher l’eau ?",
- "instr-ou1-vas-tu-le-matin": "Où vas-tu le matin ?",
- "instr-que-bois-tu-le-matin": "Que bois-tu le matin ?",
- "instr-que-fais-tu-au-marche1": "Que fais-tu au marché ?",
- "instr-que-fais-tu-avant-de-manger": "Que fais-tu avant de manger ?",
- "instr-que-fais-tu-le-jour-de-la-fe3te": "Que fais-tu le jour de la fête ?",
- "instr-que-fait-le-pe3cheur": "Que fait le pêcheur ?",
- "instr-que-fait-le-vent": "Que fait le vent ?",
- "instr-que-portes-tu-sur-la-te3te": "Que portes-tu sur la tête ?",
- "instr-que-pousse-au-champ": "Que pousse au champ ?",
- "instr-que-viens-tu-d-entendre": "Que viens-tu d’entendre ?",
- "instr-quel-animal-garde-la-maison": "Quel animal garde la maison ?",
- "instr-quel-nombre-manque": "Quel nombre manque ?",
- "instr-regarde-bien-plusieurs-e1critures-font-le-me3me-son": "Regarde bien : plusieurs écritures font le même son.",
- "instr-remets-les-mots-dans-l-ordre": "Remets les mots dans l’ordre.",
- "instr-touche-l-image-du-mot-que-tu-entends": "Touche l’image du mot que tu entends.",
- "instr-touche-la-carte-ou1-il-n-y-a-rien": "Touche la carte où il n’y a rien.",
- "instr-touche-la-carte-ou1-il-y-a-beaucoup-de-ronds": "Touche la carte où il y a beaucoup de ronds.",
- "instr-touche-la-carte-ou1-il-y-a-beaucoup-de-triangles": "Touche la carte où il y a beaucoup de triangles.",
- "instr-touche-la-carte-ou1-il-y-a-peu-de-carre1s": "Touche la carte où il y a peu de carrés.",
- "instr-touche-la-lettre-que-tu-entends": "Touche la lettre que tu entends.",
- "instr-touche-la-ligne-la-plus-courte": "Touche la ligne la plus courte.",
- "instr-touche-la-ligne-la-plus-longue": "Touche la ligne la plus longue.",
- "instr-touche-la-syllabe-que-tu-entends": "Touche la syllabe que tu entends.",
- "instr-touche-le-carre1": "Touche le carré.",
- "instr-touche-le-grand-rond": "Touche le grand rond.",
- "instr-touche-le-grand-triangle": "Touche le grand triangle.",
- "instr-touche-le-nombre-le-plus-grand": "Touche le nombre le plus grand.",
- "instr-touche-le-nombre-le-plus-petit": "Touche le nombre le plus petit.",
- "instr-touche-le-nombre-que-tu-entends": "Touche le nombre que tu entends.",
- "instr-touche-le-petit-carre1": "Touche le petit carré.",
- "instr-touche-le-rectangle": "Touche le rectangle.",
- "instr-touche-le-rond": "Touche le rond.",
- "instr-touche-le-rond-bleu": "Touche le rond bleu.",
- "instr-touche-le-rond-jaune": "Touche le rond jaune.",
- "instr-touche-le-rond-noir": "Touche le rond noir.",
- "instr-touche-le-rond-rouge": "Touche le rond rouge.",
- "instr-touche-le-rond-vert": "Touche le rond vert.",
- "instr-touche-le-trait-le-plus-court": "Touche le trait le plus court.",
- "instr-touche-le-trait-le-plus-long": "Touche le trait le plus long.",
- "instr-touche-le-triangle": "Touche le triangle.",
- "instr-trace-la-lettre-avec-ton-doigt": "Trace la lettre avec ton doigt.",
- "instr-trace-la-ligne-couche1e-avec-ton-doigt": "Trace la ligne couchée avec ton doigt.",
- "instr-trace-la-ligne-courbe-avec-ton-doigt": "Trace la ligne courbe avec ton doigt.",
- "instr-trace-la-ligne-droite-avec-ton-doigt": "Trace la ligne droite avec ton doigt.",
- "instr-trace-les-boucles-enchai1ne1es-avec-ton-doigt": "Trace les boucles enchaînées avec ton doigt.",
- "instr-trace-les-boucles-vers-le-bas-avec-ton-doigt": "Trace les boucles vers le bas avec ton doigt.",
- "instr-trace-les-boucles-vers-le-haut-avec-ton-doigt": "Trace les boucles vers le haut avec ton doigt.",
- "instr-trace-les-courbes-avec-ton-doigt": "Trace les courbes avec ton doigt.",
- "instr-trace-les-lignes-debout-avec-ton-doigt": "Trace les lignes debout avec ton doigt.",
- "instr-trace-les-lignes-penche1es-avec-ton-doigt": "Trace les lignes penchées avec ton doigt.",
- "instr-trace-les-points-avec-ton-doigt": "Trace les points avec ton doigt.",
- "instr-trace-les-ponts-avec-ton-doigt": "Trace les ponts avec ton doigt.",
- "instr-trace-les-ronds-avec-ton-doigt": "Trace les ronds avec ton doigt.",
- "lettre-1": "1.",
- "lettre-10": "10.",
- "lettre-11": "11.",
- "lettre-12": "12.",
- "lettre-2": "2.",
- "lettre-20": "20.",
- "lettre-3": "3.",
- "lettre-30": "30.",
- "lettre-4": "4.",
- "lettre-40": "40.",
- "lettre-5": "5.",
- "lettre-50": "50.",
- "lettre-6": "6.",
- "lettre-60": "60.",
- "lettre-7": "7.",
- "lettre-70": "70.",
- "lettre-8": "8.",
- "lettre-80": "80.",
- "lettre-9": "9.",
- "lettre-90": "90.",
- "lettre-a": "a.",
- "lettre-b": "b.",
- "lettre-c": "c.",
- "lettre-ch": "ch.",
- "lettre-d": "d.",
- "lettre-e": "e.",
- "lettre-e1": "é.",
- "lettre-f": "f.",
- "lettre-g": "g.",
- "lettre-h": "h.",
- "lettre-i": "i.",
- "lettre-j": "j.",
- "lettre-k": "k.",
- "lettre-l": "l.",
- "lettre-m": "m.",
- "lettre-n": "n.",
- "lettre-o": "o.",
- "lettre-p": "p.",
- "lettre-r": "r.",
- "lettre-s": "s.",
- "lettre-t": "t.",
- "lettre-u": "u.",
- "lettre-v": "v.",
- "lettre-w": "w.",
- "lettre-x": "x.",
- "mot-a2ne": "âne.",
- "mot-acacia": "acacia.",
- "mot-agneau": "agneau.",
- "mot-ami": "ami.",
- "mot-animal": "animal.",
- "mot-arachide": "arachide.",
- "mot-arbre": "arbre.",
- "mot-ardoise": "ardoise.",
- "mot-argent": "argent.",
- "mot-bagage": "bagage.",
- "mot-balai": "balai.",
- "mot-balance": "balance.",
- "mot-ballon": "ballon.",
- "mot-banane": "banane.",
- "mot-baobab": "baobab.",
- "mot-be1be1": "bébé.",
- "mot-berger": "berger.",
- "mot-bille": "bille.",
- "mot-blanc": "blanc.",
- "mot-bois": "bois.",
- "mot-bol": "bol.",
- "mot-boubou": "boubou.",
- "mot-bouton": "bouton.",
- "mot-bras": "bras.",
- "mot-brun": "brun.",
- "mot-cafe1": "café.",
- "mot-calebasse": "calebasse.",
- "mot-canari": "canari.",
- "mot-car": "car.",
- "mot-cartable": "cartable.",
- "mot-case": "case.",
- "mot-ce1re1monie": "cérémonie.",
- "mot-chaleur": "chaleur.",
- "mot-chameau": "chameau.",
- "mot-chapeau": "chapeau.",
- "mot-charrette": "charrette.",
- "mot-chat": "chat.",
- "mot-chauffeur": "chauffeur.",
- "mot-chaussure": "chaussure.",
- "mot-che2vre": "chèvre.",
- "mot-chemise": "chemise.",
- "mot-cheval": "cheval.",
- "mot-cine1ma": "cinéma.",
- "mot-classe": "classe.",
- "mot-cole2re": "colère.",
- "mot-commerc1ant": "commerçant.",
- "mot-content": "content.",
- "mot-corde": "corde.",
- "mot-cordonnier": "cordonnier.",
- "mot-courage": "courage.",
- "mot-course": "course.",
- "mot-craie": "craie.",
- "mot-crayon": "crayon.",
- "mot-cultivateur": "cultivateur.",
- "mot-danse": "danse.",
- "mot-dent": "dent.",
- "mot-directeur": "directeur.",
- "mot-docteur": "docteur.",
- "mot-dodo": "dodo.",
- "mot-e1cole": "école.",
- "mot-e1glise": "église.",
- "mot-e1le1phant": "éléphant.",
- "mot-e1leveur": "éleveur.",
- "mot-e1quipe": "équipe.",
- "mot-eau": "eau.",
- "mot-enfant": "enfant.",
- "mot-fa2che1": "fâché.",
- "mot-farine": "farine.",
- "mot-fe3te": "fête.",
- "mot-feu": "feu.",
- "mot-feuille": "feuille.",
- "mot-fie2vre": "fièvre.",
- "mot-figue": "figue.",
- "mot-fil": "fil.",
- "mot-fleur": "fleur.",
- "mot-fleuve": "fleuve.",
- "mot-forgeron": "forgeron.",
- "mot-fre2re": "frère.",
- "mot-gare": "gare.",
- "mot-gomme": "gomme.",
- "mot-graine": "graine.",
- "mot-grand": "grand.",
- "mot-grand-me2re": "grand-mère.",
- "mot-grand-pe2re": "grand-père.",
- "mot-herbe": "herbe.",
- "mot-hibou": "hibou.",
- "mot-ho1pital": "hôpital.",
- "mot-invite1": "invité.",
- "mot-jambe": "jambe.",
- "mot-jardin": "jardin.",
- "mot-jeu": "jeu.",
- "mot-joie": "joie.",
- "mot-joli": "joli.",
- "mot-jupe": "jupe.",
- "mot-ke1pi": "képi.",
- "mot-kilo": "kilo.",
- "mot-lac": "lac.",
- "mot-lait": "lait.",
- "mot-lapin": "lapin.",
- "mot-le1gume": "légume.",
- "mot-lec1on": "leçon.",
- "mot-lion": "lion.",
- "mot-lit": "lit.",
- "mot-loup": "loup.",
- "mot-lundi": "lundi.",
- "mot-lune": "lune.",
- "mot-mai1tre": "maître.",
- "mot-main": "main.",
- "mot-maire": "maire.",
- "mot-maison": "maison.",
- "mot-malade": "malade.",
- "mot-maman": "maman.",
- "mot-marche1": "marché.",
- "mot-mari": "mari.",
- "mot-mariage": "mariage.",
- "mot-marmite": "marmite.",
- "mot-me1dicament": "médicament.",
- "mot-melon": "melon.",
- "mot-midi": "midi.",
- "mot-mil": "mil.",
- "mot-monnaie": "monnaie.",
- "mot-montagne": "montagne.",
- "mot-mosque1e": "mosquée.",
- "mot-moto": "moto.",
- "mot-moustiquaire": "moustiquaire.",
- "mot-moustique": "moustique.",
- "mot-mouton": "mouton.",
- "mot-natte": "natte.",
- "mot-noir": "noir.",
- "mot-nuage": "nuage.",
- "mot-nuit": "nuit.",
- "mot-oe1il": "œil.",
- "mot-oe1uf": "œuf.",
- "mot-oiseau": "oiseau.",
- "mot-oncle": "oncle.",
- "mot-orage": "orage.",
- "mot-oreille": "oreille.",
- "mot-os": "os.",
- "mot-pain": "pain.",
- "mot-paludisme": "paludisme.",
- "mot-panier": "panier.",
- "mot-pantalon": "pantalon.",
- "mot-papa": "papa.",
- "mot-parfum": "parfum.",
- "mot-parler": "parler.",
- "mot-pe3cheur": "pêcheur.",
- "mot-petit": "petit.",
- "mot-peur": "peur.",
- "mot-pied": "pied.",
- "mot-pile": "pile.",
- "mot-pirogue": "pirogue.",
- "mot-pluie": "pluie.",
- "mot-plume": "plume.",
- "mot-poche": "poche.",
- "mot-poisson": "poisson.",
- "mot-porte": "porte.",
- "mot-poule": "poule.",
- "mot-poussie2re": "poussière.",
- "mot-prix": "prix.",
- "mot-puits": "puits.",
- "mot-quartier": "quartier.",
- "mot-quatre": "quatre.",
- "mot-racine": "racine.",
- "mot-radio": "radio.",
- "mot-reste": "reste.",
- "mot-riz": "riz.",
- "mot-robe": "robe.",
- "mot-roi": "roi.",
- "mot-roue": "roue.",
- "mot-route": "route.",
- "mot-rue": "rue.",
- "mot-sac": "sac.",
- "mot-saison": "saison.",
- "mot-salade": "salade.",
- "mot-sandale": "sandale.",
- "mot-savon": "savon.",
- "mot-sel": "sel.",
- "mot-soe1ur": "sœur.",
- "mot-soir": "soir.",
- "mot-soleil": "soleil.",
- "mot-table-banc": "table-banc.",
- "mot-tailleur": "tailleur.",
- "mot-tambour": "tambour.",
- "mot-tante": "tante.",
- "mot-tasse": "tasse.",
- "mot-taxi": "taxi.",
- "mot-te3te": "tête.",
- "mot-toit": "toit.",
- "mot-tomate": "tomate.",
- "mot-triste": "triste.",
- "mot-tristesse": "tristesse.",
- "mot-vache": "vache.",
- "mot-valise": "valise.",
- "mot-ve1lo": "vélo.",
- "mot-vent": "vent.",
- "mot-viande": "viande.",
- "mot-village": "village.",
- "mot-ville": "ville.",
- "mot-voiture": "voiture.",
- "mot-voyage": "voyage.",
- "mot-ze1bu": "zébu.",
- "nombre-10": "dix",
- "nombre-100": "cent",
- "nombre-15": "quinze",
- "nombre-20": "vingt",
- "nombre-5": "cinq",
- "nombre-50": "cinquante",
- "nombre-70": "soixante-dix",
- "phrase-a1-la-re1cre1ation-nous-jouons-au-ballon-dans-la-cour": "À la récréation, nous jouons au ballon dans la cour.",
- "phrase-amina-a-3-mangues-sa-maman-lui-en-donne-2-combien-a-t-elle-d": "Amina a 3 mangues. Sa maman lui en donne 2. Combien a-t-elle de mangues ?",
- "phrase-amina-a-4-mangues-elle-en-ajoute-3-combien-en-a-t-elle": "Amina a 4 mangues. Elle en AJOUTE 3. Combien en a-t-elle ?",
- "phrase-amina-a-9-billes-elle-en-perd-3-combien-lui-reste-t-il-de-bi": "Amina a 9 billes. Elle en perd 3. Combien lui reste-t-il de billes ?",
- "phrase-amina-range-30-oe1ufs-dans-des-boi1tes-de-5-combien-de-boi1t": "Amina range 30 œufs dans des boîtes de 5. Combien de boîtes remplit-elle ?",
- "phrase-arbre-feuille-fleur": "arbre, feuille, fleur",
- "phrase-au-champ-le-mil-pousse-plus-haut-que-moi": "Au champ, le mil pousse plus haut que moi.",
- "phrase-avec-la-pirogue": "Avec la pirogue.",
- "phrase-balai-canari-calebasse": "balai, canari, calebasse",
- "phrase-balance-commerc1ant-prix": "balance, commerçant, prix",
- "phrase-ballon-corde-bille": "ballon, corde, bille",
- "phrase-baobab-acacia-racine": "baobab, acacia, racine",
- "phrase-boubou-chemise-pantalon": "boubou, chemise, pantalon",
- "phrase-c-est-la-fe3te": "C’est la fête.",
- "phrase-c-est-le-chien": "C’est le chien.",
- "phrase-c-est-ma-maman": "C’est ma maman.",
- "phrase-c-est-mon-ardoise": "C’est mon ardoise.",
- "phrase-cartable-table-banc-classe": "cartable, table-banc, classe",
- "phrase-case-porte-natte": "case, porte, natte",
- "phrase-ce1re1monie-mariage-danse": "cérémonie, mariage, danse",
- "phrase-chaque-invite1-apporte-un-petit-cadeau": "Chaque invité apporte un petit cadeau.",
- "phrase-chaque-matin-je-vais-a1-l-e1cole-avec-mon-fre2re": "Chaque matin, je vais à l’école avec mon frère.",
- "phrase-charrette-chameau-chauffeur": "charrette, chameau, chauffeur",
- "phrase-che2vre-mouton-poule": "chèvre, mouton, poule",
- "phrase-content-triste-fa2che1": "content, triste, fâché",
- "phrase-cultivateur-e1leveur-pe3cheur": "cultivateur, éleveur, pêcheur",
- "phrase-e1cole-mai1tre-ardoise": "école, maître, ardoise",
- "phrase-fe3te-tambour-boubou": "fête, tambour, boubou",
- "phrase-forgeron-cordonnier-berger": "forgeron, cordonnier, berger",
- "phrase-grand-pe2re-grand-me2re-oncle": "grand-père, grand-mère, oncle",
- "phrase-il-est-triste": "Il est triste.",
- "phrase-il-fait-chaud-je-bois-de-l-eau": "Il fait chaud, je bois de l’eau.",
- "phrase-il-pleut": "Il pleut.",
- "phrase-il-prend-des-poissons": "Il prend des poissons.",
- "phrase-il-y-a-18-poules-dans-la-cour-papa-en-ache2te-12-combien-y-a": "Il y a 18 poules dans la cour. Papa en achète 12. Combien y a-t-il de poules ?",
- "phrase-il-y-a-5-paniers-de-5-tomates-combien-y-a-t-il-de-tomates": "Il y a 5 paniers de 5 tomates. Combien y a-t-il de tomates ?",
- "phrase-il-y-a-6-che2vres-au-puits-2-che2vres-partent-combien-reste-": "Il y a 6 chèvres au puits. 2 chèvres partent. Combien reste-t-il de chèvres ?",
- "phrase-il-y-a-7-calebasses-fatime1-en-apporte-2-combien-y-a-t-il-de": "Il y a 7 calebasses. Fatimé en apporte 2. Combien y a-t-il de calebasses ?",
- "phrase-j-ache2te-des-tomates": "J’achète des tomates.",
- "phrase-j-ai-de-la-fie2vre": "J’ai de la fièvre.",
- "phrase-j-ai-deux-mains": "J’ai deux mains.",
- "phrase-j-e1coute-avec-mes-deux-oreilles": "J’écoute avec mes deux oreilles.",
- "phrase-j-habite-au-village": "J’habite au village.",
- "phrase-je-balaie-la-cour-avec-le-balai": "Je balaie la cour avec le balai.",
- "phrase-je-bois-de-l-eau": "Je bois de l’eau.",
- "phrase-je-bois-du-lait": "Je bois du lait.",
- "phrase-je-bois-du-lait-le-matin-avant-l-e1cole": "Je bois du lait le matin avant l’école.",
- "phrase-je-dors-sous-la-moustiquaire-chaque-nuit": "Je dors sous la moustiquaire chaque nuit.",
- "phrase-je-dors-sur-la-natte": "Je dors sur la natte.",
- "phrase-je-joue-au-ballon": "Je joue au ballon.",
- "phrase-je-mange-avec-ma-bouche": "Je mange avec ma bouche.",
- "phrase-je-mange-du-riz": "Je mange du riz.",
- "phrase-je-me-lave-les-mains": "Je me lave les mains.",
- "phrase-je-me-lave-les-mains-avant-de-manger": "Je me lave les mains avant de manger.",
- "phrase-je-me-lave-les-mains-avec-du-savon-avant-de-manger": "Je me lave les mains avec du savon avant de manger.",
- "phrase-je-mets-mes-sandales-pour-aller-au-marche1": "Je mets mes sandales pour aller au marché.",
- "phrase-je-mets-mon-boubou": "Je mets mon boubou.",
- "phrase-je-montre-mon-bras-droit-et-mon-bras-gauche": "Je montre mon bras droit et mon bras gauche.",
- "phrase-je-pars-en-voyage": "Je pars en voyage.",
- "phrase-je-porte-un-boubou": "Je porte un boubou.",
- "phrase-je-porte-un-chapeau": "Je porte un chapeau.",
- "phrase-je-range-mon-cartable-sous-le-table-banc": "Je range mon cartable sous le table-banc.",
- "phrase-je-suis-content": "Je suis content.",
- "phrase-je-suis-malade": "Je suis malade.",
- "phrase-je-vais-a1-l-e1cole": "Je vais à l’école.",
- "phrase-je-vais-a1-pied": "Je vais à pied.",
- "phrase-je-vais-a1-ve1lo": "Je vais à vélo.",
- "phrase-je-vais-au-marche1": "Je vais au marché.",
- "phrase-je-vais-au-puits": "Je vais au puits.",
- "phrase-jeu-e1quipe-course": "jeu, équipe, course",
- "phrase-joie-cole2re-courage": "joie, colère, courage",
- "phrase-l-agneau-monte-sur-la-montagne": "L’agneau monte sur la montagne.",
- "phrase-l-arbre-est-grand": "L’arbre est grand.",
- "phrase-l-e1leveur-garde-les-animaux": "L’éleveur garde les animaux.",
- "phrase-l-enfant-marche-dans-le-champ": "L’enfant marche dans le champ.",
- "phrase-l-harmattan-apporte-beaucoup-de-poussie2re": "L’harmattan apporte beaucoup de poussière.",
- "phrase-l-oiseau-boit-de-l-eau": "L’oiseau boit de l’eau.",
- "phrase-la-banane-est-bonne": "La banane est bonne.",
- "phrase-la-boule-de-mil-se-mange-avec-une-sauce": "La boule de mil se mange avec une sauce.",
- "phrase-la-case-de-papa-est-la1": "La case de papa est là.",
- "phrase-la-charrette-est-tire1e-par-un-a2ne": "La charrette est tirée par un âne.",
- "phrase-la-che2vre-mange-l-herbe": "La chèvre mange l’herbe.",
- "phrase-la-farine-est-dans-le-bol": "La farine est dans le bol.",
- "phrase-la-feuille-est-verte": "La feuille est verte.",
- "phrase-la-fleur-blanche-est-dans-la-classe": "La fleur blanche est dans la classe.",
- "phrase-la-gomme-est-dans-le-sac": "La gomme est dans le sac.",
- "phrase-la-graine-devient-une-plante-quand-il-pleut": "La graine devient une plante quand il pleut.",
- "phrase-la-joie-se-lit-sur-son-visage": "La joie se lit sur son visage.",
- "phrase-la-lec1on-commence": "La leçon commence.",
- "phrase-la-natte-est-par-terre": "La natte est par terre.",
- "phrase-la-porte-du-jardin-est-ouverte": "La porte du jardin est ouverte.",
- "phrase-la-poule-a-8-poussins-3-se-cachent-combien-en-vois-tu": "La poule a 8 poussins. 3 se cachent. Combien en vois-tu ?",
- "phrase-la-route-du-village-me2ne-a1-n-djame1na": "La route du village mène à N’Djaména.",
- "phrase-la-salade-est-sur-la-natte": "La salade est sur la natte.",
- "phrase-la-tomate-est-petite": "La tomate est petite.",
- "phrase-la-vache-est-la1": "La vache est là.",
- "phrase-le-baobab-a-un-tronc-tre2s-gros": "Le baobab a un tronc très gros.",
- "phrase-le-be1be1-a-un-boubou": "Le bébé a un boubou.",
- "phrase-le-be1be1-va-parler": "Le bébé va parler.",
- "phrase-le-berger-a-40-che2vres-15-boivent-au-puits-combien-n-ont-pa": "Le berger a 40 chèvres. 15 boivent au puits. Combien n’ont pas encore bu ?",
- "phrase-le-berger-a-9-che2vres-il-en-o1te-2-du-troupeau-combien-en-r": "Le berger a 9 chèvres. Il en ÔTE 2 du troupeau. Combien en reste-t-il ?",
- "phrase-le-berger-compte-10-moutons-4-entrent-dans-l-enclos-combien-": "Le berger compte 10 moutons. 4 entrent dans l’enclos. Combien restent dehors ?",
- "phrase-le-berger-reste-pre2s-du-puits": "Le berger reste près du puits.",
- "phrase-le-car-est-sur-la-route": "Le car est sur la route.",
- "phrase-le-car-part-de-la-gare-tre2s-to1t-le-matin": "Le car part de la gare très tôt le matin.",
- "phrase-le-chameau-traverse-le-de1sert-sans-boire": "Le chameau traverse le désert sans boire.",
- "phrase-le-chat-est-sur-la-natte": "Le chat est sur la natte.",
- "phrase-le-chauffeur-du-car-klaxonne-avant-de-partir": "Le chauffeur du car klaxonne avant de partir.",
- "phrase-le-commerc1ant-a-25-mangues-il-en-vend-10-combien-lui-en-res": "Le commerçant a 25 mangues. Il en vend 10. Combien lui en reste-t-il ?",
- "phrase-le-commerc1ant-pe2se-les-arachides-sur-la-balance": "Le commerçant pèse les arachides sur la balance.",
- "phrase-le-cordonnier-re1pare-mes-sandales": "Le cordonnier répare mes sandales.",
- "phrase-le-crayon-est-sous-l-arbre": "Le crayon est sous l’arbre.",
- "phrase-le-cultivateur-travaille-au-champ": "Le cultivateur travaille au champ.",
- "phrase-le-forgeron-fabrique-des-houes-pour-les-cultivateurs": "Le forgeron fabrique des houes pour les cultivateurs.",
- "phrase-le-hibou-est-dans-le-baobab": "Le hibou est dans le baobab.",
- "phrase-le-jardin-est-joli": "Le jardin est joli.",
- "phrase-le-jour-de-la-fe3te-je-porte-des-habits-neufs": "Le jour de la fête, je porte des habits neufs.",
- "phrase-le-jour-du-mariage-tout-le-quartier-est-invite1": "Le jour du mariage, tout le quartier est invité.",
- "phrase-le-lait-est-dans-la-maison": "Le lait est dans la maison.",
- "phrase-le-lit-est-la1": "Le lit est là.",
- "phrase-le-mai1tre-e1crit-la-lec1on-au-tableau": "Le maître écrit la leçon au tableau.",
- "phrase-le-mil-pousse-au-champ": "Le mil pousse au champ.",
- "phrase-le-moustique-donne-le-paludisme": "Le moustique donne le paludisme.",
- "phrase-le-moustique-est-sur-le-ke1pi": "Le moustique est sur le képi.",
- "phrase-le-mouton-et-la-poule-sont-la1": "Le mouton et la poule sont là.",
- "phrase-le-mouton-mange-le-melon": "Le mouton mange le melon.",
- "phrase-le-pe3cheur-prend-45-poissons-il-en-vend-20-au-marche1-combi": "Le pêcheur prend 45 poissons. Il en vend 20 au marché. Combien lui en reste-t-il ?",
- "phrase-le-puits-du-village-est-pre2s-de-la-mosque1e": "Le puits du village est près de la mosquée.",
- "phrase-le-puits-est-la1-bas": "Le puits est là-bas.",
- "phrase-le-puits-est-loin": "Le puits est loin.",
- "phrase-le-riz-est-dans-la-rue": "Le riz est dans la rue.",
- "phrase-le-roi-a-le-poisson": "Le roi a le poisson.",
- "phrase-le-sac-est-pre2s-du-lac": "Le sac est près du lac.",
- "phrase-le-sel-est-dans-le-bol": "Le sel est dans le bol.",
- "phrase-le-soir-le-ciel-est-noir": "Le soir, le ciel est noir.",
- "phrase-le-soir-les-enfants-dansent-au-son-du-tambour": "Le soir, les enfants dansent au son du tambour.",
- "phrase-le-soleil-est-chaud": "Le soleil est chaud.",
- "phrase-le-tailleur-coud-une-belle-robe": "Le tailleur coud une belle robe.",
- "phrase-le-vent-souffle": "Le vent souffle.",
- "phrase-le-ze1bu-boit-dans-le-puits": "Le zébu boit dans le puits.",
- "phrase-les-animaux-domestiques-vivent-pre2s-de-la-maison": "Les animaux domestiques vivent près de la maison.",
- "phrase-les-femmes-dansent-au-son-du-tambour": "Les femmes dansent au son du tambour.",
- "phrase-les-filles-sautent-a1-la-corde-en-chantant": "Les filles sautent à la corde en chantant.",
- "phrase-lundi-chacun-va-a1-l-e1cole": "Lundi, chacun va à l’école.",
- "phrase-lundi-mardi-mercredi-jeudi": "lundi mardi mercredi jeudi",
- "phrase-ma-main-prend-le-pain": "Ma main prend le pain.",
- "phrase-ma-maman-a-la-moto": "Ma maman a la moto.",
- "phrase-ma-maman-s-appelle-halime1": "Ma maman s’appelle Halimé.",
- "phrase-ma-soe1ur-a-une-fleur": "Ma sœur a une fleur.",
- "phrase-ma-soe1ur-aime-le-jeu": "Ma sœur aime le jeu.",
- "phrase-ma-tante-habite-dans-le-quartier-voisin": "Ma tante habite dans le quartier voisin.",
- "phrase-ma-tante-habite-en-ville-dans-un-grand-quartier": "Ma tante habite en ville, dans un grand quartier.",
- "phrase-malade-fie2vre-moustique": "malade, fièvre, moustique",
- "phrase-maman-demande-le-prix-des-tomates": "Maman demande le prix des tomates.",
- "phrase-maman-fait-griller-des-arachides": "Maman fait griller des arachides.",
- "phrase-maman-partage-20-arachides-entre-2-enfants-combien-chacun-en": "Maman partage 20 arachides entre 2 enfants. Combien chacun en a-t-il ?",
- "phrase-maman-range-la-calebasse-pre2s-du-canari": "Maman range la calebasse près du canari.",
- "phrase-marche1-panier-argent": "marché, panier, argent",
- "phrase-mil-riz-lait": "mil, riz, lait",
- "phrase-mon-e1quipe-a-gagne1-la-course": "Mon équipe a gagné la course.",
- "phrase-mon-fre2re-garde-trois-che2vres": "Mon frère garde trois chèvres.",
- "phrase-mon-grand-pe2re-raconte-des-histoires-le-soir": "Mon grand-père raconte des histoires le soir.",
- "phrase-mon-oncle-est-parti-au-marche1-avec-mon-cousin": "Mon oncle est parti au marché avec mon cousin.",
- "phrase-mosque1e-e1glise-quartier": "mosquée, église, quartier",
- "phrase-moto-ve1lo-voiture": "moto, vélo, voiture",
- "phrase-moussa-ramasse-4-oe1ufs-il-en-trouve-3-autres-combien-a-t-il": "Moussa ramasse 4 œufs. Il en trouve 3 autres. Combien a-t-il d’œufs ?",
- "phrase-nous-allons-au-marche1-le-mercredi": "Nous allons au marché le mercredi.",
- "phrase-nous-sautons-a1-la-corde": "Nous sautons à la corde.",
- "phrase-o-o-o": "o o o",
- "phrase-octobre-novembre-de1cembre-janvier": "octobre novembre décembre janvier",
- "phrase-on-joue-du-tambour": "On joue du tambour.",
- "phrase-orage-saison-chaleur": "orage, saison, chaleur",
- "phrase-oreille-dent-bras": "oreille, dent, bras",
- "phrase-paludisme-docteur-moustiquaire": "paludisme, docteur, moustiquaire",
- "phrase-papa-a-le-pain": "Papa a le pain.",
- "phrase-papa-a-une-moto": "Papa a une moto.",
- "phrase-papa-ache2te-5-poissons-il-en-donne-1-au-voisin-combien-lui-": "Papa achète 5 poissons. Il en donne 1 au voisin. Combien lui en reste-t-il ?",
- "phrase-papa-maman-be1be1": "papa, maman, bébé",
- "phrase-papa-revient-de-voyage-avec-des-cadeaux": "Papa revient de voyage avec des cadeaux.",
- "phrase-pendant-la-saison-des-pluies-le-champ-devient-vert": "Pendant la saison des pluies, le champ devient vert.",
- "phrase-pluie-vent-soleil": "pluie, vent, soleil",
- "phrase-pour-aller-au-champ-je-marche-je-suis-pie1ton": "Pour aller au champ, je marche : je suis piéton.",
- "phrase-pour-le-bapte3me-du-be1be1-on-pre1pare-beaucoup-de-viande": "Pour le baptême du bébé, on prépare beaucoup de viande.",
- "phrase-pour-traverser-le-fleuve-on-prend-la-pirogue": "Pour traverser le fleuve, on prend la pirogue.",
- "phrase-quand-l-orage-arrive-nous-rentrons-dans-la-case": "Quand l’orage arrive, nous rentrons dans la case.",
- "phrase-quand-mon-ami-part-je-suis-triste": "Quand mon ami part, je suis triste.",
- "phrase-robe-sandale-poche": "robe, sandale, poche",
- "phrase-route-car-valise": "route, car, valise",
- "phrase-sali-a-le-savon": "Sali a le savon.",
- "phrase-te3te-main-pied": "tête, main, pied",
- "phrase-un-sac-de-mil-cou2te-50-francs-papa-en-ache2te-2-combien-pai": "Un sac de mil coûte 50 francs. Papa en achète 2. Combien paie-t-il ?",
- "phrase-vache-chameau-lion": "vache, chameau, lion",
- "phrase-viande-poisson-arachide": "viande, poisson, arachide",
- "phrase-village-puits-route": "village, puits, route",
- "phrase-voici-ma-case": "Voici ma case.",
- "phrase-voici-ma-te3te": "Voici ma tête.",
- "phrase-voici-mes-chaussures": "Voici mes chaussures.",
- "phrase-voici-mon-panier": "Voici mon panier.",
- "phrase-voici-mon-papa": "Voici mon papa.",
- "phrase-voici-une-poule": "Voici une poule.",
- "phrase-voyage-gare-bagage": "voyage, gare, bagage",
- "question-avec-quoi-maman-fait-elle-la-sauce": "Avec quoi maman fait-elle la sauce ?",
- "question-combien-de-tomates-ache2te-maman": "Combien de tomates achète maman ?",
- "question-ou1-e1tait-la-petite-che2vre": "Où était la petite chèvre ?",
- "question-ou1-maman-emme2ne-t-elle-moussa": "Où maman emmène-t-elle Moussa ?",
- "question-ou1-s-assoient-les-enfants": "Où s’assoient les enfants ?",
- "question-ou1-va-halime1": "Où va Halimé ?",
- "question-pourquoi-amina-sourit-elle": "Pourquoi Amina sourit-elle ?",
- "question-qu-est-ce-qui-fait-mal-a1-moussa": "Qu’est-ce qui fait mal à Moussa ?",
- "question-que-fait-amina": "Que fait Amina ?",
- "question-que-fait-grand-pe2re": "Que fait grand-père ?",
- "question-que-font-les-enfants": "Que font les enfants ?",
- "question-que-met-fatime1": "Que met Fatimé ?",
- "question-que-prend-amina": "Que prend Amina ?",
- "question-que-rapporte-papa-pour-amina": "Que rapporte papa pour Amina ?",
- "question-que-se2me-ali": "Que sème Ali ?",
- "question-quelle-fe3te-a-lieu": "Quelle fête a lieu ?",
- "question-qui-donne-de-l-eau-a1-la-graine": "Qui donne de l’eau à la graine ?",
- "question-qui-tire-la-charrette": "Qui tire la charrette ?",
- "son-a": "a.",
- "son-ac": "ac.",
- "son-ai": "ai.",
- "son-al": "al.",
- "son-an": "an.",
- "son-ar": "ar.",
- "son-au": "au.",
- "son-bl": "bl.",
- "son-br": "br.",
- "son-c-s-c1": "c = s = ç.",
- "son-e": "e.",
- "son-e1": "é.",
- "son-e1-er-ez": "é = er = ez.",
- "son-er": "er.",
- "son-eu": "eu.",
- "son-eur": "eur.",
- "son-gn": "gn.",
- "son-h": "h.",
- "son-i": "i.",
- "son-in": "in.",
- "son-k": "k.",
- "son-o": "o.",
- "son-o-au-eau": "o = au = eau.",
- "son-oi": "oi.",
- "son-oir": "oir.",
- "son-on": "on.",
- "son-ou": "ou.",
- "son-tr": "tr.",
- "son-u": "u.",
- "son-ui": "ui.",
- "son-un": "un.",
- "son-z": "z.",
- "syllabe-ac": "ac.",
- "syllabe-al": "al.",
- "syllabe-ar": "ar.",
- "syllabe-as": "as.",
- "syllabe-ba": "ba.",
- "syllabe-bai": "bai.",
- "syllabe-ban": "ban.",
- "syllabe-bau": "bau.",
- "syllabe-be": "be.",
- "syllabe-beu": "beu.",
- "syllabe-bi": "bi.",
- "syllabe-bin": "bin.",
- "syllabe-bla": "bla.",
- "syllabe-boi": "boi.",
- "syllabe-bon": "bon.",
- "syllabe-bou": "bou.",
- "syllabe-bra": "bra.",
- "syllabe-brun": "brun.",
- "syllabe-ca": "ca.",
- "syllabe-ch": "ch.",
- "syllabe-cha": "cha.",
- "syllabe-che": "che.",
- "syllabe-chi": "chi.",
- "syllabe-co": "co.",
- "syllabe-cou": "cou.",
- "syllabe-cu": "cu.",
- "syllabe-da": "da.",
- "syllabe-de": "de.",
- "syllabe-di": "di.",
- "syllabe-dou": "dou.",
- "syllabe-eur": "eur.",
- "syllabe-fa": "fa.",
- "syllabe-fe": "fe.",
- "syllabe-fi": "fi.",
- "syllabe-foi": "foi.",
- "syllabe-fra": "fra.",
- "syllabe-ga": "ga.",
- "syllabe-gna": "gna.",
- "syllabe-go": "go.",
- "syllabe-gu": "gu.",
- "syllabe-ha": "ha.",
- "syllabe-ja": "ja.",
- "syllabe-je": "je.",
- "syllabe-ji": "ji.",
- "syllabe-joi": "joi.",
- "syllabe-ka": "ka.",
- "syllabe-la": "la.",
- "syllabe-le": "le.",
- "syllabe-li": "li.",
- "syllabe-ma": "ma.",
- "syllabe-me": "me.",
- "syllabe-mi": "mi.",
- "syllabe-na": "na.",
- "syllabe-ne": "ne.",
- "syllabe-ni": "ni.",
- "syllabe-oi": "oi.",
- "syllabe-oir": "oir.",
- "syllabe-ou": "ou.",
- "syllabe-pa": "pa.",
- "syllabe-pe": "pe.",
- "syllabe-pi": "pi.",
- "syllabe-ra": "ra.",
- "syllabe-re": "re.",
- "syllabe-ri": "ri.",
- "syllabe-sa": "sa.",
- "syllabe-se": "se.",
- "syllabe-si": "si.",
- "syllabe-ta": "ta.",
- "syllabe-te": "te.",
- "syllabe-ti": "ti.",
- "syllabe-ui": "ui.",
- "syllabe-va": "va.",
- "syllabe-ve": "ve.",
- "syllabe-vi": "vi.",
- "syllabe-za": "za."
+ "graphisme-la-ligne-couche1e": {
+  "text": "Trace la ligne couchée.",
+  "kind": "graphisme"
+ },
+ "graphisme-la-ligne-courbe": {
+  "text": "Trace la ligne courbe.",
+  "kind": "graphisme"
+ },
+ "graphisme-la-ligne-droite": {
+  "text": "Trace la ligne droite.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-boucles-enchai1ne1es": {
+  "text": "Trace les boucles enchaînées.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-boucles-vers-le-bas": {
+  "text": "Trace les boucles vers le bas.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-boucles-vers-le-haut": {
+  "text": "Trace les boucles vers le haut.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-courbes": {
+  "text": "Trace les courbes.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-lignes-debout": {
+  "text": "Trace les lignes debout.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-lignes-penche1es": {
+  "text": "Trace les lignes penchées.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-points": {
+  "text": "Trace les points.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-ponts": {
+  "text": "Trace les ponts.",
+  "kind": "graphisme"
+ },
+ "graphisme-les-ronds": {
+  "text": "Trace les ronds.",
+  "kind": "graphisme"
+ },
+ "hint-commence-par-ce-que-tu-connais-de1ja1": {
+  "text": "Commence par ce que tu connais déjà.",
+  "kind": "hint"
+ },
+ "hint-compte-a1-voix-haute-en-partant-du-de1but": {
+  "text": "Compte à voix haute en partant du début.",
+  "kind": "hint"
+ },
+ "hint-compte-les-calebasses-sur-l-image": {
+  "text": "Compte les calebasses sur l’image.",
+  "kind": "hint"
+ },
+ "hint-compte-les-che2vres-sur-l-image": {
+  "text": "Compte les chèvres sur l’image.",
+  "kind": "hint"
+ },
+ "hint-compte-les-grosses-pie2ces-d-abord": {
+  "text": "Compte les grosses pièces d’abord.",
+  "kind": "hint"
+ },
+ "hint-compte-les-mangues-sur-l-image": {
+  "text": "Compte les mangues sur l’image.",
+  "kind": "hint"
+ },
+ "hint-compte-les-points-sur-les-cartes": {
+  "text": "Compte les points sur les cartes.",
+  "kind": "hint"
+ },
+ "hint-compte-les-poules-sur-l-image": {
+  "text": "Compte les poules sur l’image.",
+  "kind": "hint"
+ },
+ "hint-dis-le-mot-lentement-dans-ta-te3te": {
+  "text": "Dis le mot lentement dans ta tête.",
+  "kind": "hint"
+ },
+ "hint-dis-le-mot-lentement-syllabe-par-syllabe": {
+  "text": "Dis le mot lentement, syllabe par syllabe.",
+  "kind": "hint"
+ },
+ "hint-e1coute-encore-le-mot": {
+  "text": "Écoute encore le mot.",
+  "kind": "hint"
+ },
+ "hint-e1coute-encore-le-mot-qui-dit-ou1-c-est": {
+  "text": "Écoute encore le mot qui dit où c’est.",
+  "kind": "hint"
+ },
+ "hint-e1coute-encore-quelle-est-la-premie2re-lettre": {
+  "text": "Écoute encore : quelle est la première lettre ?",
+  "kind": "hint"
+ },
+ "hint-e1coute-encore-une-fois": {
+  "text": "Écoute encore une fois.",
+  "kind": "hint"
+ },
+ "hint-e1coute-encore-une-fois-puis-regarde-bien-chaque-lettre": {
+  "text": "Écoute encore une fois, puis regarde bien chaque lettre.",
+  "kind": "hint"
+ },
+ "hint-e1coute-la-phrase-quel-est-le-premier-mot": {
+  "text": "Écoute la phrase : quel est le premier mot ?",
+  "kind": "hint"
+ },
+ "hint-e1coute-le-mot-puis-cherche-la-premie2re-syllabe": {
+  "text": "Écoute le mot, puis cherche la première syllabe.",
+  "kind": "hint"
+ },
+ "hint-le-nombre-le-plus-grand-est-celui-qu-on-dit-en-dernier-quand": {
+  "text": "Le nombre le plus grand est celui qu’on dit en dernier quand on compte.",
+  "kind": "hint"
+ },
+ "hint-pars-du-gros-point-et-va-vers-la-droite": {
+  "text": "Pars du gros point et va vers la droite.",
+  "kind": "hint"
+ },
+ "hint-re1e1coute-l-histoire-qu-est-ce-qu-on-ajoute-qu-est-ce-qu-on": {
+  "text": "Réécoute l’histoire : qu’est-ce qu’on ajoute, qu’est-ce qu’on enlève ?",
+  "kind": "hint"
+ },
+ "hint-re1e1coute-l-histoire-si-tu-veux": {
+  "text": "Réécoute l’histoire si tu veux.",
+  "kind": "hint"
+ },
+ "hint-regarde-bien-chaque-image-avant-de-choisir": {
+  "text": "Regarde bien chaque image avant de choisir.",
+  "kind": "hint"
+ },
+ "hint-regarde-bien-la-premie2re-lettre": {
+  "text": "Regarde bien la première lettre.",
+  "kind": "hint"
+ },
+ "hint-relis-la-question-doucement": {
+  "text": "Relis la question doucement.",
+  "kind": "hint"
+ },
+ "hint-suis-le-chemin-en-partant-du-point": {
+  "text": "Suis le chemin en partant du point.",
+  "kind": "hint"
+ },
+ "hint-touche-chaque-image-en-comptant-a1-voix-haute": {
+  "text": "Touche chaque image en comptant à voix haute.",
+  "kind": "hint"
+ },
+ "histoire-ali-est-cultivateur-chaque-matin-il-part": {
+  "text": "Ali est cultivateur. Chaque matin, il part au champ avec sa houe. Il sème le mil. Quand la pluie tombe, le mil pousse bien.",
+  "kind": "histoire"
+ },
+ "histoire-amina-a-perdu-son-crayon-elle-est-triste": {
+  "text": "Amina a perdu son crayon. Elle est triste. Son ami Moussa lui donne le sien. Amina sourit et dit merci. Les deux amis rentrent ensemble.",
+  "kind": "histoire"
+ },
+ "histoire-amina-arrive-a1-l-e1cole-elle-pose-son-c": {
+  "text": "Amina arrive à l’école. Elle pose son cartable sur le table-banc. Le maître écrit la leçon au tableau. Amina prend son ardoise et sa craie.",
+  "kind": "histoire"
+ },
+ "histoire-aujourd-hui-c-est-le-bapte3me-du-petit-f": {
+  "text": "Aujourd’hui, c’est le baptême du petit frère d’Amina. Les voisins arrivent avec des cadeaux. Les femmes préparent la viande. Le soir, tout le monde danse au son du tambour.",
+  "kind": "histoire"
+ },
+ "histoire-c-est-jour-de-fe3te-fatime1-met-sa-robe": {
+  "text": "C’est jour de fête. Fatimé met sa robe neuve et son foulard. Sa maman lui donne des sandales. Fatimé est contente.",
+  "kind": "histoire"
+ },
+ "histoire-c-est-la-re1cre1ation-moussa-et-ses-amis": {
+  "text": "C’est la récréation. Moussa et ses amis jouent au ballon. Amina saute à la corde avec Fatimé. La cloche sonne et tout le monde rentre en classe.",
+  "kind": "histoire"
+ },
+ "histoire-le-berger-conduit-ses-che2vres-au-puits": {
+  "text": "Le berger conduit ses chèvres au puits. Une petite chèvre reste derrière. Le berger la cherche et la retrouve sous l’acacia. Il la ramène au troupeau.",
+  "kind": "histoire"
+ },
+ "histoire-le-ciel-devient-noir-le-vent-souffle-tre": {
+  "text": "Le ciel devient noir. Le vent souffle très fort. La pluie tombe sur le village. Les enfants rentrent vite dans la case et regardent la pluie par la porte.",
+  "kind": "histoire"
+ },
+ "histoire-le-matin-halime1-prend-son-seau-elle-mar": {
+  "text": "Le matin, Halimé prend son seau. Elle marche jusqu’au puits du village. Elle remplit son seau et rentre à la maison. Sa maman la remercie.",
+  "kind": "histoire"
+ },
+ "histoire-le-soir-grand-pe2re-s-assoit-sous-l-arbr": {
+  "text": "Le soir, grand-père s’assoit sous l’arbre. Les enfants viennent l’écouter. Il raconte l’histoire du lièvre et de l’hyène. Tout le monde rit.",
+  "kind": "histoire"
+ },
+ "histoire-le-soir-la-famille-se-re1unit-dans-la-co": {
+  "text": "Le soir, la famille se réunit dans la cour. Maman pose la marmite sur le feu. Les enfants s’assoient sur la natte. On mange ensemble.",
+  "kind": "histoire"
+ },
+ "histoire-maman-pre1pare-la-boule-de-mil-elle-fait": {
+  "text": "Maman prépare la boule de mil. Elle fait une sauce avec du poisson. Toute la famille mange ensemble. Amina dit merci à sa maman.",
+  "kind": "histoire"
+ },
+ "histoire-maman-va-au-marche1-avec-son-panier-elle": {
+  "text": "Maman va au marché avec son panier. Elle achète un kilo de riz et trois tomates. Elle donne cent francs au commerçant. Il lui rend la monnaie.",
+  "kind": "histoire"
+ },
+ "histoire-moussa-a-de-la-fie2vre-sa-maman-l-emme2n": {
+  "text": "Moussa a de la fièvre. Sa maman l’emmène à l’hôpital. Le docteur l’examine et donne un médicament. Le soir, Moussa dort sous la moustiquaire.",
+  "kind": "histoire"
+ },
+ "histoire-moussa-court-dans-la-cour-il-tombe-et-so": {
+  "text": "Moussa court dans la cour. Il tombe et son pied lui fait mal. Sa maman lave son pied avec de l’eau. Moussa ne pleure pas.",
+  "kind": "histoire"
+ },
+ "histoire-papa-met-les-sacs-de-mil-sur-la-charrett": {
+  "text": "Papa met les sacs de mil sur la charrette. L’âne tire la charrette jusqu’au marché. La route est longue mais l’âne marche bien.",
+  "kind": "histoire"
+ },
+ "histoire-papa-plante-une-graine-de-mangue-derrie2": {
+  "text": "Papa plante une graine de mangue derrière la case. Chaque jour, Amina lui donne de l’eau. Après la saison des pluies, une petite feuille sort de la terre.",
+  "kind": "histoire"
+ },
+ "histoire-papa-pre1pare-sa-valise-il-part-en-ville": {
+  "text": "Papa prépare sa valise. Il part en ville avec le car. Il revient trois jours après. Il rapporte du sucre et un livre pour Amina.",
+  "kind": "histoire"
+ },
+ "instr-a1-quoi-joues-tu": {
+  "text": "À quoi joues-tu ?",
+  "kind": "instr"
+ },
+ "instr-associe-ce-qui-va-ensemble": {
+  "text": "Associe ce qui va ensemble.",
+  "kind": "instr"
+ },
+ "instr-associe-chaque-calcul-a1-son-re1sultat": {
+  "text": "Associe chaque calcul à son résultat.",
+  "kind": "instr"
+ },
+ "instr-associe-chaque-son-a1-un-mot": {
+  "text": "Associe chaque son à un mot.",
+  "kind": "instr"
+ },
+ "instr-associe-la-forme-a1-un-objet": {
+  "text": "Associe la forme à un objet.",
+  "kind": "instr"
+ },
+ "instr-associe-la-majuscule-et-la-minuscule": {
+  "text": "Associe la majuscule et la minuscule.",
+  "kind": "instr"
+ },
+ "instr-associe-le-chiffre-et-son-nom": {
+  "text": "Associe le chiffre et son nom.",
+  "kind": "instr"
+ },
+ "instr-associe-le-mot-et-le-signe": {
+  "text": "Associe le mot et le signe.",
+  "kind": "instr"
+ },
+ "instr-associe-le-nombre-e1crit-en-chiffres-et-en-lettres": {
+  "text": "Associe le nombre écrit en chiffres et en lettres.",
+  "kind": "instr"
+ },
+ "instr-associe-le-nombre-et-son-nom": {
+  "text": "Associe le nombre et son nom.",
+  "kind": "instr"
+ },
+ "instr-associe-le-signe-et-son-nom": {
+  "text": "Associe le signe et son nom.",
+  "kind": "instr"
+ },
+ "instr-avec-quoi-manges-tu": {
+  "text": "Avec quoi manges-tu ?",
+  "kind": "instr"
+ },
+ "instr-avec-quoi-traverse-t-on-le-fleuve": {
+  "text": "Avec quoi traverse-t-on le fleuve ?",
+  "kind": "instr"
+ },
+ "instr-combien-cela-fait-il-en-tout": {
+  "text": "Combien cela fait-il en tout ?",
+  "kind": "instr"
+ },
+ "instr-combien-chacun-en-a-t-il": {
+  "text": "Combien chacun en a-t-il ?",
+  "kind": "instr"
+ },
+ "instr-combien-en-reste-t-il": {
+  "text": "Combien en reste-t-il ?",
+  "kind": "instr"
+ },
+ "instr-combien-font-ils-en-tout": {
+  "text": "Combien font-ils en tout ?",
+  "kind": "instr"
+ },
+ "instr-comment-s-appelle-ta-maman": {
+  "text": "Comment s’appelle ta maman ?",
+  "kind": "instr"
+ },
+ "instr-comment-te-sens-tu-aujourd-hui": {
+  "text": "Comment te sens-tu aujourd’hui ?",
+  "kind": "instr"
+ },
+ "instr-comment-vas-tu-a1-l-e1cole": {
+  "text": "Comment vas-tu à l’école ?",
+  "kind": "instr"
+ },
+ "instr-comple2te-le-mot-avec-la-bonne-lettre": {
+  "text": "Complète le mot avec la bonne lettre.",
+  "kind": "instr"
+ },
+ "instr-compte-l-argent-combien-y-a-t-il": {
+  "text": "Compte l’argent. Combien y a-t-il ?",
+  "kind": "instr"
+ },
+ "instr-compte-les-arbres": {
+  "text": "Compte les arbres.",
+  "kind": "instr"
+ },
+ "instr-compte-les-calebasses": {
+  "text": "Compte les calebasses.",
+  "kind": "instr"
+ },
+ "instr-compte-les-cases": {
+  "text": "Compte les cases.",
+  "kind": "instr"
+ },
+ "instr-compte-les-che2vres": {
+  "text": "Compte les chèvres.",
+  "kind": "instr"
+ },
+ "instr-compte-les-mangues": {
+  "text": "Compte les mangues.",
+  "kind": "instr"
+ },
+ "instr-compte-les-oe1ufs": {
+  "text": "Compte les œufs.",
+  "kind": "instr"
+ },
+ "instr-compte-les-poissons": {
+  "text": "Compte les poissons.",
+  "kind": "instr"
+ },
+ "instr-compte-les-poules": {
+  "text": "Compte les poules.",
+  "kind": "instr"
+ },
+ "instr-e1coute-l-histoire-puis-re1ponds": {
+  "text": "Écoute l’histoire, puis réponds.",
+  "kind": "instr"
+ },
+ "instr-e1coute-la-syllabe": {
+  "text": "Écoute la syllabe.",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-mot-puis-touche-la-bonne-e1criture": {
+  "text": "Écoute le mot, puis touche la bonne écriture.",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-proble2me-et-trouve-la-re1ponse": {
+  "text": "Écoute le problème et trouve la réponse.",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-a": {
+  "text": "Écoute le son « a ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-ac": {
+  "text": "Écoute le son « ac ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-ai": {
+  "text": "Écoute le son « ai ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-al": {
+  "text": "Écoute le son « al ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-an": {
+  "text": "Écoute le son « an ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-ar": {
+  "text": "Écoute le son « ar ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-au": {
+  "text": "Écoute le son « au ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-b": {
+  "text": "Écoute le son « b ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-bl": {
+  "text": "Écoute le son « bl ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-br": {
+  "text": "Écoute le son « br ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-c": {
+  "text": "Écoute le son « c ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-c-s-c1": {
+  "text": "Écoute le son « c, s, ç ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-ch": {
+  "text": "Écoute le son « ch ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-d": {
+  "text": "Écoute le son « d ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-e": {
+  "text": "Écoute le son « e ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-e1": {
+  "text": "Écoute le son « é ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-e1-er-ez": {
+  "text": "Écoute le son « é, er, ez ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-er": {
+  "text": "Écoute le son « er ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-eu": {
+  "text": "Écoute le son « eu ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-eur": {
+  "text": "Écoute le son « eur ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-f": {
+  "text": "Écoute le son « f ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-g": {
+  "text": "Écoute le son « g ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-gn": {
+  "text": "Écoute le son « gn ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-h": {
+  "text": "Écoute le son « h ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-i": {
+  "text": "Écoute le son « i ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-in": {
+  "text": "Écoute le son « in ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-j": {
+  "text": "Écoute le son « j ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-k": {
+  "text": "Écoute le son « k ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-l": {
+  "text": "Écoute le son « l ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-m": {
+  "text": "Écoute le son « m ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-n": {
+  "text": "Écoute le son « n ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-o": {
+  "text": "Écoute le son « o ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-o-au-eau": {
+  "text": "Écoute le son « o, au, eau ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-oi": {
+  "text": "Écoute le son « oi ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-oir": {
+  "text": "Écoute le son « oir ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-on": {
+  "text": "Écoute le son « on ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-ou": {
+  "text": "Écoute le son « ou ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-p": {
+  "text": "Écoute le son « p ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-r": {
+  "text": "Écoute le son « r ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-s": {
+  "text": "Écoute le son « s ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-t": {
+  "text": "Écoute le son « t ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-tr": {
+  "text": "Écoute le son « tr ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-u": {
+  "text": "Écoute le son « u ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-ui": {
+  "text": "Écoute le son « ui ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-un": {
+  "text": "Écoute le son « un ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-v": {
+  "text": "Écoute le son « v ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-le-son-z": {
+  "text": "Écoute le son « z ».",
+  "kind": "instr"
+ },
+ "instr-e1coute-puis-re1pe2te-a1-voix-haute": {
+  "text": "Écoute, puis répète à voix haute.",
+  "kind": "instr"
+ },
+ "instr-forme-la-syllabe": {
+  "text": "Forme la syllabe.",
+  "kind": "instr"
+ },
+ "instr-forme-le-mot-que-tu-entends": {
+  "text": "Forme le mot que tu entends.",
+  "kind": "instr"
+ },
+ "instr-l-oiseau-est-au-dessus-de-la-case-touche-la-bonne-image": {
+  "text": "L’oiseau est au-dessus de la case. Touche la bonne image.",
+  "kind": "instr"
+ },
+ "instr-la-calebasse-est-a1-co1te1-du-canari-touche-la-bonne-image": {
+  "text": "La calebasse est à côté du canari. Touche la bonne image.",
+  "kind": "instr"
+ },
+ "instr-la-che2vre-est-entre-les-deux-arbres-touche-la-bonne-image": {
+  "text": "La chèvre est entre les deux arbres. Touche la bonne image.",
+  "kind": "instr"
+ },
+ "instr-le-chat-est-sous-la-natte-touche-la-bonne-image": {
+  "text": "Le chat est sous la natte. Touche la bonne image.",
+  "kind": "instr"
+ },
+ "instr-le-chat-est-sur-la-natte-touche-la-bonne-image": {
+  "text": "Le chat est sur la natte. Touche la bonne image.",
+  "kind": "instr"
+ },
+ "instr-lis-et-choisis-la-bonne-re1ponse": {
+  "text": "Lis et choisis la bonne réponse.",
+  "kind": "instr"
+ },
+ "instr-ou1-dors-tu": {
+  "text": "Où dors-tu ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-a": {
+  "text": "Où entends-tu « a » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-ac": {
+  "text": "Où entends-tu « ac » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-ai": {
+  "text": "Où entends-tu « ai » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-al": {
+  "text": "Où entends-tu « al » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-an": {
+  "text": "Où entends-tu « an » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-ar": {
+  "text": "Où entends-tu « ar » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-au": {
+  "text": "Où entends-tu « au » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-b": {
+  "text": "Où entends-tu « b » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-bl": {
+  "text": "Où entends-tu « bl » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-br": {
+  "text": "Où entends-tu « br » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-c": {
+  "text": "Où entends-tu « c » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-ch": {
+  "text": "Où entends-tu « ch » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-d": {
+  "text": "Où entends-tu « d » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-e": {
+  "text": "Où entends-tu « e » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-e1": {
+  "text": "Où entends-tu « é » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-er": {
+  "text": "Où entends-tu « er » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-eu": {
+  "text": "Où entends-tu « eu » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-eur": {
+  "text": "Où entends-tu « eur » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-f": {
+  "text": "Où entends-tu « f » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-g": {
+  "text": "Où entends-tu « g » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-gn": {
+  "text": "Où entends-tu « gn » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-h": {
+  "text": "Où entends-tu « h » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-i": {
+  "text": "Où entends-tu « i » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-in": {
+  "text": "Où entends-tu « in » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-j": {
+  "text": "Où entends-tu « j » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-k": {
+  "text": "Où entends-tu « k » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-l": {
+  "text": "Où entends-tu « l » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-m": {
+  "text": "Où entends-tu « m » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-n": {
+  "text": "Où entends-tu « n » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-o": {
+  "text": "Où entends-tu « o » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-oi": {
+  "text": "Où entends-tu « oi » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-oir": {
+  "text": "Où entends-tu « oir » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-on": {
+  "text": "Où entends-tu « on » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-ou": {
+  "text": "Où entends-tu « ou » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-p": {
+  "text": "Où entends-tu « p » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-r": {
+  "text": "Où entends-tu « r » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-s": {
+  "text": "Où entends-tu « s » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-t": {
+  "text": "Où entends-tu « t » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-tr": {
+  "text": "Où entends-tu « tr » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-u": {
+  "text": "Où entends-tu « u » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-ui": {
+  "text": "Où entends-tu « ui » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-un": {
+  "text": "Où entends-tu « un » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-v": {
+  "text": "Où entends-tu « v » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-entends-tu-z": {
+  "text": "Où entends-tu « z » ?",
+  "kind": "instr"
+ },
+ "instr-ou1-vas-tu-chercher-l-eau": {
+  "text": "Où vas-tu chercher l’eau ?",
+  "kind": "instr"
+ },
+ "instr-ou1-vas-tu-le-matin": {
+  "text": "Où vas-tu le matin ?",
+  "kind": "instr"
+ },
+ "instr-que-bois-tu-le-matin": {
+  "text": "Que bois-tu le matin ?",
+  "kind": "instr"
+ },
+ "instr-que-fais-tu-au-marche1": {
+  "text": "Que fais-tu au marché ?",
+  "kind": "instr"
+ },
+ "instr-que-fais-tu-avant-de-manger": {
+  "text": "Que fais-tu avant de manger ?",
+  "kind": "instr"
+ },
+ "instr-que-fais-tu-le-jour-de-la-fe3te": {
+  "text": "Que fais-tu le jour de la fête ?",
+  "kind": "instr"
+ },
+ "instr-que-fait-le-pe3cheur": {
+  "text": "Que fait le pêcheur ?",
+  "kind": "instr"
+ },
+ "instr-que-fait-le-vent": {
+  "text": "Que fait le vent ?",
+  "kind": "instr"
+ },
+ "instr-que-portes-tu-sur-la-te3te": {
+  "text": "Que portes-tu sur la tête ?",
+  "kind": "instr"
+ },
+ "instr-que-pousse-au-champ": {
+  "text": "Que pousse au champ ?",
+  "kind": "instr"
+ },
+ "instr-que-viens-tu-d-entendre": {
+  "text": "Que viens-tu d’entendre ?",
+  "kind": "instr"
+ },
+ "instr-quel-animal-garde-la-maison": {
+  "text": "Quel animal garde la maison ?",
+  "kind": "instr"
+ },
+ "instr-quel-nombre-manque": {
+  "text": "Quel nombre manque ?",
+  "kind": "instr"
+ },
+ "instr-regarde-bien-plusieurs-e1critures-font-le-me3me-son": {
+  "text": "Regarde bien : plusieurs écritures font le même son.",
+  "kind": "instr"
+ },
+ "instr-remets-les-mots-dans-l-ordre": {
+  "text": "Remets les mots dans l’ordre.",
+  "kind": "instr"
+ },
+ "instr-touche-l-image-du-mot-que-tu-entends": {
+  "text": "Touche l’image du mot que tu entends.",
+  "kind": "instr"
+ },
+ "instr-touche-la-carte-ou1-il-n-y-a-rien": {
+  "text": "Touche la carte où il n’y a rien.",
+  "kind": "instr"
+ },
+ "instr-touche-la-carte-ou1-il-y-a-beaucoup-de-ronds": {
+  "text": "Touche la carte où il y a beaucoup de ronds.",
+  "kind": "instr"
+ },
+ "instr-touche-la-carte-ou1-il-y-a-beaucoup-de-triangles": {
+  "text": "Touche la carte où il y a beaucoup de triangles.",
+  "kind": "instr"
+ },
+ "instr-touche-la-carte-ou1-il-y-a-peu-de-carre1s": {
+  "text": "Touche la carte où il y a peu de carrés.",
+  "kind": "instr"
+ },
+ "instr-touche-la-lettre-que-tu-entends": {
+  "text": "Touche la lettre que tu entends.",
+  "kind": "instr"
+ },
+ "instr-touche-la-ligne-la-plus-courte": {
+  "text": "Touche la ligne la plus courte.",
+  "kind": "instr"
+ },
+ "instr-touche-la-ligne-la-plus-longue": {
+  "text": "Touche la ligne la plus longue.",
+  "kind": "instr"
+ },
+ "instr-touche-la-syllabe-que-tu-entends": {
+  "text": "Touche la syllabe que tu entends.",
+  "kind": "instr"
+ },
+ "instr-touche-le-carre1": {
+  "text": "Touche le carré.",
+  "kind": "instr"
+ },
+ "instr-touche-le-grand-rond": {
+  "text": "Touche le grand rond.",
+  "kind": "instr"
+ },
+ "instr-touche-le-grand-triangle": {
+  "text": "Touche le grand triangle.",
+  "kind": "instr"
+ },
+ "instr-touche-le-nombre-le-plus-grand": {
+  "text": "Touche le nombre le plus grand.",
+  "kind": "instr"
+ },
+ "instr-touche-le-nombre-le-plus-petit": {
+  "text": "Touche le nombre le plus petit.",
+  "kind": "instr"
+ },
+ "instr-touche-le-nombre-que-tu-entends": {
+  "text": "Touche le nombre que tu entends.",
+  "kind": "instr"
+ },
+ "instr-touche-le-petit-carre1": {
+  "text": "Touche le petit carré.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rectangle": {
+  "text": "Touche le rectangle.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rond": {
+  "text": "Touche le rond.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rond-bleu": {
+  "text": "Touche le rond bleu.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rond-jaune": {
+  "text": "Touche le rond jaune.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rond-noir": {
+  "text": "Touche le rond noir.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rond-rouge": {
+  "text": "Touche le rond rouge.",
+  "kind": "instr"
+ },
+ "instr-touche-le-rond-vert": {
+  "text": "Touche le rond vert.",
+  "kind": "instr"
+ },
+ "instr-touche-le-trait-le-plus-court": {
+  "text": "Touche le trait le plus court.",
+  "kind": "instr"
+ },
+ "instr-touche-le-trait-le-plus-long": {
+  "text": "Touche le trait le plus long.",
+  "kind": "instr"
+ },
+ "instr-touche-le-triangle": {
+  "text": "Touche le triangle.",
+  "kind": "instr"
+ },
+ "instr-trace-la-lettre-avec-ton-doigt": {
+  "text": "Trace la lettre avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-la-ligne-couche1e-avec-ton-doigt": {
+  "text": "Trace la ligne couchée avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-la-ligne-courbe-avec-ton-doigt": {
+  "text": "Trace la ligne courbe avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-la-ligne-droite-avec-ton-doigt": {
+  "text": "Trace la ligne droite avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-boucles-enchai1ne1es-avec-ton-doigt": {
+  "text": "Trace les boucles enchaînées avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-boucles-vers-le-bas-avec-ton-doigt": {
+  "text": "Trace les boucles vers le bas avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-boucles-vers-le-haut-avec-ton-doigt": {
+  "text": "Trace les boucles vers le haut avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-courbes-avec-ton-doigt": {
+  "text": "Trace les courbes avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-lignes-debout-avec-ton-doigt": {
+  "text": "Trace les lignes debout avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-lignes-penche1es-avec-ton-doigt": {
+  "text": "Trace les lignes penchées avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-points-avec-ton-doigt": {
+  "text": "Trace les points avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-ponts-avec-ton-doigt": {
+  "text": "Trace les ponts avec ton doigt.",
+  "kind": "instr"
+ },
+ "instr-trace-les-ronds-avec-ton-doigt": {
+  "text": "Trace les ronds avec ton doigt.",
+  "kind": "instr"
+ },
+ "lettre-1": {
+  "text": "1.",
+  "kind": "lettre"
+ },
+ "lettre-10": {
+  "text": "10.",
+  "kind": "lettre"
+ },
+ "lettre-11": {
+  "text": "11.",
+  "kind": "lettre"
+ },
+ "lettre-12": {
+  "text": "12.",
+  "kind": "lettre"
+ },
+ "lettre-2": {
+  "text": "2.",
+  "kind": "lettre"
+ },
+ "lettre-20": {
+  "text": "20.",
+  "kind": "lettre"
+ },
+ "lettre-3": {
+  "text": "3.",
+  "kind": "lettre"
+ },
+ "lettre-30": {
+  "text": "30.",
+  "kind": "lettre"
+ },
+ "lettre-4": {
+  "text": "4.",
+  "kind": "lettre"
+ },
+ "lettre-40": {
+  "text": "40.",
+  "kind": "lettre"
+ },
+ "lettre-5": {
+  "text": "5.",
+  "kind": "lettre"
+ },
+ "lettre-50": {
+  "text": "50.",
+  "kind": "lettre"
+ },
+ "lettre-6": {
+  "text": "6.",
+  "kind": "lettre"
+ },
+ "lettre-60": {
+  "text": "60.",
+  "kind": "lettre"
+ },
+ "lettre-7": {
+  "text": "7.",
+  "kind": "lettre"
+ },
+ "lettre-70": {
+  "text": "70.",
+  "kind": "lettre"
+ },
+ "lettre-8": {
+  "text": "8.",
+  "kind": "lettre"
+ },
+ "lettre-80": {
+  "text": "80.",
+  "kind": "lettre"
+ },
+ "lettre-9": {
+  "text": "9.",
+  "kind": "lettre"
+ },
+ "lettre-90": {
+  "text": "90.",
+  "kind": "lettre"
+ },
+ "lettre-a": {
+  "text": "a.",
+  "kind": "lettre"
+ },
+ "lettre-b": {
+  "text": "b.",
+  "kind": "lettre"
+ },
+ "lettre-c": {
+  "text": "c.",
+  "kind": "lettre"
+ },
+ "lettre-ch": {
+  "text": "ch.",
+  "kind": "lettre",
+  "phonemes": "ʃˈə"
+ },
+ "lettre-d": {
+  "text": "d.",
+  "kind": "lettre"
+ },
+ "lettre-e": {
+  "text": "e.",
+  "kind": "lettre"
+ },
+ "lettre-e1": {
+  "text": "é.",
+  "kind": "lettre",
+  "phonemes": "ˈe"
+ },
+ "lettre-f": {
+  "text": "f.",
+  "kind": "lettre"
+ },
+ "lettre-g": {
+  "text": "g.",
+  "kind": "lettre"
+ },
+ "lettre-h": {
+  "text": "h.",
+  "kind": "lettre"
+ },
+ "lettre-i": {
+  "text": "i.",
+  "kind": "lettre"
+ },
+ "lettre-j": {
+  "text": "j.",
+  "kind": "lettre"
+ },
+ "lettre-k": {
+  "text": "k.",
+  "kind": "lettre",
+  "phonemes": "kˈə"
+ },
+ "lettre-l": {
+  "text": "l.",
+  "kind": "lettre"
+ },
+ "lettre-m": {
+  "text": "m.",
+  "kind": "lettre"
+ },
+ "lettre-n": {
+  "text": "n.",
+  "kind": "lettre"
+ },
+ "lettre-o": {
+  "text": "o.",
+  "kind": "lettre"
+ },
+ "lettre-p": {
+  "text": "p.",
+  "kind": "lettre"
+ },
+ "lettre-r": {
+  "text": "r.",
+  "kind": "lettre"
+ },
+ "lettre-s": {
+  "text": "s.",
+  "kind": "lettre"
+ },
+ "lettre-t": {
+  "text": "t.",
+  "kind": "lettre"
+ },
+ "lettre-u": {
+  "text": "u.",
+  "kind": "lettre"
+ },
+ "lettre-v": {
+  "text": "v.",
+  "kind": "lettre"
+ },
+ "lettre-w": {
+  "text": "w.",
+  "kind": "lettre"
+ },
+ "lettre-x": {
+  "text": "x.",
+  "kind": "lettre"
+ },
+ "mot-a2ne": {
+  "text": "âne.",
+  "kind": "mot"
+ },
+ "mot-acacia": {
+  "text": "acacia.",
+  "kind": "mot"
+ },
+ "mot-agneau": {
+  "text": "agneau.",
+  "kind": "mot"
+ },
+ "mot-ami": {
+  "text": "ami.",
+  "kind": "mot"
+ },
+ "mot-animal": {
+  "text": "animal.",
+  "kind": "mot"
+ },
+ "mot-arachide": {
+  "text": "arachide.",
+  "kind": "mot"
+ },
+ "mot-arbre": {
+  "text": "arbre.",
+  "kind": "mot"
+ },
+ "mot-ardoise": {
+  "text": "ardoise.",
+  "kind": "mot"
+ },
+ "mot-argent": {
+  "text": "argent.",
+  "kind": "mot"
+ },
+ "mot-bagage": {
+  "text": "bagage.",
+  "kind": "mot"
+ },
+ "mot-balai": {
+  "text": "balai.",
+  "kind": "mot"
+ },
+ "mot-balance": {
+  "text": "balance.",
+  "kind": "mot"
+ },
+ "mot-ballon": {
+  "text": "ballon.",
+  "kind": "mot"
+ },
+ "mot-banane": {
+  "text": "banane.",
+  "kind": "mot"
+ },
+ "mot-baobab": {
+  "text": "baobab.",
+  "kind": "mot"
+ },
+ "mot-be1be1": {
+  "text": "bébé.",
+  "kind": "mot"
+ },
+ "mot-berger": {
+  "text": "berger.",
+  "kind": "mot"
+ },
+ "mot-bille": {
+  "text": "bille.",
+  "kind": "mot"
+ },
+ "mot-blanc": {
+  "text": "blanc.",
+  "kind": "mot"
+ },
+ "mot-bois": {
+  "text": "bois.",
+  "kind": "mot"
+ },
+ "mot-bol": {
+  "text": "bol.",
+  "kind": "mot"
+ },
+ "mot-boubou": {
+  "text": "boubou.",
+  "kind": "mot"
+ },
+ "mot-bouton": {
+  "text": "bouton.",
+  "kind": "mot"
+ },
+ "mot-bras": {
+  "text": "bras.",
+  "kind": "mot"
+ },
+ "mot-brun": {
+  "text": "brun.",
+  "kind": "mot"
+ },
+ "mot-cafe1": {
+  "text": "café.",
+  "kind": "mot"
+ },
+ "mot-calebasse": {
+  "text": "calebasse.",
+  "kind": "mot"
+ },
+ "mot-canari": {
+  "text": "canari.",
+  "kind": "mot"
+ },
+ "mot-car": {
+  "text": "car.",
+  "kind": "mot"
+ },
+ "mot-cartable": {
+  "text": "cartable.",
+  "kind": "mot"
+ },
+ "mot-case": {
+  "text": "case.",
+  "kind": "mot"
+ },
+ "mot-ce1re1monie": {
+  "text": "cérémonie.",
+  "kind": "mot"
+ },
+ "mot-chaleur": {
+  "text": "chaleur.",
+  "kind": "mot"
+ },
+ "mot-chameau": {
+  "text": "chameau.",
+  "kind": "mot"
+ },
+ "mot-chapeau": {
+  "text": "chapeau.",
+  "kind": "mot"
+ },
+ "mot-charrette": {
+  "text": "charrette.",
+  "kind": "mot"
+ },
+ "mot-chat": {
+  "text": "chat.",
+  "kind": "mot"
+ },
+ "mot-chauffeur": {
+  "text": "chauffeur.",
+  "kind": "mot"
+ },
+ "mot-chaussure": {
+  "text": "chaussure.",
+  "kind": "mot"
+ },
+ "mot-che2vre": {
+  "text": "chèvre.",
+  "kind": "mot"
+ },
+ "mot-chemise": {
+  "text": "chemise.",
+  "kind": "mot"
+ },
+ "mot-cheval": {
+  "text": "cheval.",
+  "kind": "mot"
+ },
+ "mot-cine1ma": {
+  "text": "cinéma.",
+  "kind": "mot"
+ },
+ "mot-classe": {
+  "text": "classe.",
+  "kind": "mot"
+ },
+ "mot-cole2re": {
+  "text": "colère.",
+  "kind": "mot"
+ },
+ "mot-commerc1ant": {
+  "text": "commerçant.",
+  "kind": "mot"
+ },
+ "mot-content": {
+  "text": "content.",
+  "kind": "mot"
+ },
+ "mot-corde": {
+  "text": "corde.",
+  "kind": "mot"
+ },
+ "mot-cordonnier": {
+  "text": "cordonnier.",
+  "kind": "mot"
+ },
+ "mot-courage": {
+  "text": "courage.",
+  "kind": "mot"
+ },
+ "mot-course": {
+  "text": "course.",
+  "kind": "mot"
+ },
+ "mot-craie": {
+  "text": "craie.",
+  "kind": "mot"
+ },
+ "mot-crayon": {
+  "text": "crayon.",
+  "kind": "mot"
+ },
+ "mot-cultivateur": {
+  "text": "cultivateur.",
+  "kind": "mot"
+ },
+ "mot-danse": {
+  "text": "danse.",
+  "kind": "mot"
+ },
+ "mot-dent": {
+  "text": "dent.",
+  "kind": "mot"
+ },
+ "mot-directeur": {
+  "text": "directeur.",
+  "kind": "mot"
+ },
+ "mot-docteur": {
+  "text": "docteur.",
+  "kind": "mot"
+ },
+ "mot-dodo": {
+  "text": "dodo.",
+  "kind": "mot"
+ },
+ "mot-e1cole": {
+  "text": "école.",
+  "kind": "mot"
+ },
+ "mot-e1glise": {
+  "text": "église.",
+  "kind": "mot"
+ },
+ "mot-e1le1phant": {
+  "text": "éléphant.",
+  "kind": "mot"
+ },
+ "mot-e1leveur": {
+  "text": "éleveur.",
+  "kind": "mot"
+ },
+ "mot-e1quipe": {
+  "text": "équipe.",
+  "kind": "mot"
+ },
+ "mot-eau": {
+  "text": "eau.",
+  "kind": "mot"
+ },
+ "mot-enfant": {
+  "text": "enfant.",
+  "kind": "mot"
+ },
+ "mot-fa2che1": {
+  "text": "fâché.",
+  "kind": "mot"
+ },
+ "mot-farine": {
+  "text": "farine.",
+  "kind": "mot"
+ },
+ "mot-fe3te": {
+  "text": "fête.",
+  "kind": "mot"
+ },
+ "mot-feu": {
+  "text": "feu.",
+  "kind": "mot"
+ },
+ "mot-feuille": {
+  "text": "feuille.",
+  "kind": "mot"
+ },
+ "mot-fie2vre": {
+  "text": "fièvre.",
+  "kind": "mot"
+ },
+ "mot-figue": {
+  "text": "figue.",
+  "kind": "mot"
+ },
+ "mot-fil": {
+  "text": "fil.",
+  "kind": "mot"
+ },
+ "mot-fleur": {
+  "text": "fleur.",
+  "kind": "mot"
+ },
+ "mot-fleuve": {
+  "text": "fleuve.",
+  "kind": "mot"
+ },
+ "mot-forgeron": {
+  "text": "forgeron.",
+  "kind": "mot"
+ },
+ "mot-fre2re": {
+  "text": "frère.",
+  "kind": "mot"
+ },
+ "mot-gare": {
+  "text": "gare.",
+  "kind": "mot"
+ },
+ "mot-gomme": {
+  "text": "gomme.",
+  "kind": "mot"
+ },
+ "mot-graine": {
+  "text": "graine.",
+  "kind": "mot"
+ },
+ "mot-grand": {
+  "text": "grand.",
+  "kind": "mot"
+ },
+ "mot-grand-me2re": {
+  "text": "grand-mère.",
+  "kind": "mot"
+ },
+ "mot-grand-pe2re": {
+  "text": "grand-père.",
+  "kind": "mot"
+ },
+ "mot-herbe": {
+  "text": "herbe.",
+  "kind": "mot"
+ },
+ "mot-hibou": {
+  "text": "hibou.",
+  "kind": "mot"
+ },
+ "mot-ho1pital": {
+  "text": "hôpital.",
+  "kind": "mot"
+ },
+ "mot-invite1": {
+  "text": "invité.",
+  "kind": "mot"
+ },
+ "mot-jambe": {
+  "text": "jambe.",
+  "kind": "mot"
+ },
+ "mot-jardin": {
+  "text": "jardin.",
+  "kind": "mot"
+ },
+ "mot-jeu": {
+  "text": "jeu.",
+  "kind": "mot"
+ },
+ "mot-joie": {
+  "text": "joie.",
+  "kind": "mot"
+ },
+ "mot-joli": {
+  "text": "joli.",
+  "kind": "mot"
+ },
+ "mot-jupe": {
+  "text": "jupe.",
+  "kind": "mot"
+ },
+ "mot-ke1pi": {
+  "text": "képi.",
+  "kind": "mot"
+ },
+ "mot-kilo": {
+  "text": "kilo.",
+  "kind": "mot"
+ },
+ "mot-lac": {
+  "text": "lac.",
+  "kind": "mot"
+ },
+ "mot-lait": {
+  "text": "lait.",
+  "kind": "mot"
+ },
+ "mot-lapin": {
+  "text": "lapin.",
+  "kind": "mot"
+ },
+ "mot-le1gume": {
+  "text": "légume.",
+  "kind": "mot"
+ },
+ "mot-lec1on": {
+  "text": "leçon.",
+  "kind": "mot"
+ },
+ "mot-lion": {
+  "text": "lion.",
+  "kind": "mot"
+ },
+ "mot-lit": {
+  "text": "lit.",
+  "kind": "mot"
+ },
+ "mot-loup": {
+  "text": "loup.",
+  "kind": "mot"
+ },
+ "mot-lundi": {
+  "text": "lundi.",
+  "kind": "mot"
+ },
+ "mot-lune": {
+  "text": "lune.",
+  "kind": "mot"
+ },
+ "mot-mai1tre": {
+  "text": "maître.",
+  "kind": "mot"
+ },
+ "mot-main": {
+  "text": "main.",
+  "kind": "mot"
+ },
+ "mot-maire": {
+  "text": "maire.",
+  "kind": "mot"
+ },
+ "mot-maison": {
+  "text": "maison.",
+  "kind": "mot"
+ },
+ "mot-malade": {
+  "text": "malade.",
+  "kind": "mot"
+ },
+ "mot-maman": {
+  "text": "maman.",
+  "kind": "mot"
+ },
+ "mot-marche1": {
+  "text": "marché.",
+  "kind": "mot"
+ },
+ "mot-mari": {
+  "text": "mari.",
+  "kind": "mot"
+ },
+ "mot-mariage": {
+  "text": "mariage.",
+  "kind": "mot"
+ },
+ "mot-marmite": {
+  "text": "marmite.",
+  "kind": "mot"
+ },
+ "mot-me1dicament": {
+  "text": "médicament.",
+  "kind": "mot"
+ },
+ "mot-melon": {
+  "text": "melon.",
+  "kind": "mot"
+ },
+ "mot-midi": {
+  "text": "midi.",
+  "kind": "mot"
+ },
+ "mot-mil": {
+  "text": "mil.",
+  "kind": "mot"
+ },
+ "mot-monnaie": {
+  "text": "monnaie.",
+  "kind": "mot"
+ },
+ "mot-montagne": {
+  "text": "montagne.",
+  "kind": "mot"
+ },
+ "mot-mosque1e": {
+  "text": "mosquée.",
+  "kind": "mot"
+ },
+ "mot-moto": {
+  "text": "moto.",
+  "kind": "mot"
+ },
+ "mot-moustiquaire": {
+  "text": "moustiquaire.",
+  "kind": "mot"
+ },
+ "mot-moustique": {
+  "text": "moustique.",
+  "kind": "mot"
+ },
+ "mot-mouton": {
+  "text": "mouton.",
+  "kind": "mot"
+ },
+ "mot-natte": {
+  "text": "natte.",
+  "kind": "mot"
+ },
+ "mot-noir": {
+  "text": "noir.",
+  "kind": "mot"
+ },
+ "mot-nuage": {
+  "text": "nuage.",
+  "kind": "mot"
+ },
+ "mot-nuit": {
+  "text": "nuit.",
+  "kind": "mot"
+ },
+ "mot-oe1il": {
+  "text": "œil.",
+  "kind": "mot"
+ },
+ "mot-oe1uf": {
+  "text": "œuf.",
+  "kind": "mot"
+ },
+ "mot-oiseau": {
+  "text": "oiseau.",
+  "kind": "mot"
+ },
+ "mot-oncle": {
+  "text": "oncle.",
+  "kind": "mot"
+ },
+ "mot-orage": {
+  "text": "orage.",
+  "kind": "mot"
+ },
+ "mot-oreille": {
+  "text": "oreille.",
+  "kind": "mot"
+ },
+ "mot-os": {
+  "text": "os.",
+  "kind": "mot"
+ },
+ "mot-pain": {
+  "text": "pain.",
+  "kind": "mot"
+ },
+ "mot-paludisme": {
+  "text": "paludisme.",
+  "kind": "mot"
+ },
+ "mot-panier": {
+  "text": "panier.",
+  "kind": "mot"
+ },
+ "mot-pantalon": {
+  "text": "pantalon.",
+  "kind": "mot"
+ },
+ "mot-papa": {
+  "text": "papa.",
+  "kind": "mot"
+ },
+ "mot-parfum": {
+  "text": "parfum.",
+  "kind": "mot"
+ },
+ "mot-parler": {
+  "text": "parler.",
+  "kind": "mot"
+ },
+ "mot-pe3cheur": {
+  "text": "pêcheur.",
+  "kind": "mot"
+ },
+ "mot-petit": {
+  "text": "petit.",
+  "kind": "mot"
+ },
+ "mot-peur": {
+  "text": "peur.",
+  "kind": "mot"
+ },
+ "mot-pied": {
+  "text": "pied.",
+  "kind": "mot"
+ },
+ "mot-pile": {
+  "text": "pile.",
+  "kind": "mot"
+ },
+ "mot-pirogue": {
+  "text": "pirogue.",
+  "kind": "mot"
+ },
+ "mot-pluie": {
+  "text": "pluie.",
+  "kind": "mot"
+ },
+ "mot-plume": {
+  "text": "plume.",
+  "kind": "mot"
+ },
+ "mot-poche": {
+  "text": "poche.",
+  "kind": "mot"
+ },
+ "mot-poisson": {
+  "text": "poisson.",
+  "kind": "mot"
+ },
+ "mot-porte": {
+  "text": "porte.",
+  "kind": "mot"
+ },
+ "mot-poule": {
+  "text": "poule.",
+  "kind": "mot"
+ },
+ "mot-poussie2re": {
+  "text": "poussière.",
+  "kind": "mot"
+ },
+ "mot-prix": {
+  "text": "prix.",
+  "kind": "mot"
+ },
+ "mot-puits": {
+  "text": "puits.",
+  "kind": "mot"
+ },
+ "mot-quartier": {
+  "text": "quartier.",
+  "kind": "mot"
+ },
+ "mot-quatre": {
+  "text": "quatre.",
+  "kind": "mot"
+ },
+ "mot-racine": {
+  "text": "racine.",
+  "kind": "mot"
+ },
+ "mot-radio": {
+  "text": "radio.",
+  "kind": "mot"
+ },
+ "mot-reste": {
+  "text": "reste.",
+  "kind": "mot"
+ },
+ "mot-riz": {
+  "text": "riz.",
+  "kind": "mot"
+ },
+ "mot-robe": {
+  "text": "robe.",
+  "kind": "mot"
+ },
+ "mot-roi": {
+  "text": "roi.",
+  "kind": "mot"
+ },
+ "mot-roue": {
+  "text": "roue.",
+  "kind": "mot"
+ },
+ "mot-route": {
+  "text": "route.",
+  "kind": "mot"
+ },
+ "mot-rue": {
+  "text": "rue.",
+  "kind": "mot"
+ },
+ "mot-sac": {
+  "text": "sac.",
+  "kind": "mot"
+ },
+ "mot-saison": {
+  "text": "saison.",
+  "kind": "mot"
+ },
+ "mot-salade": {
+  "text": "salade.",
+  "kind": "mot"
+ },
+ "mot-sandale": {
+  "text": "sandale.",
+  "kind": "mot"
+ },
+ "mot-savon": {
+  "text": "savon.",
+  "kind": "mot"
+ },
+ "mot-sel": {
+  "text": "sel.",
+  "kind": "mot"
+ },
+ "mot-soe1ur": {
+  "text": "sœur.",
+  "kind": "mot"
+ },
+ "mot-soir": {
+  "text": "soir.",
+  "kind": "mot"
+ },
+ "mot-soleil": {
+  "text": "soleil.",
+  "kind": "mot"
+ },
+ "mot-table-banc": {
+  "text": "table-banc.",
+  "kind": "mot"
+ },
+ "mot-tailleur": {
+  "text": "tailleur.",
+  "kind": "mot"
+ },
+ "mot-tambour": {
+  "text": "tambour.",
+  "kind": "mot"
+ },
+ "mot-tante": {
+  "text": "tante.",
+  "kind": "mot"
+ },
+ "mot-tasse": {
+  "text": "tasse.",
+  "kind": "mot"
+ },
+ "mot-taxi": {
+  "text": "taxi.",
+  "kind": "mot"
+ },
+ "mot-te3te": {
+  "text": "tête.",
+  "kind": "mot"
+ },
+ "mot-toit": {
+  "text": "toit.",
+  "kind": "mot"
+ },
+ "mot-tomate": {
+  "text": "tomate.",
+  "kind": "mot"
+ },
+ "mot-triste": {
+  "text": "triste.",
+  "kind": "mot"
+ },
+ "mot-tristesse": {
+  "text": "tristesse.",
+  "kind": "mot"
+ },
+ "mot-vache": {
+  "text": "vache.",
+  "kind": "mot"
+ },
+ "mot-valise": {
+  "text": "valise.",
+  "kind": "mot"
+ },
+ "mot-ve1lo": {
+  "text": "vélo.",
+  "kind": "mot"
+ },
+ "mot-vent": {
+  "text": "vent.",
+  "kind": "mot"
+ },
+ "mot-viande": {
+  "text": "viande.",
+  "kind": "mot"
+ },
+ "mot-village": {
+  "text": "village.",
+  "kind": "mot"
+ },
+ "mot-ville": {
+  "text": "ville.",
+  "kind": "mot"
+ },
+ "mot-voiture": {
+  "text": "voiture.",
+  "kind": "mot"
+ },
+ "mot-voyage": {
+  "text": "voyage.",
+  "kind": "mot"
+ },
+ "mot-ze1bu": {
+  "text": "zébu.",
+  "kind": "mot"
+ },
+ "nombre-10": {
+  "text": "dix",
+  "kind": "nombre"
+ },
+ "nombre-100": {
+  "text": "cent",
+  "kind": "nombre"
+ },
+ "nombre-15": {
+  "text": "quinze",
+  "kind": "nombre"
+ },
+ "nombre-20": {
+  "text": "vingt",
+  "kind": "nombre"
+ },
+ "nombre-5": {
+  "text": "cinq",
+  "kind": "nombre"
+ },
+ "nombre-50": {
+  "text": "cinquante",
+  "kind": "nombre"
+ },
+ "nombre-70": {
+  "text": "soixante-dix",
+  "kind": "nombre"
+ },
+ "phrase-a1-la-re1cre1ation-nous-jouons-au-ballon-dans-la-cour": {
+  "text": "À la récréation, nous jouons au ballon dans la cour.",
+  "kind": "phrase"
+ },
+ "phrase-amina-a-3-mangues-sa-maman-lui-en-donne-2-combien-a-t-elle-d": {
+  "text": "Amina a 3 mangues. Sa maman lui en donne 2. Combien a-t-elle de mangues ?",
+  "kind": "phrase"
+ },
+ "phrase-amina-a-4-mangues-elle-en-ajoute-3-combien-en-a-t-elle": {
+  "text": "Amina a 4 mangues. Elle en AJOUTE 3. Combien en a-t-elle ?",
+  "kind": "phrase"
+ },
+ "phrase-amina-a-9-billes-elle-en-perd-3-combien-lui-reste-t-il-de-bi": {
+  "text": "Amina a 9 billes. Elle en perd 3. Combien lui reste-t-il de billes ?",
+  "kind": "phrase"
+ },
+ "phrase-amina-range-30-oe1ufs-dans-des-boi1tes-de-5-combien-de-boi1t": {
+  "text": "Amina range 30 œufs dans des boîtes de 5. Combien de boîtes remplit-elle ?",
+  "kind": "phrase"
+ },
+ "phrase-arbre-feuille-fleur": {
+  "text": "arbre, feuille, fleur",
+  "kind": "phrase"
+ },
+ "phrase-au-champ-le-mil-pousse-plus-haut-que-moi": {
+  "text": "Au champ, le mil pousse plus haut que moi.",
+  "kind": "phrase"
+ },
+ "phrase-avec-la-pirogue": {
+  "text": "Avec la pirogue.",
+  "kind": "phrase"
+ },
+ "phrase-balai-canari-calebasse": {
+  "text": "balai, canari, calebasse",
+  "kind": "phrase"
+ },
+ "phrase-balance-commerc1ant-prix": {
+  "text": "balance, commerçant, prix",
+  "kind": "phrase"
+ },
+ "phrase-ballon-corde-bille": {
+  "text": "ballon, corde, bille",
+  "kind": "phrase"
+ },
+ "phrase-baobab-acacia-racine": {
+  "text": "baobab, acacia, racine",
+  "kind": "phrase"
+ },
+ "phrase-boubou-chemise-pantalon": {
+  "text": "boubou, chemise, pantalon",
+  "kind": "phrase"
+ },
+ "phrase-c-est-la-fe3te": {
+  "text": "C’est la fête.",
+  "kind": "phrase"
+ },
+ "phrase-c-est-le-chien": {
+  "text": "C’est le chien.",
+  "kind": "phrase"
+ },
+ "phrase-c-est-ma-maman": {
+  "text": "C’est ma maman.",
+  "kind": "phrase"
+ },
+ "phrase-c-est-mon-ardoise": {
+  "text": "C’est mon ardoise.",
+  "kind": "phrase"
+ },
+ "phrase-cartable-table-banc-classe": {
+  "text": "cartable, table-banc, classe",
+  "kind": "phrase"
+ },
+ "phrase-case-porte-natte": {
+  "text": "case, porte, natte",
+  "kind": "phrase"
+ },
+ "phrase-ce1re1monie-mariage-danse": {
+  "text": "cérémonie, mariage, danse",
+  "kind": "phrase"
+ },
+ "phrase-chaque-invite1-apporte-un-petit-cadeau": {
+  "text": "Chaque invité apporte un petit cadeau.",
+  "kind": "phrase"
+ },
+ "phrase-chaque-matin-je-vais-a1-l-e1cole-avec-mon-fre2re": {
+  "text": "Chaque matin, je vais à l’école avec mon frère.",
+  "kind": "phrase"
+ },
+ "phrase-charrette-chameau-chauffeur": {
+  "text": "charrette, chameau, chauffeur",
+  "kind": "phrase"
+ },
+ "phrase-che2vre-mouton-poule": {
+  "text": "chèvre, mouton, poule",
+  "kind": "phrase"
+ },
+ "phrase-content-triste-fa2che1": {
+  "text": "content, triste, fâché",
+  "kind": "phrase"
+ },
+ "phrase-cultivateur-e1leveur-pe3cheur": {
+  "text": "cultivateur, éleveur, pêcheur",
+  "kind": "phrase"
+ },
+ "phrase-e1cole-mai1tre-ardoise": {
+  "text": "école, maître, ardoise",
+  "kind": "phrase"
+ },
+ "phrase-fe3te-tambour-boubou": {
+  "text": "fête, tambour, boubou",
+  "kind": "phrase"
+ },
+ "phrase-forgeron-cordonnier-berger": {
+  "text": "forgeron, cordonnier, berger",
+  "kind": "phrase"
+ },
+ "phrase-grand-pe2re-grand-me2re-oncle": {
+  "text": "grand-père, grand-mère, oncle",
+  "kind": "phrase"
+ },
+ "phrase-il-est-triste": {
+  "text": "Il est triste.",
+  "kind": "phrase"
+ },
+ "phrase-il-fait-chaud-je-bois-de-l-eau": {
+  "text": "Il fait chaud, je bois de l’eau.",
+  "kind": "phrase"
+ },
+ "phrase-il-pleut": {
+  "text": "Il pleut.",
+  "kind": "phrase"
+ },
+ "phrase-il-prend-des-poissons": {
+  "text": "Il prend des poissons.",
+  "kind": "phrase"
+ },
+ "phrase-il-y-a-18-poules-dans-la-cour-papa-en-ache2te-12-combien-y-a": {
+  "text": "Il y a 18 poules dans la cour. Papa en achète 12. Combien y a-t-il de poules ?",
+  "kind": "phrase"
+ },
+ "phrase-il-y-a-5-paniers-de-5-tomates-combien-y-a-t-il-de-tomates": {
+  "text": "Il y a 5 paniers de 5 tomates. Combien y a-t-il de tomates ?",
+  "kind": "phrase"
+ },
+ "phrase-il-y-a-6-che2vres-au-puits-2-che2vres-partent-combien-reste-": {
+  "text": "Il y a 6 chèvres au puits. 2 chèvres partent. Combien reste-t-il de chèvres ?",
+  "kind": "phrase"
+ },
+ "phrase-il-y-a-7-calebasses-fatime1-en-apporte-2-combien-y-a-t-il-de": {
+  "text": "Il y a 7 calebasses. Fatimé en apporte 2. Combien y a-t-il de calebasses ?",
+  "kind": "phrase"
+ },
+ "phrase-j-ache2te-des-tomates": {
+  "text": "J’achète des tomates.",
+  "kind": "phrase"
+ },
+ "phrase-j-ai-de-la-fie2vre": {
+  "text": "J’ai de la fièvre.",
+  "kind": "phrase"
+ },
+ "phrase-j-ai-deux-mains": {
+  "text": "J’ai deux mains.",
+  "kind": "phrase"
+ },
+ "phrase-j-e1coute-avec-mes-deux-oreilles": {
+  "text": "J’écoute avec mes deux oreilles.",
+  "kind": "phrase"
+ },
+ "phrase-j-habite-au-village": {
+  "text": "J’habite au village.",
+  "kind": "phrase"
+ },
+ "phrase-je-balaie-la-cour-avec-le-balai": {
+  "text": "Je balaie la cour avec le balai.",
+  "kind": "phrase"
+ },
+ "phrase-je-bois-de-l-eau": {
+  "text": "Je bois de l’eau.",
+  "kind": "phrase"
+ },
+ "phrase-je-bois-du-lait": {
+  "text": "Je bois du lait.",
+  "kind": "phrase"
+ },
+ "phrase-je-bois-du-lait-le-matin-avant-l-e1cole": {
+  "text": "Je bois du lait le matin avant l’école.",
+  "kind": "phrase"
+ },
+ "phrase-je-dors-sous-la-moustiquaire-chaque-nuit": {
+  "text": "Je dors sous la moustiquaire chaque nuit.",
+  "kind": "phrase"
+ },
+ "phrase-je-dors-sur-la-natte": {
+  "text": "Je dors sur la natte.",
+  "kind": "phrase"
+ },
+ "phrase-je-joue-au-ballon": {
+  "text": "Je joue au ballon.",
+  "kind": "phrase"
+ },
+ "phrase-je-mange-avec-ma-bouche": {
+  "text": "Je mange avec ma bouche.",
+  "kind": "phrase"
+ },
+ "phrase-je-mange-du-riz": {
+  "text": "Je mange du riz.",
+  "kind": "phrase"
+ },
+ "phrase-je-me-lave-les-mains": {
+  "text": "Je me lave les mains.",
+  "kind": "phrase"
+ },
+ "phrase-je-me-lave-les-mains-avant-de-manger": {
+  "text": "Je me lave les mains avant de manger.",
+  "kind": "phrase"
+ },
+ "phrase-je-me-lave-les-mains-avec-du-savon-avant-de-manger": {
+  "text": "Je me lave les mains avec du savon avant de manger.",
+  "kind": "phrase"
+ },
+ "phrase-je-mets-mes-sandales-pour-aller-au-marche1": {
+  "text": "Je mets mes sandales pour aller au marché.",
+  "kind": "phrase"
+ },
+ "phrase-je-mets-mon-boubou": {
+  "text": "Je mets mon boubou.",
+  "kind": "phrase"
+ },
+ "phrase-je-montre-mon-bras-droit-et-mon-bras-gauche": {
+  "text": "Je montre mon bras droit et mon bras gauche.",
+  "kind": "phrase"
+ },
+ "phrase-je-pars-en-voyage": {
+  "text": "Je pars en voyage.",
+  "kind": "phrase"
+ },
+ "phrase-je-porte-un-boubou": {
+  "text": "Je porte un boubou.",
+  "kind": "phrase"
+ },
+ "phrase-je-porte-un-chapeau": {
+  "text": "Je porte un chapeau.",
+  "kind": "phrase"
+ },
+ "phrase-je-range-mon-cartable-sous-le-table-banc": {
+  "text": "Je range mon cartable sous le table-banc.",
+  "kind": "phrase"
+ },
+ "phrase-je-suis-content": {
+  "text": "Je suis content.",
+  "kind": "phrase"
+ },
+ "phrase-je-suis-malade": {
+  "text": "Je suis malade.",
+  "kind": "phrase"
+ },
+ "phrase-je-vais-a1-l-e1cole": {
+  "text": "Je vais à l’école.",
+  "kind": "phrase"
+ },
+ "phrase-je-vais-a1-pied": {
+  "text": "Je vais à pied.",
+  "kind": "phrase"
+ },
+ "phrase-je-vais-a1-ve1lo": {
+  "text": "Je vais à vélo.",
+  "kind": "phrase"
+ },
+ "phrase-je-vais-au-marche1": {
+  "text": "Je vais au marché.",
+  "kind": "phrase"
+ },
+ "phrase-je-vais-au-puits": {
+  "text": "Je vais au puits.",
+  "kind": "phrase"
+ },
+ "phrase-jeu-e1quipe-course": {
+  "text": "jeu, équipe, course",
+  "kind": "phrase"
+ },
+ "phrase-joie-cole2re-courage": {
+  "text": "joie, colère, courage",
+  "kind": "phrase"
+ },
+ "phrase-l-agneau-monte-sur-la-montagne": {
+  "text": "L’agneau monte sur la montagne.",
+  "kind": "phrase"
+ },
+ "phrase-l-arbre-est-grand": {
+  "text": "L’arbre est grand.",
+  "kind": "phrase"
+ },
+ "phrase-l-e1leveur-garde-les-animaux": {
+  "text": "L’éleveur garde les animaux.",
+  "kind": "phrase"
+ },
+ "phrase-l-enfant-marche-dans-le-champ": {
+  "text": "L’enfant marche dans le champ.",
+  "kind": "phrase"
+ },
+ "phrase-l-harmattan-apporte-beaucoup-de-poussie2re": {
+  "text": "L’harmattan apporte beaucoup de poussière.",
+  "kind": "phrase"
+ },
+ "phrase-l-oiseau-boit-de-l-eau": {
+  "text": "L’oiseau boit de l’eau.",
+  "kind": "phrase"
+ },
+ "phrase-la-banane-est-bonne": {
+  "text": "La banane est bonne.",
+  "kind": "phrase"
+ },
+ "phrase-la-boule-de-mil-se-mange-avec-une-sauce": {
+  "text": "La boule de mil se mange avec une sauce.",
+  "kind": "phrase"
+ },
+ "phrase-la-case-de-papa-est-la1": {
+  "text": "La case de papa est là.",
+  "kind": "phrase"
+ },
+ "phrase-la-charrette-est-tire1e-par-un-a2ne": {
+  "text": "La charrette est tirée par un âne.",
+  "kind": "phrase"
+ },
+ "phrase-la-che2vre-mange-l-herbe": {
+  "text": "La chèvre mange l’herbe.",
+  "kind": "phrase"
+ },
+ "phrase-la-farine-est-dans-le-bol": {
+  "text": "La farine est dans le bol.",
+  "kind": "phrase"
+ },
+ "phrase-la-feuille-est-verte": {
+  "text": "La feuille est verte.",
+  "kind": "phrase"
+ },
+ "phrase-la-fleur-blanche-est-dans-la-classe": {
+  "text": "La fleur blanche est dans la classe.",
+  "kind": "phrase"
+ },
+ "phrase-la-gomme-est-dans-le-sac": {
+  "text": "La gomme est dans le sac.",
+  "kind": "phrase"
+ },
+ "phrase-la-graine-devient-une-plante-quand-il-pleut": {
+  "text": "La graine devient une plante quand il pleut.",
+  "kind": "phrase"
+ },
+ "phrase-la-joie-se-lit-sur-son-visage": {
+  "text": "La joie se lit sur son visage.",
+  "kind": "phrase"
+ },
+ "phrase-la-lec1on-commence": {
+  "text": "La leçon commence.",
+  "kind": "phrase"
+ },
+ "phrase-la-natte-est-par-terre": {
+  "text": "La natte est par terre.",
+  "kind": "phrase"
+ },
+ "phrase-la-porte-du-jardin-est-ouverte": {
+  "text": "La porte du jardin est ouverte.",
+  "kind": "phrase"
+ },
+ "phrase-la-poule-a-8-poussins-3-se-cachent-combien-en-vois-tu": {
+  "text": "La poule a 8 poussins. 3 se cachent. Combien en vois-tu ?",
+  "kind": "phrase"
+ },
+ "phrase-la-route-du-village-me2ne-a1-n-djame1na": {
+  "text": "La route du village mène à N’Djaména.",
+  "kind": "phrase"
+ },
+ "phrase-la-salade-est-sur-la-natte": {
+  "text": "La salade est sur la natte.",
+  "kind": "phrase"
+ },
+ "phrase-la-tomate-est-petite": {
+  "text": "La tomate est petite.",
+  "kind": "phrase"
+ },
+ "phrase-la-vache-est-la1": {
+  "text": "La vache est là.",
+  "kind": "phrase"
+ },
+ "phrase-le-baobab-a-un-tronc-tre2s-gros": {
+  "text": "Le baobab a un tronc très gros.",
+  "kind": "phrase"
+ },
+ "phrase-le-be1be1-a-un-boubou": {
+  "text": "Le bébé a un boubou.",
+  "kind": "phrase"
+ },
+ "phrase-le-be1be1-va-parler": {
+  "text": "Le bébé va parler.",
+  "kind": "phrase"
+ },
+ "phrase-le-berger-a-40-che2vres-15-boivent-au-puits-combien-n-ont-pa": {
+  "text": "Le berger a 40 chèvres. 15 boivent au puits. Combien n’ont pas encore bu ?",
+  "kind": "phrase"
+ },
+ "phrase-le-berger-a-9-che2vres-il-en-o1te-2-du-troupeau-combien-en-r": {
+  "text": "Le berger a 9 chèvres. Il en ÔTE 2 du troupeau. Combien en reste-t-il ?",
+  "kind": "phrase"
+ },
+ "phrase-le-berger-compte-10-moutons-4-entrent-dans-l-enclos-combien-": {
+  "text": "Le berger compte 10 moutons. 4 entrent dans l’enclos. Combien restent dehors ?",
+  "kind": "phrase"
+ },
+ "phrase-le-berger-reste-pre2s-du-puits": {
+  "text": "Le berger reste près du puits.",
+  "kind": "phrase"
+ },
+ "phrase-le-car-est-sur-la-route": {
+  "text": "Le car est sur la route.",
+  "kind": "phrase"
+ },
+ "phrase-le-car-part-de-la-gare-tre2s-to1t-le-matin": {
+  "text": "Le car part de la gare très tôt le matin.",
+  "kind": "phrase"
+ },
+ "phrase-le-chameau-traverse-le-de1sert-sans-boire": {
+  "text": "Le chameau traverse le désert sans boire.",
+  "kind": "phrase"
+ },
+ "phrase-le-chat-est-sur-la-natte": {
+  "text": "Le chat est sur la natte.",
+  "kind": "phrase"
+ },
+ "phrase-le-chauffeur-du-car-klaxonne-avant-de-partir": {
+  "text": "Le chauffeur du car klaxonne avant de partir.",
+  "kind": "phrase"
+ },
+ "phrase-le-commerc1ant-a-25-mangues-il-en-vend-10-combien-lui-en-res": {
+  "text": "Le commerçant a 25 mangues. Il en vend 10. Combien lui en reste-t-il ?",
+  "kind": "phrase"
+ },
+ "phrase-le-commerc1ant-pe2se-les-arachides-sur-la-balance": {
+  "text": "Le commerçant pèse les arachides sur la balance.",
+  "kind": "phrase"
+ },
+ "phrase-le-cordonnier-re1pare-mes-sandales": {
+  "text": "Le cordonnier répare mes sandales.",
+  "kind": "phrase"
+ },
+ "phrase-le-crayon-est-sous-l-arbre": {
+  "text": "Le crayon est sous l’arbre.",
+  "kind": "phrase"
+ },
+ "phrase-le-cultivateur-travaille-au-champ": {
+  "text": "Le cultivateur travaille au champ.",
+  "kind": "phrase"
+ },
+ "phrase-le-forgeron-fabrique-des-houes-pour-les-cultivateurs": {
+  "text": "Le forgeron fabrique des houes pour les cultivateurs.",
+  "kind": "phrase"
+ },
+ "phrase-le-hibou-est-dans-le-baobab": {
+  "text": "Le hibou est dans le baobab.",
+  "kind": "phrase"
+ },
+ "phrase-le-jardin-est-joli": {
+  "text": "Le jardin est joli.",
+  "kind": "phrase"
+ },
+ "phrase-le-jour-de-la-fe3te-je-porte-des-habits-neufs": {
+  "text": "Le jour de la fête, je porte des habits neufs.",
+  "kind": "phrase"
+ },
+ "phrase-le-jour-du-mariage-tout-le-quartier-est-invite1": {
+  "text": "Le jour du mariage, tout le quartier est invité.",
+  "kind": "phrase"
+ },
+ "phrase-le-lait-est-dans-la-maison": {
+  "text": "Le lait est dans la maison.",
+  "kind": "phrase"
+ },
+ "phrase-le-lit-est-la1": {
+  "text": "Le lit est là.",
+  "kind": "phrase"
+ },
+ "phrase-le-mai1tre-e1crit-la-lec1on-au-tableau": {
+  "text": "Le maître écrit la leçon au tableau.",
+  "kind": "phrase"
+ },
+ "phrase-le-mil-pousse-au-champ": {
+  "text": "Le mil pousse au champ.",
+  "kind": "phrase"
+ },
+ "phrase-le-moustique-donne-le-paludisme": {
+  "text": "Le moustique donne le paludisme.",
+  "kind": "phrase"
+ },
+ "phrase-le-moustique-est-sur-le-ke1pi": {
+  "text": "Le moustique est sur le képi.",
+  "kind": "phrase"
+ },
+ "phrase-le-mouton-et-la-poule-sont-la1": {
+  "text": "Le mouton et la poule sont là.",
+  "kind": "phrase"
+ },
+ "phrase-le-mouton-mange-le-melon": {
+  "text": "Le mouton mange le melon.",
+  "kind": "phrase"
+ },
+ "phrase-le-pe3cheur-prend-45-poissons-il-en-vend-20-au-marche1-combi": {
+  "text": "Le pêcheur prend 45 poissons. Il en vend 20 au marché. Combien lui en reste-t-il ?",
+  "kind": "phrase"
+ },
+ "phrase-le-puits-du-village-est-pre2s-de-la-mosque1e": {
+  "text": "Le puits du village est près de la mosquée.",
+  "kind": "phrase"
+ },
+ "phrase-le-puits-est-la1-bas": {
+  "text": "Le puits est là-bas.",
+  "kind": "phrase"
+ },
+ "phrase-le-puits-est-loin": {
+  "text": "Le puits est loin.",
+  "kind": "phrase"
+ },
+ "phrase-le-riz-est-dans-la-rue": {
+  "text": "Le riz est dans la rue.",
+  "kind": "phrase"
+ },
+ "phrase-le-roi-a-le-poisson": {
+  "text": "Le roi a le poisson.",
+  "kind": "phrase"
+ },
+ "phrase-le-sac-est-pre2s-du-lac": {
+  "text": "Le sac est près du lac.",
+  "kind": "phrase"
+ },
+ "phrase-le-sel-est-dans-le-bol": {
+  "text": "Le sel est dans le bol.",
+  "kind": "phrase"
+ },
+ "phrase-le-soir-le-ciel-est-noir": {
+  "text": "Le soir, le ciel est noir.",
+  "kind": "phrase"
+ },
+ "phrase-le-soir-les-enfants-dansent-au-son-du-tambour": {
+  "text": "Le soir, les enfants dansent au son du tambour.",
+  "kind": "phrase"
+ },
+ "phrase-le-soleil-est-chaud": {
+  "text": "Le soleil est chaud.",
+  "kind": "phrase"
+ },
+ "phrase-le-tailleur-coud-une-belle-robe": {
+  "text": "Le tailleur coud une belle robe.",
+  "kind": "phrase"
+ },
+ "phrase-le-vent-souffle": {
+  "text": "Le vent souffle.",
+  "kind": "phrase"
+ },
+ "phrase-le-ze1bu-boit-dans-le-puits": {
+  "text": "Le zébu boit dans le puits.",
+  "kind": "phrase"
+ },
+ "phrase-les-animaux-domestiques-vivent-pre2s-de-la-maison": {
+  "text": "Les animaux domestiques vivent près de la maison.",
+  "kind": "phrase"
+ },
+ "phrase-les-femmes-dansent-au-son-du-tambour": {
+  "text": "Les femmes dansent au son du tambour.",
+  "kind": "phrase"
+ },
+ "phrase-les-filles-sautent-a1-la-corde-en-chantant": {
+  "text": "Les filles sautent à la corde en chantant.",
+  "kind": "phrase"
+ },
+ "phrase-lundi-chacun-va-a1-l-e1cole": {
+  "text": "Lundi, chacun va à l’école.",
+  "kind": "phrase"
+ },
+ "phrase-lundi-mardi-mercredi-jeudi": {
+  "text": "lundi mardi mercredi jeudi",
+  "kind": "phrase"
+ },
+ "phrase-ma-main-prend-le-pain": {
+  "text": "Ma main prend le pain.",
+  "kind": "phrase"
+ },
+ "phrase-ma-maman-a-la-moto": {
+  "text": "Ma maman a la moto.",
+  "kind": "phrase"
+ },
+ "phrase-ma-maman-s-appelle-halime1": {
+  "text": "Ma maman s’appelle Halimé.",
+  "kind": "phrase"
+ },
+ "phrase-ma-soe1ur-a-une-fleur": {
+  "text": "Ma sœur a une fleur.",
+  "kind": "phrase"
+ },
+ "phrase-ma-soe1ur-aime-le-jeu": {
+  "text": "Ma sœur aime le jeu.",
+  "kind": "phrase"
+ },
+ "phrase-ma-tante-habite-dans-le-quartier-voisin": {
+  "text": "Ma tante habite dans le quartier voisin.",
+  "kind": "phrase"
+ },
+ "phrase-ma-tante-habite-en-ville-dans-un-grand-quartier": {
+  "text": "Ma tante habite en ville, dans un grand quartier.",
+  "kind": "phrase"
+ },
+ "phrase-malade-fie2vre-moustique": {
+  "text": "malade, fièvre, moustique",
+  "kind": "phrase"
+ },
+ "phrase-maman-demande-le-prix-des-tomates": {
+  "text": "Maman demande le prix des tomates.",
+  "kind": "phrase"
+ },
+ "phrase-maman-fait-griller-des-arachides": {
+  "text": "Maman fait griller des arachides.",
+  "kind": "phrase"
+ },
+ "phrase-maman-partage-20-arachides-entre-2-enfants-combien-chacun-en": {
+  "text": "Maman partage 20 arachides entre 2 enfants. Combien chacun en a-t-il ?",
+  "kind": "phrase"
+ },
+ "phrase-maman-range-la-calebasse-pre2s-du-canari": {
+  "text": "Maman range la calebasse près du canari.",
+  "kind": "phrase"
+ },
+ "phrase-marche1-panier-argent": {
+  "text": "marché, panier, argent",
+  "kind": "phrase"
+ },
+ "phrase-mil-riz-lait": {
+  "text": "mil, riz, lait",
+  "kind": "phrase"
+ },
+ "phrase-mon-e1quipe-a-gagne1-la-course": {
+  "text": "Mon équipe a gagné la course.",
+  "kind": "phrase"
+ },
+ "phrase-mon-fre2re-garde-trois-che2vres": {
+  "text": "Mon frère garde trois chèvres.",
+  "kind": "phrase"
+ },
+ "phrase-mon-grand-pe2re-raconte-des-histoires-le-soir": {
+  "text": "Mon grand-père raconte des histoires le soir.",
+  "kind": "phrase"
+ },
+ "phrase-mon-oncle-est-parti-au-marche1-avec-mon-cousin": {
+  "text": "Mon oncle est parti au marché avec mon cousin.",
+  "kind": "phrase"
+ },
+ "phrase-mosque1e-e1glise-quartier": {
+  "text": "mosquée, église, quartier",
+  "kind": "phrase"
+ },
+ "phrase-moto-ve1lo-voiture": {
+  "text": "moto, vélo, voiture",
+  "kind": "phrase"
+ },
+ "phrase-moussa-ramasse-4-oe1ufs-il-en-trouve-3-autres-combien-a-t-il": {
+  "text": "Moussa ramasse 4 œufs. Il en trouve 3 autres. Combien a-t-il d’œufs ?",
+  "kind": "phrase"
+ },
+ "phrase-nous-allons-au-marche1-le-mercredi": {
+  "text": "Nous allons au marché le mercredi.",
+  "kind": "phrase"
+ },
+ "phrase-nous-sautons-a1-la-corde": {
+  "text": "Nous sautons à la corde.",
+  "kind": "phrase"
+ },
+ "phrase-o-o-o": {
+  "text": "o o o",
+  "kind": "phrase"
+ },
+ "phrase-octobre-novembre-de1cembre-janvier": {
+  "text": "octobre novembre décembre janvier",
+  "kind": "phrase"
+ },
+ "phrase-on-joue-du-tambour": {
+  "text": "On joue du tambour.",
+  "kind": "phrase"
+ },
+ "phrase-orage-saison-chaleur": {
+  "text": "orage, saison, chaleur",
+  "kind": "phrase"
+ },
+ "phrase-oreille-dent-bras": {
+  "text": "oreille, dent, bras",
+  "kind": "phrase"
+ },
+ "phrase-paludisme-docteur-moustiquaire": {
+  "text": "paludisme, docteur, moustiquaire",
+  "kind": "phrase"
+ },
+ "phrase-papa-a-le-pain": {
+  "text": "Papa a le pain.",
+  "kind": "phrase"
+ },
+ "phrase-papa-a-une-moto": {
+  "text": "Papa a une moto.",
+  "kind": "phrase"
+ },
+ "phrase-papa-ache2te-5-poissons-il-en-donne-1-au-voisin-combien-lui-": {
+  "text": "Papa achète 5 poissons. Il en donne 1 au voisin. Combien lui en reste-t-il ?",
+  "kind": "phrase"
+ },
+ "phrase-papa-maman-be1be1": {
+  "text": "papa, maman, bébé",
+  "kind": "phrase"
+ },
+ "phrase-papa-revient-de-voyage-avec-des-cadeaux": {
+  "text": "Papa revient de voyage avec des cadeaux.",
+  "kind": "phrase"
+ },
+ "phrase-pendant-la-saison-des-pluies-le-champ-devient-vert": {
+  "text": "Pendant la saison des pluies, le champ devient vert.",
+  "kind": "phrase"
+ },
+ "phrase-pluie-vent-soleil": {
+  "text": "pluie, vent, soleil",
+  "kind": "phrase"
+ },
+ "phrase-pour-aller-au-champ-je-marche-je-suis-pie1ton": {
+  "text": "Pour aller au champ, je marche : je suis piéton.",
+  "kind": "phrase"
+ },
+ "phrase-pour-le-bapte3me-du-be1be1-on-pre1pare-beaucoup-de-viande": {
+  "text": "Pour le baptême du bébé, on prépare beaucoup de viande.",
+  "kind": "phrase"
+ },
+ "phrase-pour-traverser-le-fleuve-on-prend-la-pirogue": {
+  "text": "Pour traverser le fleuve, on prend la pirogue.",
+  "kind": "phrase"
+ },
+ "phrase-quand-l-orage-arrive-nous-rentrons-dans-la-case": {
+  "text": "Quand l’orage arrive, nous rentrons dans la case.",
+  "kind": "phrase"
+ },
+ "phrase-quand-mon-ami-part-je-suis-triste": {
+  "text": "Quand mon ami part, je suis triste.",
+  "kind": "phrase"
+ },
+ "phrase-robe-sandale-poche": {
+  "text": "robe, sandale, poche",
+  "kind": "phrase"
+ },
+ "phrase-route-car-valise": {
+  "text": "route, car, valise",
+  "kind": "phrase"
+ },
+ "phrase-sali-a-le-savon": {
+  "text": "Sali a le savon.",
+  "kind": "phrase"
+ },
+ "phrase-te3te-main-pied": {
+  "text": "tête, main, pied",
+  "kind": "phrase"
+ },
+ "phrase-un-sac-de-mil-cou2te-50-francs-papa-en-ache2te-2-combien-pai": {
+  "text": "Un sac de mil coûte 50 francs. Papa en achète 2. Combien paie-t-il ?",
+  "kind": "phrase"
+ },
+ "phrase-vache-chameau-lion": {
+  "text": "vache, chameau, lion",
+  "kind": "phrase"
+ },
+ "phrase-viande-poisson-arachide": {
+  "text": "viande, poisson, arachide",
+  "kind": "phrase"
+ },
+ "phrase-village-puits-route": {
+  "text": "village, puits, route",
+  "kind": "phrase"
+ },
+ "phrase-voici-ma-case": {
+  "text": "Voici ma case.",
+  "kind": "phrase"
+ },
+ "phrase-voici-ma-te3te": {
+  "text": "Voici ma tête.",
+  "kind": "phrase"
+ },
+ "phrase-voici-mes-chaussures": {
+  "text": "Voici mes chaussures.",
+  "kind": "phrase"
+ },
+ "phrase-voici-mon-panier": {
+  "text": "Voici mon panier.",
+  "kind": "phrase"
+ },
+ "phrase-voici-mon-papa": {
+  "text": "Voici mon papa.",
+  "kind": "phrase"
+ },
+ "phrase-voici-une-poule": {
+  "text": "Voici une poule.",
+  "kind": "phrase"
+ },
+ "phrase-voyage-gare-bagage": {
+  "text": "voyage, gare, bagage",
+  "kind": "phrase"
+ },
+ "question-avec-quoi-maman-fait-elle-la-sauce": {
+  "text": "Avec quoi maman fait-elle la sauce ?",
+  "kind": "question"
+ },
+ "question-combien-de-tomates-ache2te-maman": {
+  "text": "Combien de tomates achète maman ?",
+  "kind": "question"
+ },
+ "question-ou1-e1tait-la-petite-che2vre": {
+  "text": "Où était la petite chèvre ?",
+  "kind": "question"
+ },
+ "question-ou1-maman-emme2ne-t-elle-moussa": {
+  "text": "Où maman emmène-t-elle Moussa ?",
+  "kind": "question"
+ },
+ "question-ou1-s-assoient-les-enfants": {
+  "text": "Où s’assoient les enfants ?",
+  "kind": "question"
+ },
+ "question-ou1-va-halime1": {
+  "text": "Où va Halimé ?",
+  "kind": "question"
+ },
+ "question-pourquoi-amina-sourit-elle": {
+  "text": "Pourquoi Amina sourit-elle ?",
+  "kind": "question"
+ },
+ "question-qu-est-ce-qui-fait-mal-a1-moussa": {
+  "text": "Qu’est-ce qui fait mal à Moussa ?",
+  "kind": "question"
+ },
+ "question-que-fait-amina": {
+  "text": "Que fait Amina ?",
+  "kind": "question"
+ },
+ "question-que-fait-grand-pe2re": {
+  "text": "Que fait grand-père ?",
+  "kind": "question"
+ },
+ "question-que-font-les-enfants": {
+  "text": "Que font les enfants ?",
+  "kind": "question"
+ },
+ "question-que-met-fatime1": {
+  "text": "Que met Fatimé ?",
+  "kind": "question"
+ },
+ "question-que-prend-amina": {
+  "text": "Que prend Amina ?",
+  "kind": "question"
+ },
+ "question-que-rapporte-papa-pour-amina": {
+  "text": "Que rapporte papa pour Amina ?",
+  "kind": "question"
+ },
+ "question-que-se2me-ali": {
+  "text": "Que sème Ali ?",
+  "kind": "question"
+ },
+ "question-quelle-fe3te-a-lieu": {
+  "text": "Quelle fête a lieu ?",
+  "kind": "question"
+ },
+ "question-qui-donne-de-l-eau-a1-la-graine": {
+  "text": "Qui donne de l’eau à la graine ?",
+  "kind": "question"
+ },
+ "question-qui-tire-la-charrette": {
+  "text": "Qui tire la charrette ?",
+  "kind": "question"
+ },
+ "son-a": {
+  "text": "a.",
+  "kind": "son"
+ },
+ "son-ac": {
+  "text": "ac.",
+  "kind": "son",
+  "phonemes": "ˈak"
+ },
+ "son-ai": {
+  "text": "ai.",
+  "kind": "son",
+  "phonemes": "ˈɛ"
+ },
+ "son-al": {
+  "text": "al.",
+  "kind": "son"
+ },
+ "son-an": {
+  "text": "an.",
+  "kind": "son"
+ },
+ "son-ar": {
+  "text": "ar.",
+  "kind": "son"
+ },
+ "son-au": {
+  "text": "au.",
+  "kind": "son"
+ },
+ "son-bl": {
+  "text": "bl.",
+  "kind": "son",
+  "phonemes": "blˈə"
+ },
+ "son-br": {
+  "text": "br.",
+  "kind": "son",
+  "phonemes": "bʁˈə"
+ },
+ "son-c-s-c1": {
+  "text": "c, s, ç.",
+  "kind": "son",
+  "phonemes": "sˈə, sˈə, sˈə"
+ },
+ "son-e": {
+  "text": "e.",
+  "kind": "son"
+ },
+ "son-e1": {
+  "text": "é.",
+  "kind": "son",
+  "phonemes": "ˈe"
+ },
+ "son-e1-er-ez": {
+  "text": "é, er, ez.",
+  "kind": "son",
+  "phonemes": "ˈe, ˈe, ˈe"
+ },
+ "son-er": {
+  "text": "er.",
+  "kind": "son"
+ },
+ "son-eu": {
+  "text": "eu.",
+  "kind": "son",
+  "phonemes": "ˈø"
+ },
+ "son-eur": {
+  "text": "eur.",
+  "kind": "son"
+ },
+ "son-gn": {
+  "text": "gn.",
+  "kind": "son",
+  "phonemes": "ɲˈə"
+ },
+ "son-h": {
+  "text": "h.",
+  "kind": "son"
+ },
+ "son-i": {
+  "text": "i.",
+  "kind": "son"
+ },
+ "son-in": {
+  "text": "in.",
+  "kind": "son",
+  "phonemes": "ˈɛ̃"
+ },
+ "son-k": {
+  "text": "k.",
+  "kind": "son",
+  "phonemes": "kˈə"
+ },
+ "son-o": {
+  "text": "o.",
+  "kind": "son"
+ },
+ "son-o-au-eau": {
+  "text": "o, au, eau.",
+  "kind": "son",
+  "phonemes": "ˈo, ˈo, ˈo"
+ },
+ "son-oi": {
+  "text": "oi.",
+  "kind": "son"
+ },
+ "son-oir": {
+  "text": "oir.",
+  "kind": "son"
+ },
+ "son-on": {
+  "text": "on.",
+  "kind": "son"
+ },
+ "son-ou": {
+  "text": "ou.",
+  "kind": "son"
+ },
+ "son-tr": {
+  "text": "tr.",
+  "kind": "son",
+  "phonemes": "tʁˈə"
+ },
+ "son-u": {
+  "text": "u.",
+  "kind": "son"
+ },
+ "son-ui": {
+  "text": "ui.",
+  "kind": "son"
+ },
+ "son-un": {
+  "text": "un.",
+  "kind": "son"
+ },
+ "son-z": {
+  "text": "z.",
+  "kind": "son",
+  "phonemes": "zˈə"
+ },
+ "syllabe-ac": {
+  "text": "ac.",
+  "kind": "syllabe",
+  "phonemes": "ˈak"
+ },
+ "syllabe-al": {
+  "text": "al.",
+  "kind": "syllabe"
+ },
+ "syllabe-ar": {
+  "text": "ar.",
+  "kind": "syllabe"
+ },
+ "syllabe-as": {
+  "text": "as.",
+  "kind": "syllabe"
+ },
+ "syllabe-ba": {
+  "text": "ba.",
+  "kind": "syllabe"
+ },
+ "syllabe-bai": {
+  "text": "bai.",
+  "kind": "syllabe",
+  "phonemes": "bˈɛ"
+ },
+ "syllabe-ban": {
+  "text": "ban.",
+  "kind": "syllabe"
+ },
+ "syllabe-bau": {
+  "text": "bau.",
+  "kind": "syllabe"
+ },
+ "syllabe-be": {
+  "text": "be.",
+  "kind": "syllabe",
+  "phonemes": "bˈə"
+ },
+ "syllabe-beu": {
+  "text": "beu.",
+  "kind": "syllabe"
+ },
+ "syllabe-bi": {
+  "text": "bi.",
+  "kind": "syllabe"
+ },
+ "syllabe-bin": {
+  "text": "bin.",
+  "kind": "syllabe",
+  "phonemes": "bˈɛ̃"
+ },
+ "syllabe-bla": {
+  "text": "bla.",
+  "kind": "syllabe"
+ },
+ "syllabe-boi": {
+  "text": "boi.",
+  "kind": "syllabe"
+ },
+ "syllabe-bon": {
+  "text": "bon.",
+  "kind": "syllabe"
+ },
+ "syllabe-bou": {
+  "text": "bou.",
+  "kind": "syllabe"
+ },
+ "syllabe-bra": {
+  "text": "bra.",
+  "kind": "syllabe"
+ },
+ "syllabe-brun": {
+  "text": "brun.",
+  "kind": "syllabe"
+ },
+ "syllabe-ca": {
+  "text": "ca.",
+  "kind": "syllabe"
+ },
+ "syllabe-ch": {
+  "text": "ch.",
+  "kind": "syllabe",
+  "phonemes": "ʃˈə"
+ },
+ "syllabe-cha": {
+  "text": "cha.",
+  "kind": "syllabe"
+ },
+ "syllabe-che": {
+  "text": "che.",
+  "kind": "syllabe",
+  "phonemes": "ʃˈə"
+ },
+ "syllabe-chi": {
+  "text": "chi.",
+  "kind": "syllabe"
+ },
+ "syllabe-co": {
+  "text": "co.",
+  "kind": "syllabe"
+ },
+ "syllabe-cou": {
+  "text": "cou.",
+  "kind": "syllabe"
+ },
+ "syllabe-cu": {
+  "text": "cu.",
+  "kind": "syllabe"
+ },
+ "syllabe-da": {
+  "text": "da.",
+  "kind": "syllabe"
+ },
+ "syllabe-de": {
+  "text": "de.",
+  "kind": "syllabe"
+ },
+ "syllabe-di": {
+  "text": "di.",
+  "kind": "syllabe"
+ },
+ "syllabe-dou": {
+  "text": "dou.",
+  "kind": "syllabe"
+ },
+ "syllabe-eur": {
+  "text": "eur.",
+  "kind": "syllabe"
+ },
+ "syllabe-fa": {
+  "text": "fa.",
+  "kind": "syllabe"
+ },
+ "syllabe-fe": {
+  "text": "fe.",
+  "kind": "syllabe"
+ },
+ "syllabe-fi": {
+  "text": "fi.",
+  "kind": "syllabe"
+ },
+ "syllabe-foi": {
+  "text": "foi.",
+  "kind": "syllabe"
+ },
+ "syllabe-fra": {
+  "text": "fra.",
+  "kind": "syllabe"
+ },
+ "syllabe-ga": {
+  "text": "ga.",
+  "kind": "syllabe"
+ },
+ "syllabe-gna": {
+  "text": "gna.",
+  "kind": "syllabe",
+  "phonemes": "ɲˈa"
+ },
+ "syllabe-go": {
+  "text": "go.",
+  "kind": "syllabe"
+ },
+ "syllabe-gu": {
+  "text": "gu.",
+  "kind": "syllabe"
+ },
+ "syllabe-ha": {
+  "text": "ha.",
+  "kind": "syllabe"
+ },
+ "syllabe-ja": {
+  "text": "ja.",
+  "kind": "syllabe"
+ },
+ "syllabe-je": {
+  "text": "je.",
+  "kind": "syllabe"
+ },
+ "syllabe-ji": {
+  "text": "ji.",
+  "kind": "syllabe"
+ },
+ "syllabe-joi": {
+  "text": "joi.",
+  "kind": "syllabe"
+ },
+ "syllabe-ka": {
+  "text": "ka.",
+  "kind": "syllabe"
+ },
+ "syllabe-la": {
+  "text": "la.",
+  "kind": "syllabe"
+ },
+ "syllabe-le": {
+  "text": "le.",
+  "kind": "syllabe"
+ },
+ "syllabe-li": {
+  "text": "li.",
+  "kind": "syllabe"
+ },
+ "syllabe-ma": {
+  "text": "ma.",
+  "kind": "syllabe"
+ },
+ "syllabe-me": {
+  "text": "me.",
+  "kind": "syllabe"
+ },
+ "syllabe-mi": {
+  "text": "mi.",
+  "kind": "syllabe"
+ },
+ "syllabe-na": {
+  "text": "na.",
+  "kind": "syllabe"
+ },
+ "syllabe-ne": {
+  "text": "ne.",
+  "kind": "syllabe"
+ },
+ "syllabe-ni": {
+  "text": "ni.",
+  "kind": "syllabe"
+ },
+ "syllabe-oi": {
+  "text": "oi.",
+  "kind": "syllabe"
+ },
+ "syllabe-oir": {
+  "text": "oir.",
+  "kind": "syllabe"
+ },
+ "syllabe-ou": {
+  "text": "ou.",
+  "kind": "syllabe"
+ },
+ "syllabe-pa": {
+  "text": "pa.",
+  "kind": "syllabe"
+ },
+ "syllabe-pe": {
+  "text": "pe.",
+  "kind": "syllabe"
+ },
+ "syllabe-pi": {
+  "text": "pi.",
+  "kind": "syllabe"
+ },
+ "syllabe-ra": {
+  "text": "ra.",
+  "kind": "syllabe"
+ },
+ "syllabe-re": {
+  "text": "re.",
+  "kind": "syllabe"
+ },
+ "syllabe-ri": {
+  "text": "ri.",
+  "kind": "syllabe"
+ },
+ "syllabe-sa": {
+  "text": "sa.",
+  "kind": "syllabe"
+ },
+ "syllabe-se": {
+  "text": "se.",
+  "kind": "syllabe"
+ },
+ "syllabe-si": {
+  "text": "si.",
+  "kind": "syllabe"
+ },
+ "syllabe-ta": {
+  "text": "ta.",
+  "kind": "syllabe"
+ },
+ "syllabe-te": {
+  "text": "te.",
+  "kind": "syllabe"
+ },
+ "syllabe-ti": {
+  "text": "ti.",
+  "kind": "syllabe"
+ },
+ "syllabe-ui": {
+  "text": "ui.",
+  "kind": "syllabe"
+ },
+ "syllabe-va": {
+  "text": "va.",
+  "kind": "syllabe"
+ },
+ "syllabe-ve": {
+  "text": "ve.",
+  "kind": "syllabe"
+ },
+ "syllabe-vi": {
+  "text": "vi.",
+  "kind": "syllabe"
+ },
+ "syllabe-za": {
+  "text": "za.",
+  "kind": "syllabe"
+ }
 }

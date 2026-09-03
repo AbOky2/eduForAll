@@ -41,3 +41,10 @@ example
 # generated native folders
 /ios
 /android
+
+# Chaîne voix locale (Kokoro) — outillage de build, jamais livré
+.venv-audio/
+.cache/
+
+# Python
+__pycache__/

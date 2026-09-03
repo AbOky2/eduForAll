@@ -1330,7 +1330,7 @@ export function operationLesson(
     ...(withCarry ? [skillMath('retenue')] : []),
   ];
   const ctx = base(id, skills);
-  const steps = pairsList.map(([a, b]) => {
+  const steps = pairsList.map(([a, b], index) => {
     const answer =
       op === 'simple_addition'
         ? a + b
@@ -1345,7 +1345,12 @@ export function operationLesson(
       a,
       b,
       numberOptions(answer, answer > 20 ? 2 : 1, 200),
-      op !== 'simple_division' && a <= 20 && b <= 20,
+      // La division garde ses images : « partager en parts égales » se
+      // comprend en voyant les parts, pas en lisant le signe ÷.
+      a <= 20 && b <= 20,
+      // Un objet du quotidien par exercice, dans un ordre stable : l'enfant
+      // recompte des chèvres puis des mangues, jamais deux fois la même scène.
+      COUNTABLES[index % COUNTABLES.length],
     );
   });
   const verbRef =

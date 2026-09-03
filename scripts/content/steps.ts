@@ -396,6 +396,27 @@ const OPERATION_INSTRUCTION: Record<Operation, string> = {
   simple_division: 'Combien chacun en a-t-il ?',
 };
 
+/**
+ * Combien d'images une opération peut porter avant de devenir illisible.
+ * Vingt, comme « les vingt premiers nombres » du programme (p. 58) : rangées
+ * par cinq, vingt chèvres se comptent encore d'un regard. Au-delà, on revient
+ * aux cartes de points.
+ */
+const MAX_CONCRETE_ICONS = 20;
+
+function drawnIcons(type: Operation, a: number, b: number): number {
+  switch (type) {
+    case 'simple_subtraction':
+      return a;
+    case 'simple_multiplication':
+      return a * b;
+    case 'simple_division':
+      return a;
+    default:
+      return a + b;
+  }
+}
+
 export function operationStep(
   { lessonId, skills }: Base,
   type: Operation,
@@ -403,18 +424,56 @@ export function operationStep(
   b: number,
   options: number[],
   showQuantities = true,
+  object?: { icon: string; plural: string },
 ): AnyStep {
+  // Un objet concret n'est attaché que si la scène reste comptable d'un
+  // coup d'œil ; sinon les cartes de points prennent le relais.
+  const concrete =
+    object && showQuantities && drawnIcons(type, a, b) <= MAX_CONCRETE_ICONS ? object : undefined;
   return {
     id: stepId(lessonId),
     type,
     skills,
     instruction: say.instruction(OPERATION_INSTRUCTION[type]),
-    hint: say.hint('Compte les points sur les cartes.'),
+    hint: say.hint(
+      concrete ? `Compte les ${concrete.plural} sur l’image.` : 'Compte les points sur les cartes.',
+    ),
+    ...(concrete
+      ? { illustrationId: illustration(concrete.icon), objectName: concrete.plural }
+      : {}),
     a,
     b,
     options,
     showQuantities,
   };
+}
+
+/**
+ * Met l'énoncé en images : les deux nombres cités, et le sens de l'histoire.
+ *
+ * Dérivé de l'énoncé plutôt que saisi à la main, et vérifié contre la réponse
+ * attendue — un dessin qui ne redonne pas le résultat n'est pas dessiné. Les
+ * énoncés à trois nombres ou à structure inhabituelle restent en texte seul.
+ */
+function problemVisual(
+  statement: string,
+  answer: number,
+): { first: number; second: number; mode: 'add' | 'remove' } | undefined {
+  const numbers = [...statement.matchAll(/\d+/g)].map((match) => Number(match[0]));
+  if (numbers.length !== 2) {
+    return undefined;
+  }
+  const [first, second] = numbers as [number, number];
+  if (first < 1 || second < 1 || first > 12 || second > 12) {
+    return undefined;
+  }
+  if (first + second === answer) {
+    return { first, second, mode: 'add' };
+  }
+  if (first - second === answer) {
+    return { first, second, mode: 'remove' };
+  }
+  return undefined;
 }
 
 export function wordProblemStep(
@@ -424,6 +483,7 @@ export function wordProblemStep(
   options: number[],
   icon?: string,
 ): AnyStep {
+  const visual = icon ? problemVisual(statement, answer) : undefined;
   return {
     id: stepId(lessonId),
     type: 'visual_word_problem',
@@ -433,6 +493,7 @@ export function wordProblemStep(
     statement,
     statementAudioId: say.sentence(statement),
     ...(icon ? { illustrationId: illustration(icon) } : {}),
+    ...(visual ? { visual } : {}),
     answer,
     options,
   };

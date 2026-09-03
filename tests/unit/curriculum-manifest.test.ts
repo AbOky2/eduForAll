@@ -76,6 +76,14 @@ describe('bundled curriculum manifest', () => {
     }
   });
 
+  it('lists each skill at most once per lesson', () => {
+    // lesson_skills a pour clé primaire (lesson_id, skill_id) : un doublon fait
+    // échouer l'import au premier lancement, et avec lui tout le bootstrap.
+    for (const lesson of allLessons) {
+      expect(new Set(lesson.skills).size).toBe(lesson.skills.length);
+    }
+  });
+
   it('resolves every prerequisite to an existing lesson', () => {
     const all = new Set(allLessons.map((lesson) => lesson.id));
     for (const lesson of allLessons) {

@@ -8,7 +8,7 @@ import {
   AlifaCard,
   AlifaText,
 } from '@/design-system/primitives';
-import { colors, spacing } from '@/design-system/tokens';
+import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -78,4 +78,3 @@ const styles = StyleSheet.create({
   choices: { gap: spacing.md },
 });
 
-export { colors };

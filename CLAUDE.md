@@ -42,8 +42,12 @@ dans `src/content/curriculum/official-program.ts` :
 Généré, pas édité à la main : modifier `scripts/content/data/` puis
 ```bash
 npx tsx scripts/generate-content.ts      # manifeste + audio + carte TTS + couverture
-./scripts/generate-placeholder-audio.sh  # nouveaux sons
+./scripts/generate-placeholder-audio.sh  # nouveaux sons (voix système, dev)
+npm run audio:voice -- --dry-run         # voix IA définitive (docs/audio-pipeline.md)
 ```
+Toucher au contenu = incrémenter `CONTENT_VERSION` dans
+`scripts/generate-content.ts`, sinon un appareil ayant déjà importé la version
+précédente ne réimportera jamais.
 `src/content/manifests/curriculum-v1.json`, `audio-registry.generated.ts` et
 `docs/couverture-programme.md` sont des artefacts générés.
 
@@ -51,7 +55,12 @@ npx tsx scripts/generate-content.ts      # manifeste + audio + carte TTS + couve
 ```bash
 npm run typecheck && npm run lint && npm test && npm run validate:content
 ```
-Release gates complètes : `npm run validate:release`.
+Release gates complètes : `npm run validate:release` (dont
+`validate:bundle`, qui exporte le bundle iOS et vérifie que les 824 sons y
+sont réellement — `validate:audio` ne regarde que le disque).
+
+Parcours end-to-end : `npm run test:e2e` (Maestro, sur un build installé —
+`appId` à aligner sur le profil de build utilisé).
 
 ## Pièges connus
 - Zod v4 : `.default({})` ne remplit pas les défauts internes → `.prefault({})`.

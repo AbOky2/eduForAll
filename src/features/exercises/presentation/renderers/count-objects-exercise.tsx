@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { AlifaAnswerCard, AlifaCard, AlifaExerciseLayout } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
-import { colors, radius, spacing } from '@/design-system/tokens';
+import { radius, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -69,4 +69,3 @@ const styles = StyleSheet.create({
   numberCard: { flex: 1, maxWidth: 110 },
 });
 
-export { colors };

@@ -1,8 +1,9 @@
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
+import { avatarVariant } from '@/features/child-profile/domain/child-profile';
 import {
   loadHomeSummary,
   type HomeSummary,
@@ -13,6 +14,7 @@ import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
 import { AvatarFace } from '@/design-system/illustrations/scenes';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { useFocusedData } from '@/shared/hooks/use-focused-data';
 
 const SUBJECT_META: Record<
   Subject,
@@ -52,36 +54,34 @@ const SUBJECT_META: Record<
 export default function ChildHomeScreen() {
   const router = useRouter();
   const profile = useActiveProfile((state) => state.profile);
-  const [summary, setSummary] = useState<HomeSummary | null>(null);
-
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-      if (profile) {
-        void loadHomeSummary(profile.id, profile.level).then((result) => {
-          if (!cancelled) {
-            setSummary(result);
-          }
-        });
-      }
-      return () => {
-        cancelled = true;
-      };
-    }, [profile]),
+  const summary = useFocusedData<HomeSummary>(
+    () => (profile ? loadHomeSummary(profile.id, profile.level) : null),
+    profile?.id ?? null,
   );
+  // Discipline verrouillée dont l'enfant vient de demander pourquoi.
+  const [explained, setExplained] = useState<Subject | null>(null);
 
   if (!profile) {
     return null;
   }
   const recommendation = summary?.recommendation ?? null;
-  const avatarVariant = (Math.max(1, Number(profile.avatarId.split('-')[1] ?? '1')) % 4 || 4) as
-    1 | 2 | 3 | 4;
+  const lessonsToday = summary?.lessonsToday ?? 0;
+  const streakDays = summary?.streakDays ?? 0;
+  const revisionCount = summary?.revisionCount ?? 0;
+  const todayLine = fr.home.today(lessonsToday);
 
   return (
     <AlifaScreen background="default" withBottomInset={false}>
       {/* Header: avatar — ALIFA — offline badge */}
       <View style={styles.header}>
-        <AvatarFace variant={avatarVariant} size={40} />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={fr.childProfile.title}
+          onPress={() => router.push('/(child)/profile')}
+          hitSlop={8}
+        >
+          <AvatarFace variant={avatarVariant(profile.avatarId)} size={40} />
+        </Pressable>
         <AlifaText variant="headlineSm" color={colors.primary}>
           {fr.common.appName}
         </AlifaText>
@@ -100,9 +100,21 @@ export default function ChildHomeScreen() {
           <View style={styles.greetingText}>
             <AlifaText variant="headlineLg">{fr.home.greeting(profile.firstName)}</AlifaText>
             <AlifaText variant="bodyLg" color={colors.textSecondary}>
-              {fr.home.readyToLearnGeneric}
+              {todayLine}
             </AlifaText>
           </View>
+          {streakDays > 0 ? (
+            <View
+              style={styles.streak}
+              accessibilityRole="text"
+              accessibilityLabel={fr.home.streak(streakDays)}
+            >
+              <AlifaIcon name="flame" size={18} color={colors.onPrimaryContainer} filled />
+              <AlifaText variant="labelMd" color={colors.onPrimaryContainer}>
+                {String(streakDays)}
+              </AlifaText>
+            </View>
+          ) : null}
         </View>
 
         {/* Continue lesson hero card */}
@@ -134,6 +146,27 @@ export default function ChildHomeScreen() {
           </Pressable>
         ) : null}
 
+        {/* Revision workshop — only when something is actually waiting */}
+        {revisionCount > 0 ? (
+          <AlifaCard
+            rounded="xl"
+            onPress={() => router.push('/(child)/revision')}
+            accessibilityLabel={`${fr.home.reviseTitle} ${fr.home.reviseCount(revisionCount)}`}
+            style={styles.revision}
+          >
+            <View style={styles.revisionBadge}>
+              <AlifaIcon name="leaf" size={22} color={colors.onTertiaryContainer} />
+            </View>
+            <View style={styles.revisionText}>
+              <AlifaText variant="labelLg">{fr.home.reviseTitle}</AlifaText>
+              <AlifaText variant="bodyMd" color={colors.textSecondary}>
+                {fr.home.reviseCount(revisionCount)}
+              </AlifaText>
+            </View>
+            <AlifaIcon name="chevron-right" size={22} color={colors.onSurfaceVariant} />
+          </AlifaCard>
+        ) : null}
+
         {/* Activities grid */}
         <View style={styles.sectionTitle}>
           <AlifaIcon name="star-outline" size={18} color={colors.primary} />
@@ -146,7 +179,12 @@ export default function ChildHomeScreen() {
             return (
               <AlifaCard
                 key={subject.subject}
-                onPress={subject.locked ? undefined : () => router.push('/(child)/(tabs)/learn')}
+                onPress={
+                  subject.locked
+                    ? // A dead tap tells a six-year-old nothing: explain, in place.
+                      () => setExplained(subject.subject)
+                    : () => router.push(`/(child)/level-map?subject=${subject.subject}`)
+                }
                 accessibilityLabel={`${meta.label}${subject.locked ? ', verrouillé' : ''}`}
                 style={StyleSheet.flatten([
                   styles.activityCard,
@@ -182,6 +220,11 @@ export default function ChildHomeScreen() {
                   height={8}
                   accessibilityLabel={`${meta.label} : ${subject.completed} sur ${subject.total}`}
                 />
+                {explained === subject.subject ? (
+                  <AlifaText variant="bodySm" color={colors.textSecondary}>
+                    {fr.home.lockedExplain}
+                  </AlifaText>
+                ) : null}
               </AlifaCard>
             );
           })}
@@ -204,7 +247,30 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
     gap: spacing.lg,
   },
-  greetingRow: { flexDirection: 'row', alignItems: 'center' },
+  greetingRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  streak: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xxs,
+    backgroundColor: colors.primaryContainer,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 6,
+  },
+  revision: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  revisionBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.md,
+    backgroundColor: colors.tertiaryFixed,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  revisionText: { flex: 1, gap: 2 },
   greetingText: { flex: 1, gap: spacing.xxs },
   hero: {
     backgroundColor: colors.primary,

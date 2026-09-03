@@ -19,7 +19,8 @@ tts = json.load(open("assets/audio/tts-map.json"))
 
 made = 0
 with tempfile.TemporaryDirectory() as tmp:
-    for audio_id, text in sorted(tts.items()):
+    for audio_id, entry in sorted(tts.items()):
+        text = entry["text"]
         out = f"{out_dir}/{audio_id}.m4a"
         if os.path.exists(out):
             continue

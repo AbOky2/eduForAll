@@ -1,0 +1,22 @@
+# L'avatar de l'accueil ouvre « Mon profil » : compteurs, choix d'avatar,
+# étagère de badges. Un badge verrouillé reste visible et annoncé.
+appId: td.alifa.app.dev
+---
+- launchApp
+- assertVisible: 'Bonjour'
+
+- tapOn: 'Mon profil'
+- assertVisible: 'Mon profil'
+- assertVisible: 'Leçons terminées'
+- assertVisible: 'Étoiles gagnées'
+- assertVisible: 'Jours de suite'
+
+# Les badges sont tous listés, gagnés ou non — jamais de boîte mystère
+- assertVisible: 'Tes badges'
+- assertVisible: 'Premiers pas'
+- assertVisible: 'Roi du calcul'
+
+# Changer d'avatar est un geste d'enfant : un appui, pas de confirmation
+- tapOn: 'Avatar 3'
+- tapOn: 'Retour'
+- assertVisible: 'Tes activités'

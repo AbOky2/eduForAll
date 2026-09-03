@@ -80,6 +80,13 @@ const gates: Gate[] = [
     run: () => sh('npx tsx scripts/validate-assets.ts'),
   },
   { name: 'Audio complet et sain', run: () => sh('npx tsx scripts/validate-audio-assets.ts') },
+  {
+    // Les fichiers peuvent être sur le disque sans être dans le bundle si le
+    // registre audio a pris du retard sur le contenu. L'app serait muette là
+    // où elle doit parler, et aucune autre gate ne le verrait.
+    name: 'Sons réellement embarqués dans le bundle',
+    run: () => sh('npx tsx scripts/validate-bundle.ts'),
+  },
   { name: 'Expo Doctor', run: () => sh('npx expo-doctor@latest') },
   {
     name: 'Aucune voix placeholder en production',

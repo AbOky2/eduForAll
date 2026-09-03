@@ -3,6 +3,16 @@
  * never hardcode visible text. Pedagogical content lives in the curriculum
  * manifests, not here.
  */
+/**
+ * « de » ou « d’ » selon le prénom : « le tableau de bord d’Amina », mais
+ * « de Moussa ». L'UI est en français seulement — une élision fautive se voit
+ * immédiatement, et c'est le prénom de l'enfant qui est en jeu.
+ */
+function of(firstName: string): string {
+  const first = firstName.trim().charAt(0).toLowerCase();
+  return 'aeiouyàâäéèêëîïôöùûü'.includes(first) ? `d’${firstName}` : `de ${firstName}`;
+}
+
 export const fr = {
   common: {
     appName: 'ALIFA',
@@ -42,8 +52,6 @@ export const fr = {
   },
   home: {
     greeting: (firstName: string) => `Bonjour ${firstName} !`,
-    readyToLearn: 'Prête à apprendre ?',
-    readyToLearnGeneric: 'On apprend ensemble ?',
     inProgress: 'EN COURS',
     continueLesson: 'Continuer ma leçon',
     startLesson: 'Ma prochaine leçon',
@@ -51,6 +59,17 @@ export const fr = {
     newBadge: 'Nouveau !',
     lessonsDone: (count: number) =>
       count > 1 ? `${count} leçons terminées` : `${count} leçon terminée`,
+    today: (count: number) =>
+      count === 0
+        ? 'On commence la journée ?'
+        : count === 1
+          ? 'Une leçon faite aujourd’hui. Bravo !'
+          : `${count} leçons faites aujourd’hui. Quelle énergie !`,
+    streak: (days: number) => (days > 1 ? `${days} jours de suite` : 'Premier jour'),
+    lockedExplain: 'Termine d’abord les leçons d’avant, et ça s’ouvrira.',
+    reviseTitle: 'On revoit ensemble ?',
+    reviseCount: (count: number) =>
+      count > 1 ? `${count} notions à revoir` : '1 notion à revoir',
   },
   subjects: {
     language: 'Langage',
@@ -94,8 +113,59 @@ export const fr = {
   },
   result: {
     title: 'Bravo ! Tu as terminé la leçon.',
+    perfect: 'Trois étoiles ! C’est parfait.',
     oneMoreStar: 'Tu peux rejouer pour gagner plus d’étoiles.',
     needsReview: 'On reverra certaines notions ensemble, tout va bien.',
+    nextLesson: 'Leçon suivante',
+    backHome: 'Retour à l’accueil',
+  },
+  achievements: {
+    title: 'Tes badges',
+    subtitle: 'Chaque badge récompense un vrai progrès.',
+    unlocked: 'Nouveau badge !',
+    lockedHint: 'Continue pour le découvrir.',
+    countEarned: (earned: number, total: number) => `${earned} badge${earned > 1 ? 's' : ''} sur ${total}`,
+    labels: {
+      'first-lesson': 'Premiers pas',
+      'five-lessons': 'On continue !',
+      'twenty-lessons': 'Élève appliqué',
+      'fifty-lessons': 'Grand travailleur',
+      'first-perfect': 'Sans faute',
+      'five-perfect': 'Cinq sans faute',
+      'first-world': 'Monde terminé',
+      reader: 'Bon lecteur',
+      speaker: 'Belle parole',
+      writer: 'Belle écriture',
+      counter: 'Roi du calcul',
+      'streak-three': 'Trois jours de suite',
+      'streak-seven': 'Une semaine entière',
+      'star-collector': 'Cinquante étoiles',
+    },
+    descriptions: {
+      'first-lesson': 'Terminer ta première leçon.',
+      'five-lessons': 'Terminer 5 leçons.',
+      'twenty-lessons': 'Terminer 20 leçons.',
+      'fifty-lessons': 'Terminer 50 leçons.',
+      'first-perfect': 'Gagner 3 étoiles sur une leçon.',
+      'five-perfect': 'Gagner 3 étoiles sur 5 leçons.',
+      'first-world': 'Terminer toutes les leçons d’un monde.',
+      reader: 'Terminer 10 leçons de lecture.',
+      speaker: 'Terminer 10 leçons de langage.',
+      writer: 'Terminer 10 leçons d’écriture.',
+      counter: 'Terminer 10 leçons de calcul.',
+      'streak-three': 'Apprendre 3 jours de suite.',
+      'streak-seven': 'Apprendre 7 jours de suite.',
+      'star-collector': 'Gagner 50 étoiles en tout.',
+    },
+  },
+  childProfile: {
+    title: 'Mon profil',
+    levelLabel: 'Mon niveau',
+    changeAvatar: 'Choisis ton avatar',
+    lessonsDone: 'Leçons terminées',
+    starsEarned: 'Étoiles gagnées',
+    bestStreak: 'Jours de suite',
+    days: (count: number) => (count > 1 ? `${count} jours` : `${count} jour`),
   },
   revision: {
     title: 'On va revoir ce qui est difficile.',
@@ -113,7 +183,7 @@ export const fr = {
     gateSubtitle: 'Cet espace est réservé aux parents.',
     gateQuestion: 'Pour entrer, réponds à cette question :',
     gateWrong: 'Ce n’est pas la bonne réponse.',
-    dashboardTitle: (firstName: string) => `Tableau de bord d’${firstName}`,
+    dashboardTitle: (firstName: string) => `Tableau de bord ${of(firstName)}`,
     dashboardSubtitle: 'Suivez sa progression et ses accomplissements récents.',
     currentLevel: 'Niveau actuel',
     lessonsCompleted: 'Leçons complétées',

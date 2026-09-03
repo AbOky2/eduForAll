@@ -4,6 +4,8 @@ import {
   type LessonRecommendation,
 } from '@/features/progress/infrastructure/progress-repository';
 import type { ChildProfileId } from '@/core/ids/ids';
+import { currentStreak } from '@/features/progress/domain/streaks';
+import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
 import type { LevelId, Subject } from '@/content/schemas/curriculum-schema';
 
 export interface SubjectProgress {
@@ -18,6 +20,12 @@ export interface HomeSummary {
   readonly recommendation: LessonRecommendation | null;
   readonly subjects: SubjectProgress[];
   readonly completedLessons: number;
+  /** Leçons terminées aujourd'hui — le rythme du jour, pas un score. */
+  readonly lessonsToday: number;
+  /** Jours d'affilée avec au moins une leçon, série en cours. */
+  readonly streakDays: number;
+  /** Notions en attente de révision — ouvre l'atelier de révision. */
+  readonly revisionCount: number;
 }
 
 /**
@@ -79,10 +87,21 @@ export async function loadHomeSummary(
     },
   );
 
-  const [recommendation, completedLessons] = await Promise.all([
+  const today = new Date().toISOString().slice(0, 10);
+  const [recommendation, completedLessons, lessonsToday, days, revisionCount] = await Promise.all([
     progress.findNextRecommendedLesson(childProfileId),
     progress.countCompletedLessons(childProfileId),
+    progress.countCompletedSince(childProfileId, `${today}T00:00:00`),
+    progress.findCompletedDays(childProfileId),
+    createRevisionRepository(db).countOpen(childProfileId),
   ]);
 
-  return { recommendation, subjects, completedLessons };
+  return {
+    recommendation,
+    subjects,
+    completedLessons,
+    lessonsToday,
+    streakDays: currentStreak(days, today),
+    revisionCount,
+  };
 }

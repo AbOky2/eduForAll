@@ -1,0 +1,12 @@
+# Régression : depuis l'accueil, toucher une discipline ouvrait l'onglet
+# « Apprendre » et obligeait à la choisir une seconde fois.
+appId: td.alifa.app.dev
+---
+- launchApp
+- assertVisible: 'Tes activités'
+
+# Toucher « Langage » doit ouvrir la carte de progression du langage,
+# pas la liste des modules
+- tapOn: 'Langage'
+- assertNotVisible: 'Choisis ton module'
+- assertVisible: 'Retour'

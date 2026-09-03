@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { AlifaAudioButton, AlifaButton, AlifaCard, AlifaText } from '@/design-system/primitives';
-import { colors, spacing } from '@/design-system/tokens';
+import { spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -58,4 +58,3 @@ const styles = StyleSheet.create({
   audioWrap: { alignItems: 'center' },
 });
 
-export { colors };

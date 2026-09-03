@@ -1,10 +1,11 @@
-import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 const COMMITMENTS = [
   'Toutes les données restent sur ce téléphone. Rien n’est envoyé sur internet.',
@@ -17,23 +18,10 @@ const COMMITMENTS = [
 
 /** Privacy commitments, in plain French for parents. */
 export default function PrivacyScreen() {
-  const router = useRouter();
+  const goBack = useSafeBack();
   return (
     <AlifaScreen background="default">
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.common.back}
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <AlifaIcon name="arrow-back" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
-        <AlifaText variant="headlineMd" color={colors.primary}>
-          {fr.settings.privacy}
-        </AlifaText>
-        <View style={styles.backButton} />
-      </View>
+      <AlifaScreenHeader onBack={goBack} title={fr.settings.privacy} titleVariant="headlineMd" />
       <ScrollView contentContainerStyle={styles.scroll}>
         <AlifaCard rounded="xl" style={styles.card}>
           {COMMITMENTS.map((commitment) => (
@@ -51,14 +39,6 @@ export default function PrivacyScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   scroll: { padding: spacing.screenMargin },
   card: { gap: spacing.md },
   row: { flexDirection: 'row', gap: spacing.sm, alignItems: 'flex-start' },

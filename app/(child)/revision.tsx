@@ -1,15 +1,18 @@
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { lessonForSkill } from '@/features/curriculum/application/curriculum-catalog';
 import { describeSkill } from '@/features/parent-space/application/parent-dashboard';
+import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
+import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
 import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { useFocusedData } from '@/shared/hooks/use-focused-data';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 interface RevisionItem {
   skillId: string;
@@ -20,43 +23,31 @@ interface RevisionItem {
 /** Revision screen — mockup S17. Gentle framing, notion cards, one big CTA. */
 export default function RevisionScreen() {
   const router = useRouter();
+  const goBack = useSafeBack();
   const profile = useActiveProfile((state) => state.profile);
-  const [items, setItems] = useState<RevisionItem[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-      if (!profile) {
-        return undefined;
-      }
-      void (async () => {
-        const db = await getDatabase();
-        const rows = await db.getAllAsync<{ skill_id: string }>(
-          `SELECT skill_id FROM revision_queue
-           WHERE child_profile_id = ? AND resolved_at IS NULL
-           ORDER BY due_at LIMIT 4`,
-          profile.id,
-        );
-        // Each struggled skill maps back to the first lesson that trains it.
-        const built = rows.map((row) => ({
-          skillId: row.skill_id,
-          label: describeSkill(row.skill_id),
-          lessonId: lessonForSkill(row.skill_id),
-        }));
-        if (!cancelled) {
-          setItems(built);
-        }
-      })();
-      return () => {
-        cancelled = true;
-      };
-    }, [profile]),
-  );
+  const items: RevisionItem[] =
+    useFocusedData(
+      () =>
+        profile
+          ? getDatabase()
+              .then((db) => createRevisionRepository(db).findOpen(profile.id, 4))
+              // Each struggled skill maps back to the first lesson that trains it.
+              .then((open) =>
+                open.map(({ skillId }) => ({
+                  skillId,
+                  label: describeSkill(skillId),
+                  lessonId: lessonForSkill(skillId),
+                })),
+              )
+          : null,
+      profile?.id ?? null,
+    ) ?? [];
 
   const firstLesson = items.find((item) => item.lessonId)?.lessonId ?? null;
 
   return (
     <AlifaScreen background="default">
+      <AlifaScreenHeader onBack={goBack} />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.leafBadge}>
           <AlifaIcon name="leaf" size={30} color={colors.onTertiaryContainer} />

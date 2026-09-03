@@ -10,10 +10,13 @@ import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { a11y, colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 /** Settings — mockup S19. Reached from the parent space only. */
 export default function SettingsScreen() {
   const router = useRouter();
+  const goBack = useSafeBack();
   const soundEnabled = useSettings((state) => state.soundEnabled);
   const setSoundEnabled = useSettings((state) => state.setSoundEnabled);
   const setActiveProfile = useActiveProfile((state) => state.setProfile);
@@ -39,20 +42,7 @@ export default function SettingsScreen() {
 
   return (
     <AlifaScreen background="default">
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.common.back}
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <AlifaIcon name="arrow-back" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
-        <AlifaText variant="headlineMd" color={colors.primary}>
-          {fr.settings.title}
-        </AlifaText>
-        <View style={styles.backButton} />
-      </View>
+      <AlifaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineMd" />
 
       <View style={styles.content}>
         <AlifaCard rounded="lg" padded={false} style={styles.group}>
@@ -180,14 +170,6 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   content: { padding: spacing.screenMargin, gap: spacing.lg },
   group: { paddingVertical: spacing.xs },
   row: {

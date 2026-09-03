@@ -9,7 +9,7 @@ import {
   AlifaText,
 } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
-import { colors, spacing } from '@/design-system/tokens';
+import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -100,4 +100,3 @@ const styles = StyleSheet.create({
   gridItem: { width: '46%', flexGrow: 1 },
 });
 
-export { colors };

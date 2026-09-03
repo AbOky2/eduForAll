@@ -1,4 +1,7 @@
 import { getDatabase } from '@/database/connection/database';
+import { syncAchievements } from '@/features/achievements/application/sync-achievements';
+import type { AchievementId } from '@/features/achievements/domain/achievements';
+import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
 import { newLearningSessionId, type ChildProfileId, type LessonId } from '@/core/ids/ids';
 import type { Lesson } from '@/content/schemas/curriculum-schema';
 import type { StepOutcome } from '@/features/lesson-session/domain/lesson-machine';
@@ -8,13 +11,16 @@ import { scoreLesson, type LessonScore } from '@/features/lesson-session/domain/
  * Persists everything a finished lesson produces, in one transaction:
  * result row, per-skill mastery counters, revision queue entries for
  * struggled skills, and a learning session row for the parent dashboard.
+ *
+ * Badges are recomputed after the transaction commits — they read the rows it
+ * just wrote — and the freshly unlocked ones are handed to the result screen.
  */
 export async function recordLessonCompletion(input: {
   childProfileId: ChildProfileId;
   lesson: Lesson;
   outcomes: readonly StepOutcome[];
   startedAt: string;
-}): Promise<LessonScore> {
+}): Promise<{ score: LessonScore; newAchievements: AchievementId[] }> {
   const { childProfileId, lesson, outcomes, startedAt } = input;
   const score = scoreLesson(lesson, outcomes);
   const now = new Date().toISOString();
@@ -67,23 +73,20 @@ export async function recordLessonCompletion(input: {
       }
     }
 
+    // Une notion réussie sans peine sort de la file de révision : l'enfant
+    // l'a montrée, on ne la lui repropose pas indéfiniment. Sans cela la file
+    // ne se vide jamais et la carte « on revoit ensemble ? » devient un
+    // reproche permanent.
+    const revisions = createRevisionRepository(txn);
+    const struggled = new Set(score.struggledSkills);
+    const practised = [...new Set(outcomes.flatMap((outcome) => outcome.skills))];
+    await revisions.resolve(
+      childProfileId,
+      practised.filter((skillId) => !struggled.has(skillId)),
+      now,
+    );
     for (const skillId of score.struggledSkills) {
-      // One open entry per skill; re-struggling refreshes the due date.
-      await txn.runAsync(
-        `INSERT OR REPLACE INTO revision_queue
-           (id,
-            child_profile_id, skill_id, reason, due_at, resolved_at, created_at)
-         VALUES (
-           (SELECT id FROM revision_queue
-             WHERE child_profile_id = ? AND skill_id = ? AND resolved_at IS NULL),
-           ?, ?, 'repeated_errors', ?, NULL, ?)`,
-        childProfileId,
-        skillId,
-        childProfileId,
-        skillId,
-        now,
-        now,
-      );
+      await revisions.reopen(childProfileId, skillId, now);
     }
 
     await txn.runAsync(
@@ -96,7 +99,8 @@ export async function recordLessonCompletion(input: {
     );
   });
 
-  return score;
+  const newAchievements = await syncAchievements(childProfileId);
+  return { score, newAchievements };
 }
 
 export type { LessonScore };

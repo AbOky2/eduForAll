@@ -8,14 +8,6 @@
       "decidedOn": "2026-08-26",
       "clearBy": "1.1.0",
       "matches": "Hermes V1"
-    },
-    {
-      "gate": "Aucune voix placeholder en production",
-      "reason": "Les 820 consignes sont en synthèse vocale. Décision assumée : livrer la v1 pour lancer le pilote, enregistrer les voix définitives (idéalement une voix d'enseignant·e tchadien·ne) dans la mise à jour suivante. À signaler dans les notes de version et la fiche store.",
-      "decidedBy": "propriétaire du projet",
-      "decidedOn": "2026-08-26",
-      "clearBy": "1.1.0",
-      "matches": "placeholders TTS"
     }
   ]
 }

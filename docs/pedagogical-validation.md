@@ -48,7 +48,7 @@ exercices physiques — 8 h 05) relèvent d'une pratique collective encadrée.
 
 ---
 
-## Les 7 points à trancher avec l'enseignant
+## Les 8 points à trancher avec l'enseignant
 
 Ce sont les décisions que le programme ne prend pas à notre place. Ce sont
 **les seules choses inventées** — le reste est cité.
@@ -123,6 +123,23 @@ navigateur). Ils portent tout le vocabulaire.
 
 > **À valider :** l'enfant reconnaît-il l'objet du premier coup ? Lesquels
 > prêtent à confusion ?
+
+### 8. La prononciation des sons isolés
+
+`scripts/content/data/pronunciation.ts` impose la prononciation de 24 sons que
+la synthèse rendait faux hors d'un mot : elle épelait les groupes de consonnes
+(« bl » devenait « bé-elle »), partait en anglais sur « in », donnait le nom
+de la lettre pour « z » et « k », et confondait « eu » avec « u ».
+
+Corriger l'erreur ne suffit pas : il a fallu choisir *comment* dire un son
+seul. La table retient l'usage courant du CP français — la consonne portée par
+un « e » d'appui : /blə/, /tʁə/, /zə/, /kə/ — plutôt que le nom de la lettre.
+
+Les sons isolés sont dits par Piper, les mots et phrases par Kokoro — même
+locuteur `siwis` des deux côtés, donc un seul timbre pour l'enfant.
+
+> **À valider :** est-ce ainsi qu'on dit ces sons dans une classe tchadienne ?
+> Écouter la planche d'écoute (§ « Voix » de `docs/audio-pipeline.md`).
 
 ---
 

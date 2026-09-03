@@ -30,6 +30,7 @@ export interface ChildProfileRepository {
   findAll(): Promise<ChildProfile[]>;
   findById(id: ChildProfileId): Promise<ChildProfile | null>;
   updateLevel(id: ChildProfileId, level: LevelId): Promise<void>;
+  updateAvatar(id: ChildProfileId, avatarId: AvatarId): Promise<ChildProfile | null>;
   deleteWithProgress(id: ChildProfileId): Promise<void>;
 }
 
@@ -80,6 +81,21 @@ export function createChildProfileRepository(db: SQLiteDatabase): ChildProfileRe
         new Date().toISOString(),
         id,
       );
+    },
+
+    /** The child picks their own avatar from the profile screen — no gate. */
+    async updateAvatar(id, avatarId) {
+      await db.runAsync(
+        'UPDATE child_profiles SET avatar_id = ?, updated_at = ? WHERE id = ?',
+        avatarId,
+        new Date().toISOString(),
+        id,
+      );
+      const row = await db.getFirstAsync<ChildProfileRow>(
+        'SELECT * FROM child_profiles WHERE id = ?',
+        id,
+      );
+      return row ? toDomain(row) : null;
     },
 
     /** Cascades to all progression tables via foreign keys. Parent-gated. */

@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { AlifaAnswerCard, AlifaAudioButton, AlifaText } from '@/design-system/primitives';
-import { colors, spacing } from '@/design-system/tokens';
+import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -84,4 +84,3 @@ const styles = StyleSheet.create({
   tile: { minWidth: 96, flexGrow: 1, maxWidth: '46%' },
 });
 
-export { colors };

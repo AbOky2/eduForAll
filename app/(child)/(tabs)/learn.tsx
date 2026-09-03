@@ -1,5 +1,4 @@
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
@@ -12,6 +11,7 @@ import { AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { useFocusedData } from '@/shared/hooks/use-focused-data';
 
 const MODULE_META: Record<
   Subject,
@@ -51,23 +51,11 @@ const MODULE_META: Record<
 export default function ModuleSelectionScreen() {
   const router = useRouter();
   const profile = useActiveProfile((state) => state.profile);
-  const [subjects, setSubjects] = useState<SubjectProgress[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-      if (profile) {
-        void loadHomeSummary(profile.id, profile.level).then((summary) => {
-          if (!cancelled) {
-            setSubjects(summary.subjects);
-          }
-        });
-      }
-      return () => {
-        cancelled = true;
-      };
-    }, [profile]),
-  );
+  const subjects: SubjectProgress[] =
+    useFocusedData(
+      () => (profile ? loadHomeSummary(profile.id, profile.level).then((s) => s.subjects) : null),
+      profile?.id ?? null,
+    ) ?? [];
 
   return (
     <AlifaScreen background="default" withBottomInset={false}>

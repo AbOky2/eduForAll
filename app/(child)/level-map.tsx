@@ -15,6 +15,8 @@ import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { colors, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 type WorldNodeState = 'completed' | 'current' | 'locked';
 
@@ -33,6 +35,7 @@ interface WorldNode {
  */
 export default function LevelMapScreen() {
   const router = useRouter();
+  const goBack = useSafeBack();
   const { subject } = useLocalSearchParams<{ subject?: string }>();
   const profile = useActiveProfile((state) => state.profile);
   const [nodes, setNodes] = useState<WorldNode[]>([]);
@@ -97,25 +100,13 @@ export default function LevelMapScreen() {
 
   return (
     <AlifaScreen background="default">
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.common.back}
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <AlifaIcon name="arrow-back" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
-        <View style={styles.headerText}>
-          <AlifaText variant="headlineLg" align="center">
-            {fr.learn.levelTitle(profile.level)}
-          </AlifaText>
-          <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
-            {profile.level === 'CP1' ? fr.learn.cp1Motto : fr.learn.cp2Motto}
-          </AlifaText>
-        </View>
-        <View style={styles.backButton} />
-      </View>
+      <AlifaScreenHeader
+        onBack={goBack}
+        title={fr.learn.levelTitle(profile.level)}
+        titleVariant="headlineLg"
+        titleColor={colors.textPrimary}
+        subtitle={profile.level === 'CP1' ? fr.learn.cp1Motto : fr.learn.cp2Motto}
+      />
 
       <ScrollView contentContainerStyle={styles.path} showsVerticalScrollIndicator={false}>
         {nodes.map((node, index) => {
@@ -209,14 +200,6 @@ export default function LevelMapScreen() {
 const NODE_SIZE = 84;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  headerText: { flex: 1, gap: 2 },
   path: {
     paddingVertical: spacing.lg,
     paddingHorizontal: spacing.xl,

@@ -1,14 +1,14 @@
-import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { SunCloudScene } from '@/design-system/illustrations/scenes';
 import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 /** Offline reassurance — mockup S20. */
 export default function OfflineInfoScreen() {
-  const router = useRouter();
+  const goBack = useSafeBack();
   return (
     <AlifaScreen background="default">
       <View style={styles.container}>
@@ -26,7 +26,7 @@ export default function OfflineInfoScreen() {
         <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
           {fr.offline.subtitle}
         </AlifaText>
-        <AlifaButton label={fr.common.understood} onPress={() => router.back()} />
+        <AlifaButton label={fr.common.understood} onPress={goBack} />
       </View>
     </AlifaScreen>
   );

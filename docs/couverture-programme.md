@@ -7,7 +7,7 @@ Source : *Programmes Réactualisés de l’Enseignement Primaire*, Ministère de
 ## 1. Volume produit
 
 - **308 leçons** — CP1 : 147, CP2 : 161
-- **1625 exercices**, **820 enregistrements**, **112 illustrations**
+- **1625 exercices**, **824 enregistrements**, **112 illustrations**
 
 ## 2. Respect de la grille horaire (p. 128)
 

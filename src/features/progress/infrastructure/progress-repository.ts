@@ -55,6 +55,10 @@ export interface ProgressRepository {
   saveLessonResult(result: CompletedLessonResult): Promise<void>;
   findNextRecommendedLesson(childProfileId: ChildProfileId): Promise<LessonRecommendation | null>;
   countCompletedLessons(childProfileId: ChildProfileId): Promise<number>;
+  /** Leçons terminées depuis un instant ISO — « aujourd'hui » vu de l'accueil. */
+  countCompletedSince(childProfileId: ChildProfileId, sinceIso: string): Promise<number>;
+  /** Jours calendaires (YYYY-MM-DD) avec au moins une leçon terminée. */
+  findCompletedDays(childProfileId: ChildProfileId): Promise<string[]>;
 }
 
 interface ProgressRow {
@@ -219,6 +223,27 @@ export function createProgressRepository(db: SQLiteDatabase): ProgressRepository
         childProfileId,
       );
       return row?.n ?? 0;
+    },
+
+    async countCompletedSince(childProfileId, sinceIso) {
+      const row = await db.getFirstAsync<{ n: number }>(
+        `SELECT COUNT(*) AS n FROM lesson_progress
+         WHERE child_profile_id = ? AND status = 'completed' AND completed_at >= ?`,
+        childProfileId,
+        sinceIso,
+      );
+      return row?.n ?? 0;
+    },
+
+    async findCompletedDays(childProfileId) {
+      const rows = await db.getAllAsync<{ day: string }>(
+        `SELECT DISTINCT substr(completed_at, 1, 10) AS day
+         FROM lesson_progress
+         WHERE child_profile_id = ? AND status = 'completed' AND completed_at IS NOT NULL
+         ORDER BY day`,
+        childProfileId,
+      );
+      return rows.map((row) => row.day);
     },
   };
 }

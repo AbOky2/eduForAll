@@ -1,0 +1,19 @@
+# Régression : le retour depuis l'espace parent ramenait à la porte parentale
+# au lieu de l'accueil. « Parents » était un onglet dont l'écran repoussait la
+# porte à chaque reprise de focus — boucle infinie, bouton retour mort.
+appId: td.alifa.app.dev
+---
+- launchApp
+- assertVisible: 'Bonjour'
+
+- tapOn: 'Parents'
+- assertVisible: 'Espace parents'
+# 7 × 6 = 42
+- tapOn: '42'
+- assertVisible: 'Tableau de bord'
+
+# Le retour doit ramener à l'accueil enfant, en un seul geste
+- tapOn: 'Retour'
+- assertVisible: 'Bonjour'
+- assertNotVisible: 'Espace parents'
+- assertVisible: 'Tes activités'

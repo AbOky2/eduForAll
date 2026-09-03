@@ -15,7 +15,7 @@
  * Toute modification du contenu se fait ici ou dans scripts/content/data/,
  * jamais dans le manifeste.
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 import { curriculumManifestSchema } from '../src/content/schemas/curriculum-schema';
@@ -35,7 +35,7 @@ import { buildCp2 } from './content/cp2';
 import type { LessonSpec, WorldSpec } from './content/lesson';
 
 const ROOT = join(__dirname, '..');
-const CONTENT_VERSION = '2.0.0';
+const CONTENT_VERSION = '2.1.0';
 const GENERATED_AT = '2026-08-26T00:00:00.000Z';
 
 const cp1 = buildCp1();
@@ -82,6 +82,18 @@ for (const lesson of allLessons) {
     problems.push(`identifiant de leçon en double : ${lesson.id}`);
   }
   lessonIds.add(lesson.id);
+  // lesson_skills a pour clé primaire (lesson_id, skill_id) : un doublon ici
+  // fait échouer l'import du manifeste au premier lancement, donc le bootstrap.
+  if (new Set(lesson.skills).size !== lesson.skills.length) {
+    problems.push(`${lesson.id} : compétence en double`);
+  }
+}
+for (const [audioId, entry] of audioEntries()) {
+  // « o = au = eau » est une notation d'écran ; dite telle quelle, une voix
+  // lit « égale ». say.sound / say.instruction doivent l'avoir énumérée.
+  if (entry.text.includes('=')) {
+    problems.push(`${audioId} : texte à dire contenant « = » (« ${entry.text} »)`);
+  }
 }
 for (const lesson of allLessons) {
   for (const prerequisite of lesson.prerequisiteLessonIds) {
@@ -144,11 +156,31 @@ const audioRegistry = [
 writeFileSync(join(ROOT, 'src/content/audio-registry.generated.ts'), audioRegistry);
 console.log('écrit src/content/audio-registry.generated.ts');
 
+/**
+ * Quelle voix a effectivement enregistré chaque son.
+ *
+ * Écrit par `scripts/generate-voice-audio.ts` (voix IA) ou à la main pour des
+ * enregistrements en studio. Un son absent de ce fichier reste un placeholder,
+ * et `npm run validate:release` bloque la production tant qu'il en reste un.
+ */
+const PROVENANCE_PATH = join(ROOT, 'assets/audio/voice-provenance.json');
+const provenance: Record<string, string> = existsSync(PROVENANCE_PATH)
+  ? (JSON.parse(readFileSync(PROVENANCE_PATH, 'utf8')) as { voices: Record<string, string> }).voices
+  : {};
+const distinctVoices = [...new Set(Object.values(provenance))].sort();
+
 writeJson('assets/audio/manifest.json', {
   generatedAt: GENERATED_AT,
-  voice: 'placeholder-tts',
-  entries: audioIds.map((id) => ({ id, file: `fr/${id}.m4a`, placeholder: true })),
+  voice: distinctVoices.length > 0 ? distinctVoices.join(' + ') : 'placeholder-tts',
+  entries: audioIds.map((id) => ({
+    id,
+    file: `fr/${id}.m4a`,
+    placeholder: provenance[id] === undefined,
+    ...(provenance[id] ? { voice: provenance[id] } : {}),
+  })),
 });
+// audioId → { texte à dire, nature, phonèmes imposés } : lu par la chaîne de
+// synthèse et par les outils de contrôle, jamais par l'app.
 writeJson('assets/audio/tts-map.json', Object.fromEntries(audioEntries()));
 
 // ---------------------------------------------------------------------------

@@ -172,10 +172,14 @@ function SessionBody({
       lesson,
       outcomes: state.outcomes,
       startedAt: startedAtRef.current,
-    }).then((score) => {
+    }).then(({ score, newAchievements }) => {
       router.replace({
         pathname: '/(child)/lesson/result',
-        params: { stars: String(score.stars), lessonId: lesson.id },
+        params: {
+          stars: String(score.stars),
+          lessonId: lesson.id,
+          badges: newAchievements.join(','),
+        },
       });
     });
   }, [state.phase, profileId, lesson, state.outcomes, router]);

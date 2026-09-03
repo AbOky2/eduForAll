@@ -1,4 +1,5 @@
 /** Lesson and world assembly, shared by both levels. */
+import { slug as slugId } from './audio';
 import type { AnyStep } from './steps';
 
 export interface LessonSpec {
@@ -34,6 +35,12 @@ export function termOfWeek(week: number): 1 | 2 | 3 {
   return week <= 20 ? 2 : 3;
 }
 
+/**
+ * Les identifiants de compétence partagent le slug des audios : les accents y
+ * sont encodés (« é » → « e1 »). Sans cela « le son é » et « le son e »
+ * — deux leçons distinctes — se partageraient une compétence, et une leçon de
+ * révision insérerait deux fois la même ligne dans lesson_skills.
+ */
 export const skillSound = (sound: string) => `skill-son-${slugId(sound)}`;
 export const skillLetter = (letter: string) => `skill-lettre-${slugId(letter)}`;
 export const skillWriting = (topic: string) => `skill-ecriture-${slugId(topic)}`;
@@ -42,11 +49,3 @@ export const skillMath = (topic: string) => `skill-calcul-${slugId(topic)}`;
 export const skillLanguage = (topic: string) => `skill-langage-${slugId(topic)}`;
 export const skillReading = (topic: string) => `skill-lecture-${slugId(topic)}`;
 
-function slugId(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-}

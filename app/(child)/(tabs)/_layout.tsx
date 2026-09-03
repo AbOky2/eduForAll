@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { StyleSheet, View, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,12 +16,54 @@ interface AlifaTabBarProps {
 const TAB_META: Record<string, { label: string; icon: IconName }> = {
   index: { label: fr.tabs.home, icon: 'home' },
   learn: { label: fr.tabs.learn, icon: 'book' },
-  parents: { label: fr.tabs.parents, icon: 'parents' },
 };
 
-/** Custom light tab bar with the sand active pill (mockups S06/S07/S17). */
+/** One tab-bar slot: icon over label, sand pill when active. */
+function TabButton({
+  label,
+  icon,
+  focused,
+  onPress,
+}: {
+  label: string;
+  icon: IconName;
+  focused: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="tab"
+      accessibilityLabel={label}
+      accessibilityState={{ selected: focused }}
+      onPress={onPress}
+      style={[styles.tab, focused && styles.tabActive]}
+    >
+      <AlifaIcon
+        name={icon}
+        size={24}
+        color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
+        filled={focused}
+      />
+      <AlifaText
+        variant="labelSm"
+        color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
+      >
+        {label}
+      </AlifaText>
+    </Pressable>
+  );
+}
+
+/**
+ * Custom light tab bar with the sand active pill (mockups S06/S07/S17).
+ *
+ * « Parents » is deliberately NOT a tab: it opens the parent gate on top of
+ * the child flow. As a real tab it stayed focused behind the parent stack, so
+ * coming back re-triggered the redirect and the back button looked broken.
+ */
 function AlifaTabBar({ state, navigation }: AlifaTabBarProps) {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   return (
     <View
       style={[styles.bar, shadows.raised, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}
@@ -31,31 +73,22 @@ function AlifaTabBar({ state, navigation }: AlifaTabBarProps) {
         if (!meta) {
           return null;
         }
-        const focused = state.index === index;
         return (
-          <Pressable
+          <TabButton
             key={route.key}
-            accessibilityRole="tab"
-            accessibilityLabel={meta.label}
-            accessibilityState={{ selected: focused }}
+            label={meta.label}
+            icon={meta.icon}
+            focused={state.index === index}
             onPress={() => navigation.navigate(route.name)}
-            style={[styles.tab, focused && styles.tabActive]}
-          >
-            <AlifaIcon
-              name={meta.icon}
-              size={24}
-              color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
-              filled={focused}
-            />
-            <AlifaText
-              variant="labelSm"
-              color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
-            >
-              {meta.label}
-            </AlifaText>
-          </Pressable>
+          />
         );
       })}
+      <TabButton
+        label={fr.tabs.parents}
+        icon="parents"
+        focused={false}
+        onPress={() => router.push('/(parent)/gate')}
+      />
     </View>
   );
 }
@@ -65,7 +98,6 @@ export default function TabsLayout() {
     <Tabs tabBar={(props) => <AlifaTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" />
       <Tabs.Screen name="learn" />
-      <Tabs.Screen name="parents" />
     </Tabs>
   );
 }

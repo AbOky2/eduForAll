@@ -63,11 +63,13 @@
     "validate:content": "tsx scripts/validate-content.ts",
     "validate:assets": "tsx scripts/validate-assets.ts",
     "validate:audio": "tsx scripts/validate-audio-assets.ts",
+    "validate:bundle": "tsx scripts/validate-bundle.ts",
     "validate:release": "tsx scripts/validate-release.ts",
     "pictograms": "tsx scripts/tools/render-pictograms.tsx",
     "doctor": "npx expo-doctor@latest",
     "build:preview": "eas build --profile preview --platform all",
-    "build:production": "eas build --profile production --platform all"
+    "build:production": "eas build --profile production --platform all",
+    "audio:voice": "tsx scripts/generate-voice-audio.ts"
   },
   "private": true,
   "packageManager": "npm@11.0.0"

@@ -6,6 +6,7 @@ import { AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
 import { AlifaIcon } from '@/design-system/icons/alifa-icon';
 import { a11y, colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 interface GateChallenge {
   question: string;
@@ -28,6 +29,7 @@ const CHALLENGES: GateChallenge[] = [
 
 export default function ParentGateScreen() {
   const router = useRouter();
+  const goBack = useSafeBack();
   const [attempt, setAttempt] = useState(0);
   const [wrong, setWrong] = useState(false);
   const challenge = useMemo(() => CHALLENGES[attempt % CHALLENGES.length]!, [attempt]);
@@ -81,7 +83,7 @@ export default function ParentGateScreen() {
           </View>
         </AlifaCard>
 
-        <Pressable accessibilityRole="button" onPress={() => router.back()} hitSlop={12}>
+        <Pressable accessibilityRole="button" onPress={goBack} hitSlop={12}>
           <AlifaText variant="labelMd" color={colors.textSecondary} align="center">
             {fr.common.back}
           </AlifaText>

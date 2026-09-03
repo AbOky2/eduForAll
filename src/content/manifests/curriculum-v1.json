@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "contentVersion": "2.0.0",
+ "contentVersion": "2.1.0",
  "generatedAt": "2026-08-26T00:00:00.000Z",
  "levels": [
   {
@@ -7961,7 +7961,7 @@
         "Situer le son « é » au début, au milieu ou à la fin d’un mot"
        ],
        "skills": [
-        "skill-son-e"
+        "skill-son-e1"
        ],
        "estimatedDurationMinutes": 12,
        "term": 1,
@@ -7974,7 +7974,7 @@
         {
          "id": "cp1-lecture-é-1-s269",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Écoute le son « é ».",
@@ -7987,7 +7987,7 @@
         {
          "id": "cp1-lecture-é-1-s270",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Touche la lettre que tu entends.",
@@ -8010,7 +8010,7 @@
         {
          "id": "cp1-lecture-é-1-s271",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Où entends-tu « é » ?",
@@ -8029,7 +8029,7 @@
         {
          "id": "cp1-lecture-é-1-s272",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Où entends-tu « é » ?",
@@ -8048,7 +8048,7 @@
         {
          "id": "cp1-lecture-é-1-s273",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Où entends-tu « é » ?",
@@ -8067,7 +8067,7 @@
         {
          "id": "cp1-lecture-é-1-s274",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Touche l’image du mot que tu entends.",
@@ -8101,7 +8101,7 @@
         {
          "id": "cp1-lecture-é-1-s275",
          "skills": [
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Écoute, puis répète à voix haute.",
@@ -8132,7 +8132,7 @@
         "skill-son-o",
         "skill-son-u",
         "skill-son-e",
-        "skill-son-e"
+        "skill-son-e1"
        ],
        "estimatedDurationMinutes": 12,
        "term": 1,
@@ -8148,7 +8148,7 @@
           "skill-son-o",
           "skill-son-u",
           "skill-son-e",
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Touche l’image du mot que tu entends.",
@@ -8185,7 +8185,7 @@
           "skill-son-o",
           "skill-son-u",
           "skill-son-e",
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Forme le mot que tu entends.",
@@ -8210,7 +8210,7 @@
           "skill-son-o",
           "skill-son-u",
           "skill-son-e",
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Associe chaque son à un mot.",
@@ -8245,7 +8245,7 @@
           "skill-son-o",
           "skill-son-u",
           "skill-son-e",
-          "skill-son-e"
+          "skill-son-e1"
          ],
          "instruction": {
           "text": "Écoute, puis répète à voix haute.",
@@ -17329,7 +17329,7 @@
        "skills": [
         "skill-ecriture-lettres",
         "skill-lettre-e",
-        "skill-lettre-e",
+        "skill-lettre-e1",
         "skill-lettre-s"
        ],
        "estimatedDurationMinutes": 11,
@@ -17345,7 +17345,7 @@
          "skills": [
           "skill-ecriture-lettres",
           "skill-lettre-e",
-          "skill-lettre-e",
+          "skill-lettre-e1",
           "skill-lettre-s"
          ],
          "instruction": {
@@ -17365,7 +17365,7 @@
          "skills": [
           "skill-ecriture-lettres",
           "skill-lettre-e",
-          "skill-lettre-e",
+          "skill-lettre-e1",
           "skill-lettre-s"
          ],
          "instruction": {
@@ -17385,7 +17385,7 @@
          "skills": [
           "skill-ecriture-lettres",
           "skill-lettre-e",
-          "skill-lettre-e",
+          "skill-lettre-e1",
           "skill-lettre-s"
          ],
          "instruction": {
@@ -17405,7 +17405,7 @@
          "skills": [
           "skill-ecriture-lettres",
           "skill-lettre-e",
-          "skill-lettre-e",
+          "skill-lettre-e1",
           "skill-lettre-s"
          ],
          "instruction": {
@@ -20231,6 +20231,11 @@
          "statement": "Amina a 4 mangues. Elle en AJOUTE 3. Combien en a-t-elle ?",
          "statementAudioId": "phrase-amina-a-4-mangues-elle-en-ajoute-3-combien-en-a-t-elle",
          "illustrationId": "icon-mango",
+         "visual": {
+          "first": 4,
+          "second": 3,
+          "mode": "add"
+         },
          "answer": 7,
          "options": [
           6,
@@ -20255,6 +20260,11 @@
          "statement": "Le berger a 9 chèvres. Il en ÔTE 2 du troupeau. Combien en reste-t-il ?",
          "statementAudioId": "phrase-le-berger-a-9-che2vres-il-en-o1te-2-du-troupeau-combien-en-r",
          "illustrationId": "icon-goat",
+         "visual": {
+          "first": 9,
+          "second": 2,
+          "mode": "remove"
+         },
          "answer": 7,
          "options": [
           6,
@@ -21020,10 +21030,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 1,
          "b": 2,
          "options": [
@@ -21043,10 +21055,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 3,
          "b": 2,
          "options": [
@@ -21066,10 +21080,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les poules sur l’image.",
+          "audioId": "hint-compte-les-poules-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-hen",
+         "objectName": "poules",
          "a": 4,
          "b": 1,
          "options": [
@@ -21089,10 +21105,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les calebasses sur l’image.",
+          "audioId": "hint-compte-les-calebasses-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-calabash",
+         "objectName": "calebasses",
          "a": 2,
          "b": 3,
          "options": [
@@ -21139,10 +21157,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 5,
          "b": 2,
          "options": [
@@ -21162,10 +21182,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 4,
          "b": 1,
          "options": [
@@ -21185,10 +21207,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les poules sur l’image.",
+          "audioId": "hint-compte-les-poules-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-hen",
+         "objectName": "poules",
          "a": 6,
          "b": 3,
          "options": [
@@ -21208,10 +21232,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les calebasses sur l’image.",
+          "audioId": "hint-compte-les-calebasses-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-calabash",
+         "objectName": "calebasses",
          "a": 7,
          "b": 2,
          "options": [
@@ -21552,6 +21578,11 @@
          "statement": "Amina a 3 mangues. Sa maman lui en donne 2. Combien a-t-elle de mangues ?",
          "statementAudioId": "phrase-amina-a-3-mangues-sa-maman-lui-en-donne-2-combien-a-t-elle-d",
          "illustrationId": "icon-mango",
+         "visual": {
+          "first": 3,
+          "second": 2,
+          "mode": "add"
+         },
          "answer": 5,
          "options": [
           4,
@@ -21576,6 +21607,11 @@
          "statement": "Il y a 6 chèvres au puits. 2 chèvres partent. Combien reste-t-il de chèvres ?",
          "statementAudioId": "phrase-il-y-a-6-che2vres-au-puits-2-che2vres-partent-combien-reste-",
          "illustrationId": "icon-goat",
+         "visual": {
+          "first": 6,
+          "second": 2,
+          "mode": "remove"
+         },
          "answer": 4,
          "options": [
           3,
@@ -21600,6 +21636,11 @@
          "statement": "Moussa ramasse 4 œufs. Il en trouve 3 autres. Combien a-t-il d’œufs ?",
          "statementAudioId": "phrase-moussa-ramasse-4-oe1ufs-il-en-trouve-3-autres-combien-a-t-il",
          "illustrationId": "icon-egg",
+         "visual": {
+          "first": 4,
+          "second": 3,
+          "mode": "add"
+         },
          "answer": 7,
          "options": [
           6,
@@ -21624,6 +21665,11 @@
          "statement": "La poule a 8 poussins. 3 se cachent. Combien en vois-tu ?",
          "statementAudioId": "phrase-la-poule-a-8-poussins-3-se-cachent-combien-en-vois-tu",
          "illustrationId": "icon-hen",
+         "visual": {
+          "first": 8,
+          "second": 3,
+          "mode": "remove"
+         },
          "answer": 5,
          "options": [
           4,
@@ -22315,10 +22361,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 10,
          "b": 4,
          "options": [
@@ -22338,10 +22386,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 12,
          "b": 3,
          "options": [
@@ -22361,10 +22411,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les poules sur l’image.",
+          "audioId": "hint-compte-les-poules-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-hen",
+         "objectName": "poules",
          "a": 8,
          "b": 6,
          "options": [
@@ -22384,10 +22436,12 @@
           "audioId": "instr-combien-font-ils-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les calebasses sur l’image.",
+          "audioId": "hint-compte-les-calebasses-sur-l-image"
          },
          "type": "simple_addition",
+         "illustrationId": "icon-calabash",
+         "objectName": "calebasses",
          "a": 11,
          "b": 5,
          "options": [
@@ -22442,10 +22496,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 14,
          "b": 4,
          "options": [
@@ -22465,10 +22521,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 17,
          "b": 5,
          "options": [
@@ -22488,10 +22546,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les poules sur l’image.",
+          "audioId": "hint-compte-les-poules-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-hen",
+         "objectName": "poules",
          "a": 20,
          "b": 8,
          "options": [
@@ -22511,10 +22571,12 @@
           "audioId": "instr-combien-en-reste-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les calebasses sur l’image.",
+          "audioId": "hint-compte-les-calebasses-sur-l-image"
          },
          "type": "simple_subtraction",
+         "illustrationId": "icon-calabash",
+         "objectName": "calebasses",
          "a": 15,
          "b": 3,
          "options": [
@@ -22712,10 +22774,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 2,
          "b": 2,
          "options": [
@@ -22735,10 +22799,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 3,
          "b": 2,
          "options": [
@@ -22758,10 +22824,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les poules sur l’image.",
+          "audioId": "hint-compte-les-poules-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-hen",
+         "objectName": "poules",
          "a": 4,
          "b": 2,
          "options": [
@@ -22781,10 +22849,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les calebasses sur l’image.",
+          "audioId": "hint-compte-les-calebasses-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-calabash",
+         "objectName": "calebasses",
          "a": 5,
          "b": 2,
          "options": [
@@ -22831,10 +22901,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 4,
          "b": 2,
          "options": [
@@ -22842,7 +22914,7 @@
           2,
           3
          ],
-         "showQuantities": false
+         "showQuantities": true
         },
         {
          "id": "cp1-calcul-division-1-s782",
@@ -22854,10 +22926,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 6,
          "b": 2,
          "options": [
@@ -22865,7 +22939,7 @@
           3,
           4
          ],
-         "showQuantities": false
+         "showQuantities": true
         },
         {
          "id": "cp1-calcul-division-1-s783",
@@ -22877,10 +22951,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les poules sur l’image.",
+          "audioId": "hint-compte-les-poules-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-hen",
+         "objectName": "poules",
          "a": 8,
          "b": 2,
          "options": [
@@ -22888,7 +22964,7 @@
           4,
           5
          ],
-         "showQuantities": false
+         "showQuantities": true
         },
         {
          "id": "cp1-calcul-division-1-s784",
@@ -22900,10 +22976,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les calebasses sur l’image.",
+          "audioId": "hint-compte-les-calebasses-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-calabash",
+         "objectName": "calebasses",
          "a": 10,
          "b": 2,
          "options": [
@@ -22911,7 +22989,7 @@
           5,
           6
          ],
-         "showQuantities": false
+         "showQuantities": true
         }
        ],
        "completionRule": {
@@ -23231,6 +23309,11 @@
          "statement": "Papa achète 5 poissons. Il en donne 1 au voisin. Combien lui en reste-t-il ?",
          "statementAudioId": "phrase-papa-ache2te-5-poissons-il-en-donne-1-au-voisin-combien-lui-",
          "illustrationId": "icon-fish",
+         "visual": {
+          "first": 5,
+          "second": 1,
+          "mode": "remove"
+         },
          "answer": 4,
          "options": [
           3,
@@ -23255,6 +23338,11 @@
          "statement": "Il y a 7 calebasses. Fatimé en apporte 2. Combien y a-t-il de calebasses ?",
          "statementAudioId": "phrase-il-y-a-7-calebasses-fatime1-en-apporte-2-combien-y-a-t-il-de",
          "illustrationId": "icon-calabash",
+         "visual": {
+          "first": 7,
+          "second": 2,
+          "mode": "add"
+         },
          "answer": 9,
          "options": [
           8,
@@ -23279,6 +23367,11 @@
          "statement": "Le berger compte 10 moutons. 4 entrent dans l’enclos. Combien restent dehors ?",
          "statementAudioId": "phrase-le-berger-compte-10-moutons-4-entrent-dans-l-enclos-combien-",
          "illustrationId": "icon-sheep",
+         "visual": {
+          "first": 10,
+          "second": 4,
+          "mode": "remove"
+         },
          "answer": 6,
          "options": [
           5,
@@ -23303,6 +23396,11 @@
          "statement": "Amina a 9 billes. Elle en perd 3. Combien lui reste-t-il de billes ?",
          "statementAudioId": "phrase-amina-a-9-billes-elle-en-perd-3-combien-lui-reste-t-il-de-bi",
          "illustrationId": "icon-marble",
+         "visual": {
+          "first": 9,
+          "second": 3,
+          "mode": "remove"
+         },
          "answer": 6,
          "options": [
           5,
@@ -47207,10 +47305,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 6,
          "b": 2,
          "options": [
@@ -47230,10 +47330,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 8,
          "b": 2,
          "options": [
@@ -47326,10 +47428,12 @@
           "audioId": "instr-combien-cela-fait-il-en-tout"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_multiplication",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 4,
          "b": 5,
          "options": [
@@ -47596,10 +47700,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 12,
          "b": 2,
          "options": [
@@ -47607,7 +47713,7 @@
           6,
           7
          ],
-         "showQuantities": false
+         "showQuantities": true
         },
         {
          "id": "cp2-calcul-division-1-s1593",
@@ -47619,10 +47725,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les mangues sur l’image.",
+          "audioId": "hint-compte-les-mangues-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-mango",
+         "objectName": "mangues",
          "a": 18,
          "b": 2,
          "options": [
@@ -47630,7 +47738,7 @@
           9,
           10
          ],
-         "showQuantities": false
+         "showQuantities": true
         },
         {
          "id": "cp2-calcul-division-1-s1594",
@@ -47715,10 +47823,12 @@
           "audioId": "instr-combien-chacun-en-a-t-il"
          },
          "hint": {
-          "text": "Compte les points sur les cartes.",
-          "audioId": "hint-compte-les-points-sur-les-cartes"
+          "text": "Compte les chèvres sur l’image.",
+          "audioId": "hint-compte-les-che2vres-sur-l-image"
          },
          "type": "simple_division",
+         "illustrationId": "icon-goat",
+         "objectName": "chèvres",
          "a": 20,
          "b": 5,
          "options": [
@@ -47726,7 +47836,7 @@
           4,
           5
          ],
-         "showQuantities": false
+         "showQuantities": true
         },
         {
          "id": "cp2-calcul-division-2-s1597",
@@ -48736,15 +48846,39 @@
    "placeholder": true
   },
   {
+   "id": "hint-compte-les-calebasses-sur-l-image",
+   "kind": "audio",
+   "file": "audio/fr/hint-compte-les-calebasses-sur-l-image.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-compte-les-che2vres-sur-l-image",
+   "kind": "audio",
+   "file": "audio/fr/hint-compte-les-che2vres-sur-l-image.m4a",
+   "placeholder": true
+  },
+  {
    "id": "hint-compte-les-grosses-pie2ces-d-abord",
    "kind": "audio",
    "file": "audio/fr/hint-compte-les-grosses-pie2ces-d-abord.m4a",
    "placeholder": true
   },
   {
+   "id": "hint-compte-les-mangues-sur-l-image",
+   "kind": "audio",
+   "file": "audio/fr/hint-compte-les-mangues-sur-l-image.m4a",
+   "placeholder": true
+  },
+  {
    "id": "hint-compte-les-points-sur-les-cartes",
    "kind": "audio",
    "file": "audio/fr/hint-compte-les-points-sur-les-cartes.m4a",
+   "placeholder": true
+  },
+  {
+   "id": "hint-compte-les-poules-sur-l-image",
+   "kind": "audio",
+   "file": "audio/fr/hint-compte-les-poules-sur-l-image.m4a",
    "placeholder": true
   },
   {
