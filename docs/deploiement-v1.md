@@ -200,23 +200,23 @@ eas submit -p ios --latest           # → TestFlight, puis soumission
 
 ## 7. Ce qui part en v1.0.0, et ce qui est assumé
 
-Deux exceptions sont explicitement acceptées dans `release-acceptances.json`,
-et **doivent figurer dans les notes de version** :
+Une exception est explicitement acceptée dans `release-acceptances.json`, et
+**doit figurer dans les notes de version** :
 
-1. **Voix de synthèse.** Les 820 consignes sont en TTS. Compréhensibles, mais
-   ce n'est pas une voix humaine. À remplacer en 1.1.0.
-2. **Expo SDK 56.** Une régression mémoire d'Hermes est corrigée en SDK 57.
+1. **Expo SDK 56.** Une régression mémoire d'Hermes est corrigée en SDK 57.
    La montée de version se fera tablette en main, en 1.1.0.
 
-Le script de release échoue si l'une de ces exceptions traîne au-delà de la
-1.1.0 — elles ne peuvent pas être oubliées.
+Le script de release échoue si cette exception traîne au-delà de la 1.1.0 —
+elle ne peut pas être oubliée. La voix, elle, n'est plus une exception :
+synthèse locale Kokoro + Piper (`docs/audio-pipeline.md`).
 
 ---
 
 ## 8. Après la mise en ligne
 
 1. Atelier de validation avec l'enseignant (`docs/pedagogical-validation.md`).
-2. Enregistrement des voix définitives (`docs/audio-pipeline.md`).
+2. Relecture de la prononciation des sons isolés par l'enseignant
+   (`docs/pedagogical-validation.md` § 8).
 3. Montée en Expo SDK 57, avec une tablette pour vérifier.
 4. Corrections issues de l'atelier → nouvelle `contentVersion`.
 5. → v1.1.0.
