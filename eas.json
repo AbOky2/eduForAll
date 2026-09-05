@@ -52,9 +52,7 @@
         "releaseStatus": "draft"
       },
       "ios": {
-        "appleId": "REMPLACER_PAR_EMAIL_APPLE_ID",
-        "ascAppId": "REMPLACER_PAR_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "REMPLACER_PAR_TEAM_ID"
+        "language": "fr-FR"
       }
     }
   }

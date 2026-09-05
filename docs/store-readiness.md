@@ -42,7 +42,7 @@ document dit seulement ce qui est prêt et ce qui manque.
 | Identité légale de l'éditeur : nom, adresse, e-mail | politique de confidentialité + fiches | oui |
 | URL publique de la politique de confidentialité | les deux fiches | oui |
 | Captures d'écran depuis un vrai build : **tablette et téléphone**, 9 plans | les deux fiches | oui |
-| `appleId`, `ascAppId`, `appleTeamId` | `eas.json` → `submit.production.ios` | oui, côté iOS |
+| Apple ID du compte développeur + 2FA | demandé par `eas build` / `eas submit` | oui, côté iOS |
 | URL ou e-mail de support | les deux fiches | oui |
 
 > Les comptes Play Console et Apple Developer sont déjà ouverts, et une

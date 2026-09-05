@@ -68,6 +68,23 @@ eas build --profile preview --platform android
 Un APK, un lien, un QR code. Installable directement sur une tablette
 Android (autoriser les sources inconnues).
 
+> ⚠️ **Le premier build de chaque plateforme est forcément interactif.** EAS
+> refuse de créer ou de valider des clés de signature sans confirmation
+> humaine — `--non-interactive` échoue sur
+> « Generating a new Keystore is not supported » (Android) et
+> « Distribution Certificate is not validated » (iOS). C'est voulu : une clé
+> de signature engage l'identité de l'éditeur.
+>
+> Concrètement, au premier lancement :
+> - **Android** — répondre *oui* à « Generate a new Android Keystore? ». EAS
+>   la garde sur son serveur ; elle ne sert qu'aux APK de test, la production
+>   Play étant resignée par Google.
+> - **iOS** — se connecter avec l'Apple ID du compte développeur (2FA). EAS
+>   crée le certificat de distribution et le profil de provisionnement.
+>
+> Une fois ces clés créées, les builds suivants peuvent tourner sans
+> interaction.
+
 Pour iOS, un build de test passe par TestFlight et exige déjà le compte
 Apple :
 
@@ -175,8 +192,9 @@ eas submit -p android --latest       # → piste de test interne
 ## 6. App Store Connect
 
 1. **Créer l'app** — bundle `td.alifa.app`, français comme langue principale.
-2. Renseigner dans `eas.json` → `submit.production.ios` : `appleId`,
-   `ascAppId`, `appleTeamId` (les trois `REMPLACER_PAR_…`).
+2. `eas submit -p ios` demande l'Apple ID et l'identifiant App Store Connect
+   au premier envoi, et les mémorise. Rien à renseigner d'avance dans
+   `eas.json` — seule la langue de la fiche y est fixée (`fr-FR`).
 3. **Informations sur l'app** :
    - Catégorie principale : Éducation
    - URL de politique de confidentialité → celle du §1.2
