@@ -4,12 +4,16 @@ Les deux stores exigent une **URL publique** avant toute soumission. Le
 fichier `index.html` de ce dossier est autonome : aucune dépendance, aucun
 build.
 
-## Avant de publier
+## État
 
-Compléter le **nom de l'entité légale** dans la section « Éditeur et contact »
-d'`index.html`, et retirer l'encadré jaune. L'adresse et l'e-mail sont déjà
-renseignés. Sans identité d'éditeur, la soumission est refusée par Google
-comme par Apple.
+La page est complète : éditeur, adresse, contact, RGPD. Elle est publiée sur
+`https://aboky2.github.io/eduForAll/`.
+
+Toute modification de `index.html` doit être repoussée sur `gh-pages` :
+
+```bash
+git subtree push --prefix store/shared/privacy-policy origin gh-pages
+```
 
 ## Publier avec GitHub Pages (gratuit)
 
