@@ -44,6 +44,13 @@ const STALE_AFTER_DAYS = 7;
 export const MAX_OPEN_REVISIONS = 12;
 
 /**
+ * Combien de notions l'enfant voit d'un coup. L'accueil annonce ce nombre et
+ * l'atelier de révision montre ces notions-là : les deux doivent compter la
+ * même chose, sinon la carte promet douze notions et l'écran en affiche quatre.
+ */
+export const REVISION_BATCH = 4;
+
+/**
  * Known confusable pairs (visually or phonetically close). If both sides
  * accumulate errors, revise them together with an audio+visual contrast.
  */

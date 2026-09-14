@@ -195,6 +195,7 @@ export const fr = {
     currentLevel: 'Niveau actuel',
     lessonsCompleted: 'Leçons complétées',
     timeToday: 'Temps aujourd’hui',
+    masteredSkills: 'Notions maîtrisées',
     minutes: (count: number) => `${count} min`,
     progressAnalysis: 'Analyse de progression',
     recommendation: 'RECOMMANDATION',

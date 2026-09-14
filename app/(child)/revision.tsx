@@ -5,6 +5,7 @@ import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { lessonForSkill } from '@/features/curriculum/application/curriculum-catalog';
 import { describeSkill } from '@/features/parent-space/application/parent-dashboard';
+import { REVISION_BATCH } from '@/features/revision/domain/revision-engine';
 import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
 import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
@@ -31,7 +32,7 @@ export default function RevisionScreen() {
         profile
           ? getDatabase()
               .then((db) =>
-                createRevisionRepository(db).findOpen(profile.id, 4, new Date().toISOString()),
+                createRevisionRepository(db).findOpen(profile.id, REVISION_BATCH, new Date().toISOString()),
               )
               // Each struggled skill maps back to the first lesson that trains it.
               .then((open) =>

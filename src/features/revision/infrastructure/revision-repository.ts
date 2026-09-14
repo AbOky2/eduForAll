@@ -13,10 +13,26 @@ export interface OpenRevision {
   readonly reason: RevisionReason;
 }
 
+const REASONS: readonly RevisionReason[] = [
+  'repeated_errors',
+  'needed_hints',
+  'not_practiced_recently',
+  'confusion_pair',
+];
+
+/** La colonne est du texte libre : une valeur inconnue ne doit pas finir à l'écran. */
+function toReason(value: string): RevisionReason {
+  return REASONS.includes(value as RevisionReason)
+    ? (value as RevisionReason)
+    : 'repeated_errors';
+}
+
 /** Une notion programmée par le moteur, prête à être écrite dans la file. */
 export interface ScheduledRevision {
   readonly skillId: string;
   readonly reason: RevisionReason;
+  /** Plus haut d'abord : c'est l'ordre dans lequel l'enfant les verra. */
+  readonly priority: number;
   /** Séances à laisser passer avant de la reproposer. */
   readonly deferSessions: number;
 }
@@ -27,8 +43,6 @@ export interface ScheduledRevision {
  * NULL` — cette règle vit ici et nulle part ailleurs.
  */
 export interface RevisionRepository {
-  /** Notions dues maintenant. Une notion différée ne compte pas encore. */
-  countOpen(childProfileId: ChildProfileId, now: string): Promise<number>;
   findOpen(childProfileId: ChildProfileId, limit: number, now: string): Promise<OpenRevision[]>;
   /** État accumulé de chaque notion pratiquée, pour le moteur de révision. */
   findSkillSnapshots(childProfileId: ChildProfileId): Promise<SkillSnapshot[]>;
@@ -52,29 +66,20 @@ const DEFER_DAY_MS = 86_400_000;
 
 export function createRevisionRepository(db: Queryable): RevisionRepository {
   return {
-    async countOpen(childProfileId, now) {
-      const row = await db.getFirstAsync<{ n: number }>(
-        `SELECT COUNT(*) AS n FROM revision_queue
-         WHERE child_profile_id = ? AND resolved_at IS NULL AND due_at <= ?`,
-        childProfileId,
-        now,
-      );
-      return row?.n ?? 0;
-    },
-
     async findOpen(childProfileId, limit, now) {
       const rows = await db.getAllAsync<{ skill_id: string; reason: string }>(
+        // La priorité du moteur d'abord : une confusion b/d passe avant une
+        // notion simplement ancienne. Sans cela toutes les entrées dues le
+        // même jour partagent leur `due_at` et l'enfant voyait les plus
+        // anciennes, jamais les plus importantes.
         `SELECT skill_id, reason FROM revision_queue
          WHERE child_profile_id = ? AND resolved_at IS NULL AND due_at <= ?
-         ORDER BY due_at LIMIT ?`,
+         ORDER BY priority DESC, due_at, skill_id LIMIT ?`,
         childProfileId,
         now,
         limit,
       );
-      return rows.map((row) => ({
-        skillId: row.skill_id,
-        reason: row.reason as RevisionReason,
-      }));
+      return rows.map((row) => ({ skillId: row.skill_id, reason: toReason(row.reason) }));
     },
 
     async findAllOpenSkillIds(childProfileId) {
@@ -123,20 +128,25 @@ export function createRevisionRepository(db: Queryable): RevisionRepository {
 
     async schedule(childProfileId, revisions, at) {
       const scheduledAt = Date.parse(at);
-      for (const { skillId, reason, deferSessions } of revisions) {
+      for (const { skillId, reason, priority, deferSessions } of revisions) {
         const dueAt = new Date(scheduledAt + deferSessions * DEFER_DAY_MS).toISOString();
         await db.runAsync(
-          `INSERT OR REPLACE INTO revision_queue
-             (id, child_profile_id, skill_id, reason, due_at, resolved_at, created_at)
-           VALUES (
-             (SELECT id FROM revision_queue
-               WHERE child_profile_id = ? AND skill_id = ? AND resolved_at IS NULL),
-             ?, ?, ?, ?, NULL, ?)`,
-          childProfileId,
-          skillId,
+          // `MIN` sur l'échéance : une révision en attente ne s'éloigne
+          // jamais — sans quoi une notion différée d'une séance verrait son
+          // échéance repoussée à chaque fin de leçon — mais elle peut se
+          // rapprocher si elle devient urgente. `created_at` n'est pas touché :
+          // il répond à « depuis quand cette notion attend-elle ? ».
+          `INSERT INTO revision_queue
+             (child_profile_id, skill_id, reason, priority, due_at, resolved_at, created_at)
+           VALUES (?, ?, ?, ?, ?, NULL, ?)
+           ON CONFLICT (child_profile_id, skill_id) WHERE resolved_at IS NULL DO UPDATE SET
+             reason = excluded.reason,
+             priority = excluded.priority,
+             due_at = MIN(revision_queue.due_at, excluded.due_at)`,
           childProfileId,
           skillId,
           reason,
+          priority,
           dueAt,
           at,
         );

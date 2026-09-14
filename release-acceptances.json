@@ -3,11 +3,12 @@
   "acceptances": [
     {
       "gate": "Expo Doctor",
-      "reason": "Régression mémoire Hermes V1 (RN 0.85.3). Le correctif n'existe qu'à partir de RN 0.86.2 / Expo SDK 57 : c'est une montée de version majeure, à faire tablette en main et non à l'aveugle avant la première livraison. Toutes les autres vérifications de expo-doctor passent (21/22).",
+      "reason": "Régression mémoire Hermes V1 (RN 0.85.3). Le correctif n'existe qu'à partir de RN 0.86.2 / Expo SDK 57 : c'est une montée de version majeure, à faire tablette en main et non à l'aveugle avant la première livraison. C’est la SEULE vérification en échec : les dépendances ont été réalignées sur le SDK 56 le 14 septembre 2026. Si expo-doctor en signale une seconde, cette acceptation ne s’applique plus.",
       "decidedBy": "propriétaire du projet",
       "decidedOn": "2026-08-26",
       "clearBy": "1.1.0",
-      "matches": "Hermes V1"
+      "matches": "Hermes V1",
+      "coversFailingChecks": 1
     }
   ]
 }

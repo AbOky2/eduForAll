@@ -1,6 +1,6 @@
 # ECOLNA — Audit des maquettes Stitch
 
-> Source de vérité visuelle : projet Stitch **« ECOLNA : L'École du Désert »**
+> Source de vérité visuelle : projet Stitch **« ALIFA : L'École du Désert » (nom du projet Stitch, antérieur au renommage)**
 > (`projects/15951466424347515721`, 21 écrans, mobile 412×917 de référence).
 > Fichiers locaux : `design/stitch/*.png` (captures) + `design/stitch/*.html` (code Stitch exact) + `design/stitch/index.json` (correspondance id ↔ fichier).
 

@@ -2,16 +2,15 @@
 
 ## Bloquantes pour la production (gates actives)
 
-1. **Voix placeholder TTS** — les 821 audios sont synthétiques.
-   Remplacement documenté dans `docs/audio-pipeline.md`. Gate automatique.
-2. **Régression mémoire Hermes V1** — `expo-doctor` signale que React Native
+1. **Régression mémoire Hermes V1** — `expo-doctor` signale que React Native
    0.85.3 / Expo SDK 56 embarque une version d'Hermes affectée par une
    régression mémoire, corrigée à partir de RN 0.86.2 (Expo SDK 57). Le sujet
    compte pour ce projet : la cible est une tablette d'entrée de gamme à
    faible RAM. Monter en SDK 57 est une décision du propriétaire du projet
    (SDK 56 est aujourd'hui épinglé dans `CLAUDE.md`).
-3. **Identifiants stores** — bundle id / package définitifs, comptes Apple et
-   Google, identité légale de l'éditeur : à fournir par le propriétaire.
+2. **Captures d'écran et fiches stores** — à produire depuis un build installé.
+   L'identifiant (`td.ecolna.app`), l'identité légale de l'éditeur et l'URL de
+   la politique de confidentialité sont désormais fournis.
 
 ## Non bloquantes, assumées et documentées
 

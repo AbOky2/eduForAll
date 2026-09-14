@@ -90,6 +90,13 @@ export default function ParentDashboardScreen() {
           />
         </EcolnaStatCard>
         <EcolnaStatCard
+          icon="sparkle"
+          label={fr.parent.masteredSkills}
+          value={String(data?.masteredSkills ?? 0)}
+          container={colors.feedbackCorrectContainer}
+          tint={colors.feedbackCorrect}
+        />
+        <EcolnaStatCard
           icon="star"
           label={fr.parent.timeToday}
           value={fr.parent.minutes(data?.minutesToday ?? 0)}

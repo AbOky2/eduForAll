@@ -3,7 +3,7 @@
 Mêmes 8 scènes que `store/app-store/screenshot-plan.md` (accueil, carte,
 écoute, langage, calcul, réussite, parent, hors-connexion), formats téléphone et tablette
 16:9 ou 9:16 ≥ 1080 px, + bandeau fonctionnalité (1024×500) reprenant le
-logo ECOLNA sur fond ivoire avec la signature « Apprendre partout, même sans
+logo ECOLNA sur fond bleu pétrole (#2b6485), celui de l'icône avec la signature « Apprendre partout, même sans
 internet ». Données fictives cohérentes (Amina, CP1), aucun élément de
 développement.
 

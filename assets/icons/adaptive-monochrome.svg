@@ -1,6 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Icône thématique Android : une seule couleur, donc la reliure ne peut pas
+       être un trait. Les deux pages sont séparées par un vide, sans quoi elles
+       fusionnent en une forme pleine qui ne se lit plus comme un livre. -->
   <g transform="translate(512 512) scale(0.64) translate(-512 -512)" fill="#ffffff">
-    <path d="M512 392 C452 332 366 318 288 324 L288 718 C366 712 452 726 512 786 Z"/>
-    <path d="M512 392 C572 332 658 318 736 324 L736 718 C658 712 572 726 512 786 Z"/>
+    <path d="M496 392 C436 332 350 318 288 324 L288 718 C350 712 436 726 496 786 Z"/>
+    <path d="M528 392 C588 332 674 318 736 324 L736 718 C674 712 588 726 528 786 Z"/>
   </g>
 </svg>

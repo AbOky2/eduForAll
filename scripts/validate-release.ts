@@ -30,6 +30,11 @@ interface Acceptance {
   clearBy: string;
   /** Substring that must appear in the failure for the acceptance to apply. */
   matches: string;
+  /**
+   * Combien de vérifications en échec cette acceptation couvre. Au-delà, une
+   * défaillance nouvelle se cache derrière celle qu'on a acceptée.
+   */
+  coversFailingChecks?: number;
 }
 
 const { acceptances } = JSON.parse(
@@ -42,12 +47,33 @@ const appVersion = (
 
 const usedAcceptances = new Set<string>();
 
+/**
+ * Une acceptation couvre UNE défaillance nommée, pas tout ce qu'une commande
+ * peut cracher. expo-doctor résume son verdict par « N checks failed » : si N
+ * dépasse ce que l'acceptation déclare, une défaillance neuve se cache
+ * derrière celle qu'on a acceptée, et la gate passerait en silence. C'est
+ * exactement la situation qu'on veut voir échouer.
+ */
 function acceptanceFor(gate: string, detail: string): Acceptance | null {
-  return (
-    acceptances.find(
-      (candidate) => candidate.gate === gate && detail.includes(candidate.matches),
-    ) ?? null
+  const candidate = acceptances.find(
+    (entry) => entry.gate === gate && detail.includes(entry.matches),
   );
+  if (!candidate) {
+    return null;
+  }
+  const declared = candidate.coversFailingChecks;
+  if (declared !== undefined) {
+    const reported = /(\d+)\s+checks?\s+failed/i.exec(detail);
+    const failing = reported ? Number(reported[1]) : 1;
+    if (failing > declared) {
+      console.error(
+        `     ⚠️  ${failing} vérifications en échec alors que l'acceptation n'en couvre ` +
+          `que ${declared} : une défaillance nouvelle se cache derrière.`,
+      );
+      return null;
+    }
+  }
+  return candidate;
 }
 
 const results: Array<{ name: string; ok: boolean; accepted?: Acceptance; detail?: string }> = [];

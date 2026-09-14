@@ -9,10 +9,11 @@ const ANDROID_PACKAGE = process.env.ECOLNA_ANDROID_PACKAGE ?? 'td.ecolna.app.dev
 const IOS_BUNDLE_IDENTIFIER = process.env.ECOLNA_IOS_BUNDLE_ID ?? 'td.ecolna.app.dev';
 
 /**
- * Projet EAS @okimy/ecolna. Ce n'est pas un secret : c'est l'équivalent de ce
- * qu'Expo écrit dans app.json sur un projet à configuration statique. La
- * configuration d'ECOLNA étant dynamique, EAS ne peut pas l'écrire lui-même.
- * La variable d'environnement permet de pointer un autre projet.
+ * Projet EAS `@okimy/alifa` — l'app s'appelle ECOLNA, son projet EAS a gardé
+ * son nom d'origine. Ce n'est pas un secret : c'est l'équivalent de ce qu'Expo
+ * écrit dans app.json sur un projet à configuration statique. La configuration
+ * d'ECOLNA étant dynamique, EAS ne peut pas l'écrire lui-même. La variable
+ * d'environnement permet de pointer un autre projet.
  */
 const EAS_PROJECT_ID =
   process.env.EAS_PROJECT_ID ?? 'aa1d821b-49a3-4a56-aad8-9cd2a0b0afa3';
@@ -21,13 +22,27 @@ const EAS_PROJECT_ID =
  * Vrai pour tout build destiné à quelqu'un d'autre que le développeur
  * (profils preview, production, production-apk d'eas.json).
  *
- * React Native déclare par défaut des permissions dont il n'a besoin qu'en
- * développement : INTERNET pour joindre Metro, SYSTEM_ALERT_WINDOW pour
- * l'overlay du menu dev. Les laisser dans une app pour enfants qui promet
- * de ne jamais accéder au réseau serait une contradiction visible dans la
- * liste des autorisations du Play Store.
+ * INTERNET arrive par les manifestes d'`expo-file-system` et d'`expo-image`,
+ * pas par React Native lui-même. La laisser dans une app pour enfants qui
+ * promet de ne jamais accéder au réseau serait une contradiction visible dans
+ * la liste des autorisations du Play Store. Les trois autres ne sont plus
+ * déclarées par les dépendances actuelles : les bloquer ne coûte rien et
+ * protège d'une régression d'une mise à jour de dépendance.
  */
 const IS_RELEASE_BUILD = process.env.ECOLNA_RELEASE === '1';
+
+/**
+ * Un build livré qui retombe sur l'identifiant `.dev` produit un paquet que le
+ * store refuse, et des clés de signature créées sous le mauvais nom. Les
+ * valeurs par défaut ci-dessus sont là pour le développement : en release,
+ * elles doivent avoir été fournies explicitement par le profil eas.json.
+ */
+if (IS_RELEASE_BUILD && (!process.env.ECOLNA_ANDROID_PACKAGE || !process.env.ECOLNA_IOS_BUNDLE_ID)) {
+  throw new Error(
+    'Build de release sans ECOLNA_ANDROID_PACKAGE / ECOLNA_IOS_BUNDLE_ID : ' +
+      'l’app partirait sous l’identifiant de développement. Voir eas.json.',
+  );
+}
 
 /**
  * Autorisations retirées des builds livrés. ECOLNA n'effectue aucun appel
@@ -44,6 +59,11 @@ const BLOCKED_PERMISSIONS = [
 
 const config: ExpoConfig = {
   name: 'ECOLNA',
+  // ⚠️ Ne pas renommer en 'ecolna'. eas-cli récupère le projet par
+  // `extra.eas.projectId`, puis VÉRIFIE que ce slug est celui du projet côté
+  // serveur : toute divergence fait échouer `eas build`, `eas submit` et
+  // `eas project:info`. Le projet s'appelle encore `alifa` sur expo.dev ; le
+  // renommer là-bas d'abord, puis aligner cette ligne.
   slug: 'alifa',
   owner: 'okimy',
   version: '1.0.0',

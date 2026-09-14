@@ -6,6 +6,7 @@ import {
 import type { ChildProfileId } from '@/core/ids/ids';
 import { localDay } from '@/core/time/day';
 import { currentStreak } from '@/features/progress/domain/streaks';
+import { REVISION_BATCH } from '@/features/revision/domain/revision-engine';
 import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
 import type { LevelId, Subject } from '@/content/schemas/curriculum-schema';
 
@@ -25,7 +26,7 @@ export interface HomeSummary {
   readonly lessonsToday: number;
   /** Jours d'affilée avec au moins une leçon, série en cours. */
   readonly streakDays: number;
-  /** Notions en attente de révision — ouvre l'atelier de révision. */
+  /** Notions proposées à la révision — exactement ce que l'atelier montrera. */
   readonly revisionCount: number;
 }
 
@@ -93,7 +94,9 @@ export async function loadHomeSummary(
     progress.countCompletedLessons(childProfileId),
     progress.countCompletedToday(childProfileId),
     progress.findCompletedDays(childProfileId),
-    createRevisionRepository(db).countOpen(childProfileId, new Date().toISOString()),
+    createRevisionRepository(db)
+      .findOpen(childProfileId, REVISION_BATCH, new Date().toISOString())
+      .then((open) => open.length),
   ]);
 
   return {

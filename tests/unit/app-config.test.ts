@@ -45,8 +45,15 @@ describe('configuration de l’application', () => {
     expect(loadConfig({}).android?.allowBackup).toBe(false);
   });
 
+  /** Ce que le profil `production` d'eas.json fournit réellement. */
+  const RELEASE_ENV = {
+    ECOLNA_RELEASE: '1',
+    ECOLNA_ANDROID_PACKAGE: 'td.ecolna.app',
+    ECOLNA_IOS_BUNDLE_ID: 'td.ecolna.app',
+  };
+
   it('retire l’accès réseau et l’overlay système des builds livrés', () => {
-    const blocked = loadConfig({ ECOLNA_RELEASE: '1' }).android?.blockedPermissions ?? [];
+    const blocked = loadConfig(RELEASE_ENV).android?.blockedPermissions ?? [];
     expect(blocked).toContain('android.permission.INTERNET');
     expect(blocked).toContain('android.permission.SYSTEM_ALERT_WINDOW');
     expect(blocked).toContain('android.permission.READ_EXTERNAL_STORAGE');
@@ -57,6 +64,14 @@ describe('configuration de l’application', () => {
 
   it('garde l’accès réseau en développement, sinon Metro est injoignable', () => {
     expect(loadConfig({ ECOLNA_RELEASE: undefined }).android?.blockedPermissions).toBeUndefined();
+  });
+
+  it('refuse un build livré qui retomberait sur l’identifiant de développement', () => {
+    // Sans identifiant explicite, l'app partirait en td.ecolna.app.dev : le
+    // store refuse le paquet, et EAS crée les clés sous le mauvais nom.
+    expect(() => loadConfig({ ECOLNA_RELEASE: '1' })).toThrow(/identifiant de développement/);
+    expect(loadConfig(RELEASE_ENV).android?.package).toBe('td.ecolna.app');
+    expect(loadConfig(RELEASE_ENV).ios?.bundleIdentifier).toBe('td.ecolna.app');
   });
 
   it('pointe le projet EAS, et laisse l’environnement en désigner un autre', () => {

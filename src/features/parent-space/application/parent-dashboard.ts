@@ -8,6 +8,8 @@ export interface ParentDashboardData {
   readonly completedLessons: number;
   readonly totalLessons: number;
   readonly minutesToday: number;
+  /** Notions que l'enfant réussit désormais sans peine. */
+  readonly masteredSkills: number;
   /** Human sentences, already in French — never raw metrics. */
   readonly analysis: string[];
   readonly recommendations: string[];
@@ -98,6 +100,12 @@ export async function loadParentDashboard(
     analysis.push(`${firstName} avance à son rythme. Continuez à l’encourager !`);
   }
 
+  const mastered = await db.getFirstAsync<{ n: number }>(
+    `SELECT COUNT(*) AS n FROM skill_mastery
+     WHERE child_profile_id = ? AND mastery = 'mastered'`,
+    childProfileId,
+  );
+
   const open = await createRevisionRepository(db).findOpen(childProfileId, 3, new Date().toISOString());
   const recommendations = open.map(
     (entry) =>
@@ -108,6 +116,7 @@ export async function loadParentDashboard(
     completedLessons: completed?.n ?? 0,
     totalLessons: totals?.total ?? 0,
     minutesToday,
+    masteredSkills: mastered?.n ?? 0,
     analysis,
     recommendations,
   };
