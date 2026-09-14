@@ -1,3 +1,8 @@
+// L'app tourne au Tchad (Africa/Ndjamena, UTC+1 toute l'année). Les règles qui
+// découpent les journées — série de jours, « leçons faites aujourd'hui » — sont
+// fausses si les tests les évaluent depuis un autre fuseau.
+process.env.TZ = 'Africa/Ndjamena';
+
 /** @type {import('jest').Config} */
 module.exports = {
   preset: 'jest-expo',

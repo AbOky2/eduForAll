@@ -55,9 +55,9 @@ export interface ProgressRepository {
   saveLessonResult(result: CompletedLessonResult): Promise<void>;
   findNextRecommendedLesson(childProfileId: ChildProfileId): Promise<LessonRecommendation | null>;
   countCompletedLessons(childProfileId: ChildProfileId): Promise<number>;
-  /** Leçons terminées depuis un instant ISO — « aujourd'hui » vu de l'accueil. */
-  countCompletedSince(childProfileId: ChildProfileId, sinceIso: string): Promise<number>;
-  /** Jours calendaires (YYYY-MM-DD) avec au moins une leçon terminée. */
+  /** Leçons terminées dans la journée locale en cours. */
+  countCompletedToday(childProfileId: ChildProfileId): Promise<number>;
+  /** Jours calendaires LOCAUX (YYYY-MM-DD) avec au moins une leçon terminée. */
   findCompletedDays(childProfileId: ChildProfileId): Promise<string[]>;
 }
 
@@ -225,19 +225,21 @@ export function createProgressRepository(db: SQLiteDatabase): ProgressRepository
       return row?.n ?? 0;
     },
 
-    async countCompletedSince(childProfileId, sinceIso) {
+    async countCompletedToday(childProfileId) {
+      // Journée de l'enfant, pas journée UTC : à N'Djaména (UTC+1) une leçon
+      // finie à 00 h 30 tombe la veille si on découpe la chaîne ISO.
       const row = await db.getFirstAsync<{ n: number }>(
         `SELECT COUNT(*) AS n FROM lesson_progress
-         WHERE child_profile_id = ? AND status = 'completed' AND completed_at >= ?`,
+         WHERE child_profile_id = ? AND status = 'completed'
+           AND date(completed_at, 'localtime') = date('now', 'localtime')`,
         childProfileId,
-        sinceIso,
       );
       return row?.n ?? 0;
     },
 
     async findCompletedDays(childProfileId) {
       const rows = await db.getAllAsync<{ day: string }>(
-        `SELECT DISTINCT substr(completed_at, 1, 10) AS day
+        `SELECT DISTINCT date(completed_at, 'localtime') AS day
          FROM lesson_progress
          WHERE child_profile_id = ? AND status = 'completed' AND completed_at IS NOT NULL
          ORDER BY day`,

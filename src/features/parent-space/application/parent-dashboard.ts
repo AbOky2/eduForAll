@@ -51,12 +51,11 @@ export async function loadParentDashboard(
     childProfileId,
   );
 
-  const today = new Date().toISOString().slice(0, 10);
   const sessions = await db.getAllAsync<{ started_at: string; ended_at: string | null }>(
     `SELECT started_at, ended_at FROM learning_sessions
-     WHERE child_profile_id = ? AND started_at >= ?`,
+     WHERE child_profile_id = ?
+       AND date(started_at, 'localtime') = date('now', 'localtime')`,
     childProfileId,
-    `${today}T00:00:00`,
   );
   const minutesToday = Math.round(
     sessions.reduce((sum, session) => {
