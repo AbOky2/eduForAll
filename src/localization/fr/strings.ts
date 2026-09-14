@@ -169,6 +169,13 @@ export const fr = {
   },
   revision: {
     title: 'On va revoir ce qui est difficile.',
+    /** Pourquoi une notion revient — dit à l'adulte, jamais à l'enfant. */
+    reasons: {
+      repeated_errors: 'Cette notion a posé plusieurs difficultés récemment.',
+      needed_hints: 'Cette notion a souvent eu besoin d’un coup de pouce.',
+      not_practiced_recently: 'Cette notion n’a pas été pratiquée depuis un moment.',
+      confusion_pair: 'Deux sons proches sont parfois confondus : on les compare ensemble.',
+    },
     subtitle: 'Pas de stress, on prend notre temps pour bien comprendre.',
     start: 'Commencer la révision',
     empty: 'Rien à revoir pour l’instant. Continue comme ça !',

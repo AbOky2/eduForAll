@@ -116,21 +116,3 @@ export function recommendRevisions(
     (a, b) => b.priority - a.priority || a.skillId.localeCompare(b.skillId),
   );
 }
-
-/** French copy for the parent dashboard — keep human, never technical. */
-export function describeRevisionReason(reason: RevisionReason): string {
-  switch (reason) {
-    case 'repeated_errors':
-      return 'Cette notion a posé plusieurs difficultés récemment.';
-    case 'needed_hints':
-      return 'Cette notion a souvent eu besoin d’un coup de pouce.';
-    case 'not_practiced_recently':
-      return 'Cette notion n’a pas été pratiquée depuis un moment.';
-    case 'confusion_pair':
-      return 'Deux sons proches sont parfois confondus : on les compare ensemble.';
-    default: {
-      const unhandled: never = reason;
-      throw new Error(`unhandled reason: ${String(unhandled)}`);
-    }
-  }
-}

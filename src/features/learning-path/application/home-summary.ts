@@ -93,7 +93,7 @@ export async function loadHomeSummary(
     progress.countCompletedLessons(childProfileId),
     progress.countCompletedSince(childProfileId, `${today}T00:00:00`),
     progress.findCompletedDays(childProfileId),
-    createRevisionRepository(db).countOpen(childProfileId),
+    createRevisionRepository(db).countOpen(childProfileId, new Date().toISOString()),
   ]);
 
   return {

@@ -30,9 +30,13 @@ export default function RevisionScreen() {
       () =>
         profile
           ? getDatabase()
-              .then((db) => createRevisionRepository(db).findOpen(profile.id, 4))
+              .then((db) =>
+                createRevisionRepository(db).findOpen(profile.id, 4, new Date().toISOString()),
+              )
               // Each struggled skill maps back to the first lesson that trains it.
               .then((open) =>
+                // Le motif du moteur est écrit pour un adulte : il reste à
+                // l'espace parent. L'enfant voit la notion, pas le reproche.
                 open.map(({ skillId }) => ({
                   skillId,
                   label: describeSkill(skillId),

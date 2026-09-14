@@ -2,6 +2,7 @@ import { getDatabase } from '@/database/connection/database';
 import type { ChildProfileId } from '@/core/ids/ids';
 import type { LevelId } from '@/content/schemas/curriculum-schema';
 import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
+import { fr } from '@/localization/fr/strings';
 
 export interface ParentDashboardData {
   readonly completedLessons: number;
@@ -98,8 +99,11 @@ export async function loadParentDashboard(
     analysis.push(`${firstName} avance à son rythme. Continuez à l’encourager !`);
   }
 
-  const open = await createRevisionRepository(db).findOpen(childProfileId, 3);
-  const recommendations = open.map((entry) => `Revoyez ensemble ${describeSkill(entry.skillId)}.`);
+  const open = await createRevisionRepository(db).findOpen(childProfileId, 3, new Date().toISOString());
+  const recommendations = open.map(
+    (entry) =>
+      `Revoyez ensemble ${describeSkill(entry.skillId)}. ${fr.revision.reasons[entry.reason]}`,
+  );
 
   return {
     completedLessons: completed?.n ?? 0,
