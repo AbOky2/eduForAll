@@ -83,28 +83,41 @@ export async function recordLessonCompletion(input: {
     // écrit, testé, et appelé par personne.
     const revisions = createRevisionRepository(txn);
     const snapshots = await revisions.findSkillSnapshots(childProfileId);
-    const recommended = recommendRevisions(snapshots, systemClock);
-    const recommendedIds = new Set(recommended.map((entry) => entry.skillId));
+    const scheduled = recommendRevisions(snapshots, systemClock);
+    const scheduledIds = new Set(scheduled.map((entry) => entry.skillId));
 
-    // Une notion que le moteur ne reprogramme plus sort de la file : l'enfant
-    // l'a montrée, on ne la lui repropose pas indéfiniment.
-    await revisions.resolve(
-      childProfileId,
-      snapshots.map((snapshot) => snapshot.skillId).filter((id) => !recommendedIds.has(id)),
-      now,
-    );
-    await revisions.schedule(childProfileId, recommended, now);
+    // Une notion que le moteur ne reprogramme plus sort de la file. On ne
+    // résout que ce qui y est réellement : viser les 135 notions du programme
+    // ferait une clause IN démesurée pour supprimer des lignes inexistantes.
+    const openBefore = await revisions.findAllOpenSkillIds(childProfileId);
+    const resolved = openBefore.filter((skillId) => !scheduledIds.has(skillId));
+    await revisions.resolve(childProfileId, resolved, now);
+    await revisions.schedule(childProfileId, scheduled, now);
 
-    for (const snapshot of snapshots) {
+    // Seules ces notions-là ont pu changer de niveau. Recalculer les 135
+    // lignes à chaque fin de leçon ferait quatre-vingts fois plus d'écritures
+    // que nécessaire, dans une transaction exclusive, sur une tablette
+    // d'entrée de gamme.
+    const byId = new Map(snapshots.map((snapshot) => [snapshot.skillId, snapshot]));
+    const touched = new Set([
+      ...outcomes.flatMap((outcome) => outcome.skills),
+      ...scheduledIds,
+      ...resolved,
+    ]);
+    for (const skillId of touched) {
+      const snapshot = byId.get(skillId);
+      if (!snapshot) {
+        continue;
+      }
       await txn.runAsync(
         'UPDATE skill_mastery SET mastery = ? WHERE child_profile_id = ? AND skill_id = ?',
         masteryFor({
           correctCount: snapshot.correctCount,
           errorCount: snapshot.errorCount,
-          needsReview: recommendedIds.has(snapshot.skillId),
+          needsReview: scheduledIds.has(skillId),
         }),
         childProfileId,
-        snapshot.skillId,
+        skillId,
       );
     }
 

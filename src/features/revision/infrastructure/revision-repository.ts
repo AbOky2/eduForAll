@@ -32,6 +32,8 @@ export interface RevisionRepository {
   findOpen(childProfileId: ChildProfileId, limit: number, now: string): Promise<OpenRevision[]>;
   /** État accumulé de chaque notion pratiquée, pour le moteur de révision. */
   findSkillSnapshots(childProfileId: ChildProfileId): Promise<SkillSnapshot[]>;
+  /** Notions ouvertes, échéance comprise : ce qui est réellement dans la file. */
+  findAllOpenSkillIds(childProfileId: ChildProfileId): Promise<string[]>;
   /** Une notion réussie sans peine sort de la file. */
   resolve(childProfileId: ChildProfileId, skillIds: readonly string[], at: string): Promise<void>;
   /** Une seule entrée ouverte par notion ; la reprogrammer rafraîchit l'échéance. */
@@ -73,6 +75,15 @@ export function createRevisionRepository(db: Queryable): RevisionRepository {
         skillId: row.skill_id,
         reason: row.reason as RevisionReason,
       }));
+    },
+
+    async findAllOpenSkillIds(childProfileId) {
+      const rows = await db.getAllAsync<{ skill_id: string }>(
+        `SELECT skill_id FROM revision_queue
+         WHERE child_profile_id = ? AND resolved_at IS NULL`,
+        childProfileId,
+      );
+      return rows.map((row) => row.skill_id);
     },
 
     async findSkillSnapshots(childProfileId) {

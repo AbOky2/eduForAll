@@ -30,6 +30,20 @@ export interface RevisionRecommendation {
 const STALE_AFTER_DAYS = 7;
 
 /**
+ * Combien de notions peuvent attendre en même temps.
+ *
+ * Sans plafond, la règle d'ancienneté vise après une semaine de vacances
+ * TOUTES les notions déjà réussies : l'app annoncerait « 135 notions à
+ * revoir » à un enfant de six ans, ce qui est l'inverse de sa promesse.
+ *
+ * Rien n'est perdu en plafonnant : la file est dérivée, pas archivée. Le
+ * moteur la recalcule intégralement à chaque fin de leçon depuis les
+ * compteurs accumulés, donc une notion écartée aujourd'hui remonte demain si
+ * elle relève toujours d'une règle.
+ */
+export const MAX_OPEN_REVISIONS = 12;
+
+/**
  * Known confusable pairs (visually or phonetically close). If both sides
  * accumulate errors, revise them together with an audio+visual contrast.
  */
@@ -45,6 +59,7 @@ const CONFUSION_PAIRS: readonly (readonly [string, string])[] = [
 export function recommendRevisions(
   skills: readonly SkillSnapshot[],
   clock: Clock,
+  limit: number = MAX_OPEN_REVISIONS,
 ): RevisionRecommendation[] {
   const recommendations = new Map<string, RevisionRecommendation>();
   const now = clock.epochMillis();
@@ -112,7 +127,7 @@ export function recommendRevisions(
     }
   }
 
-  return [...recommendations.values()].sort(
-    (a, b) => b.priority - a.priority || a.skillId.localeCompare(b.skillId),
-  );
+  return [...recommendations.values()]
+    .sort((a, b) => b.priority - a.priority || a.skillId.localeCompare(b.skillId))
+    .slice(0, limit);
 }

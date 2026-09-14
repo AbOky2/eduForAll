@@ -1,6 +1,6 @@
 import { fixedClock } from '@/core/time/clock';
 
-import { recommendRevisions, type SkillSnapshot } from './revision-engine';
+import { MAX_OPEN_REVISIONS, recommendRevisions, type SkillSnapshot } from './revision-engine';
 
 const clock = fixedClock(new Date('2026-07-13T10:00:00Z'));
 
@@ -68,5 +68,47 @@ describe('recommendRevisions', () => {
     expect(
       recommendRevisions([snapshot({ skillId: 'skill-son-ba', lastPracticedAt: null })], clock),
     ).toEqual([]);
+  });
+
+  it('ne met jamais plus de notions devant l’enfant que le plafond', () => {
+    // Après une semaine sans ouvrir l'app, la règle d'ancienneté vise TOUTES
+    // les notions déjà réussies. Sans plafond, l'app annoncerait « 135 notions
+    // à revoir » à un enfant de six ans.
+    const stale: SkillSnapshot[] = Array.from({ length: 135 }, (_, index) => ({
+      skillId: `skill-son-${index}`,
+      correctCount: 3,
+      errorCount: 0,
+      hintCount: 0,
+      lastPracticedAt: '2026-03-01T08:00:00.000Z',
+    }));
+    const recommendations = recommendRevisions(stale, fixedClock(new Date('2026-04-01T08:00:00.000Z')));
+    expect(recommendations).toHaveLength(MAX_OPEN_REVISIONS);
+  });
+
+  it('garde les notions les plus prioritaires quand il plafonne', () => {
+    const skills: SkillSnapshot[] = [
+      // Ancienneté seule : priorité basse.
+      ...Array.from({ length: 20 }, (_, index) => ({
+        skillId: `skill-vieux-${index}`,
+        correctCount: 2,
+        errorCount: 0,
+        hintCount: 0,
+        lastPracticedAt: '2026-03-01T08:00:00.000Z',
+      })),
+      // Erreurs répétées : priorité haute, doit survivre au plafond.
+      {
+        skillId: 'skill-son-difficile',
+        correctCount: 1,
+        errorCount: 6,
+        hintCount: 0,
+        lastPracticedAt: '2026-03-01T08:00:00.000Z',
+      },
+    ];
+    const recommendations = recommendRevisions(
+      skills,
+      fixedClock(new Date('2026-04-01T08:00:00.000Z')),
+    );
+    expect(recommendations[0]?.skillId).toBe('skill-son-difficile');
+    expect(recommendations[0]?.reason).toBe('repeated_errors');
   });
 });
