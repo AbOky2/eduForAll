@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
-import { AlifaIcon } from '../icons/alifa-icon';
+import { EcolnaIcon } from '../icons/ecolna-icon';
 import { colors, spacing } from '../tokens';
 
 interface StarRowProps {
@@ -19,7 +19,7 @@ export function StarRow({ earned, total = 3, size = 44 }: StarRowProps) {
     >
       {Array.from({ length: total }, (_, index) => (
         <View key={index} style={index === 1 ? styles.middle : undefined}>
-          <AlifaIcon
+          <EcolnaIcon
             name={index < earned ? 'star' : 'star-outline'}
             size={index === 1 ? size * 1.35 : size}
             color={index < earned ? colors.starActive : colors.starInactive}

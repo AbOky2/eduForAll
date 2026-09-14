@@ -1,6 +1,6 @@
 # Premier lancement (à exécuter en mode avion) : onboarding → profil → accueil.
 # appId : celui du profil de build utilisé (dev / preview / production).
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp:
     clearState: true

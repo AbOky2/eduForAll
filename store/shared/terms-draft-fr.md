@@ -2,7 +2,7 @@
 
 > ⚠️ Document de travail, à faire relire par un conseil juridique.
 
-1. **Objet.** ALIFA est une application éducative gratuite destinée à
+1. **Objet.** ECOLNA est une application éducative gratuite destinée à
    accompagner l'apprentissage de la lecture, de l'écriture et du calcul au
    CP1 et au CP2.
 2. **Gratuité.** L'application est fournie gratuitement, sans publicité ni

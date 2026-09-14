@@ -3,10 +3,10 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAnswerCard,
-  AlifaAudioButton,
-  AlifaExerciseLayout,
-  AlifaText,
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaExerciseLayout,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
 import { spacing } from '@/design-system/tokens';
@@ -51,12 +51,12 @@ export function ChoiceExercise({
 
   const prompt =
     step.type === 'text_multiple_choice' ? (
-      <AlifaText variant="headlineMd" align="center">
+      <EcolnaText variant="headlineMd" align="center">
         {step.question}
-      </AlifaText>
+      </EcolnaText>
     ) : (
       <View style={styles.audioWrap}>
-        <AlifaAudioButton
+        <EcolnaAudioButton
           size={isTablet ? 120 : 92}
           playing={playingAudioId === step.audioId}
           onPress={() => playAudio(step.audioId)}
@@ -67,7 +67,7 @@ export function ChoiceExercise({
   const answers = (
     <View style={grid ? styles.grid : styles.list}>
       {step.choices.map((choice) => (
-        <AlifaAnswerCard
+        <EcolnaAnswerCard
           key={choice.id}
           label={choice.label}
           glyph={choice.label.length <= 6}
@@ -85,7 +85,7 @@ export function ChoiceExercise({
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

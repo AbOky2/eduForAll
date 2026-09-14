@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
-import { AlifaIcon, type IconName } from '../icons/alifa-icon';
-import { AlifaText } from '../primitives';
+import { EcolnaIcon, type IconName } from '../icons/ecolna-icon';
+import { EcolnaText } from '../primitives';
 import { colors, radius, spacing } from '../tokens';
 
 interface BadgeTileProps {
@@ -47,16 +47,16 @@ export function BadgeTile({
           },
         ]}
       >
-        <AlifaIcon
+        <EcolnaIcon
           name={earned ? icon : 'lock'}
           size={Math.round(size * 0.45)}
           color={earned ? tint : colors.locked}
           filled={earned}
         />
       </View>
-      <AlifaText variant="labelSm" align="center" color={earned ? colors.textPrimary : colors.locked}>
+      <EcolnaText variant="labelSm" align="center" color={earned ? colors.textPrimary : colors.locked}>
         {label}
-      </AlifaText>
+      </EcolnaText>
     </View>
   );
 }

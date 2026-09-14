@@ -1,5 +1,5 @@
 # L'espace parent est protégé : une mauvaise réponse ne passe pas.
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp
 - tapOn: 'Parents'

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAudioButton, AlifaButton, AlifaText } from '@/design-system/primitives';
+import { EcolnaAudioButton, EcolnaButton, EcolnaText } from '@/design-system/primitives';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -57,24 +57,24 @@ export function OrderWordsExercise({
     <View style={styles.container}>
       <View style={styles.promptRow}>
         {step.audioId ? (
-          <AlifaAudioButton
+          <EcolnaAudioButton
             variant="sky"
             size={52}
             playing={playingAudioId === step.audioId}
             onPress={() => step.audioId && playAudio(step.audioId)}
           />
         ) : null}
-        <AlifaText variant="headlineMd" style={styles.promptText}>
+        <EcolnaText variant="headlineMd" style={styles.promptText}>
           {step.instruction.text}
-        </AlifaText>
+        </EcolnaText>
       </View>
 
       {/* Sentence under construction */}
       <View style={styles.sentenceZone}>
         {chosen.length === 0 ? (
-          <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+          <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
             Touche les mots dans l’ordre.
-          </AlifaText>
+          </EcolnaText>
         ) : (
           <View style={styles.chipsRow}>
             {chosen.map((chip) => (
@@ -87,9 +87,9 @@ export function OrderWordsExercise({
                 }
                 style={[styles.chip, styles.chipChosen, shadows.card]}
               >
-                <AlifaText variant="headlineSm" color={colors.onPrimaryContainer}>
+                <EcolnaText variant="headlineSm" color={colors.onPrimaryContainer}>
                   {chip.word}
-                </AlifaText>
+                </EcolnaText>
               </Pressable>
             ))}
           </View>
@@ -111,12 +111,12 @@ export function OrderWordsExercise({
               { opacity: interactive ? 1 : 0.5, transform: [{ scale: pressed ? 0.95 : 1 }] },
             ]}
           >
-            <AlifaText variant="headlineSm">{chip.word}</AlifaText>
+            <EcolnaText variant="headlineSm">{chip.word}</EcolnaText>
           </Pressable>
         ))}
       </View>
 
-      <AlifaButton
+      <EcolnaButton
         label={fr.common.verify}
         disabled={!interactive || chosen.length === 0}
         onPress={() => onSubmit({ kind: 'sequence', values: chosen.map((chip) => chip.word) })}

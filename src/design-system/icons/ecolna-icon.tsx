@@ -32,7 +32,7 @@ export type IconName =
   | 'flame'
   | 'medal';
 
-interface AlifaIconProps {
+interface EcolnaIconProps {
   name: IconName;
   size?: number;
   color?: string;
@@ -44,12 +44,12 @@ interface AlifaIconProps {
  * Original hand-drawn icon set on a 24×24 grid, matching the light outlined
  * style of the mockups (no @expo/vector-icons — see ADR notes).
  */
-export function AlifaIcon({
+export function EcolnaIcon({
   name,
   size = 24,
   color = colors.onSurface,
   filled = false,
-}: AlifaIconProps) {
+}: EcolnaIconProps) {
   const stroke = {
     stroke: color,
     strokeWidth: 1.8,

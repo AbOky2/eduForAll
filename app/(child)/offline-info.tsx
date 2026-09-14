@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
 import { SunCloudScene } from '@/design-system/illustrations/scenes';
-import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
@@ -10,25 +10,25 @@ import { useSafeBack } from '@/shared/hooks/use-safe-back';
 export default function OfflineInfoScreen() {
   const goBack = useSafeBack();
   return (
-    <AlifaScreen background="default">
+    <EcolnaScreen background="default">
       <View style={styles.container}>
-        <AlifaCard rounded="xl" padded={false}>
+        <EcolnaCard rounded="xl" padded={false}>
           <SunCloudScene width={320} height={230} />
-        </AlifaCard>
+        </EcolnaCard>
         <View style={styles.badge}>
-          <AlifaText variant="labelMd" color={colors.onTertiaryContainer}>
+          <EcolnaText variant="labelMd" color={colors.onTertiaryContainer}>
             ☀ {fr.offline.badge}
-          </AlifaText>
+          </EcolnaText>
         </View>
-        <AlifaText variant="headlineLg" align="center">
+        <EcolnaText variant="headlineLg" align="center">
           {fr.offline.title}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+        </EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
           {fr.offline.subtitle}
-        </AlifaText>
-        <AlifaButton label={fr.common.understood} onPress={goBack} />
+        </EcolnaText>
+        <EcolnaButton label={fr.common.understood} onPress={goBack} />
       </View>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

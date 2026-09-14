@@ -6,11 +6,11 @@ import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { useSettings } from '@/features/settings/application/settings-store';
 import { createSettingsRepository } from '@/features/settings/infrastructure/settings-repository';
-import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { a11y, colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 /** Settings — mockup S19. Reached from the parent space only. */
@@ -41,17 +41,17 @@ export default function SettingsScreen() {
   };
 
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineMd" />
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineMd" />
 
       <View style={styles.content}>
-        <AlifaCard rounded="lg" padded={false} style={styles.group}>
+        <EcolnaCard rounded="lg" padded={false} style={styles.group}>
           {/* Sound */}
           <View style={styles.row}>
-            <AlifaIcon name="speaker" size={22} color={colors.onSurfaceVariant} />
-            <AlifaText variant="bodyLg" style={styles.rowLabel}>
+            <EcolnaIcon name="speaker" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.sound}
-            </AlifaText>
+            </EcolnaText>
             <Switch
               accessibilityLabel={fr.settings.sound}
               value={soundEnabled}
@@ -65,23 +65,23 @@ export default function SettingsScreen() {
           {/* Language */}
           <View style={styles.rowColumn}>
             <View style={styles.rowInner}>
-              <AlifaIcon name="book" size={22} color={colors.onSurfaceVariant} />
-              <AlifaText variant="bodyLg" style={styles.rowLabel}>
+              <EcolnaIcon name="book" size={22} color={colors.onSurfaceVariant} />
+              <EcolnaText variant="bodyLg" style={styles.rowLabel}>
                 {fr.settings.language}
-              </AlifaText>
+              </EcolnaText>
             </View>
             <View style={styles.radioGroup}>
               <View style={styles.radioRow}>
                 <View style={[styles.radio, styles.radioActive]}>
                   <View style={styles.radioDot} />
                 </View>
-                <AlifaText variant="bodyMd">{fr.settings.french}</AlifaText>
+                <EcolnaText variant="bodyMd">{fr.settings.french}</EcolnaText>
               </View>
               <View style={[styles.radioRow, { opacity: 0.5 }]}>
                 <View style={styles.radio} />
-                <AlifaText variant="bodyMd">
+                <EcolnaText variant="bodyMd">
                   {fr.settings.chadianArabic} — {fr.settings.comingSoon}
-                </AlifaText>
+                </EcolnaText>
               </View>
             </View>
           </View>
@@ -89,12 +89,12 @@ export default function SettingsScreen() {
 
           {/* Offline info */}
           <View style={styles.row}>
-            <AlifaIcon name="check" size={22} color={colors.secondary} />
+            <EcolnaIcon name="check" size={22} color={colors.secondary} />
             <View style={styles.rowLabel}>
-              <AlifaText variant="bodyLg">{fr.settings.offlineInfo}</AlifaText>
-              <AlifaText variant="bodySm" color={colors.textSecondary}>
+              <EcolnaText variant="bodyLg">{fr.settings.offlineInfo}</EcolnaText>
+              <EcolnaText variant="bodySm" color={colors.textSecondary}>
                 {fr.settings.offlineStatus}
-              </AlifaText>
+              </EcolnaText>
             </View>
           </View>
           <View style={styles.divider} />
@@ -105,11 +105,11 @@ export default function SettingsScreen() {
             onPress={() => router.push('/(settings)/privacy')}
             style={styles.row}
           >
-            <AlifaIcon name="lock" size={22} color={colors.onSurfaceVariant} />
-            <AlifaText variant="bodyLg" style={styles.rowLabel}>
+            <EcolnaIcon name="lock" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.privacy}
-            </AlifaText>
-            <AlifaIcon name="chevron-right" size={20} color={colors.outline} />
+            </EcolnaText>
+            <EcolnaIcon name="chevron-right" size={20} color={colors.outline} />
           </Pressable>
           <View style={styles.divider} />
           <Pressable
@@ -117,13 +117,13 @@ export default function SettingsScreen() {
             onPress={() => router.push('/(settings)/diagnostics')}
             style={styles.row}
           >
-            <AlifaIcon name="gear" size={22} color={colors.onSurfaceVariant} />
-            <AlifaText variant="bodyLg" style={styles.rowLabel}>
+            <EcolnaIcon name="gear" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.diagnostics}
-            </AlifaText>
-            <AlifaIcon name="chevron-right" size={20} color={colors.outline} />
+            </EcolnaText>
+            <EcolnaIcon name="chevron-right" size={20} color={colors.outline} />
           </Pressable>
-        </AlifaCard>
+        </EcolnaCard>
 
         {/* Danger zone */}
         <Pressable
@@ -132,10 +132,10 @@ export default function SettingsScreen() {
           onPress={() => setResetStep(1)}
           style={styles.danger}
         >
-          <AlifaIcon name="trash" size={20} color={colors.onErrorContainer} />
-          <AlifaText variant="labelLg" color={colors.onErrorContainer}>
+          <EcolnaIcon name="trash" size={20} color={colors.onErrorContainer} />
+          <EcolnaText variant="labelLg" color={colors.onErrorContainer}>
             {fr.settings.resetProgress}
-          </AlifaText>
+          </EcolnaText>
         </Pressable>
       </View>
 
@@ -147,25 +147,25 @@ export default function SettingsScreen() {
         onRequestClose={() => setResetStep(0)}
       >
         <View style={styles.modalBackdrop}>
-          <AlifaCard rounded="xl" style={styles.modalCard}>
-            <AlifaText variant="headlineSm" align="center">
+          <EcolnaCard rounded="xl" style={styles.modalCard}>
+            <EcolnaText variant="headlineSm" align="center">
               {fr.settings.resetTitle}
-            </AlifaText>
-            <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+            </EcolnaText>
+            <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
               {resetStep === 1
                 ? fr.settings.resetMessage
                 : 'Dernière vérification : cette action supprime tout, définitivement.'}
-            </AlifaText>
-            <AlifaButton label={fr.common.cancel} onPress={() => setResetStep(0)} />
-            <AlifaButton
+            </EcolnaText>
+            <EcolnaButton label={fr.common.cancel} onPress={() => setResetStep(0)} />
+            <EcolnaButton
               label={resetStep === 1 ? fr.common.continue : fr.settings.resetConfirm}
               variant="danger"
               onPress={() => (resetStep === 1 ? setResetStep(2) : void resetEverything())}
             />
-          </AlifaCard>
+          </EcolnaCard>
         </View>
       </Modal>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

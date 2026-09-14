@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAudioButton, AlifaButton, AlifaCard, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaAudioButton, EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -27,23 +27,23 @@ export function ListenExercise({
 
   return (
     <View style={styles.container}>
-      <AlifaCard rounded="xl" style={styles.glyphCard} backgroundColor="#faf7ec">
+      <EcolnaCard rounded="xl" style={styles.glyphCard} backgroundColor="#faf7ec">
         <View style={styles.watermark}>
-          <AlifaIcon name="leaf" size={180} color={colors.exerciseBackground} />
+          <EcolnaIcon name="leaf" size={180} color={colors.exerciseBackground} />
         </View>
-        <AlifaText variant="displayGlyph" align="center">
+        <EcolnaText variant="displayGlyph" align="center">
           {step.glyph}
-        </AlifaText>
-      </AlifaCard>
+        </EcolnaText>
+      </EcolnaCard>
       <View style={styles.audioWrap}>
-        <AlifaAudioButton
+        <EcolnaAudioButton
           variant="bordered"
           size={64}
           playing={playingAudioId === step.audioId}
           onPress={() => playAudio(step.audioId)}
         />
       </View>
-      <AlifaButton
+      <EcolnaButton
         label={fr.common.next}
         variant="ghost"
         disabled={!interactive}

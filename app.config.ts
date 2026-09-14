@@ -5,13 +5,13 @@ import type { ExpoConfig } from 'expo/config';
  * final legal identity (see docs/store-readiness.md). Development and preview
  * builds work with these values; do not submit to stores without replacing them.
  */
-const ANDROID_PACKAGE = process.env.ALIFA_ANDROID_PACKAGE ?? 'td.alifa.app.dev';
-const IOS_BUNDLE_IDENTIFIER = process.env.ALIFA_IOS_BUNDLE_ID ?? 'td.alifa.app.dev';
+const ANDROID_PACKAGE = process.env.ECOLNA_ANDROID_PACKAGE ?? 'td.ecolna.app.dev';
+const IOS_BUNDLE_IDENTIFIER = process.env.ECOLNA_IOS_BUNDLE_ID ?? 'td.ecolna.app.dev';
 
 /**
- * Projet EAS @okimy/alifa. Ce n'est pas un secret : c'est l'équivalent de ce
+ * Projet EAS @okimy/ecolna. Ce n'est pas un secret : c'est l'équivalent de ce
  * qu'Expo écrit dans app.json sur un projet à configuration statique. La
- * configuration d'ALIFA étant dynamique, EAS ne peut pas l'écrire lui-même.
+ * configuration d'ECOLNA étant dynamique, EAS ne peut pas l'écrire lui-même.
  * La variable d'environnement permet de pointer un autre projet.
  */
 const EAS_PROJECT_ID =
@@ -27,10 +27,10 @@ const EAS_PROJECT_ID =
  * de ne jamais accéder au réseau serait une contradiction visible dans la
  * liste des autorisations du Play Store.
  */
-const IS_RELEASE_BUILD = process.env.ALIFA_RELEASE === '1';
+const IS_RELEASE_BUILD = process.env.ECOLNA_RELEASE === '1';
 
 /**
- * Autorisations retirées des builds livrés. ALIFA n'effectue aucun appel
+ * Autorisations retirées des builds livrés. ECOLNA n'effectue aucun appel
  * réseau (règle n° 1 du projet) et n'écrit que dans sa base privée : rien de
  * tout cela ne lui sert. VIBRATE est conservée — le retour haptique de fin
  * d'exercice s'en sert.
@@ -43,14 +43,14 @@ const BLOCKED_PERMISSIONS = [
 ];
 
 const config: ExpoConfig = {
-  name: 'ALIFA',
+  name: 'ECOLNA',
   slug: 'alifa',
   owner: 'okimy',
   version: '1.0.0',
   // Tablet-first: the app must work held either way. Layouts adapt through
   // src/design-system/responsive.
   orientation: 'default',
-  scheme: 'alifa',
+  scheme: 'ecolna',
   // Le projet n'embarque pas react-native-web. Le déclarer évite que
   // `expo export --platform all` parte sur une plateforme absente.
   platforms: ['ios', 'android'],
@@ -81,7 +81,9 @@ const config: ExpoConfig = {
     allowBackup: false,
     ...(IS_RELEASE_BUILD ? { blockedPermissions: BLOCKED_PERMISSIONS } : {}),
     adaptiveIcon: {
-      backgroundColor: '#f2efe1',
+      // Le fond de l'icône adaptative doit être celui de la marque : Android
+      // compose l'avant-plan par-dessus et rogne en cercle ou en écusson.
+      backgroundColor: '#2b6485',
       foregroundImage: './assets/icons/adaptive-icon-foreground.png',
       monochromeImage: './assets/icons/adaptive-icon-monochrome.png',
     },

@@ -12,7 +12,7 @@
   parent (action destructive).
 - **Réduction de mouvement** : `useReducedMotion` coupe pulsations et
   entrées animées (AccessibilityInfo.reduceMotion).
-- **Tailles de texte** : `maxFontSizeMultiplier 1.4` sur AlifaText — l'échelle
+- **Tailles de texte** : `maxFontSizeMultiplier 1.4` sur EcolnaText — l'échelle
   OS est respectée sans casser les glyphes pédagogiques.
 - **Sans lecture** : chaque consigne a un bouton audio identique et
   reconnaissable ; l'enfant non-lecteur navigue à l'oreille.

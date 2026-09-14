@@ -1,7 +1,7 @@
 import { Text, useWindowDimensions } from 'react-native';
 import { render, screen } from '@testing-library/react-native';
 
-import { AlifaExerciseLayout } from '../primitives/alifa-exercise-layout';
+import { EcolnaExerciseLayout } from '../primitives/ecolna-exercise-layout';
 import { useResponsive, windowSizeOf } from './use-responsive';
 
 jest.mock('react-native/Libraries/Utilities/useWindowDimensions');
@@ -83,7 +83,7 @@ describe('useResponsive', () => {
   });
 });
 
-describe('AlifaExerciseLayout', () => {
+describe('EcolnaExerciseLayout', () => {
   it('shows both the prompt and the answers whatever the window', () => {
     for (const [width, height] of [
       [412, 917],
@@ -92,7 +92,7 @@ describe('AlifaExerciseLayout', () => {
     ] as const) {
       setWindow(width, height);
       const view = render(
-        <AlifaExerciseLayout
+        <EcolnaExerciseLayout
           prompt={<Text>Que viens-tu d’entendre ?</Text>}
           answers={<Text>ba</Text>}
         />,

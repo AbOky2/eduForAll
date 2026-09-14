@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAnswerCard, AlifaText } from '@/design-system/primitives';
+import { EcolnaAnswerCard, EcolnaText } from '@/design-system/primitives';
 import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -48,13 +48,13 @@ export function MatchPairsExercise({
 
   return (
     <View style={styles.container}>
-      <AlifaText variant="headlineMd" align="center">
+      <EcolnaText variant="headlineMd" align="center">
         {step.instruction.text}
-      </AlifaText>
+      </EcolnaText>
       <View style={styles.columns}>
         <View style={styles.column}>
           {step.pairs.map((pair) => (
-            <AlifaAnswerCard
+            <EcolnaAnswerCard
               key={pair.id}
               label={pair.left}
               glyph={pair.left.length <= 6}
@@ -77,7 +77,7 @@ export function MatchPairsExercise({
         </View>
         <View style={styles.column}>
           {rightShuffled.map((pair) => (
-            <AlifaAnswerCard
+            <EcolnaAnswerCard
               key={pair.id}
               label={pair.right}
               glyph={pair.right.length <= 6}

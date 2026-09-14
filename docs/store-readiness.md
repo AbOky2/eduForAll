@@ -1,6 +1,6 @@
 # Préparation stores
 
-Cible v1.0.0 : **Google Play et App Store**, identifiant `td.alifa.app`.
+Cible v1.0.0 : **Google Play et App Store**, identifiant `td.ecolna.app`.
 La marche à suivre pas à pas est dans **`docs/deploiement-v1.md`** ; ce
 document dit seulement ce qui est prêt et ce qui manque.
 

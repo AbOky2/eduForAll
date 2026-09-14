@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
-import { AlifaButton, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaButton, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { createLogger } from '@/core/logging/logger';
 import { fr } from '@/localization/fr/strings';
@@ -22,15 +22,15 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   return (
     <View style={styles.container}>
       <View style={styles.bubble}>
-        <AlifaIcon name="leaf" size={40} color={colors.tertiaryContainer} />
+        <EcolnaIcon name="leaf" size={40} color={colors.tertiaryContainer} />
       </View>
-      <AlifaText variant="headlineMd" align="center">
+      <EcolnaText variant="headlineMd" align="center">
         {fr.errors.genericTitle}
-      </AlifaText>
-      <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+      </EcolnaText>
+      <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
         {fr.errors.genericMessage}
-      </AlifaText>
-      <AlifaButton label={fr.common.retry} onPress={() => void retry()} />
+      </EcolnaText>
+      <EcolnaButton label={fr.common.retry} onPress={() => void retry()} />
     </View>
   );
 }

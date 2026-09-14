@@ -2,13 +2,13 @@ import { Tabs, useRouter } from 'expo-router';
 import { StyleSheet, View, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
-import { AlifaText } from '@/design-system/primitives';
+import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
+import { EcolnaText } from '@/design-system/primitives';
 import { a11y, colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 /** Minimal shape of the tab-bar props we consume (no direct react-navigation import). */
-interface AlifaTabBarProps {
+interface EcolnaTabBarProps {
   state: { index: number; routes: { key: string; name: string }[] };
   navigation: { navigate: (name: string) => void };
 }
@@ -38,18 +38,18 @@ function TabButton({
       onPress={onPress}
       style={[styles.tab, focused && styles.tabActive]}
     >
-      <AlifaIcon
+      <EcolnaIcon
         name={icon}
         size={24}
         color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
         filled={focused}
       />
-      <AlifaText
+      <EcolnaText
         variant="labelSm"
         color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
       >
         {label}
-      </AlifaText>
+      </EcolnaText>
     </Pressable>
   );
 }
@@ -61,7 +61,7 @@ function TabButton({
  * the child flow. As a real tab it stayed focused behind the parent stack, so
  * coming back re-triggered the redirect and the back button looked broken.
  */
-function AlifaTabBar({ state, navigation }: AlifaTabBarProps) {
+function EcolnaTabBar({ state, navigation }: EcolnaTabBarProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   return (
@@ -95,7 +95,7 @@ function AlifaTabBar({ state, navigation }: AlifaTabBarProps) {
 
 export default function TabsLayout() {
   return (
-    <Tabs tabBar={(props) => <AlifaTabBar {...props} />} screenOptions={{ headerShown: false }}>
+    <Tabs tabBar={(props) => <EcolnaTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" />
       <Tabs.Screen name="learn" />
     </Tabs>

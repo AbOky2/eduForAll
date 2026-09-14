@@ -1,10 +1,10 @@
-# ALIFA — Description App Store
+# ECOLNA — Description App Store
 
 **Sous-titre** (30 car. max) : `Le CP tchadien, sans internet`
 
 ## Description
 
-ALIFA accompagne les enfants de CP1 et CP2 dans leurs premiers pas en
+ECOLNA accompagne les enfants de CP1 et CP2 dans leurs premiers pas en
 langage, lecture, écriture et calcul — **entièrement hors connexion**.
 
 Le contenu n'est pas une méthode générique : il suit le programme officiel
@@ -12,7 +12,7 @@ de l'enseignement primaire de la République du Tchad, discipline par
 discipline, dans les proportions horaires fixées par le ministère.
 
 Pensée pour les zones où internet est rare ou coûteux — campagnes,
-communautés nomades, familles sans connexion fiable — ALIFA fonctionne à
+communautés nomades, familles sans connexion fiable — ECOLNA fonctionne à
 100 % sans réseau, dès le premier lancement.
 
 **Ce que votre enfant y trouve :**

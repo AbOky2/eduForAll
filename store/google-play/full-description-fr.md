@@ -1,8 +1,8 @@
 # Description complète Google Play
 
-**ALIFA — Apprendre partout, même sans internet.**
+**ECOLNA — Apprendre partout, même sans internet.**
 
-ALIFA accompagne les enfants de CP1 et CP2 dans l'apprentissage du langage,
+ECOLNA accompagne les enfants de CP1 et CP2 dans l'apprentissage du langage,
 de la lecture, de l'écriture et du calcul. Conçue en priorité pour les
 enfants du Tchad — zones rurales, communautés nomades, familles sans
 connexion fiable — elle fonctionne **entièrement hors ligne**, dès la

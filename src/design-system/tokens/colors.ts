@@ -1,6 +1,6 @@
 /**
- * ALIFA color tokens — extracted verbatim from the Stitch project
- * « ALIFA : L'École du Désert » (design system "Premium Sahelian").
+ * ECOLNA color tokens — extracted verbatim from the Stitch project
+ * « ECOLNA : L'École du Désert » (design system "Premium Sahelian").
  * Light mode only for V1. See docs/design-audit.md §1.
  */
 export const palette = {

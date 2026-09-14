@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { bootstrapApp, type BootstrapOutcome } from '@/core/config/bootstrap';
-import { AlifaButton, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaButton, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -46,15 +46,15 @@ export default function BootstrapScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.bubble}>
-          <AlifaIcon name="cloud-off" size={40} color={colors.onSurfaceVariant} />
+          <EcolnaIcon name="cloud-off" size={40} color={colors.onSurfaceVariant} />
         </View>
-        <AlifaText variant="headlineMd" align="center">
+        <EcolnaText variant="headlineMd" align="center">
           {fr.errors.initFailedTitle}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+        </EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
           {fr.errors.initFailedMessage}
-        </AlifaText>
-        <AlifaButton
+        </EcolnaText>
+        <EcolnaButton
           label={fr.common.retry}
           onPress={() => {
             setOutcome(null);

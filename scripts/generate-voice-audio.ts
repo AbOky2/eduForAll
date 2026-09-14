@@ -29,7 +29,7 @@ const ROOT = join(__dirname, '..');
 const AUDIO_DIR = join(ROOT, 'assets/audio/fr');
 const TTS_MAP = join(ROOT, 'assets/audio/tts-map.json');
 const PROVENANCE = join(ROOT, 'assets/audio/voice-provenance.json');
-const PYTHON = process.env.ALIFA_PYTHON ?? join(ROOT, '.venv-audio/bin/python');
+const PYTHON = process.env.ECOLNA_PYTHON ?? join(ROOT, '.venv-audio/bin/python');
 
 // ---------------------------------------------------------------------------
 // Diction
@@ -145,7 +145,7 @@ function pythonBatchProvider(input: {
       if (!existsSync(PYTHON)) {
         throw new Error(`interpréteur Python introuvable (${PYTHON}) — voir docs/audio-pipeline.md`);
       }
-      const workDir = join(tmpdir(), `alifa-${input.name}`);
+      const workDir = join(tmpdir(), `ecolna-${input.name}`);
       mkdirSync(workDir, { recursive: true });
       const jobPath = join(workDir, 'job.json');
       writeFileSync(
@@ -403,7 +403,7 @@ async function main(): Promise<void> {
     let done = 0;
     for (const target of remaining) {
       const { bytes, extension } = await provider.synthesize(target, voice, apiKey);
-      const raw = join(tmpdir(), `alifa-${target.id}.${extension}`);
+      const raw = join(tmpdir(), `ecolna-${target.id}.${extension}`);
       writeFileSync(raw, bytes);
       save(target.id, raw, `${provider.name}:${voice}`);
       done += 1;

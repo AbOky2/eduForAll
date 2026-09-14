@@ -1,5 +1,5 @@
 import { BadgeTile } from '@/design-system/components/badge-tile';
-import type { IconName } from '@/design-system/icons/alifa-icon';
+import type { IconName } from '@/design-system/icons/ecolna-icon';
 import { colors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 

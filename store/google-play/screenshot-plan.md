@@ -3,7 +3,7 @@
 Mêmes 8 scènes que `store/app-store/screenshot-plan.md` (accueil, carte,
 écoute, langage, calcul, réussite, parent, hors-connexion), formats téléphone et tablette
 16:9 ou 9:16 ≥ 1080 px, + bandeau fonctionnalité (1024×500) reprenant le
-logo ALIFA sur fond ivoire avec la signature « Apprendre partout, même sans
+logo ECOLNA sur fond ivoire avec la signature « Apprendre partout, même sans
 internet ». Données fictives cohérentes (Amina, CP1), aucun élément de
 développement.
 
@@ -22,5 +22,5 @@ Identique à `store/app-store/screenshot-plan.md` (9 plans, profil fictif
 | Image de mise en avant | **1024 × 500**, sans transparence | 1, obligatoire |
 | Icône | 512 × 512 PNG | 1 |
 
-ALIFA vise la tablette : renseigner les deux formats tablette, sinon la
+ECOLNA vise la tablette : renseigner les deux formats tablette, sinon la
 fiche s'affiche en « application téléphone » sur les tablettes.

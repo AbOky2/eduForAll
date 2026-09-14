@@ -2,11 +2,11 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, type ViewStyle } from 'react-native';
 
 import { a11y, colors, radius, shadows, spacing } from '../tokens';
-import { AlifaText } from './alifa-text';
+import { EcolnaText } from './ecolna-text';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
-interface AlifaButtonProps {
+interface EcolnaButtonProps {
   label: string;
   onPress: () => void;
   variant?: ButtonVariant;
@@ -33,7 +33,7 @@ const VARIANT_STYLES: Record<
   danger: { background: colors.errorContainer, text: colors.onErrorContainer },
 };
 
-export function AlifaButton({
+export function EcolnaButton({
   label,
   onPress,
   variant = 'primary',
@@ -41,7 +41,7 @@ export function AlifaButton({
   icon,
   accessibilityHint,
   style,
-}: AlifaButtonProps) {
+}: EcolnaButtonProps) {
   const palette = VARIANT_STYLES[variant];
   return (
     <Pressable
@@ -65,9 +65,9 @@ export function AlifaButton({
       ]}
     >
       {icon}
-      <AlifaText variant="labelLg" color={palette.text} align="center">
+      <EcolnaText variant="labelLg" color={palette.text} align="center">
         {label}
-      </AlifaText>
+      </EcolnaText>
     </Pressable>
   );
 }

@@ -6,7 +6,7 @@ import { typography, type TypographyVariant } from '../tokens/typography';
 /**
  * Responsive foundation.
  *
- * ALIFA is built for tablets — that is the hardware the children in the pilot
+ * ECOLNA is built for tablets — that is the hardware the children in the pilot
  * receive — but the same build has to stay usable on a phone for testing and
  * for whatever a family already owns. Rather than branching on device type,
  * layouts branch on window size classes (Material 3), which also handles

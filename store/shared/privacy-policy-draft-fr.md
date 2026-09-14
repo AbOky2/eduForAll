@@ -3,7 +3,7 @@
 > ⚠️ Document de travail. À faire relire par un conseil juridique et à
 > héberger sur une URL publique avant toute soumission aux stores.
 
-**ALIFA** (« l'application ») est une application éducative destinée aux
+**ECOLNA** (« l'application ») est une application éducative destinée aux
 enfants de CP1 et CP2.
 
 ## 1. Données collectées : aucune

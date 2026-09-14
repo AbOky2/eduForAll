@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAnswerCard, AlifaAudioButton, AlifaExerciseLayout } from '@/design-system/primitives';
+import { EcolnaAnswerCard, EcolnaAudioButton, EcolnaExerciseLayout } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { spacing } from '@/design-system/tokens';
@@ -31,7 +31,7 @@ export function ImageChoiceExercise({
 
   const prompt = step.audioId ? (
     <View style={styles.audioWrap}>
-      <AlifaAudioButton
+      <EcolnaAudioButton
         size={isTablet ? 108 : 84}
         playing={playingAudioId === step.audioId}
         onPress={() => step.audioId && playAudio(step.audioId)}
@@ -42,7 +42,7 @@ export function ImageChoiceExercise({
   const answers = (
     <View style={styles.grid}>
       {step.choices.map((choice) => (
-        <AlifaAnswerCard
+        <EcolnaAnswerCard
           key={choice.id}
           accessibilityLabel={choice.label ?? choice.id}
           state={
@@ -59,12 +59,12 @@ export function ImageChoiceExercise({
           style={styles.imageCard}
         >
           <ObjectIcon id={choice.illustrationId} size={isTablet ? 96 : 72} />
-        </AlifaAnswerCard>
+        </EcolnaAnswerCard>
       ))}
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

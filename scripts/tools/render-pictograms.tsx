@@ -45,7 +45,7 @@ for (const [id, Component] of all) {
 
 const html = `<!doctype html>
 <html lang="fr"><head><meta charset="utf-8">
-<title>ALIFA — planche de contact des pictogrammes</title>
+<title>ECOLNA — planche de contact des pictogrammes</title>
 <style>
   body { margin:0; padding:32px; background:#fbf8ff; font-family:-apple-system,system-ui,sans-serif; color:#161a32; }
   h1 { font-size:22px; margin:0 0 4px; }
@@ -57,7 +57,7 @@ const html = `<!doctype html>
   figcaption { font-size:11px; color:#50453b; margin-top:8px; word-break:break-word; }
 </style></head>
 <body>
-<h1>ALIFA — planche de contact des pictogrammes</h1>
+<h1>ECOLNA — planche de contact des pictogrammes</h1>
 <p>${all.length} illustrations vectorielles, dessinées pour les 18 thèmes de vocabulaire du programme tchadien. Aucune image bitmap, aucun réseau.</p>
 <div class="grid">${cells.join('')}</div>
 </body></html>`;

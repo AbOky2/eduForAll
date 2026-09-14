@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAudioButton, AlifaButton, AlifaCard, AlifaText } from '@/design-system/primitives';
+import { EcolnaAudioButton, EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
 import { spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -28,22 +28,22 @@ export function ListenRepeatExercise({
 
   return (
     <View style={styles.container}>
-      <AlifaText variant="headlineMd" align="center">
+      <EcolnaText variant="headlineMd" align="center">
         {fr.lesson.listenAndRepeat}
-      </AlifaText>
-      <AlifaCard rounded="xl" style={styles.card} backgroundColor="#faf7ec">
-        <AlifaText variant={step.text.length > 12 ? 'headlineLg' : 'displayGlyph'} align="center">
+      </EcolnaText>
+      <EcolnaCard rounded="xl" style={styles.card} backgroundColor="#faf7ec">
+        <EcolnaText variant={step.text.length > 12 ? 'headlineLg' : 'displayGlyph'} align="center">
           {step.text}
-        </AlifaText>
-      </AlifaCard>
+        </EcolnaText>
+      </EcolnaCard>
       <View style={styles.audioWrap}>
-        <AlifaAudioButton
+        <EcolnaAudioButton
           size={84}
           playing={playingAudioId === step.audioId}
           onPress={() => playAudio(step.audioId)}
         />
       </View>
-      <AlifaButton
+      <EcolnaButton
         label={fr.lesson.repeatDone}
         disabled={!interactive}
         onPress={() => onSubmit({ kind: 'acknowledge' })}

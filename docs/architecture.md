@@ -1,4 +1,4 @@
-# Architecture ALIFA
+# Architecture ECOLNA
 
 ## Vue d'ensemble
 

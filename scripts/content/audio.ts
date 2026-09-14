@@ -1,7 +1,7 @@
 /**
  * Audio identity for generated content.
  *
- * Every spoken thing in ALIFA gets a stable id and the exact French text a
+ * Every spoken thing in ECOLNA gets a stable id and the exact French text a
  * narrator must read. The pair (id → text) is written to assets/audio/tts-map.json
  * and drives both the placeholder TTS pipeline and the definitive recording
  * script handed to the voice talent (docs/audio-pipeline.md).

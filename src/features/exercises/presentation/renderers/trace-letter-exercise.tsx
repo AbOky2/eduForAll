@@ -4,7 +4,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaButton, AlifaCard, AlifaText } from '@/design-system/primitives';
+import { EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -91,13 +91,13 @@ export function TraceLetterExercise({
     // Explicit content fallback: unknown letter → acknowledge step, no dead end.
     return (
       <View style={styles.container}>
-        <AlifaText variant="displayGlyph" align="center">
+        <EcolnaText variant="displayGlyph" align="center">
           {step.letter}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+        </EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
           {fr.errors.contentUnavailable}
-        </AlifaText>
-        <AlifaButton
+        </EcolnaText>
+        <EcolnaButton
           label={fr.common.next}
           onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
         />
@@ -107,7 +107,7 @@ export function TraceLetterExercise({
 
   return (
     <View style={styles.container}>
-      <AlifaCard
+      <EcolnaCard
         rounded="xl"
         padded={false}
         // A tracing board has to be big enough for a whole hand movement —
@@ -116,13 +116,13 @@ export function TraceLetterExercise({
         backgroundColor="#faf7ec"
       >
         <View style={styles.letterUnderlay} pointerEvents="none">
-          <AlifaText
+          <EcolnaText
             variant="displayGlyph"
             color={colors.surfaceContainerHighest}
             style={[styles.letterGlyph, { fontSize: 240 * scale, lineHeight: 300 * scale }]}
           >
             {step.letter}
-          </AlifaText>
+          </EcolnaText>
         </View>
         <GestureDetector gesture={pan}>
           <View
@@ -168,13 +168,13 @@ export function TraceLetterExercise({
             </Svg>
           </View>
         </GestureDetector>
-      </AlifaCard>
+      </EcolnaCard>
 
-      <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+      <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
         {done ? '' : 'Pars du gros point et suis le chemin.'}
-      </AlifaText>
+      </EcolnaText>
 
-      <AlifaButton
+      <EcolnaButton
         label={fr.common.verify}
         disabled={!interactive || !done}
         onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}

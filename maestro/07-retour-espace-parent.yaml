@@ -1,7 +1,7 @@
 # Régression : le retour depuis l'espace parent ramenait à la porte parentale
 # au lieu de l'accueil. « Parents » était un onglet dont l'écran repoussait la
 # porte à chaque reprise de focus — boucle infinie, bouton retour mort.
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp
 - assertVisible: 'Bonjour'

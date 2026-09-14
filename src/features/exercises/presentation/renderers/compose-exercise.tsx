@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAudioButton, AlifaButton, AlifaText } from '@/design-system/primitives';
+import { EcolnaAudioButton, EcolnaButton, EcolnaText } from '@/design-system/primitives';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -85,15 +85,15 @@ export function ComposeExercise({
   return (
     <View style={styles.container}>
       <View style={styles.promptRow}>
-        <AlifaAudioButton
+        <EcolnaAudioButton
           variant="sky"
           size={52}
           playing={step.audioId !== undefined && playingAudioId === step.audioId}
           onPress={() => step.audioId && playAudio(step.audioId)}
         />
-        <AlifaText variant="headlineMd" style={styles.promptText}>
+        <EcolnaText variant="headlineMd" style={styles.promptText}>
           {step.instruction.text}
-        </AlifaText>
+        </EcolnaText>
       </View>
 
       {/* Drop zone */}
@@ -109,16 +109,16 @@ export function ComposeExercise({
                 onPress={() => remove(tile)}
                 style={[styles.slot, styles.slotFilled, shadows.card]}
               >
-                <AlifaText variant="displayGlyphSmall">{tile.value}</AlifaText>
+                <EcolnaText variant="displayGlyphSmall">{tile.value}</EcolnaText>
               </Pressable>
             ) : (
               <View key={`empty-${index}`} style={[styles.slot, styles.slotEmpty]} />
             );
           })}
         </View>
-        <AlifaText variant="bodySm" color={colors.textSecondary} align="center">
+        <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
           {fr.lesson.dragHere}
-        </AlifaText>
+        </EcolnaText>
       </View>
 
       {/* Tile tray */}
@@ -136,12 +136,12 @@ export function ComposeExercise({
               { opacity: !interactive ? 0.5 : 1, transform: [{ scale: pressed ? 0.94 : 1 }] },
             ]}
           >
-            <AlifaText variant="displayGlyphSmall">{tile.value}</AlifaText>
+            <EcolnaText variant="displayGlyphSmall">{tile.value}</EcolnaText>
           </Pressable>
         ))}
       </View>
 
-      <AlifaButton
+      <EcolnaButton
         label={fr.common.verify}
         disabled={!interactive || placed.length === 0}
         onPress={() => onSubmit({ kind: 'sequence', values: placed.map((tile) => tile.value) })}

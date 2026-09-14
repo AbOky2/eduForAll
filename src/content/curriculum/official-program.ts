@@ -77,18 +77,18 @@ export const WEEKLY_TIMETABLE_CP = [
 ] as const;
 
 /**
- * Périmètre couvert par ALIFA : les quatre disciplines instrumentales du CP.
+ * Périmètre couvert par ECOLNA : les quatre disciplines instrumentales du CP.
  * Ensemble elles pèsent 1195 mn sur 1680 mn hebdomadaires (71 %).
  * Le poids `share` pilote le nombre de leçons générées par discipline.
  */
-export const ALIFA_SUBJECTS = [
+export const ECOLNA_SUBJECTS = [
   { id: 'reading', label: 'Lecture', minutes: 460, share: 0.385 },
   { id: 'language', label: 'Langage', minutes: 360, share: 0.301 },
   { id: 'math', label: 'Calcul', minutes: 210, share: 0.176 },
   { id: 'writing', label: 'Écriture', minutes: 165, share: 0.138 },
 ] as const;
 
-export type AlifaSubjectId = (typeof ALIFA_SUBJECTS)[number]['id'];
+export type EcolnaSubjectId = (typeof ECOLNA_SUBJECTS)[number]['id'];
 
 // ---------------------------------------------------------------------------
 // A. LANGAGE / ÉLOCUTION — p. 18-19
@@ -397,7 +397,7 @@ export const MENTAL_MATH_CONTENTS = [
 ] as const;
 
 // ---------------------------------------------------------------------------
-// MISE EN ORDRE PÉDAGOGIQUE — décision ALIFA, à valider par un enseignant
+// MISE EN ORDRE PÉDAGOGIQUE — décision ECOLNA, à valider par un enseignant
 // ---------------------------------------------------------------------------
 
 /**

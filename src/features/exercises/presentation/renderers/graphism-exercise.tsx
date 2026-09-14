@@ -4,7 +4,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaButton, AlifaCard, AlifaText } from '@/design-system/primitives';
+import { EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -95,7 +95,7 @@ export function GraphismExercise({
 
   return (
     <View style={styles.container}>
-      <AlifaCard
+      <EcolnaCard
         rounded="xl"
         padded={false}
         style={[styles.board, { height: isTablet ? 360 : 260 }]}
@@ -165,13 +165,13 @@ export function GraphismExercise({
             </Svg>
           </View>
         </GestureDetector>
-      </AlifaCard>
+      </EcolnaCard>
 
-      <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+      <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
         {done ? '' : 'Pars du gros point et va vers la droite.'}
-      </AlifaText>
+      </EcolnaText>
 
-      <AlifaButton
+      <EcolnaButton
         label={fr.common.verify}
         disabled={!interactive || !done}
         onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}

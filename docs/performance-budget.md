@@ -28,9 +28,9 @@ Cible : Android 3 Go RAM, CPU modeste, stockage lent, écran compact.
 ## Procédure de mesure (à exécuter sur appareil réel)
 
 1. Build preview (`npm run build:preview`), installer sur l'appareil cible.
-2. Démarrage : `adb shell am start -W td.alifa.app.preview/.MainActivity`
+2. Démarrage : `adb shell am start -W td.ecolna.app.preview/.MainActivity`
    (TotalTime), 5 mesures à froid, médiane.
-3. Mémoire : `adb shell dumpsys meminfo td.alifa.app.preview` au repos puis en
+3. Mémoire : `adb shell dumpsys meminfo td.ecolna.app.preview` au repos puis en
    leçon.
 4. Reporter dans `docs/performance-report.md` et ajuster le budget si un écart
    est justifié.

@@ -20,13 +20,13 @@ import { recordLessonCompletion } from '@/features/progress/application/record-l
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import { useSettings } from '@/features/settings/application/settings-store';
 import { FeedbackBanner } from '@/design-system/components/feedback-banner';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import {
-  AlifaButton,
-  AlifaCard,
-  AlifaProgressBar,
-  AlifaScreen,
-  AlifaText,
+  EcolnaButton,
+  EcolnaCard,
+  EcolnaProgressBar,
+  EcolnaScreen,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { a11y, colors, spacing } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
@@ -67,18 +67,18 @@ export default function LessonSessionScreen() {
 
   if (!lesson || !profile) {
     return (
-      <AlifaScreen background="exercise">
+      <EcolnaScreen background="exercise">
         <View style={styles.missing}>
-          <AlifaText variant="headlineMd" align="center">
+          <EcolnaText variant="headlineMd" align="center">
             {fr.errors.contentUnavailable}
-          </AlifaText>
-          <AlifaButton label={fr.common.back} onPress={() => router.back()} />
+          </EcolnaText>
+          <EcolnaButton label={fr.common.back} onPress={() => router.back()} />
         </View>
-      </AlifaScreen>
+      </EcolnaScreen>
     );
   }
   if (resumeIndex === null) {
-    return <AlifaScreen background="exercise">{null}</AlifaScreen>;
+    return <EcolnaScreen background="exercise">{null}</EcolnaScreen>;
   }
   return <SessionBody lesson={lesson} profileId={profile.id} initialStepIndex={resumeIndex} />;
 }
@@ -189,7 +189,7 @@ function SessionBody({
   const progress = state.stepIndex / lesson.steps.length;
 
   return (
-    <AlifaScreen background="exercise">
+    <EcolnaScreen background="exercise">
       {/* Header: close — progress — hint */}
       <View style={styles.header}>
         <Pressable
@@ -198,10 +198,10 @@ function SessionBody({
           onPress={() => setQuitVisible(true)}
           style={styles.headerButton}
         >
-          <AlifaIcon name="close" size={22} color={colors.onSurfaceVariant} />
+          <EcolnaIcon name="close" size={22} color={colors.onSurfaceVariant} />
         </Pressable>
         <View style={styles.progressWrap}>
-          <AlifaProgressBar
+          <EcolnaProgressBar
             progress={progress}
             accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
           />
@@ -213,7 +213,7 @@ function SessionBody({
             onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
             style={styles.headerButton}
           >
-            <AlifaIcon name="lightbulb" size={22} color={colors.tertiary} />
+            <EcolnaIcon name="lightbulb" size={22} color={colors.tertiary} />
           </Pressable>
         ) : (
           <View style={styles.headerButton} />
@@ -222,9 +222,9 @@ function SessionBody({
 
       {/* Instruction */}
       {step && step.type !== 'compose_syllable' && step.type !== 'compose_word' ? (
-        <AlifaText variant="headlineMd" align="center" style={styles.instruction}>
+        <EcolnaText variant="headlineMd" align="center" style={styles.instruction}>
           {step.instruction.text}
-        </AlifaText>
+        </EcolnaText>
       ) : null}
 
       {/* Exercise body */}
@@ -243,10 +243,10 @@ function SessionBody({
           })
         ) : step ? (
           <View style={styles.missing}>
-            <AlifaText variant="bodyLg" align="center" color={colors.textSecondary}>
+            <EcolnaText variant="bodyLg" align="center" color={colors.textSecondary}>
               {fr.errors.contentUnavailable}
-            </AlifaText>
-            <AlifaButton
+            </EcolnaText>
+            <EcolnaButton
               label={fr.common.next}
               onPress={() =>
                 dispatch({ type: 'ANSWER_SUBMITTED', answer: { kind: 'acknowledge' } })
@@ -274,17 +274,17 @@ function SessionBody({
       {/* Hint sheet */}
       {state.phase === 'showing_hint' && step?.hint ? (
         <View style={styles.hintOverlay}>
-          <AlifaCard rounded="xl" style={styles.hintCard}>
+          <EcolnaCard rounded="xl" style={styles.hintCard}>
             <View style={styles.hintHeader}>
-              <AlifaIcon name="lightbulb" size={26} color={colors.tertiary} />
-              <AlifaText variant="headlineSm">{fr.lesson.hint}</AlifaText>
+              <EcolnaIcon name="lightbulb" size={26} color={colors.tertiary} />
+              <EcolnaText variant="headlineSm">{fr.lesson.hint}</EcolnaText>
             </View>
-            <AlifaText variant="bodyLg">{step.hint.text}</AlifaText>
-            <AlifaButton
+            <EcolnaText variant="bodyLg">{step.hint.text}</EcolnaText>
+            <EcolnaButton
               label={fr.common.understood}
               onPress={() => dispatch({ type: 'HINT_DISMISSED' })}
             />
-          </AlifaCard>
+          </EcolnaCard>
         </View>
       ) : null}
 
@@ -296,15 +296,15 @@ function SessionBody({
         onRequestClose={() => setQuitVisible(false)}
       >
         <View style={styles.modalBackdrop}>
-          <AlifaCard rounded="xl" style={styles.modalCard}>
-            <AlifaText variant="headlineSm" align="center">
+          <EcolnaCard rounded="xl" style={styles.modalCard}>
+            <EcolnaText variant="headlineSm" align="center">
               {fr.lesson.quit}
-            </AlifaText>
-            <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+            </EcolnaText>
+            <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
               {fr.lesson.quitMessage}
-            </AlifaText>
-            <AlifaButton label={fr.lesson.quitCancel} onPress={() => setQuitVisible(false)} />
-            <AlifaButton
+            </EcolnaText>
+            <EcolnaButton label={fr.lesson.quitCancel} onPress={() => setQuitVisible(false)} />
+            <EcolnaButton
               label={fr.lesson.quitConfirm}
               variant="secondary"
               onPress={() => {
@@ -313,10 +313,10 @@ function SessionBody({
                 router.back();
               }}
             />
-          </AlifaCard>
+          </EcolnaCard>
         </View>
       </Modal>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

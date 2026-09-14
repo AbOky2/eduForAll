@@ -11,11 +11,11 @@ import {
 } from '@/features/curriculum/application/curriculum-catalog';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import type { Subject } from '@/content/schemas/curriculum-schema';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
-import { AlifaScreen, AlifaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
+import { EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { colors, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 type WorldNodeState = 'completed' | 'current' | 'locked';
@@ -99,8 +99,8 @@ export default function LevelMapScreen() {
   }
 
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader
         onBack={goBack}
         title={fr.learn.levelTitle(profile.level)}
         titleVariant="headlineLg"
@@ -145,7 +145,7 @@ export default function LevelMapScreen() {
                         ),
                       },
                       (_, i) => (
-                        <AlifaIcon key={i} name="star" size={16} color={colors.starActive} />
+                        <EcolnaIcon key={i} name="star" size={16} color={colors.starActive} />
                       ),
                     )}
                   </View>
@@ -168,24 +168,24 @@ export default function LevelMapScreen() {
                   ]}
                 >
                   {node.state === 'locked' ? (
-                    <AlifaIcon name="lock" size={26} color={colors.locked} />
+                    <EcolnaIcon name="lock" size={26} color={colors.locked} />
                   ) : node.state === 'completed' ? (
-                    <AlifaIcon name="check" size={30} color={colors.onSecondaryContainer} />
+                    <EcolnaIcon name="check" size={30} color={colors.onSecondaryContainer} />
                   ) : (
-                    <AlifaIcon name="sparkle" size={30} color={colors.tertiaryContainer} />
+                    <EcolnaIcon name="sparkle" size={30} color={colors.tertiaryContainer} />
                   )}
                 </Pressable>
                 <View style={styles.nodeLabel}>
-                  <AlifaText variant="labelLg" align="center">
+                  <EcolnaText variant="labelLg" align="center">
                     {node.world.title}
-                  </AlifaText>
-                  <AlifaText variant="bodySm" color={colors.textSecondary} align="center">
+                  </EcolnaText>
+                  <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
                     {node.world.subtitle}
-                  </AlifaText>
+                  </EcolnaText>
                   {node.state !== 'locked' ? (
-                    <AlifaText variant="bodySm" color={colors.outline} align="center">
+                    <EcolnaText variant="bodySm" color={colors.outline} align="center">
                       {node.completedLessons}/{node.totalLessons}
-                    </AlifaText>
+                    </EcolnaText>
                   ) : null}
                 </View>
               </View>
@@ -193,7 +193,7 @@ export default function LevelMapScreen() {
           );
         })}
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

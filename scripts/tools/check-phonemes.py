@@ -69,7 +69,7 @@ def main() -> int:
         if not os.path.exists(path):
             continue
         # soundfile ne lit pas le m4a : passer par afconvert (macOS) en wav temporaire
-        wav = f"/tmp/alifa-check-{audio_id}.wav"
+        wav = f"/tmp/ecolna-check-{audio_id}.wav"
         os.system(f'afconvert -f WAVE -d LEI16 "{path}" "{wav}" 2>/dev/null')
         samples, rate = sf.read(wav, dtype="float32")
         os.remove(wav)

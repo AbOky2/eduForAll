@@ -19,8 +19,8 @@ import {
   type AvatarId,
 } from '@/features/child-profile/domain/child-profile';
 import type { LevelId } from '@/content/schemas/curriculum-schema';
-import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { AvatarFace } from '@/design-system/illustrations/scenes';
 import { a11y, colors, radius, spacing, typography } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -57,23 +57,23 @@ export default function CreateProfileScreen() {
   };
 
   return (
-    <AlifaScreen background="exercise">
+    <EcolnaScreen background="exercise">
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={styles.container}>
-          <AlifaCard rounded="xl" style={styles.card}>
-            <AlifaText variant="headlineLg" align="center">
+          <EcolnaCard rounded="xl" style={styles.card}>
+            <EcolnaText variant="headlineLg" align="center">
               {fr.profile.title}
-            </AlifaText>
-            <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+            </EcolnaText>
+            <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
               {fr.profile.subtitle}
-            </AlifaText>
+            </EcolnaText>
 
-            <AlifaText variant="labelMd" color={colors.textSecondary} align="center">
+            <EcolnaText variant="labelMd" color={colors.textSecondary} align="center">
               {fr.profile.avatarLabel}
-            </AlifaText>
+            </EcolnaText>
             <View style={styles.avatarRow}>
               {AVATAR_IDS.map((candidate, index) => {
                 const selected = candidate === avatarId;
@@ -89,7 +89,7 @@ export default function CreateProfileScreen() {
                     <AvatarFace variant={(index + 1) as 1 | 2 | 3 | 4} size={56} />
                     {selected ? (
                       <View style={styles.avatarCheck}>
-                        <AlifaIcon name="check" size={12} color={colors.onPrimary} />
+                        <EcolnaIcon name="check" size={12} color={colors.onPrimary} />
                       </View>
                     ) : null}
                   </Pressable>
@@ -97,9 +97,9 @@ export default function CreateProfileScreen() {
               })}
             </View>
 
-            <AlifaText variant="labelMd" color={colors.textSecondary}>
+            <EcolnaText variant="labelMd" color={colors.textSecondary}>
               {fr.profile.firstNameLabel}
-            </AlifaText>
+            </EcolnaText>
             <TextInput
               accessibilityLabel={fr.profile.firstNameLabel}
               value={firstName}
@@ -112,9 +112,9 @@ export default function CreateProfileScreen() {
               style={styles.input}
             />
 
-            <AlifaText variant="labelMd" color={colors.textSecondary}>
+            <EcolnaText variant="labelMd" color={colors.textSecondary}>
               {fr.profile.levelLabel}
-            </AlifaText>
+            </EcolnaText>
             <View style={styles.levelRow}>
               {(
                 [
@@ -134,40 +134,40 @@ export default function CreateProfileScreen() {
                   >
                     {selected ? (
                       <View style={styles.levelCheck}>
-                        <AlifaIcon name="check" size={12} color={colors.onSecondary} />
+                        <EcolnaIcon name="check" size={12} color={colors.onSecondary} />
                       </View>
                     ) : null}
-                    <AlifaIcon
+                    <EcolnaIcon
                       name={option.icon}
                       size={26}
                       color={selected ? colors.secondary : colors.onSurfaceVariant}
                     />
-                    <AlifaText
+                    <EcolnaText
                       variant="headlineSm"
                       color={selected ? colors.secondary : colors.textPrimary}
                     >
                       {option.id}
-                    </AlifaText>
+                    </EcolnaText>
                   </Pressable>
                 );
               })}
             </View>
 
-            <AlifaButton
+            <EcolnaButton
               label={fr.profile.go}
               onPress={() => void submit()}
               disabled={!canSubmit}
             />
             <View style={styles.privacyRow}>
-              <AlifaIcon name="lock" size={16} color={colors.textSecondary} />
-              <AlifaText variant="bodySm" color={colors.textSecondary} style={styles.privacyText}>
+              <EcolnaIcon name="lock" size={16} color={colors.textSecondary} />
+              <EcolnaText variant="bodySm" color={colors.textSecondary} style={styles.privacyText}>
                 {fr.profile.privacyNote}
-              </AlifaText>
+              </EcolnaText>
             </View>
-          </AlifaCard>
+          </EcolnaCard>
         </View>
       </KeyboardAvoidingView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

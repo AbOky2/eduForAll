@@ -9,8 +9,8 @@ import {
   type HomeSummary,
 } from '@/features/learning-path/application/home-summary';
 import type { Subject } from '@/content/schemas/curriculum-schema';
-import { AlifaCard, AlifaProgressBar, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
+import { EcolnaCard, EcolnaProgressBar, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
 import { AvatarFace } from '@/design-system/illustrations/scenes';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -71,8 +71,8 @@ export default function ChildHomeScreen() {
   const todayLine = fr.home.today(lessonsToday);
 
   return (
-    <AlifaScreen background="default" withBottomInset={false}>
-      {/* Header: avatar — ALIFA — offline badge */}
+    <EcolnaScreen background="default" withBottomInset={false}>
+      {/* Header: avatar — ECOLNA — offline badge */}
       <View style={styles.header}>
         <Pressable
           accessibilityRole="button"
@@ -82,26 +82,26 @@ export default function ChildHomeScreen() {
         >
           <AvatarFace variant={avatarVariant(profile.avatarId)} size={40} />
         </Pressable>
-        <AlifaText variant="headlineSm" color={colors.primary}>
+        <EcolnaText variant="headlineSm" color={colors.primary}>
           {fr.common.appName}
-        </AlifaText>
+        </EcolnaText>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={fr.offline.badge}
           onPress={() => router.push('/(child)/offline-info')}
           hitSlop={8}
         >
-          <AlifaIcon name="cloud-off" size={24} color={colors.onSurfaceVariant} />
+          <EcolnaIcon name="cloud-off" size={24} color={colors.onSurfaceVariant} />
         </Pressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.greetingRow}>
           <View style={styles.greetingText}>
-            <AlifaText variant="headlineLg">{fr.home.greeting(profile.firstName)}</AlifaText>
-            <AlifaText variant="bodyLg" color={colors.textSecondary}>
+            <EcolnaText variant="headlineLg">{fr.home.greeting(profile.firstName)}</EcolnaText>
+            <EcolnaText variant="bodyLg" color={colors.textSecondary}>
               {todayLine}
-            </AlifaText>
+            </EcolnaText>
           </View>
           {streakDays > 0 ? (
             <View
@@ -109,10 +109,10 @@ export default function ChildHomeScreen() {
               accessibilityRole="text"
               accessibilityLabel={fr.home.streak(streakDays)}
             >
-              <AlifaIcon name="flame" size={18} color={colors.onPrimaryContainer} filled />
-              <AlifaText variant="labelMd" color={colors.onPrimaryContainer}>
+              <EcolnaIcon name="flame" size={18} color={colors.onPrimaryContainer} filled />
+              <EcolnaText variant="labelMd" color={colors.onPrimaryContainer}>
                 {String(streakDays)}
-              </AlifaText>
+              </EcolnaText>
             </View>
           ) : null}
         </View>
@@ -130,54 +130,54 @@ export default function ChildHomeScreen() {
             ]}
           >
             <View style={styles.heroBadge}>
-              <AlifaText variant="labelSm" color={colors.primaryFixed}>
+              <EcolnaText variant="labelSm" color={colors.primaryFixed}>
                 {recommendation.reason === 'resume' ? fr.home.inProgress : fr.home.newBadge}
-              </AlifaText>
+              </EcolnaText>
             </View>
-            <AlifaText variant="headlineMd" color={colors.onPrimary}>
+            <EcolnaText variant="headlineMd" color={colors.onPrimary}>
               {recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson}
-            </AlifaText>
-            <AlifaText variant="bodyMd" color={colors.primaryFixed}>
+            </EcolnaText>
+            <EcolnaText variant="bodyMd" color={colors.primaryFixed}>
               {recommendation.title}
-            </AlifaText>
+            </EcolnaText>
             <View style={styles.heroPlay}>
-              <AlifaIcon name="play" size={26} color={colors.primary} />
+              <EcolnaIcon name="play" size={26} color={colors.primary} />
             </View>
           </Pressable>
         ) : null}
 
         {/* Revision workshop — only when something is actually waiting */}
         {revisionCount > 0 ? (
-          <AlifaCard
+          <EcolnaCard
             rounded="xl"
             onPress={() => router.push('/(child)/revision')}
             accessibilityLabel={`${fr.home.reviseTitle} ${fr.home.reviseCount(revisionCount)}`}
             style={styles.revision}
           >
             <View style={styles.revisionBadge}>
-              <AlifaIcon name="leaf" size={22} color={colors.onTertiaryContainer} />
+              <EcolnaIcon name="leaf" size={22} color={colors.onTertiaryContainer} />
             </View>
             <View style={styles.revisionText}>
-              <AlifaText variant="labelLg">{fr.home.reviseTitle}</AlifaText>
-              <AlifaText variant="bodyMd" color={colors.textSecondary}>
+              <EcolnaText variant="labelLg">{fr.home.reviseTitle}</EcolnaText>
+              <EcolnaText variant="bodyMd" color={colors.textSecondary}>
                 {fr.home.reviseCount(revisionCount)}
-              </AlifaText>
+              </EcolnaText>
             </View>
-            <AlifaIcon name="chevron-right" size={22} color={colors.onSurfaceVariant} />
-          </AlifaCard>
+            <EcolnaIcon name="chevron-right" size={22} color={colors.onSurfaceVariant} />
+          </EcolnaCard>
         ) : null}
 
         {/* Activities grid */}
         <View style={styles.sectionTitle}>
-          <AlifaIcon name="star-outline" size={18} color={colors.primary} />
-          <AlifaText variant="headlineSm">{fr.home.activities}</AlifaText>
+          <EcolnaIcon name="star-outline" size={18} color={colors.primary} />
+          <EcolnaText variant="headlineSm">{fr.home.activities}</EcolnaText>
         </View>
         <View style={styles.grid}>
           {(summary?.subjects ?? []).map((subject) => {
             const meta = SUBJECT_META[subject.subject];
             const progress = subject.total === 0 ? 0 : subject.completed / subject.total;
             return (
-              <AlifaCard
+              <EcolnaCard
                 key={subject.subject}
                 onPress={
                   subject.locked
@@ -198,39 +198,39 @@ export default function ChildHomeScreen() {
                       { backgroundColor: subject.locked ? colors.lockedContainer : meta.tile },
                     ]}
                   >
-                    <AlifaIcon
+                    <EcolnaIcon
                       name={meta.icon}
                       size={22}
                       color={subject.locked ? colors.locked : meta.tint}
                     />
                   </View>
                   {subject.locked ? (
-                    <AlifaIcon name="lock" size={16} color={colors.locked} />
+                    <EcolnaIcon name="lock" size={16} color={colors.locked} />
                   ) : null}
                 </View>
-                <AlifaText
+                <EcolnaText
                   variant="labelLg"
                   color={subject.locked ? colors.locked : colors.textPrimary}
                 >
                   {meta.label}
-                </AlifaText>
-                <AlifaProgressBar
+                </EcolnaText>
+                <EcolnaProgressBar
                   progress={progress}
                   tone={meta.bar}
                   height={8}
                   accessibilityLabel={`${meta.label} : ${subject.completed} sur ${subject.total}`}
                 />
                 {explained === subject.subject ? (
-                  <AlifaText variant="bodySm" color={colors.textSecondary}>
+                  <EcolnaText variant="bodySm" color={colors.textSecondary}>
                     {fr.home.lockedExplain}
-                  </AlifaText>
+                  </EcolnaText>
                 ) : null}
-              </AlifaCard>
+              </EcolnaCard>
             );
           })}
         </View>
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

@@ -3,11 +3,11 @@ import { Animated, Pressable, StyleSheet } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
 import { colors, shadows } from '../tokens';
-import { AlifaIcon } from '../icons/alifa-icon';
+import { EcolnaIcon } from '../icons/ecolna-icon';
 
 type AudioButtonVariant = 'sand' | 'sky' | 'bordered';
 
-interface AlifaAudioButtonProps {
+interface EcolnaAudioButtonProps {
   onPress: () => void;
   size?: number;
   variant?: AudioButtonVariant;
@@ -30,14 +30,14 @@ const VARIANTS: Record<AudioButtonVariant, { background: string; icon: string; b
  * The always-recognizable "listen" button. Pulses gently while audio plays
  * (unless the OS asks for reduced motion). Replays on every tap.
  */
-export function AlifaAudioButton({
+export function EcolnaAudioButton({
   onPress,
   size = 72,
   variant = 'sand',
   playing = false,
   disabled = false,
   accessibilityLabel = 'Écouter',
-}: AlifaAudioButtonProps) {
+}: EcolnaAudioButtonProps) {
   const palette = VARIANTS[variant];
   const reducedMotion = useReducedMotion();
   const [pulse] = useState(() => new Animated.Value(1));
@@ -81,7 +81,7 @@ export function AlifaAudioButton({
           },
         ]}
       >
-        <AlifaIcon name="speaker" size={size * 0.45} color={palette.icon} />
+        <EcolnaIcon name="speaker" size={size * 0.45} color={palette.icon} />
       </Animated.View>
     </Pressable>
   );

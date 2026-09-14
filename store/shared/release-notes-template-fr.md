@@ -11,5 +11,5 @@
 **Corrections**
 - [Bugs corrigés, en langage simple]
 
-*ALIFA fonctionne toujours entièrement sans internet. Vos données restent
+*ECOLNA fonctionne toujours entièrement sans internet. Vos données restent
 sur votre téléphone.*

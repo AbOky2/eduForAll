@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { Pressable } from 'react-native';
 
-import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { OfflineReadyScene, ReadingChildScene } from '@/design-system/illustrations/scenes';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -35,16 +35,16 @@ export default function OnboardingScreen() {
   const finish = () => router.push('/(onboarding)/create-profile');
 
   return (
-    <AlifaScreen background="default">
+    <EcolnaScreen background="default">
       <View style={styles.topBar}>
-        <AlifaText variant="headlineSm" color={colors.primary}>
+        <EcolnaText variant="headlineSm" color={colors.primary}>
           {fr.common.appName}
-        </AlifaText>
+        </EcolnaText>
         {page < 2 ? (
           <Pressable accessibilityRole="button" onPress={finish} hitSlop={12}>
-            <AlifaText variant="labelMd" color={colors.textSecondary}>
+            <EcolnaText variant="labelMd" color={colors.textSecondary}>
               {fr.common.skip}
-            </AlifaText>
+            </EcolnaText>
           </Pressable>
         ) : null}
       </View>
@@ -59,29 +59,29 @@ export default function OnboardingScreen() {
       >
         {/* Page 1 — Ton école t'accompagne partout (S02) */}
         <View style={[styles.page, { width }]}>
-          <AlifaCard rounded="xl" padded={false} style={styles.sceneCard}>
+          <EcolnaCard rounded="xl" padded={false} style={styles.sceneCard}>
             <ReadingChildScene width={width - spacing.screenMargin * 2} height={210} />
-          </AlifaCard>
-          <AlifaText variant="headlineLg" align="center">
+          </EcolnaCard>
+          <EcolnaText variant="headlineLg" align="center">
             Ton école{' '}
-            <AlifaText variant="headlineLg" color={colors.secondary}>
+            <EcolnaText variant="headlineLg" color={colors.secondary}>
               t’accompagne
-            </AlifaText>{' '}
+            </EcolnaText>{' '}
             partout.
-          </AlifaText>
+          </EcolnaText>
         </View>
 
         {/* Page 2 — Les matières (S03) */}
         <View style={[styles.page, { width }]}>
           <View style={styles.sparkBadge}>
-            <AlifaIcon name="sparkle" size={30} color={colors.onSecondaryContainer} />
+            <EcolnaIcon name="sparkle" size={30} color={colors.onSecondaryContainer} />
           </View>
-          <AlifaText variant="headlineLg" align="center">
+          <EcolnaText variant="headlineLg" align="center">
             {fr.onboarding.subjectsTitle}
-          </AlifaText>
-          <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+          </EcolnaText>
+          <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
             {fr.onboarding.subjectsSubtitle}
-          </AlifaText>
+          </EcolnaText>
           <View style={styles.subjectGrid}>
             {(
               [
@@ -111,29 +111,29 @@ export default function OnboardingScreen() {
                 },
               ] as const
             ).map((subject) => (
-              <AlifaCard key={subject.label} style={styles.subjectCard}>
+              <EcolnaCard key={subject.label} style={styles.subjectCard}>
                 <View style={[styles.subjectTile, { backgroundColor: subject.tile }]}>
-                  <AlifaIcon name={subject.icon} size={26} color={subject.tint} />
+                  <EcolnaIcon name={subject.icon} size={26} color={subject.tint} />
                 </View>
-                <AlifaText variant="labelLg" align="center">
+                <EcolnaText variant="labelLg" align="center">
                   {subject.label}
-                </AlifaText>
-              </AlifaCard>
+                </EcolnaText>
+              </EcolnaCard>
             ))}
           </View>
         </View>
 
         {/* Page 3 — Fonctionne sans connexion (S04) */}
         <View style={[styles.page, { width }]}>
-          <AlifaCard rounded="xl" padded={false} style={styles.sceneCard}>
+          <EcolnaCard rounded="xl" padded={false} style={styles.sceneCard}>
             <OfflineReadyScene width={width - spacing.screenMargin * 2} height={210} />
-          </AlifaCard>
-          <AlifaText variant="headlineLg" align="center">
+          </EcolnaCard>
+          <EcolnaText variant="headlineLg" align="center">
             {fr.onboarding.offlineTitle}
-          </AlifaText>
-          <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+          </EcolnaText>
+          <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
             {fr.onboarding.offlineSubtitle}
-          </AlifaText>
+          </EcolnaText>
         </View>
       </ScrollView>
 
@@ -151,14 +151,14 @@ export default function OnboardingScreen() {
             />
           ))}
         </View>
-        <AlifaButton
+        <EcolnaButton
           label={
             page === 0 ? fr.common.start : page === 1 ? fr.common.next : fr.onboarding.createProfile
           }
           onPress={() => (page < 2 ? goTo(page + 1) : finish())}
         />
       </View>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

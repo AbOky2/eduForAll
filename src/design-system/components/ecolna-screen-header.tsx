@@ -3,11 +3,11 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { fr } from '@/localization/fr/strings';
 
-import { AlifaIcon } from '../icons/alifa-icon';
-import { AlifaText } from '../primitives';
+import { EcolnaIcon } from '../icons/ecolna-icon';
+import { EcolnaText } from '../primitives';
 import { a11y, colors, spacing, type TypographyVariant } from '../tokens';
 
-interface AlifaScreenHeaderProps {
+interface EcolnaScreenHeaderProps {
   onBack: () => void;
   title?: string | undefined;
   /** Ligne sous le titre — la devise du niveau sur la carte de progression. */
@@ -22,14 +22,14 @@ interface AlifaScreenHeaderProps {
  * En-tête d'écran secondaire : retour à gauche, titre centré, action à droite.
  * Un seul endroit pour la cible tactile de 44 pt et l'étiquette « Retour ».
  */
-export function AlifaScreenHeader({
+export function EcolnaScreenHeader({
   onBack,
   title,
   subtitle,
   titleVariant = 'headlineSm',
   right,
   titleColor = colors.primary,
-}: AlifaScreenHeaderProps) {
+}: EcolnaScreenHeaderProps) {
   return (
     <View style={styles.header}>
       <Pressable
@@ -38,18 +38,18 @@ export function AlifaScreenHeader({
         onPress={onBack}
         style={styles.button}
       >
-        <AlifaIcon name="arrow-back" size={22} color={colors.onSurfaceVariant} />
+        <EcolnaIcon name="arrow-back" size={22} color={colors.onSurfaceVariant} />
       </Pressable>
       <View style={styles.titles}>
         {title ? (
-          <AlifaText variant={titleVariant} color={titleColor} align="center">
+          <EcolnaText variant={titleVariant} color={titleColor} align="center">
             {title}
-          </AlifaText>
+          </EcolnaText>
         ) : null}
         {subtitle ? (
-          <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+          <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
             {subtitle}
-          </AlifaText>
+          </EcolnaText>
         ) : null}
       </View>
       <View style={styles.button}>{right}</View>

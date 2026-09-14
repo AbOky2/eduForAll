@@ -46,7 +46,7 @@ describe('configuration de l’application', () => {
   });
 
   it('retire l’accès réseau et l’overlay système des builds livrés', () => {
-    const blocked = loadConfig({ ALIFA_RELEASE: '1' }).android?.blockedPermissions ?? [];
+    const blocked = loadConfig({ ECOLNA_RELEASE: '1' }).android?.blockedPermissions ?? [];
     expect(blocked).toContain('android.permission.INTERNET');
     expect(blocked).toContain('android.permission.SYSTEM_ALERT_WINDOW');
     expect(blocked).toContain('android.permission.READ_EXTERNAL_STORAGE');
@@ -56,7 +56,7 @@ describe('configuration de l’application', () => {
   });
 
   it('garde l’accès réseau en développement, sinon Metro est injoignable', () => {
-    expect(loadConfig({ ALIFA_RELEASE: undefined }).android?.blockedPermissions).toBeUndefined();
+    expect(loadConfig({ ECOLNA_RELEASE: undefined }).android?.blockedPermissions).toBeUndefined();
   });
 
   it('pointe le projet EAS, et laisse l’environnement en désigner un autre', () => {

@@ -29,7 +29,7 @@ function md5(path: string): string {
 }
 
 const provided = flag('dir');
-const exportDir = provided ?? mkdtempSync(join(tmpdir(), 'alifa-bundle-'));
+const exportDir = provided ?? mkdtempSync(join(tmpdir(), 'ecolna-bundle-'));
 
 try {
   if (!provided) {

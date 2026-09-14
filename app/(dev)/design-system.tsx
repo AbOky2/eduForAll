@@ -1,17 +1,17 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { StarRow } from '@/design-system/components/star-row';
-import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
+import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
 import { AvatarFace } from '@/design-system/illustrations/scenes';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import {
-  AlifaAnswerCard,
-  AlifaAudioButton,
-  AlifaButton,
-  AlifaCard,
-  AlifaProgressBar,
-  AlifaScreen,
-  AlifaText,
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaButton,
+  EcolnaCard,
+  EcolnaProgressBar,
+  EcolnaScreen,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { colors, spacing, typography, type TypographyVariant } from '@/design-system/tokens';
 
@@ -72,15 +72,15 @@ export default function DesignSystemGallery() {
     return null;
   }
   return (
-    <AlifaScreen background="default">
+    <EcolnaScreen background="default">
       <ScrollView contentContainerStyle={styles.scroll}>
-        <AlifaText variant="headlineLg">Design system ALIFA</AlifaText>
+        <EcolnaText variant="headlineLg">Design system ECOLNA</EcolnaText>
 
         <Section title="Typographie">
           {(Object.keys(typography) as TypographyVariant[]).map((variant) => (
-            <AlifaText key={variant} variant={variant} numberOfLines={1}>
+            <EcolnaText key={variant} variant={variant} numberOfLines={1}>
               {variant} — Amina lit « ba »
-            </AlifaText>
+            </EcolnaText>
           ))}
         </Section>
 
@@ -100,36 +100,36 @@ export default function DesignSystemGallery() {
             ).map(([name, value]) => (
               <View key={name} style={styles.swatchWrap}>
                 <View style={[styles.swatch, { backgroundColor: value }]} />
-                <AlifaText variant="bodySm">{name}</AlifaText>
+                <EcolnaText variant="bodySm">{name}</EcolnaText>
               </View>
             ))}
           </View>
         </Section>
 
         <Section title="Boutons">
-          <AlifaButton label="Commencer" onPress={() => undefined} />
-          <AlifaButton label="Rejouer" variant="secondary" onPress={() => undefined} />
-          <AlifaButton label="Passer" variant="ghost" onPress={() => undefined} />
-          <AlifaButton label="Réinitialiser" variant="danger" onPress={() => undefined} />
-          <AlifaButton label="Désactivé" onPress={() => undefined} disabled />
+          <EcolnaButton label="Commencer" onPress={() => undefined} />
+          <EcolnaButton label="Rejouer" variant="secondary" onPress={() => undefined} />
+          <EcolnaButton label="Passer" variant="ghost" onPress={() => undefined} />
+          <EcolnaButton label="Réinitialiser" variant="danger" onPress={() => undefined} />
+          <EcolnaButton label="Désactivé" onPress={() => undefined} disabled />
         </Section>
 
         <Section title="Cartes réponses">
-          <AlifaAnswerCard label="ba" onPress={() => undefined} />
-          <AlifaAnswerCard label="ma" state="selected" onPress={() => undefined} />
-          <AlifaAnswerCard label="ta" state="correct" onPress={() => undefined} />
-          <AlifaAnswerCard label="da" state="incorrect" onPress={() => undefined} />
-          <AlifaAnswerCard label="la" state="disabled" onPress={() => undefined} />
+          <EcolnaAnswerCard label="ba" onPress={() => undefined} />
+          <EcolnaAnswerCard label="ma" state="selected" onPress={() => undefined} />
+          <EcolnaAnswerCard label="ta" state="correct" onPress={() => undefined} />
+          <EcolnaAnswerCard label="da" state="incorrect" onPress={() => undefined} />
+          <EcolnaAnswerCard label="la" state="disabled" onPress={() => undefined} />
         </Section>
 
         <Section title="Audio et progression">
           <View style={styles.wrap}>
-            <AlifaAudioButton onPress={() => undefined} />
-            <AlifaAudioButton variant="sky" size={52} onPress={() => undefined} />
-            <AlifaAudioButton variant="bordered" size={52} onPress={() => undefined} />
+            <EcolnaAudioButton onPress={() => undefined} />
+            <EcolnaAudioButton variant="sky" size={52} onPress={() => undefined} />
+            <EcolnaAudioButton variant="bordered" size={52} onPress={() => undefined} />
           </View>
-          <AlifaProgressBar progress={0.6} />
-          <AlifaProgressBar progress={0.35} tone="brown" />
+          <EcolnaProgressBar progress={0.6} />
+          <EcolnaProgressBar progress={0.35} tone="brown" />
           <StarRow earned={2} />
         </Section>
 
@@ -137,7 +137,7 @@ export default function DesignSystemGallery() {
           <View style={styles.wrap}>
             {ICONS.map((name) => (
               <View key={name} style={styles.iconCell}>
-                <AlifaIcon name={name} size={26} color={colors.onSurfaceVariant} />
+                <EcolnaIcon name={name} size={26} color={colors.onSurfaceVariant} />
               </View>
             ))}
           </View>
@@ -159,16 +159,16 @@ export default function DesignSystemGallery() {
           </View>
         </Section>
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <AlifaCard style={styles.section}>
-      <AlifaText variant="headlineSm">{title}</AlifaText>
+    <EcolnaCard style={styles.section}>
+      <EcolnaText variant="headlineSm">{title}</EcolnaText>
       {children}
-    </AlifaCard>
+    </EcolnaCard>
   );
 }
 

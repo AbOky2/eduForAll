@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'rea
 
 import { colors, radius, shadows, spacing } from '../tokens';
 
-interface AlifaCardProps {
+interface EcolnaCardProps {
   children: ReactNode;
   onPress?: (() => void) | undefined;
   /** Rounded 24 for hero cards, 16 for standard cards. */
@@ -15,7 +15,7 @@ interface AlifaCardProps {
 }
 
 /** White soft-shadow card used across every mockup. */
-export function AlifaCard({
+export function EcolnaCard({
   children,
   onPress,
   rounded = 'lg',
@@ -23,7 +23,7 @@ export function AlifaCard({
   backgroundColor = colors.card,
   accessibilityLabel,
   style,
-}: AlifaCardProps) {
+}: EcolnaCardProps) {
   const base = [
     styles.card,
     shadows.card,

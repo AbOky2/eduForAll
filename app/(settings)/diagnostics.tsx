@@ -3,10 +3,10 @@ import { ScrollView, Share, StyleSheet, View } from 'react-native';
 
 import { logSnapshot } from '@/core/logging/logger';
 import { getDatabase } from '@/database/connection/database';
-import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 interface DiagnosticsInfo {
@@ -54,7 +54,7 @@ export default function DiagnosticsScreen() {
       .join('\n');
     void Share.share({
       message:
-        `Diagnostic ALIFA\n` +
+        `Diagnostic ECOLNA\n` +
         `Contenu : ${info?.contentVersion}\nMigrations : ${info?.migrations}\n` +
         `Profils : ${info?.profiles}\nRéponses enregistrées : ${info?.attempts}\n\n` +
         `Derniers avertissements :\n${logs || 'aucun'}`,
@@ -66,31 +66,31 @@ export default function DiagnosticsScreen() {
   }
 
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader onBack={goBack} title={fr.settings.diagnostics} titleVariant="headlineMd" />
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader onBack={goBack} title={fr.settings.diagnostics} titleVariant="headlineMd" />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <AlifaCard rounded="xl" style={styles.card}>
+        <EcolnaCard rounded="xl" style={styles.card}>
           <Row label="Version du contenu" value={info?.contentVersion ?? '…'} />
           <Row label="Migrations appliquées" value={String(info?.migrations ?? '…')} />
           <Row label="Profils sur ce téléphone" value={String(info?.profiles ?? '…')} />
           <Row label="Réponses enregistrées" value={String(info?.attempts ?? '…')} />
-        </AlifaCard>
-        <AlifaButton label="Exporter le diagnostic" onPress={exportDiagnostics} />
-        <AlifaText variant="bodySm" color={colors.textSecondary} align="center">
+        </EcolnaCard>
+        <EcolnaButton label="Exporter le diagnostic" onPress={exportDiagnostics} />
+        <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
           L’export ne contient ni prénom, ni voix, ni position. Vous choisissez à qui l’envoyer.
-        </AlifaText>
+        </EcolnaText>
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.row}>
-      <AlifaText variant="bodyMd" color={colors.textSecondary}>
+      <EcolnaText variant="bodyMd" color={colors.textSecondary}>
         {label}
-      </AlifaText>
-      <AlifaText variant="bodyLg">{value}</AlifaText>
+      </EcolnaText>
+      <EcolnaText variant="bodyLg">{value}</EcolnaText>
     </View>
   );
 }

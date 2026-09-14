@@ -40,7 +40,7 @@ données qui en sont tirées sont dans
 
 Le fichier `official-program.ts` **n'invente rien**. Les champs `official`
 sont des citations ; les champs `teachingOrder` sont les seules décisions
-pédagogiques d'ALIFA, isolées et signalées comme telles pour être soumises à
+pédagogiques d'ECOLNA, isolées et signalées comme telles pour être soumises à
 un enseignant (`docs/pedagogical-validation.md`).
 
 Chaque leçon générée porte un `officialReference` qui cite le contenu et sa

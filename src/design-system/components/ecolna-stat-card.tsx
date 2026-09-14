@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { AlifaIcon, type IconName } from '../icons/alifa-icon';
-import { AlifaCard, AlifaText } from '../primitives';
+import { EcolnaIcon, type IconName } from '../icons/ecolna-icon';
+import { EcolnaCard, EcolnaText } from '../primitives';
 import { colors, radius, spacing } from '../tokens';
 
-interface AlifaStatCardProps {
+interface EcolnaStatCardProps {
   icon: IconName;
   value: string;
   label: string;
@@ -18,7 +18,7 @@ interface AlifaStatCardProps {
 }
 
 /** Un chiffre dont on est fier, avec son icône dans un disque de couleur. */
-export function AlifaStatCard({
+export function EcolnaStatCard({
   icon,
   value,
   label,
@@ -26,31 +26,31 @@ export function AlifaStatCard({
   tint,
   orientation = 'row',
   children,
-}: AlifaStatCardProps) {
+}: EcolnaStatCardProps) {
   const column = orientation === 'column';
   return (
-    <AlifaCard
+    <EcolnaCard
       style={column ? styles.columnCard : styles.rowCard}
       accessibilityLabel={`${label} : ${value}`}
     >
       <View style={[styles.disc, column ? styles.discSmall : styles.discLarge, { backgroundColor: container }]}>
-        <AlifaIcon name={icon} size={column ? 20 : 22} color={tint} filled={column} />
+        <EcolnaIcon name={icon} size={column ? 20 : 22} color={tint} filled={column} />
       </View>
       <View style={column ? styles.columnText : styles.rowText}>
         {column ? null : (
-          <AlifaText variant="labelMd" color={colors.textSecondary}>
+          <EcolnaText variant="labelMd" color={colors.textSecondary}>
             {label}
-          </AlifaText>
+          </EcolnaText>
         )}
-        <AlifaText variant="headlineMd">{value}</AlifaText>
+        <EcolnaText variant="headlineMd">{value}</EcolnaText>
         {column ? (
-          <AlifaText variant="labelSm" color={colors.textSecondary} align="center">
+          <EcolnaText variant="labelSm" color={colors.textSecondary} align="center">
             {label}
-          </AlifaText>
+          </EcolnaText>
         ) : null}
         {children}
       </View>
-    </AlifaCard>
+    </EcolnaCard>
   );
 }
 

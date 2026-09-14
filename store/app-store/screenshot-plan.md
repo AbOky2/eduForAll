@@ -29,4 +29,4 @@ réelle, aucun élément de développement.
 | iPhone 6,9" | 1320 × 2868 | 1 min, 10 max |
 | iPad 13" | 2064 × 2752 | **obligatoire** (l'app déclare `supportsTablet`) |
 
-ALIFA vise la tablette : mettre les captures iPad en premier.
+ECOLNA vise la tablette : mettre les captures iPad en premier.

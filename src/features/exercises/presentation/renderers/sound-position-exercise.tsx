@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAnswerCard,
-  AlifaAudioButton,
-  AlifaCard,
-  AlifaExerciseLayout,
-  AlifaText,
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { colors, radius, spacing } from '@/design-system/tokens';
 
@@ -43,40 +43,40 @@ export function SoundPositionExercise({
 
   const prompt = (
     <>
-      <AlifaCard rounded="xl" style={styles.prompt}>
-        <AlifaText variant="headlineMd" align="center">
+      <EcolnaCard rounded="xl" style={styles.prompt}>
+        <EcolnaText variant="headlineMd" align="center">
           {step.instruction.text}
-        </AlifaText>
+        </EcolnaText>
         <View style={styles.soundBadge}>
-          <AlifaText variant="displayGlyphSmall" color={colors.onPrimaryContainer}>
+          <EcolnaText variant="displayGlyphSmall" color={colors.onPrimaryContainer}>
             {step.sound}
-          </AlifaText>
+          </EcolnaText>
         </View>
-      </AlifaCard>
+      </EcolnaCard>
 
-      <AlifaCard rounded="xl" style={styles.wordCard}>
-        <AlifaText variant="displayGlyph" align="center" color={colors.primary}>
+      <EcolnaCard rounded="xl" style={styles.wordCard}>
+        <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
           {step.word}
-        </AlifaText>
+        </EcolnaText>
         <View style={styles.slots}>
           {POSITIONS.map((position) => (
             <View key={position.value} style={styles.slot} />
           ))}
         </View>
-        <AlifaAudioButton
+        <EcolnaAudioButton
           variant="sky"
           size={64}
           playing={playingAudioId === step.audioId}
           onPress={() => playAudio(step.audioId)}
         />
-      </AlifaCard>
+      </EcolnaCard>
     </>
   );
 
   const answers = (
     <View style={styles.options}>
       {POSITIONS.map((position) => (
-        <AlifaAnswerCard
+        <EcolnaAnswerCard
           key={position.value}
           label={position.label}
           glyph={false}
@@ -97,7 +97,7 @@ export function SoundPositionExercise({
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

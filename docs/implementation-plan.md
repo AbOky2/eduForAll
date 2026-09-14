@@ -1,4 +1,4 @@
-# ALIFA — Plan d'implémentation
+# ECOLNA — Plan d'implémentation
 
 Application éducative CP1–CP2 offline-first pour le Tchad. Expo SDK 56, RN 0.85, TypeScript strict, New Architecture, Hermes.
 

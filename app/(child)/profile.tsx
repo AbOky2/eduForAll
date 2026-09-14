@@ -8,10 +8,10 @@ import { AchievementBadge } from '@/features/achievements/presentation/achieveme
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { AVATAR_IDS, avatarVariant } from '@/features/child-profile/domain/child-profile';
 import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
-import { AlifaStatCard } from '@/design-system/components/alifa-stat-card';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
+import { EcolnaStatCard } from '@/design-system/components/ecolna-stat-card';
 import { AvatarFace } from '@/design-system/illustrations/scenes';
-import { AlifaScreen, AlifaText } from '@/design-system/primitives';
+import { EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -50,26 +50,26 @@ export default function ChildProfileScreen() {
   };
 
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader onBack={goBack} title={fr.childProfile.title} />
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader onBack={goBack} title={fr.childProfile.title} />
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.identity}>
           <View style={styles.avatarRing}>
             <AvatarFace variant={avatarVariant(profile.avatarId)} size={scaled(104, scale)} />
           </View>
-          <AlifaText variant="headlineLg" align="center">
+          <EcolnaText variant="headlineLg" align="center">
             {profile.firstName}
-          </AlifaText>
+          </EcolnaText>
           <View style={styles.levelPill}>
-            <AlifaText variant="labelMd" color={colors.onSecondaryContainer}>
+            <EcolnaText variant="labelMd" color={colors.onSecondaryContainer}>
               {fr.learn.levelTitle(profile.level)}
-            </AlifaText>
+            </EcolnaText>
           </View>
         </View>
 
         <View style={styles.statRow}>
-          <AlifaStatCard
+          <EcolnaStatCard
             orientation="column"
             icon="book"
             value={String(stats?.completedLessons ?? 0)}
@@ -77,7 +77,7 @@ export default function ChildProfileScreen() {
             container={colors.primaryContainer}
             tint={colors.onPrimaryContainer}
           />
-          <AlifaStatCard
+          <EcolnaStatCard
             orientation="column"
             icon="star"
             value={String(stats?.totalStars ?? 0)}
@@ -85,7 +85,7 @@ export default function ChildProfileScreen() {
             container={colors.tertiaryFixed}
             tint={colors.starActive}
           />
-          <AlifaStatCard
+          <EcolnaStatCard
             orientation="column"
             icon="flame"
             value={String(stats?.bestStreakDays ?? 0)}
@@ -95,7 +95,7 @@ export default function ChildProfileScreen() {
           />
         </View>
 
-        <AlifaText variant="headlineSm">{fr.childProfile.changeAvatar}</AlifaText>
+        <EcolnaText variant="headlineSm">{fr.childProfile.changeAvatar}</EcolnaText>
         <View style={styles.avatarRow}>
           {AVATAR_IDS.map((candidate, index) => {
             const selected = candidate === profile.avatarId;
@@ -115,21 +115,21 @@ export default function ChildProfileScreen() {
         </View>
 
         <View style={styles.badgeHeader}>
-          <AlifaText variant="headlineSm">{fr.achievements.title}</AlifaText>
-          <AlifaText variant="labelMd" color={colors.textSecondary}>
+          <EcolnaText variant="headlineSm">{fr.achievements.title}</EcolnaText>
+          <EcolnaText variant="labelMd" color={colors.textSecondary}>
             {fr.achievements.countEarned(earnedSet.size, ACHIEVEMENT_IDS.length)}
-          </AlifaText>
+          </EcolnaText>
         </View>
-        <AlifaText variant="bodyMd" color={colors.textSecondary}>
+        <EcolnaText variant="bodyMd" color={colors.textSecondary}>
           {fr.achievements.subtitle}
-        </AlifaText>
+        </EcolnaText>
         <View style={styles.badgeGrid}>
           {ACHIEVEMENT_IDS.map((id) => (
             <AchievementBadge key={id} id={id} earned={earnedSet.has(id)} size={scaled(64, scale)} />
           ))}
         </View>
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

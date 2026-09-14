@@ -1,4 +1,4 @@
-# ALIFA — Registre des risques
+# ECOLNA — Registre des risques
 
 | ID | Risque | Impact | Prob. | Mitigation | Statut |
 |---|---|---|---|---|---|

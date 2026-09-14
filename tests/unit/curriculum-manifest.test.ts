@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import { curriculumManifestSchema, type Subject } from '@/content/schemas/curriculum-schema';
 import { EXERCISE_TYPES } from '@/content/schemas/exercise-schema';
-import { ALIFA_SUBJECTS, SCHOOL_YEAR } from '@/content/curriculum/official-program';
+import { ECOLNA_SUBJECTS, SCHOOL_YEAR } from '@/content/curriculum/official-program';
 
 const manifest = curriculumManifestSchema.parse(
   JSON.parse(
@@ -29,7 +29,7 @@ describe('bundled curriculum manifest', () => {
   });
 
   it('teaches the four instrumental subjects of the official timetable at both levels', () => {
-    const official = new Set<Subject>(ALIFA_SUBJECTS.map((subject) => subject.id));
+    const official = new Set<Subject>(ECOLNA_SUBJECTS.map((subject) => subject.id));
     for (const level of manifest.levels) {
       const subjects = new Set(level.worlds.map((world) => world.subject));
       expect(subjects).toEqual(official);
@@ -37,7 +37,7 @@ describe('bundled curriculum manifest', () => {
   });
 
   it('weights each subject like the official weekly timetable', () => {
-    for (const subject of ALIFA_SUBJECTS) {
+    for (const subject of ECOLNA_SUBJECTS) {
       const count = allLessons.filter((lesson) => lesson.world.subject === subject.id).length;
       const produced = count / allLessons.length;
       // ±6 points d'écart avec la part horaire officielle (grille p. 128).
@@ -98,7 +98,7 @@ describe('bundled curriculum manifest', () => {
     // calcul dès le premier jour : chaque discipline doit avoir une porte
     // d'entrée, sinon l'enfant reste bloqué devant un cadenas.
     for (const level of manifest.levels) {
-      for (const subject of ALIFA_SUBJECTS) {
+      for (const subject of ECOLNA_SUBJECTS) {
         const entryPoints = level.worlds
           .filter((world) => world.subject === subject.id)
           .flatMap((world) => world.lessons)

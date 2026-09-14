@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * Générateur de contenu ALIFA — une année scolaire complète, CP1 et CP2,
+ * Générateur de contenu ECOLNA — une année scolaire complète, CP1 et CP2,
  * calquée sur les « Programmes Réactualisés de l'Enseignement Primaire »
  * (République du Tchad, MEN / Centre National des Curricula, sept. 2004).
  *

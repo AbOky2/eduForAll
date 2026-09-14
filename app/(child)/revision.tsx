@@ -6,9 +6,9 @@ import { useActiveProfile } from '@/features/child-profile/application/active-pr
 import { lessonForSkill } from '@/features/curriculum/application/curriculum-catalog';
 import { describeSkill } from '@/features/parent-space/application/parent-dashboard';
 import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
-import { AlifaButton, AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
@@ -50,34 +50,34 @@ export default function RevisionScreen() {
   const firstLesson = items.find((item) => item.lessonId)?.lessonId ?? null;
 
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader onBack={goBack} />
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader onBack={goBack} />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.leafBadge}>
-          <AlifaIcon name="leaf" size={30} color={colors.onTertiaryContainer} />
+          <EcolnaIcon name="leaf" size={30} color={colors.onTertiaryContainer} />
         </View>
-        <AlifaText variant="headlineLg" align="center">
+        <EcolnaText variant="headlineLg" align="center">
           {fr.revision.title}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+        </EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
           {fr.revision.subtitle}
-        </AlifaText>
+        </EcolnaText>
 
         {items.length === 0 ? (
-          <AlifaCard rounded="xl" style={styles.emptyCard}>
-            <AlifaIcon name="star" size={32} color={colors.starActive} />
-            <AlifaText variant="bodyLg" align="center">
+          <EcolnaCard rounded="xl" style={styles.emptyCard}>
+            <EcolnaIcon name="star" size={32} color={colors.starActive} />
+            <EcolnaText variant="bodyLg" align="center">
               {fr.revision.empty}
-            </AlifaText>
-          </AlifaCard>
+            </EcolnaText>
+          </EcolnaCard>
         ) : (
           <>
             <View style={styles.grid}>
               {items.map((item, index) => (
-                <AlifaCard key={item.skillId} style={styles.notionCard}>
-                  <AlifaText variant="headlineSm" align="center">
+                <EcolnaCard key={item.skillId} style={styles.notionCard}>
+                  <EcolnaText variant="headlineSm" align="center">
                     {item.label}
-                  </AlifaText>
+                  </EcolnaText>
                   <View
                     style={[
                       styles.underline,
@@ -91,19 +91,19 @@ export default function RevisionScreen() {
                       },
                     ]}
                   />
-                </AlifaCard>
+                </EcolnaCard>
               ))}
             </View>
-            <AlifaButton
+            <EcolnaButton
               label={fr.revision.start}
-              icon={<AlifaIcon name="play" size={16} color={colors.onPrimaryContainer} />}
+              icon={<EcolnaIcon name="play" size={16} color={colors.onPrimaryContainer} />}
               disabled={!firstLesson}
               onPress={() => firstLesson && router.push(`/(child)/lesson/${firstLesson}`)}
             />
           </>
         )}
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

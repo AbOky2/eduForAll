@@ -4,11 +4,11 @@ import Svg, { Circle, Text as SvgText } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAnswerCard,
-  AlifaAudioButton,
-  AlifaCard,
-  AlifaExerciseLayout,
-  AlifaText,
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { colors, radius, spacing } from '@/design-system/tokens';
 
@@ -85,32 +85,32 @@ export function MoneyExercise({
 
   const prompt = (
     <>
-      <AlifaCard rounded="xl" style={styles.prompt}>
-        <AlifaText variant="headlineMd" align="center">
+      <EcolnaCard rounded="xl" style={styles.prompt}>
+        <EcolnaText variant="headlineMd" align="center">
           {step.instruction.text}
-        </AlifaText>
-        <AlifaAudioButton
+        </EcolnaText>
+        <EcolnaAudioButton
           variant="sky"
           size={56}
           playing={playingAudioId === step.instruction.audioId}
           onPress={() => playAudio(step.instruction.audioId)}
         />
-      </AlifaCard>
+      </EcolnaCard>
 
-      <AlifaCard rounded="xl" style={styles.mat} backgroundColor={colors.surfaceContainerLow}>
+      <EcolnaCard rounded="xl" style={styles.mat} backgroundColor={colors.surfaceContainerLow}>
         <View style={styles.coins}>
           {step.coins.map((coin, index) => (
             <CoinFace key={`${coin}-${index}`} value={coin} />
           ))}
         </View>
-      </AlifaCard>
+      </EcolnaCard>
     </>
   );
 
   const answers = (
     <View style={styles.options}>
       {step.options.map((option) => (
-        <AlifaAnswerCard
+        <EcolnaAnswerCard
           key={option}
           label={`${option} F`}
           state={
@@ -130,7 +130,7 @@ export function MoneyExercise({
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { colors, radius } from '../tokens';
 
-interface AlifaProgressBarProps {
+interface EcolnaProgressBarProps {
   /** 0..1 */
   progress: number;
   /** Sand on sky-blue track — the lesson header bar (mockup S12). */
@@ -17,12 +17,12 @@ const TONES = {
   blue: { fill: colors.secondary, track: colors.surfaceContainerHigh },
 } as const;
 
-export function AlifaProgressBar({
+export function EcolnaProgressBar({
   progress,
   tone = 'sand',
   height = 10,
   accessibilityLabel = 'Progression',
-}: AlifaProgressBarProps) {
+}: EcolnaProgressBarProps) {
   const clamped = Math.min(1, Math.max(0, progress));
   const palette = TONES[tone];
   return (

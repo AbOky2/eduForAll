@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { AlifaButton, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -10,17 +10,17 @@ import { fr } from '@/localization/fr/strings';
 export default function NotFoundScreen() {
   const router = useRouter();
   return (
-    <AlifaScreen background="default">
+    <EcolnaScreen background="default">
       <View style={styles.container}>
         <View style={styles.badge}>
-          <AlifaIcon name="leaf" size={34} color={colors.onTertiaryContainer} />
+          <EcolnaIcon name="leaf" size={34} color={colors.onTertiaryContainer} />
         </View>
-        <AlifaText variant="headlineMd" align="center">
+        <EcolnaText variant="headlineMd" align="center">
           {fr.errors.contentUnavailable}
-        </AlifaText>
-        <AlifaButton label={fr.tabs.home} onPress={() => router.replace('/(child)/(tabs)')} />
+        </EcolnaText>
+        <EcolnaButton label={fr.tabs.home} onPress={() => router.replace('/(child)/(tabs)')} />
       </View>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

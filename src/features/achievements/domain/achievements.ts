@@ -1,7 +1,7 @@
 import type { Subject } from '@/content/schemas/curriculum-schema';
 
 /**
- * Badges ALIFA.
+ * Badges ECOLNA.
  *
  * Chaque badge récompense un progrès réel dans le programme officiel — des
  * leçons terminées, des mondes bouclés, de la régularité — jamais un temps

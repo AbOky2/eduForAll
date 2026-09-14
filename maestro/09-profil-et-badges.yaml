@@ -1,6 +1,6 @@
 # L'avatar de l'accueil ouvre « Mon profil » : compteurs, choix d'avatar,
 # étagère de badges. Un badge verrouillé reste visible et annoncé.
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp
 - assertVisible: 'Bonjour'

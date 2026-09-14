@@ -1,8 +1,8 @@
-# Notes de version — ALIFA 1.0.0
+# Notes de version — ECOLNA 1.0.0
 
 ## Texte pour les stores (≤ 500 caractères)
 
-Première version d'ALIFA. L'année scolaire complète du CP1 et du CP2, calquée
+Première version d'ECOLNA. L'année scolaire complète du CP1 et du CP2, calquée
 sur le programme officiel de l'enseignement primaire tchadien : langage,
 lecture, écriture et calcul. 308 leçons, 1 625 exercices, tout hors connexion.
 Optimisée pour tablette. Aucune publicité, aucun compte, aucune donnée

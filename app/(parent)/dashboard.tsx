@@ -6,16 +6,16 @@ import {
   loadParentDashboard,
   type ParentDashboardData,
 } from '@/features/parent-space/application/parent-dashboard';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
-import { AlifaStatCard } from '@/design-system/components/alifa-stat-card';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
+import { EcolnaStatCard } from '@/design-system/components/ecolna-stat-card';
 import {
-  AlifaButton,
-  AlifaCard,
-  AlifaProgressBar,
-  AlifaScreen,
-  AlifaText,
+  EcolnaButton,
+  EcolnaCard,
+  EcolnaProgressBar,
+  EcolnaScreen,
+  EcolnaText,
 } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
@@ -39,15 +39,15 @@ export default function ParentDashboardScreen() {
     // Local OS share sheet with a text summary — the app itself sends nothing.
     void Share.share({
       message:
-        `${profile.firstName} apprend avec ALIFA !\n` +
+        `${profile.firstName} apprend avec ECOLNA !\n` +
         `Leçons terminées : ${data?.completedLessons ?? 0}/${data?.totalLessons ?? 0} (${profile.level}).\n` +
         'Apprendre partout, même sans internet.',
     });
   };
 
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader
         onBack={goBack}
         title={fr.common.appName}
         right={
@@ -57,39 +57,39 @@ export default function ParentDashboardScreen() {
             onPress={() => router.push('/(settings)')}
             hitSlop={8}
           >
-            <AlifaIcon name="gear" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaIcon name="gear" size={22} color={colors.onSurfaceVariant} />
           </Pressable>
         }
       />
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <AlifaText variant="headlineLg">{fr.parent.dashboardTitle(profile.firstName)}</AlifaText>
-        <AlifaText variant="bodyMd" color={colors.textSecondary}>
+        <EcolnaText variant="headlineLg">{fr.parent.dashboardTitle(profile.firstName)}</EcolnaText>
+        <EcolnaText variant="bodyMd" color={colors.textSecondary}>
           {fr.parent.dashboardSubtitle}
-        </AlifaText>
+        </EcolnaText>
 
         {/* Stat cards */}
-        <AlifaStatCard
+        <EcolnaStatCard
           icon="sparkle"
           label={fr.parent.currentLevel}
           value={profile.level}
           container={colors.primaryContainer}
           tint={colors.onPrimaryContainer}
         />
-        <AlifaStatCard
+        <EcolnaStatCard
           icon="book"
           label={fr.parent.lessonsCompleted}
           value={`${data?.completedLessons ?? 0} / ${data?.totalLessons ?? 0}`}
           container={colors.secondaryContainer}
           tint={colors.onSecondaryContainer}
         >
-          <AlifaProgressBar
+          <EcolnaProgressBar
             progress={data && data.totalLessons > 0 ? data.completedLessons / data.totalLessons : 0}
             tone="brown"
             height={8}
           />
-        </AlifaStatCard>
-        <AlifaStatCard
+        </EcolnaStatCard>
+        <EcolnaStatCard
           icon="star"
           label={fr.parent.timeToday}
           value={fr.parent.minutes(data?.minutesToday ?? 0)}
@@ -98,48 +98,48 @@ export default function ParentDashboardScreen() {
         />
 
         {/* Analysis */}
-        <AlifaCard rounded="xl" style={styles.analysisCard}>
+        <EcolnaCard rounded="xl" style={styles.analysisCard}>
           <View style={styles.analysisHeader}>
-            <AlifaIcon name="sparkle" size={20} color={colors.secondary} />
-            <AlifaText variant="headlineSm">{fr.parent.progressAnalysis}</AlifaText>
+            <EcolnaIcon name="sparkle" size={20} color={colors.secondary} />
+            <EcolnaText variant="headlineSm">{fr.parent.progressAnalysis}</EcolnaText>
           </View>
           {(data?.analysis ?? []).map((sentence) => (
-            <AlifaText key={sentence} variant="bodyLg">
+            <EcolnaText key={sentence} variant="bodyLg">
               {sentence}
-            </AlifaText>
+            </EcolnaText>
           ))}
           {data && data.recommendations.length > 0 ? (
             <View style={styles.recommendationBox}>
-              <AlifaText variant="labelSm" color={colors.onSecondaryContainer}>
+              <EcolnaText variant="labelSm" color={colors.onSecondaryContainer}>
                 {fr.parent.recommendation}
-              </AlifaText>
+              </EcolnaText>
               {data.recommendations.map((recommendation) => (
-                <AlifaText
+                <EcolnaText
                   key={recommendation}
                   variant="bodyMd"
                   color={colors.onSecondaryContainer}
                 >
                   {recommendation}
-                </AlifaText>
+                </EcolnaText>
               ))}
             </View>
           ) : (
-            <AlifaText variant="bodyMd" color={colors.textSecondary}>
+            <EcolnaText variant="bodyMd" color={colors.textSecondary}>
               {fr.parent.nothingToReview}
-            </AlifaText>
+            </EcolnaText>
           )}
-        </AlifaCard>
+        </EcolnaCard>
 
         {/* Share */}
-        <AlifaCard rounded="xl" style={styles.shareCard}>
-          <AlifaIcon name="share" size={24} color={colors.primary} />
-          <AlifaText variant="headlineSm" align="center">
+        <EcolnaCard rounded="xl" style={styles.shareCard}>
+          <EcolnaIcon name="share" size={24} color={colors.primary} />
+          <EcolnaText variant="headlineSm" align="center">
             {fr.parent.proudTitle}
-          </AlifaText>
-          <AlifaButton label={fr.parent.share} onPress={share} />
-        </AlifaCard>
+          </EcolnaText>
+          <EcolnaButton label={fr.parent.share} onPress={share} />
+        </EcolnaCard>
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

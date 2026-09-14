@@ -2,8 +2,8 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { a11y, colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
@@ -44,29 +44,29 @@ export default function ParentGateScreen() {
   };
 
   return (
-    <AlifaScreen background="default">
+    <EcolnaScreen background="default">
       <View style={styles.container}>
         <View style={styles.badge}>
-          <AlifaIcon name="parents" size={34} color={colors.onSecondaryContainer} />
+          <EcolnaIcon name="parents" size={34} color={colors.onSecondaryContainer} />
         </View>
-        <AlifaText variant="headlineLg" align="center">
+        <EcolnaText variant="headlineLg" align="center">
           {fr.parent.gateTitle}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+        </EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
           {fr.parent.gateSubtitle}
-        </AlifaText>
+        </EcolnaText>
 
-        <AlifaCard rounded="xl" style={styles.card}>
-          <AlifaText variant="bodyMd" color={colors.textSecondary} align="center">
+        <EcolnaCard rounded="xl" style={styles.card}>
+          <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
             {fr.parent.gateQuestion}
-          </AlifaText>
-          <AlifaText variant="displayGlyphSmall" align="center">
+          </EcolnaText>
+          <EcolnaText variant="displayGlyphSmall" align="center">
             {challenge.question} = ?
-          </AlifaText>
+          </EcolnaText>
           {wrong ? (
-            <AlifaText variant="bodyMd" color={colors.secondary} align="center">
+            <EcolnaText variant="bodyMd" color={colors.secondary} align="center">
               {fr.parent.gateWrong}
-            </AlifaText>
+            </EcolnaText>
           ) : null}
           <View style={styles.options}>
             {challenge.options.map((option) => (
@@ -77,19 +77,19 @@ export default function ParentGateScreen() {
                 onPress={() => choose(option)}
                 style={({ pressed }) => [styles.option, pressed && { opacity: 0.8 }]}
               >
-                <AlifaText variant="headlineSm">{String(option)}</AlifaText>
+                <EcolnaText variant="headlineSm">{String(option)}</EcolnaText>
               </Pressable>
             ))}
           </View>
-        </AlifaCard>
+        </EcolnaCard>
 
         <Pressable accessibilityRole="button" onPress={goBack} hitSlop={12}>
-          <AlifaText variant="labelMd" color={colors.textSecondary} align="center">
+          <EcolnaText variant="labelMd" color={colors.textSecondary} align="center">
             {fr.common.back}
-          </AlifaText>
+          </EcolnaText>
         </Pressable>
       </View>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

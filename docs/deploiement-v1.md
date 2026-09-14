@@ -1,6 +1,6 @@
 # Déploiement de la v1.0.0 — mode d'emploi
 
-Cible décidée : **Google Play et App Store**, identifiant `td.alifa.app`.
+Cible décidée : **Google Play et App Store**, identifiant `td.ecolna.app`.
 
 Ce document est la marche à suivre, dans l'ordre. Ce qui est marqué
 🔴 **à toi** ne peut pas être fait depuis le dépôt.
@@ -161,13 +161,13 @@ téléphone » sur les tablettes, et c'est exactement le contraire du message.
 
 ## 5. Google Play Console
 
-1. **Créer l'app** — nom `ALIFA`, français, gratuite.
+1. **Créer l'app** — nom `ECOLNA`, français, gratuite.
 2. **Fiche principale** : reprendre `store/google-play/short-description-fr.md`
    et `full-description-fr.md`, les captures, l'image de mise en avant.
 3. **Contenu de l'application** :
    - Politique de confidentialité → l'URL du §1.2
    - **Public cible** : « Enfants de moins de 13 ans » → l'app entre dans le
-     **programme Familles**. ALIFA est conforme : aucune publicité, aucune
+     **programme Familles**. ECOLNA est conforme : aucune publicité, aucune
      collecte, aucun SDK tiers, contrôle d'accès adulte
      (`store/google-play/families-checklist.md`).
    - **Data Safety** : « aucune donnée collectée, aucune donnée partagée » —
@@ -191,7 +191,7 @@ eas submit -p android --latest       # → piste de test interne
 
 ## 6. App Store Connect
 
-1. **Créer l'app** — bundle `td.alifa.app`, français comme langue principale.
+1. **Créer l'app** — bundle `td.ecolna.app`, français comme langue principale.
 2. `eas submit -p ios` demande l'Apple ID et l'identifiant App Store Connect
    au premier envoi, et les mémorise. Rien à renseigner d'avance dans
    `eas.json` — seule la langue de la fiche y est fixée (`fr-FR`).
@@ -202,7 +202,7 @@ eas submit -p android --latest       # → piste de test interne
      (`store/app-store/privacy-answers.md`)
    - **Classification par âge** : questionnaire, aucun contenu sensible
      (`store/app-store/age-rating.md`)
-4. **Catégorie Enfants (« Kids »)** : optionnelle. ALIFA en remplit les
+4. **Catégorie Enfants (« Kids »)** : optionnelle. ECOLNA en remplit les
    conditions — pas de lien externe, pas de SDK tiers, contrôle d'accès
    adulte avant tout partage. Elle apporte de la visibilité auprès des
    familles, au prix d'une revue plus stricte.

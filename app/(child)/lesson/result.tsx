@@ -8,9 +8,9 @@ import { useActiveProfile } from '@/features/child-profile/application/active-pr
 import { avatarVariant } from '@/features/child-profile/domain/child-profile';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import { StarRow } from '@/design-system/components/star-row';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { AvatarFace } from '@/design-system/illustrations/scenes';
-import { AlifaButton, AlifaScreen, AlifaText } from '@/design-system/primitives';
+import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
@@ -45,7 +45,7 @@ export default function LessonResultScreen() {
     .filter((id): id is AchievementId => (ACHIEVEMENT_IDS as readonly string[]).includes(id));
 
   return (
-    <AlifaScreen background="default">
+    <EcolnaScreen background="default">
       <View style={styles.container}>
         <StarRow earned={stars} />
 
@@ -54,22 +54,22 @@ export default function LessonResultScreen() {
             <AvatarFace variant={avatarVariant(profile?.avatarId ?? '')} size={96} />
           </View>
           <View style={styles.checkBadge}>
-            <AlifaIcon name="check" size={16} color={colors.onSecondary} />
+            <EcolnaIcon name="check" size={16} color={colors.onSecondary} />
           </View>
         </View>
 
-        <AlifaText variant="headlineLg" align="center">
+        <EcolnaText variant="headlineLg" align="center">
           {fr.result.title}
-        </AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+        </EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
           {stars === 3 ? fr.result.perfect : stars === 2 ? fr.result.oneMoreStar : fr.result.needsReview}
-        </AlifaText>
+        </EcolnaText>
 
         {newBadges.length > 0 ? (
           <View style={styles.badges}>
-            <AlifaText variant="labelLg" color={colors.primary} align="center">
+            <EcolnaText variant="labelLg" color={colors.primary} align="center">
               {fr.achievements.unlocked}
-            </AlifaText>
+            </EcolnaText>
             <View style={styles.badgeRow}>
               {newBadges.map((id) => (
                 <AchievementBadge key={id} id={id} earned size={64} />
@@ -80,24 +80,24 @@ export default function LessonResultScreen() {
 
         <View style={styles.buttons}>
           {nextLessonId ? (
-            <AlifaButton
+            <EcolnaButton
               label={fr.result.nextLesson}
-              icon={<AlifaIcon name="play" size={16} color={colors.onPrimaryContainer} />}
+              icon={<EcolnaIcon name="play" size={16} color={colors.onPrimaryContainer} />}
               onPress={() => router.replace(`/(child)/lesson/${nextLessonId}`)}
             />
           ) : (
-            <AlifaButton label={fr.common.continue} onPress={() => router.replace('/(child)/(tabs)')} />
+            <EcolnaButton label={fr.common.continue} onPress={() => router.replace('/(child)/(tabs)')} />
           )}
           {lessonId ? (
-            <AlifaButton
+            <EcolnaButton
               label={fr.common.replay}
               variant="secondary"
-              icon={<AlifaIcon name="replay" size={18} color={colors.secondary} />}
+              icon={<EcolnaIcon name="replay" size={18} color={colors.secondary} />}
               onPress={() => router.replace(`/(child)/lesson/${lessonId}`)}
             />
           ) : null}
           {nextLessonId ? (
-            <AlifaButton
+            <EcolnaButton
               label={fr.result.backHome}
               variant="ghost"
               onPress={() => router.replace('/(child)/(tabs)')}
@@ -105,7 +105,7 @@ export default function LessonResultScreen() {
           ) : null}
         </View>
       </View>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

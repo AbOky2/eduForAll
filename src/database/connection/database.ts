@@ -3,7 +3,7 @@ import * as SQLite from 'expo-sqlite';
 import { DatabaseInitializationError } from '@/core/errors/app-errors';
 import { createLogger } from '@/core/logging/logger';
 
-const DATABASE_NAME = 'alifa.db';
+const DATABASE_NAME = 'ecolna.db';
 const log = createLogger('database');
 
 let databasePromise: Promise<SQLite.SQLiteDatabase> | null = null;

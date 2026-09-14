@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
-import { AlifaIcon } from '../icons/alifa-icon';
-import { AlifaButton } from '../primitives/alifa-button';
-import { AlifaText } from '../primitives/alifa-text';
+import { EcolnaIcon } from '../icons/ecolna-icon';
+import { EcolnaButton } from '../primitives/ecolna-button';
+import { EcolnaText } from '../primitives/ecolna-text';
 import { colors, radius, shadows, spacing } from '../tokens';
 
 interface FeedbackBannerProps {
@@ -55,17 +55,17 @@ export function FeedbackBanner({ kind, message, actionLabel, onAction }: Feedbac
             { backgroundColor: isCorrect ? colors.feedbackCorrect : colors.secondary },
           ]}
         >
-          <AlifaIcon name={isCorrect ? 'check' : 'replay'} size={26} color={colors.card} />
+          <EcolnaIcon name={isCorrect ? 'check' : 'replay'} size={26} color={colors.card} />
         </View>
-        <AlifaText
+        <EcolnaText
           variant="headlineSm"
           color={isCorrect ? colors.feedbackCorrect : colors.onSecondaryContainer}
           style={styles.message}
         >
           {message}
-        </AlifaText>
+        </EcolnaText>
       </View>
-      <AlifaButton label={actionLabel} onPress={onAction} />
+      <EcolnaButton label={actionLabel} onPress={onAction} />
     </Animated.View>
   );
 }

@@ -1,4 +1,4 @@
-# ALIFA — Guide agent
+# ECOLNA — Guide agent
 
 App éducative CP1–CP2 offline-first (Tchad), **conçue pour tablette**.
 Expo SDK 56, RN 0.85, TS 6 strict, expo-router, SQLite.
@@ -35,7 +35,7 @@ dans `src/content/curriculum/official-program.ts` :
 - Chaque leçon porte son `term`, sa `week` et un `officialReference` citant le
   contenu et sa page.
 - Ne rien inventer dans `official-program.ts` : les champs `official` sont des
-  citations. Les seules décisions ALIFA sont les `teachingOrder`, isolées
+  citations. Les seules décisions ECOLNA sont les `teachingOrder`, isolées
   exprès pour être soumises à un enseignant
   (`docs/pedagogical-validation.md`).
 

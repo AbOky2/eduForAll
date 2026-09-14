@@ -4,10 +4,10 @@ import Svg, { Circle, Polygon, Rect } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAudioButton,
-  AlifaCard,
-  AlifaExerciseLayout,
-  AlifaText,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 
@@ -130,19 +130,19 @@ export function AttributeExercise({
   };
 
   const prompt = (
-    <AlifaCard rounded="xl" style={styles.prompt}>
-      <AlifaText variant="headlineMd" align="center">
+    <EcolnaCard rounded="xl" style={styles.prompt}>
+      <EcolnaText variant="headlineMd" align="center">
         {step.instruction.text}
-      </AlifaText>
+      </EcolnaText>
       {step.audioId ? (
-        <AlifaAudioButton
+        <EcolnaAudioButton
           variant="sky"
           size={56}
           playing={playingAudioId === step.audioId}
           onPress={() => step.audioId && playAudio(step.audioId)}
         />
       ) : null}
-    </AlifaCard>
+    </EcolnaCard>
   );
 
   const answers = (
@@ -174,9 +174,9 @@ export function AttributeExercise({
               ))}
             </View>
             {choice.label ? (
-              <AlifaText variant="labelMd" align="center" color={colors.textSecondary}>
+              <EcolnaText variant="labelMd" align="center" color={colors.textSecondary}>
                 {choice.label}
-              </AlifaText>
+              </EcolnaText>
             ) : null}
           </Pressable>
         );
@@ -184,7 +184,7 @@ export function AttributeExercise({
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

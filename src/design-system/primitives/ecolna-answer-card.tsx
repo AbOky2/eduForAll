@@ -2,12 +2,12 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 
 import { a11y, colors, radius, shadows, spacing } from '../tokens';
-import { AlifaIcon } from '../icons/alifa-icon';
-import { AlifaText } from './alifa-text';
+import { EcolnaIcon } from '../icons/ecolna-icon';
+import { EcolnaText } from './ecolna-text';
 
 export type AnswerCardState = 'default' | 'selected' | 'correct' | 'incorrect' | 'disabled';
 
-interface AlifaAnswerCardProps {
+interface EcolnaAnswerCardProps {
   label?: string;
   children?: ReactNode;
   onPress: () => void;
@@ -23,7 +23,7 @@ interface AlifaAnswerCardProps {
  * Correct/incorrect states pair color with an icon so feedback never relies
  * on color alone.
  */
-export function AlifaAnswerCard({
+export function EcolnaAnswerCard({
   label,
   children,
   onPress,
@@ -31,7 +31,7 @@ export function AlifaAnswerCard({
   glyph = true,
   accessibilityLabel,
   style,
-}: AlifaAnswerCardProps) {
+}: EcolnaAnswerCardProps) {
   const borderColor =
     state === 'selected'
       ? colors.primaryContainer
@@ -71,18 +71,18 @@ export function AlifaAnswerCard({
     >
       {children ??
         (label !== undefined ? (
-          <AlifaText
+          <EcolnaText
             variant={glyph ? 'displayGlyphSmall' : 'bodyLg'}
             align="center"
             color={state === 'correct' ? colors.feedbackCorrect : colors.textPrimary}
           >
             {label}
-          </AlifaText>
+          </EcolnaText>
         ) : null)}
       {state === 'correct' ? (
-        <AlifaIcon name="check" size={22} color={colors.feedbackCorrect} />
+        <EcolnaIcon name="check" size={22} color={colors.feedbackCorrect} />
       ) : null}
-      {state === 'incorrect' ? <AlifaIcon name="close" size={20} color={colors.secondary} /> : null}
+      {state === 'incorrect' ? <EcolnaIcon name="close" size={20} color={colors.secondary} /> : null}
     </Pressable>
   );
 }

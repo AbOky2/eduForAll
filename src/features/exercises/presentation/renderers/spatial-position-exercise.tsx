@@ -3,10 +3,10 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAudioButton,
-  AlifaCard,
-  AlifaExerciseLayout,
-  AlifaText,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
@@ -124,19 +124,19 @@ export function SpatialPositionExercise({
   }, [step.id]);
 
   const prompt = (
-    <AlifaCard rounded="xl" style={styles.prompt}>
-      <AlifaText variant="headlineMd" align="center">
+    <EcolnaCard rounded="xl" style={styles.prompt}>
+      <EcolnaText variant="headlineMd" align="center">
         {step.instruction.text}
-      </AlifaText>
+      </EcolnaText>
       {step.audioId ? (
-        <AlifaAudioButton
+        <EcolnaAudioButton
           variant="sky"
           size={56}
           playing={playingAudioId === step.audioId}
           onPress={() => step.audioId && playAudio(step.audioId)}
         />
       ) : null}
-    </AlifaCard>
+    </EcolnaCard>
   );
 
   const answers = (
@@ -170,7 +170,7 @@ export function SpatialPositionExercise({
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

@@ -3,10 +3,10 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAnswerCard,
-  AlifaAudioButton,
-  AlifaCard,
-  AlifaText,
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { spacing } from '@/design-system/tokens';
 
@@ -31,25 +31,25 @@ export function MiniStoryExercise({
 
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-      <AlifaCard rounded="xl" style={styles.storyCard} backgroundColor="#faf7ec">
+      <EcolnaCard rounded="xl" style={styles.storyCard} backgroundColor="#faf7ec">
         <View style={styles.storyHeader}>
-          <AlifaAudioButton
+          <EcolnaAudioButton
             variant="sky"
             size={48}
             playing={playingAudioId === step.storyAudioId}
             onPress={() => playAudio(step.storyAudioId)}
           />
         </View>
-        <AlifaText variant="bodyLg">{step.story}</AlifaText>
-      </AlifaCard>
+        <EcolnaText variant="bodyLg">{step.story}</EcolnaText>
+      </EcolnaCard>
 
-      <AlifaText variant="headlineSm" align="center">
+      <EcolnaText variant="headlineSm" align="center">
         {step.question}
-      </AlifaText>
+      </EcolnaText>
 
       <View style={styles.choices}>
         {step.choices.map((choice) => (
-          <AlifaAnswerCard
+          <EcolnaAnswerCard
             key={choice.id}
             label={choice.label}
             glyph={false}

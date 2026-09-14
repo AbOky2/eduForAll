@@ -7,8 +7,8 @@ import {
   type SubjectProgress,
 } from '@/features/learning-path/application/home-summary';
 import type { Subject } from '@/content/schemas/curriculum-schema';
-import { AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon, type IconName } from '@/design-system/icons/alifa-icon';
+import { EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
@@ -58,17 +58,17 @@ export default function ModuleSelectionScreen() {
     ) ?? [];
 
   return (
-    <AlifaScreen background="default" withBottomInset={false}>
+    <EcolnaScreen background="default" withBottomInset={false}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <AlifaText variant="headlineLg">{fr.learn.chooseModule}</AlifaText>
-        <AlifaText variant="bodyLg" color={colors.textSecondary}>
+        <EcolnaText variant="headlineLg">{fr.learn.chooseModule}</EcolnaText>
+        <EcolnaText variant="bodyLg" color={colors.textSecondary}>
           {fr.learn.readyToday}
-        </AlifaText>
+        </EcolnaText>
 
         {subjects.map((subject) => {
           const meta = MODULE_META[subject.subject];
           return (
-            <AlifaCard
+            <EcolnaCard
               key={subject.subject}
               rounded="xl"
               onPress={
@@ -86,32 +86,32 @@ export default function ModuleSelectionScreen() {
                   { backgroundColor: subject.locked ? colors.lockedContainer : meta.pastille },
                 ]}
               >
-                <AlifaIcon
+                <EcolnaIcon
                   name={meta.icon}
                   size={26}
                   color={subject.locked ? colors.locked : meta.tint}
                 />
               </View>
               <View style={styles.moduleText}>
-                <AlifaText variant="headlineMd">{meta.label}</AlifaText>
+                <EcolnaText variant="headlineMd">{meta.label}</EcolnaText>
                 <View style={styles.badge}>
-                  <AlifaText variant="labelSm" color={colors.onSecondaryContainer}>
+                  <EcolnaText variant="labelSm" color={colors.onSecondaryContainer}>
                     {subject.completed > 0
                       ? fr.home.lessonsDone(subject.completed)
                       : fr.home.newBadge}
-                  </AlifaText>
+                  </EcolnaText>
                 </View>
               </View>
-              <AlifaIcon
+              <EcolnaIcon
                 name={subject.locked ? 'lock' : 'chevron-right'}
                 size={22}
                 color={colors.onSurfaceVariant}
               />
-            </AlifaCard>
+            </EcolnaCard>
           );
         })}
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

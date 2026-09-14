@@ -1,5 +1,5 @@
 # Couper le son depuis l'espace parent, et vérifier la persistance.
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp
 - tapOn: 'Parents'

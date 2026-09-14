@@ -45,7 +45,7 @@ Tout est dans `src/design-system/responsive`.
 
 Quatre décisions en découlent.
 
-**1. Colonne centrée de largeur lisible.** `AlifaScreen` borne le contenu à
+**1. Colonne centrée de largeur lisible.** `EcolnaScreen` borne le contenu à
 560 / 720 / 1000 dp selon la classe. Une ligne de texte étirée sur toute la
 largeur d'un écran de 10 pouces est illisible pour un enfant qui déchiffre
 encore lettre à lettre ; le fond, lui, occupe tout l'écran.
@@ -56,7 +56,7 @@ bout de bras : il faut des lettres plus grandes, pas les mêmes lettres plus
 espacées. Les tailles sont arrondies au dp entier — les dalles bon marché sont
 souvent en 1x ou 1,5x et un demi-pixel s'y voit.
 
-**3. Deux volets en paysage.** `AlifaExerciseLayout` place le stimulus et les
+**3. Deux volets en paysage.** `EcolnaExerciseLayout` place le stimulus et les
 réponses côte à côte dès qu'on est en `expanded` + paysage. Empilés sur une
 fenêtre large et basse, les cartes-réponses passent sous la ligne de flottaison
 et l'enfant doit faire défiler pour répondre — l'exercice cesse d'être un

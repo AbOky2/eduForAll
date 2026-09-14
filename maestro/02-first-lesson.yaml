@@ -1,6 +1,6 @@
 # Première leçon d'un CP1 : « À l'école » (langage) — écouter un mot, toucher
 # l'image. Vérifie que la séance démarre, avance et se compte.
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp
 - assertVisible: 'Bonjour'

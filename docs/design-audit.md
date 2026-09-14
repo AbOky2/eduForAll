@@ -1,6 +1,6 @@
-# ALIFA — Audit des maquettes Stitch
+# ECOLNA — Audit des maquettes Stitch
 
-> Source de vérité visuelle : projet Stitch **« ALIFA : L'École du Désert »**
+> Source de vérité visuelle : projet Stitch **« ECOLNA : L'École du Désert »**
 > (`projects/15951466424347515721`, 21 écrans, mobile 412×917 de référence).
 > Fichiers locaux : `design/stitch/*.png` (captures) + `design/stitch/*.html` (code Stitch exact) + `design/stitch/index.json` (correspondance id ↔ fichier).
 
@@ -10,7 +10,7 @@
 
 | Token | Valeur | Usage observé |
 |---|---|---|
-| `primary` | `#7d562d` | Brun terre — texte de marque « ALIFA », icônes actives, boutons texte |
+| `primary` | `#7d562d` | Brun terre — texte de marque « ECOLNA », icônes actives, boutons texte |
 | `primary-container` | `#d4a373` | Sable — boutons principaux (« Commencer », « Vérifier », « C'est parti ! ») |
 | `on-primary-container` | `#5b3912` | Texte sur bouton sable |
 | `secondary` | `#2b6485` | Bleu pétrole — accents Dictée/Calcul, bouton audio bordé |
@@ -61,12 +61,12 @@ Réf. = fichier dans `design/stitch/`. Dimensions de référence : 412×917 sauf
 
 ### S01 — Splash (`splash-screen`)
 - **Objectif** : démarrage, affirmer l'identité et la promesse offline.
-- Fond `#fbf8ff` texturé ; carte-logo centrée (icône : soleil doré + triangle-dune bleu + vague sable, sur carte ivoire arrondie 3xl) ; nom « ALIFA » (label PJS 600) ; illustration sahélienne (enfant lisant sous un acacia au couchant, carte arrondie) ; signature bleu pétrole « Apprendre partout, même sans internet » en bas.
+- Fond `#fbf8ff` texturé ; carte-logo centrée (icône : soleil doré + triangle-dune bleu + vague sable, sur carte ivoire arrondie 3xl) ; nom « ECOLNA » (label PJS 600) ; illustration sahélienne (enfant lisant sous un acacia au couchant, carte arrondie) ; signature bleu pétrole « Apprendre partout, même sans internet » en bas.
 - États : statique (V1) ; animation d'apparition douce possible, respectant réduction de mouvement.
 
 ### S02–S04 — Onboarding 1/2/3 (`onboarding-1/2/3`)
 - **O1** : soleil ligne en haut, illustration enfant + livre (carte crème 3xl), « Ton école t'accompagne partout. » (headline Quicksand, « partout » en bleu), bouton sable pill « Commencer », 3 points de pagination (actif sable allongé).
-- **O2** : « ALIFA » en haut-gauche, lien « Passer » en haut-droite, badge rond bleu ciel avec étincelle, titre « Lecture, dictée, écriture et calcul. », sous-titre gris, grille 2×2 de cartes matières (Lecture bleu ciel, Écriture jaune, Dictée brun-sable, Calcul bleu pétrole — icônes sur tuile colorée arrondie), bouton « Suivant ».
+- **O2** : « ECOLNA » en haut-gauche, lien « Passer » en haut-droite, badge rond bleu ciel avec étincelle, titre « Lecture, dictée, écriture et calcul. », sous-titre gris, grille 2×2 de cartes matières (Lecture bleu ciel, Écriture jaune, Dictée brun-sable, Calcul bleu pétrole — icônes sur tuile colorée arrondie), bouton « Suivant ».
 - **O3** : illustration téléphone + coche verte + galet souriant, « Fonctionne sans connexion. », « Apprends partout, tout le temps. », bouton « Créer mon profil ». Pagination : dernier point actif.
 - États : pagination, skip. Swipe horizontal attendu + boutons.
 
@@ -79,7 +79,7 @@ Réf. = fichier dans `design/stitch/`. Dimensions de référence : 412×917 sauf
 - États : avatar sélectionné/non, champ vide/rempli/focus, niveau sélectionné, bouton désactivé tant que prénom+avatar absents (à confirmer — adaptation : garder actif avec aide vocale plutôt que bloquer un non-lecteur → décision documentée).
 
 ### S06 — Accueil enfant (`accueil-enfant`)
-- Header : avatar rond (haut-gauche), « ALIFA » centré (Quicksand 700 brun), icône cloche-barrée/offline (haut-droite).
+- Header : avatar rond (haut-gauche), « ECOLNA » centré (Quicksand 700 brun), icône cloche-barrée/offline (haut-droite).
 - « Bonjour Amina ! » headline + « Prête à apprendre ? » + bouton audio rond bleu ciel à droite.
 - **Carte « Continuer ma leçon »** : grande carte brune `#7d562d` → dégradé, badge « EN COURS », titre blanc « Continuer ma leçon », sous-titre « Les syllabes avec A », bouton play rond blanc, étoile filigrane.
 - Section « ⭐ Tes activités » : grille 2×2 de cartes blanches : Lecture (tuile sable, barre de progression brune), Dictée (tuile bleu pétrole, barre bleue), Écriture (tuile mauve clair, barre), Calcul (verrouillée : cadenas, tuile grisée, opacité réduite).
@@ -119,7 +119,7 @@ Réf. = fichier dans `design/stitch/`. Dimensions de référence : 412×917 sauf
 - États réponse : default / pressée / correcte / incorrecte / désactivée.
 
 ### S12 — Écran dictée (`ecran-dictee`)
-- Header complet : avatar, « ALIFA », icône offline.
+- Header complet : avatar, « ECOLNA », icône offline.
 - X + barre de progression bicolore (segment sable sur piste bleu clair) + étoile.
 - « Écoute et choisis le bon mot. » ; bouton audio rond sable ; grille 2×2 de cartes mots (« papa », « mama », « baba », « tata ») ; filigrane « S » sable en bas.
 - États identiques à S11.
@@ -133,7 +133,7 @@ Réf. = fichier dans `design/stitch/`. Dimensions de référence : 412×917 sauf
 - États : emplacement vide/rempli, tuile posée/restante, vérification correcte/incorrecte, indice.
 
 ### S14 — Calcul CP1 (`calcul-cp1`)
-- Header ALIFA ; retour ← ; « Exercice 1 sur 5 » + barre sable ; étoile.
+- Header ECOLNA ; retour ← ; « Exercice 1 sur 5 » + barre sable ; étoile.
 - Carte consigne : haut-parleur + « Compte les chèvres. »
 - Illustration : 4 chèvres blanches dans paysage sahélien (carte arrondie 16).
 - 3 cartes réponses chiffres « 3 5 7 » (Quicksand 700 ~40 px brun).
@@ -152,7 +152,7 @@ Réf. = fichier dans `design/stitch/`. Dimensions de référence : 412×917 sauf
 - États : 1/2/3 étoiles (jamais zéro étoile humiliant).
 
 ### S17 — Écran révision (`ecran-revision`)
-- Header ALIFA ; pastille ronde jaune `#ffdf9b` avec feuille ; « On va revoir ce qui est difficile. » ; sous-titre bienveillant « Pas de stress, on prend notre temps pour bien comprendre. »
+- Header ECOLNA ; pastille ronde jaune `#ffdf9b` avec feuille ; « On va revoir ce qui est difficile. » ; sous-titre bienveillant « Pas de stress, on prend notre temps pour bien comprendre. »
 - Grille 2×2 de cartes notions : « ba / ma », « ou / on », « ta / da », « ch / j » (Quicksand 700, petit trait de couleur sous chaque paire : sable/bleu/rose).
 - Bouton « Commencer la révision ▶ » sable pill.
 - Bottom nav : Apprendre actif.
@@ -172,10 +172,10 @@ Réf. = fichier dans `design/stitch/`. Dimensions de référence : 412×917 sauf
 - Filigrane arbres en bas.
 
 ### S20 — État hors-connexion (`etat-hors-connexion`)
-- Header ALIFA + icône « pas de cloud » ; illustration soleil souriant + nuage sur dune (carte arrondie) ; badge pill or « Mode hors-connexion actif » ; « Tu peux continuer à apprendre sans internet. » ; « Tes leçons favorites sont toujours là. » ; bouton « C'est compris ».
+- Header ECOLNA + icône « pas de cloud » ; illustration soleil souriant + nuage sur dune (carte arrondie) ; badge pill or « Mode hors-connexion actif » ; « Tu peux continuer à apprendre sans internet. » ; « Tes leçons favorites sont toujours là. » ; bouton « C'est compris ».
 
-### S21 — Logo (`alifa-logo`)
-- Icône app : carte ivoire arrondie, cercle soleil jaune `#ffd166`-ish, triangle dune bleu pétrole, vague sable, « ALIFA » encre. Base pour icône adaptative Android + iOS.
+### S21 — Logo (`ecolna-logo`)
+- Icône app : carte ivoire arrondie, cercle soleil jaune `#ffd166`-ish, triangle dune bleu pétrole, vague sable, « ECOLNA » encre. Base pour icône adaptative Android + iOS.
 
 ## 3. Écarts et compléments nécessaires (non couverts par Stitch)
 

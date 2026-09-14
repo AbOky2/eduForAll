@@ -30,7 +30,7 @@ justesse culturelle, le niveau de difficulté réel.
 
 ### Grille horaire du CP1/CP2 (p. 128)
 
-| Discipline | Horaire officiel | Part | Leçons ALIFA | Part |
+| Discipline | Horaire officiel | Part | Leçons ECOLNA | Part |
 |---|---|---|---|---|
 | Lecture | 7 h 40 | 38 % | 112 | 37 % |
 | Langage/Élocution | 6 h 00 | 30 % | 99 | 32 % |
@@ -59,7 +59,7 @@ Le programme donne un **inventaire** (p. 23-24), pas une chronologie. Il liste
 les consonnes dans cet ordre : `t, h, p, n, l, d, v, m, r, b, j, f, s, c, g,
 k, z, x, ch, w, qu`.
 
-ALIFA les enseigne dans un autre ordre, celui d'un CP sahélien classique :
+ECOLNA les enseigne dans un autre ordre, celui d'un CP sahélien classique :
 voyelles d'abord, puis les consonnes **continues** (l, m, r, s — on peut les
 faire durer et les fusionner tout de suite), puis les occlusives (p, t, d, b,
 n, f, v), puis les graphies plus rares (j, ch, c, g), puis ou et oi.
@@ -71,7 +71,7 @@ n, f, v), puis les graphies plus rares (j, ch, c, g), puis ou et oi.
 ### 2. La répartition CP1 / CP2
 
 Le programme traite CP1 et CP2 d'un seul tenant, sauf pour les nombres
-(0-20 au CP1, 20-100 au CP2) et la table de 5 (CP2). ALIFA a réparti le reste :
+(0-20 au CP1, 20-100 au CP2) et la table de 5 (CP2). ECOLNA a réparti le reste :
 
 - **CP1** : voyelles, 15 consonnes, ou, oi.
 - **CP2** : consonnes restantes (k, qu, z, x, h, w, y), voyelles nasales,
@@ -93,7 +93,7 @@ le tam-tam, la boule de mil, le table-banc, la daba.
 
 Un mot ne devrait contenir que des lettres déjà étudiées. En pratique, les
 manuels de CP présentent aussi des mots « globaux » avant que toutes leurs
-lettres soient connues. ALIFA fait de même : les mots des exercices **oraux**
+lettres soient connues. ECOLNA fait de même : les mots des exercices **oraux**
 (image + son) sont libres, les mots des exercices de **déchiffrage** sont
 choisis dans les lettres connues, avec les finales muettes usuelles.
 

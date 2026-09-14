@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  AlifaAnswerCard,
-  AlifaAudioButton,
-  AlifaCard,
-  AlifaExerciseLayout,
-  AlifaText,
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  EcolnaText,
 } from '@/design-system/primitives';
 import { QuantityCard, QuantityGroup } from '@/design-system/components/quantity-group';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
@@ -136,9 +136,9 @@ const QuantityScene = memo(function QuantityScene({
   return (
     <View style={styles.quantities}>
       <QuantityCard count={a} illustrationId={illustrationId} size={size} accessibilityLabel={of(a)} />
-      <AlifaText variant="displayGlyphSmall" color={colors.primary}>
+      <EcolnaText variant="displayGlyphSmall" color={colors.primary}>
         +
-      </AlifaText>
+      </EcolnaText>
       <QuantityCard count={b} illustrationId={illustrationId} size={size} accessibilityLabel={of(b)} />
     </View>
   );
@@ -172,7 +172,7 @@ export function MathExercise({
   };
 
   const prompt = (
-    <AlifaCard rounded="xl" style={styles.board}>
+    <EcolnaCard rounded="xl" style={styles.board}>
       {isOperation(step) ? (
         <>
           {step.showQuantities ? (
@@ -185,9 +185,9 @@ export function MathExercise({
               size={iconSize}
             />
           ) : null}
-          <AlifaText variant="displayGlyph" align="center" color={colors.primary}>
+          <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
             {step.a} {OPERATOR[step.type]} {step.b} = ?
-          </AlifaText>
+          </EcolnaText>
         </>
       ) : null}
 
@@ -195,21 +195,21 @@ export function MathExercise({
         <View style={styles.sequence}>
           {step.sequence.map((value, index) => (
             <View key={index} style={[styles.sequenceCell, value === null && styles.sequenceGap]}>
-              <AlifaText
+              <EcolnaText
                 variant="displayGlyphSmall"
                 color={value === null ? colors.outline : colors.textPrimary}
               >
                 {value === null ? '?' : String(value)}
-              </AlifaText>
+              </EcolnaText>
             </View>
           ))}
         </View>
       ) : null}
 
       {step.type === 'compare_numbers' ? (
-        <AlifaText variant="headlineMd" align="center">
+        <EcolnaText variant="headlineMd" align="center">
           {step.instruction.text}
-        </AlifaText>
+        </EcolnaText>
       ) : null}
 
       {step.type === 'visual_word_problem' ? (
@@ -226,11 +226,11 @@ export function MathExercise({
           ) : step.illustrationId ? (
             <ObjectIcon id={step.illustrationId} size={64} />
           ) : null}
-          <AlifaText variant="bodyLg" align="center">
+          <EcolnaText variant="bodyLg" align="center">
             {step.statement}
-          </AlifaText>
+          </EcolnaText>
           {step.statementAudioId ? (
-            <AlifaAudioButton
+            <EcolnaAudioButton
               variant="sky"
               size={48}
               playing={playingAudioId === step.statementAudioId}
@@ -239,13 +239,13 @@ export function MathExercise({
           ) : null}
         </View>
       ) : null}
-    </AlifaCard>
+    </EcolnaCard>
   );
 
   const answers = (
     <View style={styles.options}>
       {options.map((option, index) => (
-        <AlifaAnswerCard
+        <EcolnaAnswerCard
           key={`${option}-${index}`}
           label={String(option)}
           state={
@@ -262,7 +262,7 @@ export function MathExercise({
     </View>
   );
 
-  return <AlifaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.3} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.3} />;
 }
 
 const styles = StyleSheet.create({

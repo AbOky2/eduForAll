@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { colors } from '@/design-system/tokens';
-import { AlifaText } from '@/design-system/primitives';
+import { EcolnaText } from '@/design-system/primitives';
 import { fr } from '@/localization/fr/strings';
 import { StyleSheet, View } from 'react-native';
 
@@ -17,9 +17,9 @@ export const unstable_settings = {
 function SuspenseFallback() {
   return (
     <View style={styles.fallback}>
-      <AlifaText variant="bodyLg" color={colors.textSecondary} align="center">
+      <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
         {fr.common.appName}
-      </AlifaText>
+      </EcolnaText>
     </View>
   );
 }

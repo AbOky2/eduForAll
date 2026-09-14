@@ -1,6 +1,6 @@
 # Tablette : l'app doit rester utilisable dans les deux orientations, et une
 # rotation en pleine leçon ne doit rien perdre.
-appId: td.alifa.app.dev
+appId: td.ecolna.app.dev
 ---
 - launchApp
 - setOrientation: LANDSCAPE

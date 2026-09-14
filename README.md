@@ -1,4 +1,4 @@
-# ALIFA — Apprendre partout, même sans internet
+# ECOLNA — Apprendre partout, même sans internet
 
 Application éducative **CP1–CP2 offline-first** pour les enfants du Tchad,
 **conçue pour tablette**. Langage, lecture, écriture et calcul — l'année
@@ -76,7 +76,7 @@ tests. Le compilateur force l'exhaustivité à chaque étape.
 ```
 app/                    routes Expo Router (groupes onboarding/child/parent/settings/dev)
 src/core/               erreurs, result, ids branded, horloge, logger local
-src/design-system/      tokens Stitch, primitives Alifa*, icônes et illustrations SVG
+src/design-system/      tokens Stitch, primitives Ecolna*, icônes et illustrations SVG
 src/features/<f>/       domain / application / infrastructure / presentation
 src/database/           connexion SQLite, migrations versionnées
 src/content/            manifestes générés + schémas Zod + registre audio

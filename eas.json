@@ -8,8 +8,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "ALIFA_ANDROID_PACKAGE": "td.alifa.app.dev",
-        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.dev"
+        "ECOLNA_ANDROID_PACKAGE": "td.ecolna.app.dev",
+        "ECOLNA_IOS_BUNDLE_ID": "td.ecolna.app.dev"
       }
     },
     "preview": {
@@ -21,9 +21,9 @@
         "simulator": false
       },
       "env": {
-        "ALIFA_ANDROID_PACKAGE": "td.alifa.app.preview",
-        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app.preview",
-        "ALIFA_RELEASE": "1"
+        "ECOLNA_ANDROID_PACKAGE": "td.ecolna.app.preview",
+        "ECOLNA_IOS_BUNDLE_ID": "td.ecolna.app.preview",
+        "ECOLNA_RELEASE": "1"
       }
     },
     "production": {
@@ -32,9 +32,9 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "ALIFA_ANDROID_PACKAGE": "td.alifa.app",
-        "ALIFA_IOS_BUNDLE_ID": "td.alifa.app",
-        "ALIFA_RELEASE": "1"
+        "ECOLNA_ANDROID_PACKAGE": "td.ecolna.app",
+        "ECOLNA_IOS_BUNDLE_ID": "td.ecolna.app",
+        "ECOLNA_RELEASE": "1"
       }
     },
     "production-apk": {

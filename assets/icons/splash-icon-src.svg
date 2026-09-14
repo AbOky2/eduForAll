@@ -1,7 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <rect x="112" y="112" width="800" height="800" rx="176" fill="#f2efe1"/>
-  <circle cx="512" cy="440" r="180" fill="#ffd166"/>
-  <path d="M 368 508 L 512 364 L 656 508 Z" fill="#3d7194"/>
-  <path d="M 280 660 Q 360 630 440 658 Q 520 686 600 656 Q 680 626 744 654 Q 764 662 760 676 Q 754 698 726 692 Q 664 676 596 700 Q 516 728 436 700 Q 366 676 306 694 Q 278 702 272 684 Q 268 670 280 660 Z" fill="#d4a373"/>
-  <text x="512" y="810" font-family="Helvetica, Arial, sans-serif" font-size="120" font-weight="800" fill="#2b2e48" text-anchor="middle" letter-spacing="14">ALIFA</text>
+  <rect x="112" y="112" width="800" height="672" rx="176" fill="#2b6485"/>
+  <g transform="translate(512 448) scale(0.78) translate(-512 -512)">
+    <path d="M512 392 C452 332 366 318 288 324 L288 718 C366 712 452 726 512 786 Z" fill="#e8c49b"/>
+    <path d="M512 392 C572 332 658 318 736 324 L736 718 C658 712 572 726 512 786 Z" fill="#d4a373"/>
+    <path d="M512 392 L512 786" stroke="#2b6485" stroke-width="26" stroke-linecap="round"/>
+    <path d="M352 432 L452 440 M352 512 L452 520 M572 440 L672 432 M572 520 L672 512"
+          stroke="#8a5a2b" stroke-width="24" stroke-linecap="round" opacity=".8"/>
+  </g>
+  <text x="512" y="902" font-family="Helvetica, Arial, sans-serif" font-size="116" font-weight="800"
+        fill="#2b2e48" text-anchor="middle" letter-spacing="16">ECOLNA</text>
 </svg>

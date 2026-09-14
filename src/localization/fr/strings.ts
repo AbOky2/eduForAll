@@ -15,7 +15,7 @@ function of(firstName: string): string {
 
 export const fr = {
   common: {
-    appName: 'ALIFA',
+    appName: 'ECOLNA',
     next: 'Suivant',
     start: 'Commencer',
     continue: 'Continuer',
@@ -227,7 +227,7 @@ export const fr = {
     genericMessage: 'Ce n’est pas de ta faute. Réessaie, tout est gardé.',
     contentUnavailable: 'Ce contenu n’est pas disponible pour le moment.',
     audioUnavailable: 'Le son ne marche pas ici, mais tu peux continuer.',
-    initFailedTitle: 'ALIFA n’arrive pas à démarrer.',
+    initFailedTitle: 'ECOLNA n’arrive pas à démarrer.',
     initFailedMessage: 'Réessaie. Si le problème continue, un parent peut voir le diagnostic.',
   },
 } as const;

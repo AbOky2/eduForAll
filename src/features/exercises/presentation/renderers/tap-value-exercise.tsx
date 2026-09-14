@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AlifaAnswerCard, AlifaAudioButton, AlifaText } from '@/design-system/primitives';
+import { EcolnaAnswerCard, EcolnaAudioButton, EcolnaText } from '@/design-system/primitives';
 import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -35,12 +35,12 @@ export function TapValueExercise({
   return (
     <View style={styles.container}>
       {step.type === 'fill_missing_letter' ? (
-        <AlifaText variant="displayGlyph" align="center" accessibilityLabel={`Mot à compléter`}>
+        <EcolnaText variant="displayGlyph" align="center" accessibilityLabel={`Mot à compléter`}>
           {step.maskedWord.replace('_', ' _ ')}
-        </AlifaText>
+        </EcolnaText>
       ) : audioId ? (
         <View style={styles.audioWrap}>
-          <AlifaAudioButton
+          <EcolnaAudioButton
             size={92}
             playing={playingAudioId === audioId}
             onPress={() => playAudio(audioId)}
@@ -50,7 +50,7 @@ export function TapValueExercise({
 
       <View style={styles.grid}>
         {options.map((option) => (
-          <AlifaAnswerCard
+          <EcolnaAnswerCard
             key={option}
             label={option}
             state={

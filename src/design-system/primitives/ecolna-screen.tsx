@@ -8,7 +8,7 @@ import { useResponsive } from '../responsive';
 
 type ScreenBackground = 'default' | 'exercise' | 'plain-card';
 
-interface AlifaScreenProps {
+interface EcolnaScreenProps {
   children: ReactNode;
   /**
    * `default`  — #fbf8ff with the dotted pattern (home, maps — mockup S06)
@@ -58,12 +58,12 @@ function DottedPattern({ width, height, step }: { width: number; height: number;
  * of readable width. A line of text stretched across a 10" screen is
  * unreadable for a child who is still decoding letter by letter.
  */
-export function AlifaScreen({
+export function EcolnaScreen({
   children,
   background = 'default',
   withBottomInset = true,
   padded = false,
-}: AlifaScreenProps) {
+}: EcolnaScreenProps) {
   const insets = useSafeAreaInsets();
   const { width, height, contentMaxWidth, screenPadding, scale } = useResponsive();
   const backgroundColor = background === 'exercise' ? colors.exerciseBackground : colors.background;

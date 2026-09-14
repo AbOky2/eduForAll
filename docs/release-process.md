@@ -40,7 +40,7 @@ npm run build:preview      # APK interne + iOS interne
 npm run build:production   # AAB + IPA (autoIncrement)
 ```
 
-Identifiants par profil dans `eas.json` (`td.alifa.app[.dev|.preview]`) —
+Identifiants par profil dans `eas.json` (`td.ecolna.app[.dev|.preview]`) —
 placeholders : le propriétaire fournit les identifiants légaux définitifs
 avant soumission (docs/store-readiness.md). Credentials gérés par EAS,
 **jamais commités**.

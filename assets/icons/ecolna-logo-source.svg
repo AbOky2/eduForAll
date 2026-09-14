@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- ECOLNA — « notre école » : un livre ouvert, deux pages jointes.
+       Plein cadre et opaque : Apple refuse toute transparence sur l'icône. -->
+  <rect width="1024" height="1024" fill="#2b6485"/>
+  <path d="M512 392 C452 332 366 318 288 324 L288 718 C366 712 452 726 512 786 Z" fill="#e8c49b"/>
+  <path d="M512 392 C572 332 658 318 736 324 L736 718 C658 712 572 726 512 786 Z" fill="#d4a373"/>
+  <path d="M512 392 L512 786" stroke="#2b6485" stroke-width="26" stroke-linecap="round"/>
+  <path d="M352 432 L452 440 M352 512 L452 520 M572 440 L672 432 M572 520 L672 512"
+        stroke="#8a5a2b" stroke-width="24" stroke-linecap="round" opacity=".8"/>
+</svg>

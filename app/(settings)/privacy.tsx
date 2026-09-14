@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { AlifaCard, AlifaScreen, AlifaText } from '@/design-system/primitives';
-import { AlifaIcon } from '@/design-system/icons/alifa-icon';
+import { EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
-import { AlifaScreenHeader } from '@/design-system/components/alifa-screen-header';
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 const COMMITMENTS = [
@@ -20,21 +20,21 @@ const COMMITMENTS = [
 export default function PrivacyScreen() {
   const goBack = useSafeBack();
   return (
-    <AlifaScreen background="default">
-      <AlifaScreenHeader onBack={goBack} title={fr.settings.privacy} titleVariant="headlineMd" />
+    <EcolnaScreen background="default">
+      <EcolnaScreenHeader onBack={goBack} title={fr.settings.privacy} titleVariant="headlineMd" />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <AlifaCard rounded="xl" style={styles.card}>
+        <EcolnaCard rounded="xl" style={styles.card}>
           {COMMITMENTS.map((commitment) => (
             <View key={commitment} style={styles.row}>
-              <AlifaIcon name="check" size={18} color={colors.feedbackCorrect} />
-              <AlifaText variant="bodyLg" style={styles.rowText}>
+              <EcolnaIcon name="check" size={18} color={colors.feedbackCorrect} />
+              <EcolnaText variant="bodyLg" style={styles.rowText}>
                 {commitment}
-              </AlifaText>
+              </EcolnaText>
             </View>
           ))}
-        </AlifaCard>
+        </EcolnaCard>
       </ScrollView>
-    </AlifaScreen>
+    </EcolnaScreen>
   );
 }
 

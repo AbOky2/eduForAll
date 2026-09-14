@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { spacing } from '../tokens';
 import { useResponsive } from '../responsive';
 
-interface AlifaExerciseLayoutProps {
+interface EcolnaExerciseLayoutProps {
   /** What the child looks at or listens to: question, audio button, board. */
   prompt: ReactNode;
   /** What the child touches to answer. */
@@ -21,11 +21,11 @@ interface AlifaExerciseLayoutProps {
  * below the fold and a six-year-old has to scroll to find them, which is
  * exactly the moment an exercise stops being about reading.
  */
-export function AlifaExerciseLayout({
+export function EcolnaExerciseLayout({
   prompt,
   answers,
   promptWeight = 1,
-}: AlifaExerciseLayoutProps) {
+}: EcolnaExerciseLayoutProps) {
   const { splitPanes } = useResponsive();
 
   if (!splitPanes) {
