@@ -39,8 +39,25 @@
   score de prononciation (choix de confidentialité assumé).
 - **Bouton audio « en lecture »** : l'état visuel de pulsation s'éteint après
   ~2,5 s (pas de suivi précis de fin de lecture).
-- **Écran récompenses/badges** : la table `achievements` existe, l'écran
-  dédié n'est pas encore construit.
+- **Moteur de révision non branché** : `recommendRevisions`
+  (`src/features/revision/domain/revision-engine.ts`) est écrit, testé et
+  déterministe — priorités, ancienneté, paires de confusion propres au CP1
+  (b/d, p/q, ba/ma, ou/on) — mais il n'est appelé que par son propre fichier
+  de test. Ce qui tourne en production est une règle bien plus grossière :
+  une notion ratée entre dans la file, une notion réussie en sort, avec le
+  motif `repeated_errors` pour seule explication.
+
+  Conséquence : `skill_mastery` accumule `correct_count`, `error_count`,
+  `hint_count` et `last_practiced_at` à chaque leçon, et **rien ne relit
+  jamais cette table**. Son état `mastered` n'est écrit nulle part.
+  L'adaptativité est donc construite et payée, mais débranchée.
+
+  Constaté le 14 septembre 2026, en évaluant l'ajout d'un LLM local pour
+  générer des exercices. Conclusion de cette évaluation : un modèle embarqué
+  pèserait vingt à quarante fois l'app, n'aurait pas d'audio (les enfants ne
+  savent pas lire), échapperait à tous les garde-fous de contenu et rendrait
+  le programme irrelisible par un enseignant. Brancher ce qui existe déjà
+  coûte zéro mégaoctet et reste vérifiable.
 - **Multi-profils** : le schéma le supporte ; l'UI de sélection de profil
   n'est pas encore exposée.
 - **Tests E2E Maestro** : flows de base fournis, à étoffer sur appareil réel.
