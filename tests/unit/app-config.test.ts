@@ -5,6 +5,9 @@
  * dans le manifeste généré — donc invisibles en relecture de code. Ce test
  * les rend impossibles à casser en silence.
  */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import type { ExpoConfig } from 'expo/config';
 
 function loadConfig(env: Record<string, string | undefined>): ExpoConfig {
@@ -83,5 +86,22 @@ describe('configuration de l’application', () => {
 
     expect((loadConfig({ EAS_PROJECT_ID: 'abc-123' }).extra as Record<string, unknown>).eas)
       .toEqual({ projectId: 'abc-123' });
+  });
+
+  it('ne laisse aucune clé de locale partir vers les deux plateformes', () => {
+    // Expo envoie toute clé laissée à la racine d'un fichier de locale vers
+    // iOS ET Android. `CFBundleDisplayName` atterrissait ainsi dans les
+    // ressources Android sans équivalent par défaut, et `lintVitalRelease`
+    // faisait échouer chaque build de production — 23 minutes pour l'apprendre,
+    // et seulement en release.
+    const config = loadConfig({});
+    for (const path of Object.values(config.locales ?? {})) {
+      const contents = JSON.parse(readFileSync(join(__dirname, '../..', String(path)), 'utf8'));
+      expect(Object.keys(contents).sort()).toEqual(
+        Object.keys(contents)
+          .filter((key) => key === 'ios' || key === 'android')
+          .sort(),
+      );
+    }
   });
 });

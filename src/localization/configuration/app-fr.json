@@ -1,3 +1,5 @@
 {
-  "CFBundleDisplayName": "ECOLNA"
+  "ios": {
+    "CFBundleDisplayName": "ECOLNA"
+  }
 }

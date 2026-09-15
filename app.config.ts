@@ -79,6 +79,18 @@ const config: ExpoConfig = {
   icon: './assets/icons/app-icon.png',
   backgroundColor: '#fbf8ff',
   primaryColor: '#7d562d',
+  /**
+   * Déclare le français comme localisation prise en charge, ce qui met l'UI
+   * système d'iOS en français.
+   *
+   * ⚠️ Les clés du fichier de locale doivent être rangées sous `ios` ou
+   * `android`. Une clé laissée à la racine part vers LES DEUX plateformes :
+   * `CFBundleDisplayName`, qui n'a aucun sens sur Android, se retrouvait dans
+   * `res/values-b+fr/strings.xml` sans équivalent dans la locale par défaut,
+   * et `lintVitalRelease` faisait échouer tout build Android de production
+   * (ExtraTranslation). Seuls les builds de release exécutent ce lint, d'où un
+   * échec invisible en développement.
+   */
   locales: {
     fr: './src/localization/configuration/app-fr.json',
   },
