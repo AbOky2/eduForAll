@@ -66,6 +66,8 @@
     "validate:bundle": "tsx scripts/validate-bundle.ts",
     "validate:release": "tsx scripts/validate-release.ts",
     "pictograms": "tsx scripts/tools/render-pictograms.tsx",
+    "brand:assets": "node scripts/tools/render-brand-assets.mjs",
+    "store:screenshots": "node scripts/tools/compose-store-screenshots.mjs",
     "doctor": "npx expo-doctor@latest",
     "build:preview": "eas build --profile preview --platform all",
     "build:production": "eas build --profile production --platform all",

@@ -115,7 +115,7 @@ const config: ExpoConfig = {
     adaptiveIcon: {
       // Le fond de l'icône adaptative doit être celui de la marque : Android
       // compose l'avant-plan par-dessus et rogne en cercle ou en écusson.
-      backgroundColor: '#2b6485',
+      backgroundColor: '#1f5473',
       foregroundImage: './assets/icons/adaptive-icon-foreground.png',
       monochromeImage: './assets/icons/adaptive-icon-monochrome.png',
     },

@@ -1,0 +1,20 @@
+{
+  "_lisezMoi": "Les légendes sont celles de docs/deploiement-v1.md §4. Un plan = une capture brute prise sur un VRAI appareil, puis encadrée par scripts/tools/compose-store-screenshots.mjs.",
+  "formats": {
+    "app-store-iphone": { "w": 1320, "h": 2868, "console": "App Store — iPhone 6,9\"", "min": 1 },
+    "app-store-ipad":   { "w": 2752, "h": 2064, "console": "App Store — iPad 13\" (paysage)", "min": 1 },
+    "play-telephone":   { "w": 1080, "h": 1920, "console": "Play — téléphone", "min": 2 },
+    "play-tablette":    { "w": 1920, "h": 1200, "console": "Play — tablette 7\" et 10\" (paysage)", "min": 1 }
+  },
+  "plans": [
+    { "id": "01-accueil",     "ecran": "Accueil enfant",                       "legende": "Le programme officiel du CP, sans internet." },
+    { "id": "02-modules",     "ecran": "Choix du module, les quatre disciplines", "legende": "Langage, lecture, écriture, calcul." },
+    { "id": "03-progression", "ecran": "Carte de progression CP1",             "legende": "Une année scolaire complète, semaine après semaine." },
+    { "id": "04-ecoute",      "ecran": "Exercice « Que viens-tu d’entendre ? »", "legende": "Des consignes lues à voix haute." },
+    { "id": "05-langage",     "ecran": "Langage — toucher l’image du mot",     "legende": "Le vocabulaire du quotidien tchadien." },
+    { "id": "06-calcul",      "ecran": "Calcul — compter les chèvres",         "legende": "Compter avec des objets familiers." },
+    { "id": "07-reussite",    "ecran": "Écran de réussite, trois étoiles",     "legende": "Des encouragements, jamais de pression." },
+    { "id": "08-badges",      "ecran": "Mon profil, étagère de badges",        "legende": "Des badges qui récompensent un vrai progrès." },
+    { "id": "09-parent",      "ecran": "Espace parent",                        "legende": "Suivez ses progrès, simplement." }
+  ]
+}
