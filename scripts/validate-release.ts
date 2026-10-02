@@ -61,6 +61,9 @@ function acceptanceFor(gate: string, detail: string): Acceptance | null {
   if (!candidate) {
     return null;
   }
+  // Vue : elle correspond bien à cet échec. Qu'elle suffise ou non se décide
+  // juste après, et ne doit pas la faire passer pour périmée dans le bilan.
+  usedAcceptances.add(`${candidate.gate}::${candidate.matches}`);
   const declared = candidate.coversFailingChecks;
   if (declared !== undefined) {
     const reported = /(\d+)\s+checks?\s+failed/i.exec(detail);
