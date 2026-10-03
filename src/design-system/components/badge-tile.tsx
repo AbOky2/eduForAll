@@ -32,8 +32,8 @@ export function BadgeTile({
 }: BadgeTileProps) {
   return (
     <View
-      // La cellule donne la largeur : le nom passe sur deux lignes, jamais sur la voisine.
-      style={[styles.tile, { width: '100%', maxWidth: Math.max(96, size + 24) }]}
+      // Jamais plus large que sa cellule : le nom passe sur deux lignes, jamais sur la voisine.
+      style={[styles.tile, { width: Math.max(96, size + 24), maxWidth: '100%' }]}
       accessibilityRole="image"
       accessibilityLabel={`${label}. ${earned ? description : `${description} ${lockedHint}`}`}
     >
