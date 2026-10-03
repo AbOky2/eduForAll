@@ -9,3 +9,5 @@ export type { RadiusToken } from './radius';
 export { shadows } from './shadows';
 export { motion } from './motion';
 export { a11y } from './accessibility';
+export { illustration, skinTones } from './illustration';
+export type { BackdropName, FabricName, Ramp, SkinTone } from './illustration';

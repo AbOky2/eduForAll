@@ -32,8 +32,23 @@ document dit seulement ce qui est prêt et ce qui manque.
   Enfants (Apple) et Familles (Google).
 - Métadonnées rédigées dans `store/` : descriptions, mots-clés, réponses
   privacy, plans de captures, notes de revue, notes de version 1.0.0.
+  L'index `store/README.md` dit quel fichier remplit quel champ de quelle
+  console, et ce qui reste à produire.
 - Politique de confidentialité **prête à héberger**
   (`store/shared/privacy-policy/`), page autonome, sans dépendance.
+- **Page de support prête à héberger** : `support.html`, dans le même dossier,
+  donc publiée par le même `git subtree push`. URL attendue :
+  `https://aboky2.github.io/eduForAll/support.html`
+  (`store/app-store/support-url.md`, `store/shared/contact-support.md`).
+- **Déclarations de store écrites, une par fichier** : questionnaire IARC,
+  accès à l'application, identifiant publicitaire, actualités / gouvernement /
+  finance / santé / COVID, droits sur le contenu, licences tierces, titre et
+  nom de fiche, coordonnées, territoires et prix. Index :
+  `store/google-play/declarations.md` et `store/README.md`.
+- `com.google.android.gms.permission.AD_ID` **bloquée** dans les builds livrés,
+  pour que la déclaration « aucun identifiant publicitaire » reste vraie après
+  une montée de version de dépendance — assertion dans
+  `tests/unit/app-config.test.ts`.
 
 ## À fournir par le propriétaire
 
@@ -41,9 +56,22 @@ document dit seulement ce qui est prêt et ce qui manque.
 |---|---|---|
 | Identité légale de l'éditeur : nom, adresse, e-mail | politique de confidentialité + fiches | oui |
 | URL publique de la politique de confidentialité | les deux fiches | oui |
-| Captures d'écran depuis un vrai build : **tablette et téléphone**, 9 plans | les deux fiches | oui |
+| Captures d'écran depuis l'app qui tourne : **tablette et téléphone**, 9 plans | les deux fiches | oui |
 | Apple ID du compte développeur + 2FA | demandé par `eas build` / `eas submit` | oui, côté iOS |
-| URL ou e-mail de support | les deux fiches | oui |
+| Téléphone du contact de revue, format international | App Store Connect → *App Review Information* ; **non publié** | oui, côté iOS |
+
+Le support, lui, n'est plus à fournir :
+
+| Élément | Valeur | Où la saisir |
+|---|---|---|
+| URL de support | `https://aboky2.github.io/eduForAll/support.html` | App Store Connect → *URL de support* |
+| E-mail de contact | `issaokiabderamane@gmail.com` | Play Console → *Paramètres de la fiche → Coordonnées* |
+
+La page existe (`store/shared/privacy-policy/support.html`) et part sur
+`gh-pages` avec la politique de confidentialité ; il reste à la publier et à
+vérifier que l'URL répond en 200. Les chaînes exactes des deux fiches sont
+regroupées dans `store/shared/coordonnees-fiches.md` — un seul fichier, pour
+qu'elles ne divergent pas entre les consoles et la politique.
 
 > Les comptes Play Console et Apple Developer sont déjà ouverts, et une
 > application a déjà été publiée depuis ce compte Play : la règle du test
@@ -58,6 +86,43 @@ document dit seulement ce qui est prêt et ce qui manque.
   l'app. (`store/google-play/data-safety.md`)
 - **Public cible** : 6–8 ans → programme Familles, exigences couvertes.
   (`store/google-play/families-checklist.md`)
-- **Classification du contenu** : Éducation, aucun contenu sensible.
-  (`store/app-store/age-rating.md`)
+- **Classification par âge (Apple)** : questionnaire complet, résultat attendu
+  4+. (`store/app-store/age-rating.md`)
+- **Classification du contenu (Play, IARC)** : catégorie « Référence,
+  actualités ou éducation », « Non » à toutes les questions de contenu et aux
+  sept questions « divers » ; PEGI 3, ESRB Everyone, USK 0, ClassInd L
+  attendus. (`store/google-play/content-rating-iarc.md`)
+- **Accès à l'application (Play)** : « toutes les fonctionnalités sont
+  disponibles sans accès spécial » — à écrire noir sur blanc, sinon un
+  examinateur cherche un compte de test qui n'existe pas.
+  (`store/google-play/app-access.md`)
 - **Publicités** : déclarer « Non » sur les deux plateformes.
+  (`store/google-play/app-content-declarations.md`)
+- **Identifiant publicitaire (Play)** : « non utilisé », tenu par la
+  configuration et non par la vigilance.
+  (`store/google-play/advertising-id.md`)
+- **Actualités, gouvernement, finance, santé, COVID-19 (Play)** : « Non » aux
+  cinq, chacun avec son motif.
+  (`store/google-play/app-content-declarations.md`)
+- **Droits sur le contenu (Apple)** : « Oui », contenu de tiers sous licence —
+  programme officiel cité, voix de synthèse, polices.
+  (`store/app-store/content-rights.md`, `store/shared/licences-tierces.md`)
+
+## Statut de professionnel au titre du DSA — décidé
+
+Réponse retenue : **non-professionnel**. L'éditeur est une personne physique,
+l'app est gratuite, sans achat intégré, sans publicité et sans collecte : aucune
+activité commerciale n'y est attachée.
+
+Ce que la décision évite : déclarer « professionnel » fait **publier sur chaque
+fiche** le nom, l'adresse postale et le téléphone de l'éditeur — l'adresse
+personnelle du 25 rue Édouard Vaillant serait affichée sur les deux stores.
+
+Ce qu'il reste à faire, console en main : lire l'écran de déclaration tel qu'il
+s'affiche au moment de soumettre, parce que les deux plateformes conditionnent
+la diffusion dans l'UE à cette réponse et que leurs règles ont changé plusieurs
+fois. Si une console réserve la diffusion UE aux professionnels vérifiés, la
+décision déjà prise est de retirer les territoires de l'UE plutôt que de publier
+un domicile, et de garder le Tchad — cible du pilote. Détail, conséquences et
+coordonnées concernées : `store/shared/dsa-trader.md` ; territoires et prix :
+`store/shared/distribution.md`.

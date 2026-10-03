@@ -61,6 +61,12 @@ describe('configuration de l’application', () => {
     expect(blocked).toContain('android.permission.SYSTEM_ALERT_WINDOW');
     expect(blocked).toContain('android.permission.READ_EXTERNAL_STORAGE');
     expect(blocked).toContain('android.permission.WRITE_EXTERNAL_STORAGE');
+    // La fiche Play déclare « aucun identifiant publicitaire »
+    // (store/google-play/advertising-id.md) : si une dépendance se met à
+    // déclarer AD_ID, la déclaration devient fausse et l'app sort du
+    // programme Familles. Le blocage tient la promesse à la place de la
+    // vigilance.
+    expect(blocked).toContain('com.google.android.gms.permission.AD_ID');
     // Le retour haptique de fin d'exercice s'en sert : elle reste.
     expect(blocked).not.toContain('android.permission.VIBRATE');
   });

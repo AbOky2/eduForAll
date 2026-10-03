@@ -188,7 +188,9 @@ export const fr = {
   parent: {
     gateTitle: 'Espace parents',
     gateSubtitle: 'Cet espace est réservé aux parents.',
-    gateQuestion: 'Pour entrer, réponds à cette question :',
+    gateQuestion: 'Pour entrer, écris le résultat de cette opération :',
+    gatePlaceholder: 'Ta réponse',
+    gateEnter: 'Entrer',
     gateWrong: 'Ce n’est pas la bonne réponse.',
     dashboardTitle: (firstName: string) => `Tableau de bord ${of(firstName)}`,
     dashboardSubtitle: 'Suivez sa progression et ses accomplissements récents.',
@@ -230,6 +232,27 @@ export const fr = {
     audioUnavailable: 'Le son ne marche pas ici, mais tu peux continuer.',
     initFailedTitle: 'ECOLNA n’arrive pas à démarrer.',
     initFailedMessage: 'Réessaie. Si le problème continue, un parent peut voir le diagnostic.',
+  },
+  /**
+   * Les douze enfants (design/brief-identite-v2.md § 8.4) : on décrit le style,
+   * jamais une aide technique en premier. Libellé d'une tuile :
+   * « Avatar 3 : garçon en jalabiya verte ».
+   */
+  avatars: {
+    descriptions: {
+      'avatar-1': 'Garçon à la raie de côté, chemise bleue',
+      'avatar-2': 'Fille aux deux boules afro, robe en pagne',
+      'avatar-3': 'Garçon en jalabiya verte',
+      'avatar-4': 'Fille aux tresses perlées, haut prune',
+      'avatar-5': 'Fille au foulard noué, robe sable',
+      'avatar-6': 'Garçon aux lunettes rondes, polo jaune',
+      'avatar-7': 'Fille aux cheveux afro, robe bleu ciel',
+      'avatar-8': 'Garçon au bob, t-shirt rayé',
+      'avatar-9': 'Fille aux nattes relevées, robe brodée',
+      'avatar-10': 'Garçon à la chemise à carreaux, appareil auditif bleu',
+      'avatar-11': 'Fille au chignon couronne, boubou indigo',
+      'avatar-12': 'Garçon aux cheveux bouclés, t-shirt vert',
+    },
   },
 } as const;
 

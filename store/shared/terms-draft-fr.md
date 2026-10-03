@@ -14,6 +14,21 @@
    remplace ni l'école ni l'enseignant.
 5. **Données.** Voir la politique de confidentialité : aucune donnée n'est
    collectée ni transmise.
-6. **Propriété intellectuelle.** [À compléter par l'éditeur : licence du
-   contenu et de la marque.]
-7. **Contact.** [À compléter par l'éditeur.]
+6. **Propriété intellectuelle.** Le nom ECOLNA, le logo, les 112
+   illustrations et le code de l'application sont la propriété de l'éditeur ;
+   les 308 leçons et les 1 625 exercices sont une création de l'éditeur,
+   construite sur un référentiel public cité page par page : *Programmes
+   Réactualisés de l'Enseignement Primaire*, Ministère de l'Éducation
+   Nationale — Centre National des Curricula, N'Djaména, septembre 2004.
+   ECOLNA n'est ni éditée, ni approuvée, ni cautionnée par ce ministère.
+   L'application embarque des éléments tiers sous licence libre, dont les
+   conditions s'appliquent et dont l'attribution est due : les polices
+   Quicksand et Plus Jakarta Sans sous SIL Open Font License 1.1, et les voix
+   de synthèse Kokoro (Apache-2.0) et Piper (MIT), issues du locuteur `siwis`
+   dont le jeu de données impose une attribution. L'inventaire complet, source
+   par source, est dans `store/shared/licences-tierces.md` ; c'est aussi la
+   réponse à la question « Content Rights » d'App Store Connect
+   (`store/app-store/content-rights.md`).
+7. **Contact.** Issa Oki ABDRAMANE, 25 rue Édouard Vaillant, appartement 317,
+   37000 Tours, France — issaokiabderamane@gmail.com. Aide et questions
+   fréquentes : <https://aboky2.github.io/eduForAll/support.html>.

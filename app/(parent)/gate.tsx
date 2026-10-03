@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
-import { EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { a11y, colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -11,20 +11,28 @@ import { useSafeBack } from '@/shared/hooks/use-safe-back';
 interface GateChallenge {
   question: string;
   answer: number;
-  options: number[];
 }
 
 /**
- * Parent gate: a multiplication a young child cannot yet solve. Blocks the
- * child flow from reaching parent-only actions (reset, sharing, diagnostics).
- * A local PIN can be layered on top later without changing callers.
+ * Porte parentale : une multiplication qu'un enfant de six à huit ans ne sait
+ * pas encore poser, à SAISIR et non à choisir.
+ *
+ * Trois réponses proposées laissaient une chance sur trois par essai, sans
+ * limite de tentatives : un enfant qui tape au hasard entrait en trois coups.
+ * Ce n'est pas une porte parentale au sens de la catégorie Enfants d'Apple,
+ * et neuf fiches de store affirment pourtant qu'elle en est une. La saisie
+ * libre rend le hasard inopérant.
+ *
+ * Bloque l'accès aux actions réservées aux adultes : réinitialisation,
+ * partage, diagnostic. Un code local pourra se superposer sans toucher aux
+ * appelants.
  */
 const CHALLENGES: GateChallenge[] = [
-  { question: '7 × 6', answer: 42, options: [36, 42, 48] },
-  { question: '8 × 7', answer: 56, options: [54, 56, 64] },
-  { question: '9 × 6', answer: 54, options: [48, 54, 56] },
-  { question: '7 × 8', answer: 56, options: [49, 56, 63] },
-  { question: '6 × 8', answer: 48, options: [42, 48, 54] },
+  { question: '7 × 6', answer: 42 },
+  { question: '8 × 7', answer: 56 },
+  { question: '9 × 6', answer: 54 },
+  { question: '7 × 8', answer: 56 },
+  { question: '6 × 8', answer: 48 },
 ];
 
 export default function ParentGateScreen() {
@@ -32,15 +40,19 @@ export default function ParentGateScreen() {
   const goBack = useSafeBack();
   const [attempt, setAttempt] = useState(0);
   const [wrong, setWrong] = useState(false);
+  const [saisie, setSaisie] = useState('');
   const challenge = useMemo(() => CHALLENGES[attempt % CHALLENGES.length]!, [attempt]);
 
-  const choose = (value: number) => {
-    if (value === challenge.answer) {
+  const valider = () => {
+    if (Number(saisie.trim()) === challenge.answer) {
       router.replace('/(parent)/dashboard');
-    } else {
-      setWrong(true);
-      setAttempt((current) => current + 1);
+      return;
     }
+    setWrong(true);
+    setSaisie('');
+    // Une opération différente à chaque échec : retenir la bonne réponse par
+    // répétition ne mène nulle part.
+    setAttempt((current) => current + 1);
   };
 
   return (
@@ -68,19 +80,23 @@ export default function ParentGateScreen() {
               {fr.parent.gateWrong}
             </EcolnaText>
           ) : null}
-          <View style={styles.options}>
-            {challenge.options.map((option) => (
-              <Pressable
-                key={option}
-                accessibilityRole="button"
-                accessibilityLabel={String(option)}
-                onPress={() => choose(option)}
-                style={({ pressed }) => [styles.option, pressed && { opacity: 0.8 }]}
-              >
-                <EcolnaText variant="headlineSm">{String(option)}</EcolnaText>
-              </Pressable>
-            ))}
-          </View>
+          <TextInput
+            accessibilityLabel={fr.parent.gateQuestion}
+            value={saisie}
+            onChangeText={(texte) => setSaisie(texte.replace(/[^0-9]/g, '').slice(0, 4))}
+            onSubmitEditing={valider}
+            placeholder={fr.parent.gatePlaceholder}
+            placeholderTextColor={colors.outline}
+            keyboardType="number-pad"
+            returnKeyType="done"
+            maxLength={4}
+            style={styles.input}
+          />
+          <EcolnaButton
+            label={fr.parent.gateEnter}
+            onPress={valider}
+            disabled={saisie.trim().length === 0}
+          />
         </EcolnaCard>
 
         <Pressable accessibilityRole="button" onPress={goBack} hitSlop={12}>
@@ -110,15 +126,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: { gap: spacing.md },
-  options: { flexDirection: 'row', gap: spacing.md },
-  option: {
-    flex: 1,
+  input: {
     minHeight: a11y.minTouchTarget + 8,
     borderRadius: radius.md,
     borderWidth: 1.5,
     borderColor: colors.outlineVariant,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: colors.surfaceContainerLowest,
+    textAlign: 'center',
+    fontSize: 26,
+    color: colors.textPrimary,
+    paddingHorizontal: spacing.md,
   },
 });

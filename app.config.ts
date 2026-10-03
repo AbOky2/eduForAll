@@ -55,6 +55,12 @@ const BLOCKED_PERMISSIONS = [
   'android.permission.SYSTEM_ALERT_WINDOW',
   'android.permission.READ_EXTERNAL_STORAGE',
   'android.permission.WRITE_EXTERNAL_STORAGE',
+  // La fiche Play déclare « n'utilise pas d'identifiant publicitaire »
+  // (store/google-play/advertising-id.md). Aucune dépendance actuelle ne
+  // déclare AD_ID, mais une mise à jour qui l'ajouterait rendrait cette
+  // déclaration fausse — et une déclaration fausse démentie par le manifeste
+  // est un retrait du programme Familles, pas un avertissement.
+  'com.google.android.gms.permission.AD_ID',
 ];
 
 const config: ExpoConfig = {
@@ -122,6 +128,13 @@ const config: ExpoConfig = {
     predictiveBackGestureEnabled: false,
   },
   plugins: [
+    // Relève la cible de déploiement des bundles de ressources de Pods, que
+    // react_native_post_install laisse derrière lui. Sans cela Xcode 27 refuse
+    // de compiler react-native-svg.
+    // Sans le cycle de vie UIScene, une app compilée avec le SDK iOS 26+
+    // refuse de démarrer. Ni RN 0.85 ni Expo SDK 56 ne l'apportent.
+    './plugins/with-ios-scene-lifecycle',
+    './plugins/with-pods-deployment-target',
     'expo-router',
     'expo-sqlite',
     'expo-localization',

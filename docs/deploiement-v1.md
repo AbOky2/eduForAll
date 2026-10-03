@@ -136,7 +136,12 @@ terminées. Aucune donnée réelle, aucun écran de développement.
 | 5 | Langage — toucher l'image du mot | *Le vocabulaire du quotidien tchadien.* |
 | 6 | Calcul — compter les chèvres | *Compter avec des objets familiers.* |
 | 7 | Écran de réussite (3 étoiles) | *Des encouragements, jamais de pression.* |
-| 8 | Espace parent | *Suivez ses progrès, simplement.* |
+| 8 | Mon profil — étagère de badges | *Des badges qui récompensent un vrai progrès.* |
+| 9 | Espace parent | *Suivez ses progrès, simplement.* |
+
+Ces 9 plans, leur ordre et leurs légendes sont encodés dans
+`store/screenshots/plan.json`, que lit `npm run store:screenshots` : le
+tableau ci-dessus et ce fichier doivent rester identiques.
 
 **Formats exigés**
 

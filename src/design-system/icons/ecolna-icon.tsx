@@ -1,331 +1,134 @@
-import Svg, { Circle, Line, Path, Polyline, Rect } from 'react-native-svg';
+import { memo, type ReactElement } from 'react';
+import Svg, { G, Path } from 'react-native-svg';
 
 import { colors } from '../tokens';
+import { M_GLYPHS, renderMGlyph, type IconMode } from './glyphs-m';
+import { S_GLYPHS, renderSGlyph, type IconName } from './glyphs-s';
 
-export type IconName =
-  | 'speaker'
-  | 'play'
-  | 'check'
-  | 'close'
-  | 'star'
-  | 'star-outline'
-  | 'lock'
-  | 'lightbulb'
-  | 'arrow-back'
-  | 'chevron-right'
-  | 'gear'
-  | 'home'
-  | 'book'
-  | 'pencil'
-  | 'ear'
-  | 'speech'
-  | 'calculator'
-  | 'parents'
-  | 'cloud-off'
-  | 'pause'
-  | 'replay'
-  | 'leaf'
-  | 'sparkle'
-  | 'trash'
-  | 'share'
-  | 'trophy'
-  | 'flame'
-  | 'medal';
+export type { IconName } from './glyphs-s';
+export type { IconMode } from './glyphs-m';
 
-interface EcolnaIconProps {
+/** Modificateur posé en bas à droite (ex. l'onglet « Parents » : cadenas). */
+export type IconModifier = 'lock';
+
+export interface EcolnaIconProps {
   name: IconName;
+  /** Taille en dp (défaut 24). À partir de 32, le dessin du palier M s'il existe. */
   size?: number;
+  /** Couleur du mode `mono` (défaut `colors.onSurfaceVariant`). */
   color?: string;
-  /** Filled version where it exists (stars). */
+  /** Rétrocompatible : mode `color` (palier M) ou jumeau plein (palier S). */
   filled?: boolean;
+  /** Mode de rendu du palier M (défaut : `filled` ? 'color' : 'mono'). */
+  mode?: IconMode;
+  /** Petit cadenas en bas à droite, détaché par un liseré de `modifierBackdrop`. */
+  modifier?: IconModifier;
+  /** Couleur du fond sous l'icône, pour détacher le modificateur (défaut `colors.card`). */
+  modifierBackdrop?: string;
+}
+
+/** Taille à partir de laquelle le dessin du palier M remplace celui du palier S (§ 6.1). */
+export const M_TIER_MIN_SIZE = 32;
+
+/**
+ * Le palier dessiné. Optique, pas homothétie : un dessin 24 n'est jamais
+ * agrandi quand son jumeau 48 existe. Le palier S n'a que `mono` et le
+ * jumeau plein : un mode `duo` ou `color` demandé explicitement prend le
+ * dessin M même en petit, puisque c'est lui qui porte la couleur.
+ */
+export function iconTier(name: IconName, size: number, mode?: IconMode): 'S' | 'M' {
+  if (M_GLYPHS[name] === undefined) {
+    return 'S';
+  }
+  return size >= M_TIER_MIN_SIZE || mode === 'duo' || mode === 'color' ? 'M' : 'S';
+}
+
+// Cadenas modificateur, grille 48 : le même cadenas rond que le glyphe, plein,
+// détaché du dessin par un liseré de 3 u couleur du fond.
+const MOD_SHACKLE = 'M35.5 36V33A3 3 0 0 1 41.5 33V36';
+const MOD_BODY = 'M44 39A5.5 5.5 0 1 1 33 39A5.5 5.5 0 1 1 44 39Z';
+const ROUND = { strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+
+function lockModifier(color: string, backdrop: string): ReactElement[] {
+  return [
+    <Path key="m1" d={MOD_SHACKLE} fill="none" stroke={backdrop} strokeWidth={9} {...ROUND} />,
+    <Path key="m2" d={MOD_BODY} fill={backdrop} stroke={backdrop} strokeWidth={6} {...ROUND} />,
+    <Path key="m3" d={MOD_SHACKLE} fill="none" stroke={color} strokeWidth={3} {...ROUND} />,
+    <Path key="m4" d={MOD_BODY} fill={color} />,
+  ];
 }
 
 /**
- * Original hand-drawn icon set on a 24×24 grid, matching the light outlined
- * style of the mockups (no @expo/vector-icons — see ADR notes).
+ * Les éléments d'une icône sont immuables pour un même (nom, palier, mode,
+ * couleur, modificateur) : on les garde au lieu de réallouer la liste à
+ * chaque rendu. Les modes `duo` et `color` ne dépendent pas de `color`.
  */
-export function EcolnaIcon({
+const cache = new Map<string, ReactElement[]>();
+const CACHE_LIMIT = 512;
+
+function iconElements(
+  name: IconName,
+  tier: 'S' | 'M',
+  mode: IconMode,
+  color: string,
+  solidTwin: boolean,
+  modifier: IconModifier | undefined,
+  backdrop: string,
+): ReactElement[] {
+  const ink = tier === 'S' || mode === 'mono' || modifier !== undefined ? color : '';
+  const variant = tier === 'M' ? mode : solidTwin ? 'plein' : 'contour';
+  const key = `${tier}|${name}|${variant}|${ink}|${modifier ?? ''}|${modifier ? backdrop : ''}`;
+  const hit = cache.get(key);
+  if (hit) {
+    return hit;
+  }
+  const m = tier === 'M' ? M_GLYPHS[name] : undefined;
+  const elements = m
+    ? renderMGlyph(m, mode, color)
+    : renderSGlyph(S_GLYPHS[name], color, solidTwin);
+  if (modifier === 'lock') {
+    const lock = lockModifier(color, backdrop);
+    // Le cadenas est dessiné sur la grille 48 ; le palier S le ramène à 24.
+    elements.push(
+      tier === 'M' ? (
+        <G key="mod">{lock}</G>
+      ) : (
+        <G key="mod" transform="scale(0.5)">
+          {lock}
+        </G>
+      ),
+    );
+  }
+  if (cache.size >= CACHE_LIMIT) {
+    cache.clear();
+  }
+  cache.set(key, elements);
+  return elements;
+}
+
+/**
+ * Icônes ECOLNA v2 « Galets & craie » (design/brief-identite-v2.md § 6) :
+ * glyphes d'interface (palier S, 24 u, trait 2) et pictogrammes enfant
+ * (palier M, 48 u, trait 4, modes mono / duo / couleur). Aucun réseau,
+ * aucune police d'icônes : tout est dessiné ici.
+ */
+export const EcolnaIcon = memo(function EcolnaIcon({
   name,
   size = 24,
-  color = colors.onSurface,
+  color = colors.onSurfaceVariant,
   filled = false,
+  mode,
+  modifier,
+  modifierBackdrop = colors.card,
 }: EcolnaIconProps) {
-  const stroke = {
-    stroke: color,
-    strokeWidth: 1.8,
-    strokeLinecap: 'round' as const,
-    strokeLinejoin: 'round' as const,
-    fill: 'none' as const,
-  };
-  const box = { width: size, height: size, viewBox: '0 0 24 24' };
-
-  switch (name) {
-    case 'speaker':
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4z"
-            fill={filled ? color : 'none'}
-          />
-          <Path {...stroke} d="M15 9.2a4 4 0 0 1 0 5.6" />
-          <Path {...stroke} d="M17.6 7a7.4 7.4 0 0 1 0 10" />
-        </Svg>
-      );
-    case 'play':
-      return (
-        <Svg {...box}>
-          <Path
-            d="M8.5 5.8v12.4c0 .8.9 1.3 1.6.9l9.4-6.2c.6-.4.6-1.3 0-1.7L10.1 4.9c-.7-.4-1.6 0-1.6.9z"
-            fill={color}
-          />
-        </Svg>
-      );
-    case 'pause':
-      return (
-        <Svg {...box}>
-          <Rect x={7} y={5.5} width={3.4} height={13} rx={1.4} fill={color} />
-          <Rect x={13.6} y={5.5} width={3.4} height={13} rx={1.4} fill={color} />
-        </Svg>
-      );
-    case 'replay':
-      return (
-        <Svg {...box}>
-          <Path {...stroke} d="M12 5a7 7 0 1 1-6.3 4" />
-          <Polyline {...stroke} points="5.2,4.4 5.7,9 10.2,8.4" />
-        </Svg>
-      );
-    case 'check':
-      return (
-        <Svg {...box}>
-          <Polyline {...stroke} strokeWidth={2.4} points="5,12.5 10,17.5 19,7" />
-        </Svg>
-      );
-    case 'close':
-      return (
-        <Svg {...box}>
-          <Line {...stroke} strokeWidth={2.2} x1={6.5} y1={6.5} x2={17.5} y2={17.5} />
-          <Line {...stroke} strokeWidth={2.2} x1={17.5} y1={6.5} x2={6.5} y2={17.5} />
-        </Svg>
-      );
-    case 'star':
-    case 'star-outline': {
-      const starPath =
-        'M12 3.6l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L12 16.2 6.9 19l1.1-5.6-4.2-3.9 5.7-.7z';
-      return (
-        <Svg {...box}>
-          <Path
-            d={starPath}
-            fill={name === 'star' || filled ? color : 'none'}
-            stroke={color}
-            strokeWidth={1.6}
-            strokeLinejoin="round"
-          />
-        </Svg>
-      );
-    }
-    case 'lock':
-      return (
-        <Svg {...box}>
-          <Rect {...stroke} x={5.5} y={10.5} width={13} height={9} rx={2.5} />
-          <Path {...stroke} d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" />
-          <Circle cx={12} cy={15} r={1.4} fill={color} />
-        </Svg>
-      );
-    case 'lightbulb':
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M12 3.5a5.5 5.5 0 0 1 3.2 10c-.7.5-1.2 1.1-1.2 1.9v.6h-4v-.6c0-.8-.5-1.4-1.2-1.9A5.5 5.5 0 0 1 12 3.5z"
-          />
-          <Line {...stroke} x1={10} y1={19.5} x2={14} y2={19.5} />
-        </Svg>
-      );
-    case 'arrow-back':
-      return (
-        <Svg {...box}>
-          <Line {...stroke} strokeWidth={2.2} x1={20} y1={12} x2={5} y2={12} />
-          <Polyline {...stroke} strokeWidth={2.2} points="11,5.5 4.5,12 11,18.5" />
-        </Svg>
-      );
-    case 'chevron-right':
-      return (
-        <Svg {...box}>
-          <Polyline {...stroke} strokeWidth={2.2} points="9,5.5 15.5,12 9,18.5" />
-        </Svg>
-      );
-    case 'gear':
-      return (
-        <Svg {...box}>
-          <Circle {...stroke} cx={12} cy={12} r={3} />
-          <Path
-            {...stroke}
-            d="M12 3.8l1 2.1 2.3.4 1.9-1.3 1.8 1.8-1.3 1.9.4 2.3 2.1 1-2.1 1-.4 2.3 1.3 1.9-1.8 1.8-1.9-1.3-2.3.4-1 2.1-1-2.1-2.3-.4-1.9 1.3-1.8-1.8 1.3-1.9-.4-2.3-2.1-1 2.1-1 .4-2.3L6.8 5l1.8-1.8 1.9 1.3 2.3-.4z"
-          />
-        </Svg>
-      );
-    case 'home':
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M4.5 11.5 12 4.5l7.5 7v7.5a1.5 1.5 0 0 1-1.5 1.5h-3.5v-5.5h-5V20.5H6a1.5 1.5 0 0 1-1.5-1.5z"
-            fill={filled ? color : 'none'}
-          />
-        </Svg>
-      );
-    case 'book':
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M12 6.5c-1.6-1.3-3.8-1.8-7-1.5v13c3.2-.3 5.4.2 7 1.5 1.6-1.3 3.8-1.8 7-1.5v-13c-3.2-.3-5.4.2-7 1.5z"
-          />
-          <Line {...stroke} x1={12} y1={6.8} x2={12} y2={19} />
-        </Svg>
-      );
-    case 'pencil':
-      return (
-        <Svg {...box}>
-          <Path {...stroke} d="M5 16.2 15.6 5.6a2 2 0 0 1 2.8 2.8L7.8 19 4.5 19.5z" />
-        </Svg>
-      );
-    case 'ear':
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M7.5 9a4.8 4.8 0 0 1 9.6 0c0 2.6-2.3 3.5-2.6 5.4-.2 1.6-1 2.9-2.6 2.9"
-          />
-          <Path {...stroke} d="M10.4 9.1a2.2 2.2 0 0 1 4 1.2c0 1.3-1.3 1.9-1.7 3" />
-        </Svg>
-      );
-    case 'speech':
-      // Langage/élocution — a spoken bubble, not a listening ear.
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M4.5 7.2c0-1.5 1.2-2.7 2.7-2.7h9.6c1.5 0 2.7 1.2 2.7 2.7v6.1c0 1.5-1.2 2.7-2.7 2.7H10l-4.1 3.2c-.5.4-1.2 0-1.2-.6v-2.7c-.1-.3-.2-1-.2-2.6V7.2z"
-          />
-          <Line {...stroke} x1={8.2} y1={9} x2={15.8} y2={9} />
-          <Line {...stroke} x1={8.2} y1={12.2} x2={13.2} y2={12.2} />
-        </Svg>
-      );
-    case 'calculator':
-      return (
-        <Svg {...box}>
-          <Rect {...stroke} x={5.5} y={3.5} width={13} height={17} rx={2.5} />
-          <Line {...stroke} x1={8.5} y1={7.5} x2={15.5} y2={7.5} />
-          <Circle cx={9} cy={12} r={1.1} fill={color} />
-          <Circle cx={15} cy={12} r={1.1} fill={color} />
-          <Circle cx={9} cy={16.5} r={1.1} fill={color} />
-          <Circle cx={15} cy={16.5} r={1.1} fill={color} />
-        </Svg>
-      );
-    case 'parents':
-      return (
-        <Svg {...box}>
-          <Circle {...stroke} cx={9} cy={8} r={2.6} />
-          <Circle {...stroke} cx={16.4} cy={9.4} r={2} />
-          <Path {...stroke} d="M4.5 19c.4-3 2.3-4.8 4.5-4.8S13.1 16 13.5 19" />
-          <Path {...stroke} d="M14.6 19c.3-2.1 1.4-3.4 3-3.4 1.3 0 2.3 1 2.9 2.6" />
-        </Svg>
-      );
-    case 'cloud-off':
-      return (
-        <Svg {...box}>
-          <Path
-            {...stroke}
-            d="M8 17.5h9a3.5 3.5 0 0 0 .8-6.9A5.5 5.5 0 0 0 8.2 8.5 4 4 0 0 0 8 17.5z"
-          />
-          <Line {...stroke} x1={4.5} y1={4.5} x2={19.5} y2={19.5} stroke={colors.error} />
-        </Svg>
-      );
-    case 'leaf':
-      return (
-        <Svg {...box}>
-          <Path {...stroke} d="M6 18C6 10 11 5.5 19 5c.4 8-3.8 13-12 13z" />
-          <Path {...stroke} d="M6.5 17.5C9 14 12 11 16 8.5" />
-        </Svg>
-      );
-    case 'sparkle':
-      return (
-        <Svg {...box}>
-          <Path d="M12 3.5l1.8 5.2 5.2 1.8-5.2 1.8L12 17.5l-1.8-5.2L5 10.5l5.2-1.8z" fill={color} />
-          <Circle cx={18.5} cy={17.5} r={1.6} fill={color} />
-        </Svg>
-      );
-    case 'trophy':
-      return (
-        <Svg {...box}>
-          <Path {...stroke} d="M7.5 4h9v5.2a4.5 4.5 0 0 1-9 0z" fill={filled ? color : 'none'} />
-          <Path {...stroke} d="M7.5 5.5H5a2.5 2.5 0 0 0 2.5 4.2" />
-          <Path {...stroke} d="M16.5 5.5H19a2.5 2.5 0 0 1-2.5 4.2" />
-          <Line {...stroke} x1={12} y1={13.8} x2={12} y2={17} />
-          <Path {...stroke} d="M8.6 20h6.8l-.7-3H9.3z" />
-        </Svg>
-      );
-    case 'flame':
-      return (
-        <Svg {...box}>
-          {/* Pointe marquée + épaule creusée : sans elles la flamme lit
-              comme une goutte d'eau. */}
-          <Path
-            {...stroke}
-            d="M12.6 2.6c-.5 2.6-1.8 3.7-3.4 5.3C7.4 9.6 6.4 11 6.4 13a5.6 5.6 0 0 0 11.2 0c0-2.2-1-3.6-2.4-5-.6.9-1.2 1.4-1.9 1.6.8-2.4.5-4.6-.7-7z"
-            fill={filled ? color : 'none'}
-          />
-          {/* Cœur de flamme : en version pleine il doit se détacher du corps,
-              sinon la flamme redevient une tache. */}
-          <Path
-            d="M12 13c1.4 1.4 2.1 2.4 2.1 3.4a2.1 2.1 0 0 1-4.2 0c0-1 .7-2 2.1-3.4z"
-            fill={filled ? colors.card : color}
-          />
-        </Svg>
-      );
-    case 'medal':
-      return (
-        <Svg {...box}>
-          {/* Deux rubans qui s'écartent vers le haut, puis le disque. */}
-          <Path {...stroke} d="M7.6 2.8l2.6 5.4" />
-          <Path {...stroke} d="M16.4 2.8l-2.6 5.4" />
-          <Circle
-            cx={12}
-            cy={14.6}
-            r={6.4}
-            stroke={color}
-            strokeWidth={1.8}
-            fill={filled ? color : 'none'}
-          />
-          <Path
-            d="M12 10.7l1.15 2.33 2.57.37-1.86 1.81.44 2.56L12 16.57l-2.3 1.19.44-2.56-1.86-1.81 2.57-.37z"
-            fill={filled ? colors.card : color}
-          />
-        </Svg>
-      );
-    case 'trash':
-      return (
-        <Svg {...box}>
-          <Path {...stroke} d="M6 7h12l-.8 12.2a1.8 1.8 0 0 1-1.8 1.7H8.6a1.8 1.8 0 0 1-1.8-1.7z" />
-          <Line {...stroke} x1={4.5} y1={7} x2={19.5} y2={7} />
-          <Path {...stroke} d="M9.5 7V5.4c0-.8.6-1.4 1.4-1.4h2.2c.8 0 1.4.6 1.4 1.4V7" />
-        </Svg>
-      );
-    case 'share':
-      return (
-        <Svg {...box}>
-          <Circle {...stroke} cx={6.5} cy={12} r={2.2} />
-          <Circle {...stroke} cx={17.5} cy={6} r={2.2} />
-          <Circle {...stroke} cx={17.5} cy={18} r={2.2} />
-          <Line {...stroke} x1={8.6} y1={11} x2={15.5} y2={7} />
-          <Line {...stroke} x1={8.6} y1={13} x2={15.5} y2={17} />
-        </Svg>
-      );
-    default: {
-      const unhandled: never = name;
-      throw new Error(`unknown icon: ${String(unhandled)}`);
-    }
-  }
-}
+  const resolvedMode: IconMode = mode ?? (filled ? 'color' : 'mono');
+  const tier = iconTier(name, size, mode);
+  // Le jumeau plein du palier S répond à `filled` comme à un mode coloré demandé.
+  const solidTwin = filled || resolvedMode !== 'mono';
+  const grid = tier === 'M' ? 48 : 24;
+  return (
+    <Svg width={size} height={size} viewBox={`0 0 ${grid} ${grid}`}>
+      {iconElements(name, tier, resolvedMode, color, solidTwin, modifier, modifierBackdrop)}
+    </Svg>
+  );
+});

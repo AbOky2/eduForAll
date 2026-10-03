@@ -6,14 +6,23 @@ build.
 
 ## État
 
-La page est complète : éditeur, adresse, contact, RGPD. Elle est publiée sur
-`https://aboky2.github.io/eduForAll/`.
+Le texte est complet : éditeur, adresse, contact, RGPD. L'URL publique
+renseignée dans les deux consoles est `https://aboky2.github.io/eduForAll/`.
 
-Toute modification de `index.html` doit être repoussée sur `gh-pages` :
+`gh-pages` ne se met pas à jour tout seul : la page en ligne est celle du
+dernier `subtree push`, pas celle de l'arbre de travail. Toute modification de
+`index.html` doit donc être commitée, repoussée, puis vérifiée — la date
+affichée en bas de la page en ligne est le témoin le plus simple :
 
 ```bash
 git subtree push --prefix store/shared/privacy-policy origin gh-pages
+git fetch origin gh-pages
+# doit ne rien afficher :
+git diff origin/gh-pages:index.html store/shared/privacy-policy/index.html
+curl -s https://aboky2.github.io/eduForAll/ | grep 'Dernière mise à jour'
 ```
+
+GitHub Pages met jusqu'à une minute à servir la nouvelle version.
 
 ## Publier avec GitHub Pages (gratuit)
 
