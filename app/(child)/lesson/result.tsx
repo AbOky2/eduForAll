@@ -1,5 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
 
 import { getDatabase } from '@/database/connection/database';
 import { ACHIEVEMENT_IDS, type AchievementId } from '@/features/achievements/domain/achievements';
@@ -7,21 +9,22 @@ import { AchievementBadge } from '@/features/achievements/presentation/achieveme
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import { EcolnaAvatar } from '@/design-system/avatars';
-import { EcolnaPill } from '@/design-system/components/ecolna-pill';
+import { Confetti } from '@/design-system/components/confetti';
 import { StarRow } from '@/design-system/components/star-row';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { SunBurst } from '@/design-system/illustrations/backdrops';
 import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, spacing } from '@/design-system/tokens';
+import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
 
 /**
- * La réussite (mockup S16, direction v3). L'enfant, en joie, au cœur d'un
- * soleil ; ses étoiles qui éclosent ; les badges qu'il vient de gagner ; et
- * tout de suite la suite — un enfant qui vient de réussir veut enchaîner.
- * En paysage, la fête à gauche, les mots et les boutons à droite.
+ * La réussite (direction v4) : la nuit du Sahel, le seul écran sombre de
+ * l'enfant. Son personnage en joie, cerclé de la vannerie de la carte du
+ * jour ; ses étoiles qui éclosent ; une pluie de confettis, une fois ; les
+ * badges qu'il vient de gagner ; et tout de suite la suite — un enfant qui
+ * vient de réussir veut enchaîner. En paysage, la fête à gauche, les mots et
+ * les boutons à droite.
  */
 export default function LessonResultScreen() {
   const router = useRouter();
@@ -57,50 +60,50 @@ export default function LessonResultScreen() {
 
   // Le héros se règle aussi sur la hauteur : un téléphone couché n'a que 400 dp.
   const avatar = Math.min(
-    scaled(isTablet ? 168 : 132, scale),
-    Math.round(height * (sideBySide ? 0.32 : 0.2)),
+    scaled(isTablet ? 176 : 136, scale),
+    Math.round(height * (sideBySide ? 0.34 : 0.21)),
   );
-  const burst = Math.round(avatar * 2.1);
-  const check = scaled(isTablet ? 44 : 36, scale);
+  // Deux cercles autour de l'enfant : la vannerie de la carte du jour.
+  const halo = Math.round(avatar * 1.62);
+  const check = scaled(isTablet ? 48 : 40, scale);
 
   const celebration = (
-    <View style={[styles.celebration, { gap: scaled(spacing.md, scale) }]}>
-      <StarRow earned={stars} size={scaled(isTablet ? 56 : 44, scale)} celebrate />
-      <View
-        style={{
-          width: burst,
-          height: burst * 0.78,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <View style={[styles.burst, { width: burst, height: burst, top: -burst * 0.11 }]}>
-          <SunBurst size={burst} />
+    <View style={[styles.celebration, { gap: scaled(spacing.lg, scale) }]}>
+      <View style={[styles.center, { width: halo, height: halo }]}>
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          <Svg width={halo} height={halo}>
+            <Circle cx={halo / 2} cy={halo / 2} r={halo / 2 - 1} stroke={colors.onColorTrack} strokeWidth={1.5} fill="none" opacity={0.45} />
+            <Circle cx={halo / 2} cy={halo / 2} r={avatar / 2 + (halo - avatar) / 4} stroke={colors.onColorTrack} strokeWidth={1.5} fill="none" />
+          </Svg>
         </View>
         <View>
-          <View style={[styles.avatarRing, { borderRadius: avatar }]}>
-            <EcolnaAvatar
-              avatarId={profile?.avatarId ?? 'avatar-1'}
-              size={avatar}
-              expression="joy"
-            />
-          </View>
-          {/* La coche du palier M en mode couleur EST un disque vert : un liseré
-              blanc la détache de l'avatar, sans second disque autour. */}
-          <View style={[styles.check, { borderRadius: check }]}>
-            <EcolnaIcon name="check" size={check} mode="color" />
+          <EcolnaAvatar avatarId={profile?.avatarId ?? 'avatar-1'} size={avatar} expression="joy" />
+          {/* La pastille de réussite, détachée de l'avatar par la nuit. */}
+          <View
+            style={[
+              styles.check,
+              { width: check, height: check, borderRadius: check / 2, borderWidth: scaled(4, scale) },
+            ]}
+          >
+            <EcolnaIcon name="check" size={Math.round(check * 0.5)} color={colors.white} />
           </View>
         </View>
       </View>
+      <StarRow
+        earned={stars}
+        size={scaled(isTablet ? 48 : 40, scale)}
+        celebrate
+        inactiveColor={colors.onColorTrack}
+      />
     </View>
   );
 
   const words = (
     <View style={[styles.words, { gap: scaled(spacing.md, scale) }]}>
-      <EcolnaText variant="displayHero" align="center">
+      <EcolnaText variant="displayHero" align="center" color={colors.white}>
         {fr.result.title}
       </EcolnaText>
-      <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
+      <EcolnaText variant="bodyLg" color={colors.onNightSecondary} align="center">
         {stars === 3
           ? fr.result.perfect
           : stars === 2
@@ -109,16 +112,15 @@ export default function LessonResultScreen() {
       </EcolnaText>
 
       {newBadges.length > 0 ? (
-        <View style={[styles.badges, { gap: scaled(spacing.sm, scale) }]}>
-          <EcolnaPill
-            tone="sun"
-            variant="buttonSm"
-            label={fr.achievements.unlocked}
-            style={styles.center}
-          />
+        // Le badge gagné, sur une feuille blanche : il se lit comme dans la collection.
+        <View style={[styles.badges, { gap: scaled(spacing.sm, scale), padding: scaled(spacing.md, scale) }]}>
+          <View style={styles.badgeTitle}>
+            <EcolnaIcon name="sparkle" size={scaled(20, scale)} mode="color" />
+            <EcolnaText variant="labelLg">{fr.achievements.unlocked}</EcolnaText>
+          </View>
           <View style={styles.badgeRow}>
             {newBadges.map((id) => (
-              <AchievementBadge key={id} id={id} earned size={scaled(80, scale)} />
+              <AchievementBadge key={id} id={id} earned size={scaled(72, scale)} />
             ))}
           </View>
         </View>
@@ -128,7 +130,7 @@ export default function LessonResultScreen() {
         {nextLessonId ? (
           <EcolnaButton
             label={fr.result.nextLesson}
-            icon={<EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onSun} />}
+            icon={<EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onReward} filled />}
             onPress={() => router.replace(`/(child)/lesson/${nextLessonId}`)}
           />
         ) : (
@@ -141,7 +143,8 @@ export default function LessonResultScreen() {
           <EcolnaButton
             label={fr.common.replay}
             variant="secondary"
-            icon={<EcolnaIcon name="replay" size={scaled(20, scale)} color={colors.secondary} />}
+            onDark
+            icon={<EcolnaIcon name="replay" size={scaled(20, scale)} color={colors.white} />}
             onPress={() => router.replace(`/(child)/lesson/${lessonId}`)}
           />
         ) : null}
@@ -149,6 +152,7 @@ export default function LessonResultScreen() {
           <EcolnaButton
             label={fr.result.backHome}
             variant="ghost"
+            onDark
             onPress={() => router.replace('/(child)/(tabs)')}
           />
         ) : null}
@@ -157,7 +161,8 @@ export default function LessonResultScreen() {
   );
 
   return (
-    <EcolnaScreen background="default" fullWidth>
+    <EcolnaScreen background="night" fullWidth>
+      <StatusBar style="light" />
       {/* Centré quand tout tient, défilable sinon (badges, petite fenêtre). */}
       <ScrollView
         contentContainerStyle={[
@@ -174,6 +179,7 @@ export default function LessonResultScreen() {
         {celebration}
         {words}
       </ScrollView>
+      <Confetti width={width} height={height} />
     </EcolnaScreen>
   );
 }
@@ -182,18 +188,19 @@ const styles = StyleSheet.create({
   container: { flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
   split: { flexDirection: 'row', justifyContent: 'space-evenly' },
   celebration: { alignItems: 'center' },
-  burst: { position: 'absolute' },
-  avatarRing: { borderWidth: 6, borderColor: colors.card, backgroundColor: colors.card },
+  center: { alignItems: 'center', justifyContent: 'center' },
   check: {
     position: 'absolute',
-    right: -2,
-    bottom: 2,
-    backgroundColor: colors.card,
-    padding: 3,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.success,
+    borderColor: colors.night,
   },
   words: { width: '100%', maxWidth: 520, alignItems: 'stretch' },
-  badges: { alignItems: 'center' },
-  center: { alignSelf: 'center' },
+  badges: { alignItems: 'center', backgroundColor: colors.white, borderRadius: radius.xl },
+  badgeTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   badgeRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12 },
-  buttons: { marginTop: spacing.xs },
+  buttons: { marginTop: spacing.sm },
 });

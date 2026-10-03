@@ -117,7 +117,7 @@ export function SpatialPositionExercise({
   const [picked, setPicked] = useState<string | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
-  const stage = scaled(isTablet ? 136 : 112, scale);
+  const stage = scaled(isTablet ? 168 : 112, scale);
 
   useEffect(() => {
     if (step.audioId) {

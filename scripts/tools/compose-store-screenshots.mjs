@@ -31,8 +31,8 @@ const flag = (nom) => {
 
 function police() {
   const fichiers = [
-    ['Quicksand', 700, 'assets/fonts/Quicksand-Bold.ttf'],
-    ['Quicksand', 600, 'assets/fonts/Quicksand-SemiBold.ttf'],
+    ['Ecolna Sans', 700, 'assets/fonts/EcolnaSans-Bold.ttf'],
+    ['Ecolna Sans', 600, 'assets/fonts/EcolnaSans-SemiBold.ttf'],
   ];
   return fichiers
     .filter(([, , f]) => existsSync(join(ROOT, f)))
@@ -69,12 +69,12 @@ for (const [format, spec] of Object.entries(PLAN.formats)) {
     const hauteurLegende = Math.round(spec.h * (tablette ? 0.17 : 0.14));
     const page = join(travail, 'page.html');
     writeFileSync(page, `<meta charset="utf-8"><style>${css}
-      html,body{margin:0;padding:0;width:${spec.w}px;height:${spec.h}px;overflow:hidden;background:#1f5473}
+      html,body{margin:0;padding:0;width:${spec.w}px;height:${spec.h}px;overflow:hidden;background:#1c2554}
       .legende{height:${hauteurLegende}px;display:flex;align-items:center;justify-content:center;
         padding:0 ${Math.round(spec.w * 0.08)}px;box-sizing:border-box}
-      .legende p{margin:0;font-family:Quicksand,system-ui,sans-serif;font-weight:700;
+      .legende p{margin:0;font-family:'Ecolna Sans',system-ui,sans-serif;font-weight:700;
         font-size:${Math.round(spec.w * (tablette ? 0.032 : 0.052))}px;line-height:1.25;
-        color:#fbf3e4;text-align:center;text-wrap:balance}
+        color:#ffffff;text-align:center;text-wrap:balance}
       .cadre{height:${spec.h - hauteurLegende}px;display:flex;align-items:flex-start;justify-content:center;
         padding:0 ${Math.round(spec.w * 0.06)}px}
       img{max-width:100%;max-height:100%;object-fit:contain;

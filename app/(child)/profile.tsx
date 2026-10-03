@@ -12,7 +12,6 @@ import { EcolnaAvatar } from '@/design-system/avatars';
 import { AvatarGrid } from '@/design-system/components/avatar-grid';
 import { EcolnaPill } from '@/design-system/components/ecolna-pill';
 import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
-import { SunBurst } from '@/design-system/illustrations/backdrops';
 import {
   EcolnaCard,
   EcolnaIconButton,
@@ -25,19 +24,19 @@ import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
-/** Un chiffre dont l'enfant est fier, avec son pictogramme en couleur. */
-function StatTile({ icon, value, label }: { icon: IconName; value: string; label: string }) {
+/** Un chiffre dont l'enfant est fier : son pictogramme plein, la valeur, le mot. */
+function Stat({ icon, color, value, label }: { icon: IconName; color: string; value: string; label: string }) {
   const { scale } = useResponsive();
   return (
-    <EcolnaCard style={styles.stat} accessibilityLabel={`${label} : ${value}`}>
-      <EcolnaIcon name={icon} size={scaled(44, scale)} mode="color" />
+    <View style={styles.stat} accessible accessibilityLabel={`${label} : ${value}`}>
+      <EcolnaIcon name={icon} size={scaled(28, scale)} color={color} filled />
       <EcolnaText variant="headlineLg" align="center">
         {value}
       </EcolnaText>
-      <EcolnaText variant="labelSm" color={colors.textSecondary} align="center">
+      <EcolnaText variant="labelSm" color={colors.textSecondary} align="center" numberOfLines={2}>
         {label}
       </EcolnaText>
-    </EcolnaCard>
+    </View>
   );
 }
 
@@ -74,30 +73,28 @@ export default function ChildProfileScreen() {
       });
   };
 
-  const hero = scaled(isTablet ? 148 : 120, scale);
+  const hero = scaled(isTablet ? 136 : 112, scale);
   const badgeColumns = splitPanes ? 4 : isTablet ? 5 : 3;
   const gap = scaled(spacing.lg, scale);
 
   const identity = (
-    <View style={{ gap }}>
-      <EcolnaCard rounded="xl" style={[styles.identity, { gap: scaled(spacing.xs, scale) }]}>
-        <View style={[styles.burst, { width: hero * 2.2, height: hero * 2.2, top: -hero * 0.45 }]}>
-          <SunBurst size={hero * 2.2} />
-        </View>
-        <View style={[styles.avatarRing, { borderRadius: hero }]}>
-          <EcolnaAvatar avatarId={profile.avatarId} size={hero} />
-        </View>
+    <EcolnaCard rounded="xl" padded={false} style={styles.identity}>
+      <View style={[styles.who, { gap: scaled(spacing.sm, scale), padding: scaled(spacing.xl, scale) }]}>
+        <EcolnaAvatar avatarId={profile.avatarId} size={hero} popOut />
         <EcolnaText variant="displayHero" align="center">
           {profile.firstName}
         </EcolnaText>
         <EcolnaPill tone="petrol" label={fr.learn.levelTitle(profile.level)} style={styles.center} />
-      </EcolnaCard>
-      <View style={[styles.statRow, { gap: scaled(spacing.sm, scale) }]}>
-        <StatTile icon="book" value={String(stats?.completedLessons ?? 0)} label={fr.childProfile.lessonsDone} />
-        <StatTile icon="star" value={String(stats?.totalStars ?? 0)} label={fr.childProfile.starsEarned} />
-        <StatTile icon="sun" value={String(stats?.bestStreakDays ?? 0)} label={fr.childProfile.bestStreak} />
       </View>
-    </View>
+      {/* Trois chiffres sur une même bande, séparés d'un filet. */}
+      <View style={[styles.statStrip, { paddingVertical: scaled(spacing.md, scale) }]}>
+        <Stat icon="book" color={colors.brand} value={String(stats?.completedLessons ?? 0)} label={fr.childProfile.lessonsDone} />
+        <View style={styles.rule} />
+        <Stat icon="star" color={colors.reward} value={String(stats?.totalStars ?? 0)} label={fr.childProfile.starsEarned} />
+        <View style={styles.rule} />
+        <Stat icon="flame" color={colors.flame} value={String(stats?.bestStreakDays ?? 0)} label={fr.childProfile.bestStreak} />
+      </View>
+    </EcolnaCard>
   );
 
   const collection = (
@@ -107,6 +104,7 @@ export default function ChildProfileScreen() {
         <EcolnaPill
           tone="sun"
           variant="labelMd"
+          icon={<EcolnaIcon name="medal" size={scaled(16, scale)} color={colors.rewardDeep} filled />}
           label={fr.achievements.countEarned(earnedSet.size, ACHIEVEMENT_IDS.length)}
         />
       </View>
@@ -172,12 +170,12 @@ const styles = StyleSheet.create({
   leftPane: { flex: 0.9, justifyContent: 'center' },
   rightPane: { flex: 1.2 },
   scrollBottom: { paddingBottom: spacing.xxl, paddingTop: spacing.sm },
-  identity: { alignItems: 'center', overflow: 'hidden', paddingTop: spacing.xl },
-  burst: { position: 'absolute', alignSelf: 'center' },
-  avatarRing: { borderWidth: 5, borderColor: colors.card, backgroundColor: colors.card },
+  identity: { overflow: 'hidden' },
+  who: { alignItems: 'center' },
   center: { alignSelf: 'center' },
-  statRow: { flexDirection: 'row' },
-  stat: { flex: 1, alignItems: 'center', gap: 2 },
+  statStrip: { flexDirection: 'row', borderTopWidth: 1, borderTopColor: colors.border },
+  rule: { width: 1, backgroundColor: colors.border },
+  stat: { flex: 1, alignItems: 'center', gap: 2, paddingHorizontal: spacing.xs },
   sectionHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   shelf: {},
   badgeGrid: { flexDirection: 'row', flexWrap: 'wrap' },

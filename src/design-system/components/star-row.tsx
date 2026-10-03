@@ -12,6 +12,8 @@ interface StarRowProps {
   size?: number;
   /** Les étoiles gagnées éclosent l'une après l'autre (écran de réussite). */
   celebrate?: boolean;
+  /** Couleur d'une étoile à gagner (défaut : gris clair ; sur la nuit, un blanc voilé). */
+  inactiveColor?: string;
 }
 
 /** Une étoile qui éclôt : 0 → 1 en ressort, après `delay`. */
@@ -20,11 +22,13 @@ function PoppingStar({
   size,
   delay,
   animate,
+  inactiveColor,
 }: {
   earned: boolean;
   size: number;
   delay: number;
   animate: boolean;
+  inactiveColor: string;
 }) {
   const [grow] = useState(() => new Animated.Value(animate ? 0 : 1));
   useEffect(() => {
@@ -44,23 +48,25 @@ function PoppingStar({
   }, [animate, delay, grow]);
   return (
     <Animated.View style={{ transform: [{ scale: grow }] }}>
-      <EcolnaIcon
-        name={earned ? 'star' : 'star-outline'}
-        size={size}
-        mode={earned ? 'color' : 'mono'}
-        color={colors.starInactive}
-      />
+      <EcolnaIcon name="star" filled size={size} color={earned ? colors.reward : inactiveColor} />
     </Animated.View>
   );
 }
 
 /**
- * Result stars (mockup S16): earned gold with their highlight, remaining
- * outlined — never red. The middle star stands taller. On the result screen
- * the earned ones hatch one after the other (≤ 1 s in all), unless the
- * system asks for reduced motion.
+ * Les étoiles d'une leçon (v4) : pleines et plates — soleil pour les gagnées,
+ * gris clair pour celles qui restent, jamais de rouge, jamais de reflet.
+ * L'étoile du milieu est plus grande et plus haute. Sur l'écran de réussite,
+ * les gagnées éclosent l'une après l'autre (≤ 1 s en tout), sauf si le
+ * système demande moins de mouvement.
  */
-export function StarRow({ earned, total = 3, size = 44, celebrate = false }: StarRowProps) {
+export function StarRow({
+  earned,
+  total = 3,
+  size = 44,
+  celebrate = false,
+  inactiveColor = colors.starInactive,
+}: StarRowProps) {
   const reducedMotion = useReducedMotion();
   return (
     <View
@@ -75,6 +81,7 @@ export function StarRow({ earned, total = 3, size = 44, celebrate = false }: Sta
             size={Math.round(index === 1 ? size * 1.35 : size)}
             delay={250 + index * 220}
             animate={celebrate && !reducedMotion && index < earned}
+            inactiveColor={inactiveColor}
           />
         </View>
       ))}

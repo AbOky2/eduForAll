@@ -16,27 +16,28 @@ deux sont du travail du projet.
 
 ## 1. Polices de caractères — SIL Open Font License 1.1
 
-Déclarées dans `app.config.ts` (plugin `expo-font`), embarquées depuis
-`assets/fonts/` :
+Chargées depuis `assets/fonts/` (plugin `expo-font` dans `app.config.ts`, et
+`useFonts` au démarrage — aucun réseau) :
 
-| Fichier | Famille | Licence |
-|---|---|---|
-| `Quicksand-Regular.ttf`, `-Medium`, `-SemiBold`, `-Bold` | Quicksand | SIL Open Font License 1.1 |
-| `PlusJakartaSans-SemiBold.ttf` | Plus Jakarta Sans | SIL Open Font License 1.1 |
+| Fichier | Famille | Origine | Licence | Notice |
+|---|---|---|---|---|
+| `EcolnaSans-Regular.ttf`, `-Medium`, `-SemiBold`, `-Bold`, `-ExtraBold` | Ecolna Sans | Figtree, © 2022 The Figtree Project Authors — **version modifiée** (« a » à un étage figé par défaut, renommée) | SIL Open Font License 1.1 | `OFL-Figtree.txt`, `FONTLOG-EcolnaSans.txt` |
+| `Andika-Regular.ttf`, `Andika-Bold.ttf` | Andika | © 2004-2022 SIL International, noms réservés « Andika » et « SIL » — **non modifiée** | SIL Open Font License 1.1 | `OFL-Andika.txt` |
 
 L'OFL 1.1 autorise l'embarquement dans une application, y compris distribuée
-commercialement, et **exige que le texte de la licence accompagne les fichiers**
-de police.
+commercialement, et exige que le texte de la licence accompagne les fichiers :
+les deux notices sont dans `assets/fonts/`. Une version modifiée ne peut pas
+porter un nom réservé : Figtree n'en déclare aucun, et sa version modifiée est
+tout de même renommée (« Ecolna Sans ») ; Andika, qui en déclare, est
+embarquée telle quelle, sans sous-ensemble ni retouche.
 
-🔴 À FOURNIR : `assets/fonts/OFL.txt`, copié depuis la distribution amont de
-chaque police (Google Fonts livre le fichier `OFL.txt` avec les `.ttf`). Ce
-fichier porte la ligne de copyright exacte et le *Reserved Font Name* de chaque
-famille — deux chaînes qui ne doivent pas être recopiées de mémoire. Si les deux
-polices ont des notices différentes, deux fichiers :
-`assets/fonts/OFL-Quicksand.txt` et `assets/fonts/OFL-PlusJakartaSans.txt`.
+## 1 bis. Pictogrammes d'interface — licence MIT
 
-Tant que ce fichier manque, la condition d'attribution de l'OFL n'est pas
-remplie, alors que les polices sont déjà dans le bundle.
+Les tracés des pictogrammes d'interface (`src/design-system/icons/phosphor.generated.ts`)
+viennent de **Phosphor Icons** (https://phosphoricons.com), © 2023 Phosphor
+Icons, licence MIT — la notice est en tête du fichier généré
+(`scripts/icons/build-icons.mjs`). Ils sont embarqués comme données, sans
+police d'icônes ni réseau.
 
 ## 2. Voix de synthèse — deux moteurs, un locuteur
 
@@ -84,10 +85,11 @@ cette mention est le scénario de refus pour affiliation implicite.
 
 - Les **112 illustrations** du manifeste sont des pictogrammes vectoriels
   originaux, écrits dans `src/design-system/illustrations/`
-  (`object-icons.tsx`, `curriculum-icons.tsx`, `scenes.tsx`) et rendus avec
-  `react-native-svg`. Aucun jeu d'icônes tiers, aucune banque d'images, aucun
-  élément importé : la planche de contact `docs/pictogrammes.html` montre
-  exactement ce que l'app dessine.
+  (`object-icons.tsx`, `curriculum-icons.tsx`, `school-art.tsx`) et rendus
+  avec `react-native-svg`. Aucune banque d'images, aucun élément importé : la
+  planche de contact `docs/pictogrammes.html` montre exactement ce que l'app
+  dessine. (Les pictogrammes d'**interface** — boutons, onglets, médailles —
+  sont ceux de Phosphor, § 1 bis.)
 - L'**icône** et les visuels de store sont rendus depuis leurs sources
   vectorielles du dépôt (`assets/icons/*.svg`, `npm run brand:assets`).
 - Le **nom ECOLNA** et le logo du livre ouvert sont la marque du projet.
@@ -118,8 +120,9 @@ l'Enseignement Primaire, Ministère de l'Éducation Nationale —
 Centre National des Curricula, N'Djaména, septembre 2004.
 Publication indépendante, non validée par le ministère.
 
-Polices Quicksand et Plus Jakarta Sans — SIL Open Font
-License 1.1.
+Polices Ecolna Sans (d'après Figtree, © The Figtree Project
+Authors) et Andika (© SIL International) — SIL Open Font
+License 1.1. Pictogrammes Phosphor Icons — licence MIT.
 
 Voix de synthèse Kokoro (Apache-2.0) et Piper (MIT), locuteur
 siwis. 🔴 attribution exacte du jeu de données SIWIS à compléter.

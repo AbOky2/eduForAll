@@ -3,16 +3,16 @@
        superposer un bouton de lecture au centre : tout le contenu tient dans
        les 80 % centraux. La police est fournie au rendu
        (scripts/tools/render-brand-assets.mjs), pas embarquée ici. -->
-  <rect width="1024" height="500" fill="#1f5473"/>
+  <rect width="1024" height="500" fill="#1c2554"/>
   <g transform="translate(286 250) scale(0.26) translate(-512 -512)">
-    <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#fbf3e4"/>
-    <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#e0b184"/>
-    <path d="M512 370 L512 816" stroke="#1f5473" stroke-width="40" stroke-linecap="round"/>
+    <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#ffffff"/>
+    <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#ffb81c"/>
+    <path d="M512 370 L512 816" stroke="#1c2554" stroke-width="40" stroke-linecap="round"/>
   </g>
-  <text x="400" y="232" font-family="Quicksand" font-size="82" font-weight="700"
-        fill="#fbf3e4" letter-spacing="8">ECOLNA</text>
-  <text x="404" y="294" font-family="Quicksand" font-size="30" font-weight="600"
-        fill="#e0b184">Le programme officiel du CP.</text>
-  <text x="404" y="336" font-family="Quicksand" font-size="30" font-weight="600"
-        fill="#e0b184">Entièrement hors connexion.</text>
+  <text x="400" y="232" font-family="Ecolna Sans" font-size="82" font-weight="700"
+        fill="#ffffff" letter-spacing="4">ECOLNA</text>
+  <text x="404" y="294" font-family="Ecolna Sans" font-size="30" font-weight="600"
+        fill="#ffd27a">Le programme officiel du CP.</text>
+  <text x="404" y="336" font-family="Ecolna Sans" font-size="30" font-weight="600"
+        fill="#ffd27a">Entièrement hors connexion.</text>
 </svg>

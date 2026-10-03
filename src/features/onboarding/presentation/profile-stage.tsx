@@ -5,12 +5,12 @@ import type { LevelId } from '@/content/schemas/curriculum-schema';
 import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { AvatarSilhouette, EcolnaAvatar } from '@/design-system/avatars';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { ProfileStageScene } from '@/design-system/illustrations/scenes';
+import { Orbit } from '@/design-system/illustrations/orbit';
 import { EcolnaText } from '@/design-system/primitives';
-import { colors, fontFamilies, illustration, radius, spacing } from '@/design-system/tokens';
+import { colors, fontFamilies, illustration, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
-const { wood, slate, chalk, chalkDim } = illustration.school;
+const { slate, chalk, chalkDim } = illustration.school;
 
 interface ProfileStageProps {
   width: number;
@@ -65,7 +65,7 @@ function WelcomeStars({ size }: { size: number }) {
               },
             ]}
           >
-            <EcolnaIcon name="star" size={index % 2 === 0 ? 40 : 30} mode="color" />
+            <EcolnaIcon name="star" size={index % 2 === 0 ? 40 : 30} color={colors.reward} filled />
           </Animated.View>
         );
       })}
@@ -96,7 +96,7 @@ function Character({
     Animated.spring(grow, { toValue: 1, useNativeDriver: true, speed: 16, bounciness: 12 }).start();
   }, [avatarId, grow, reducedMotion]);
   return (
-    <Animated.View style={[styles.ring, { borderRadius: size, transform: [{ scale: grow }] }]}>
+    <Animated.View style={{ transform: [{ scale: grow }] }}>
       {avatarId ? (
         <EcolnaAvatar avatarId={avatarId} size={size} expression={joy ? 'joy' : 'calm'} />
       ) : (
@@ -107,12 +107,12 @@ function Character({
 }
 
 /**
- * La scène de la création de profil (brief v2 § 12.2) — elle ne se démonte
- * jamais d'une étape à l'autre. Un paysage calme ; le personnage choisi,
- * grand ; sous lui, comme un écolier montre son ardoise, le prénom qui s'écrit
- * à la craie, première lettre en or plein (l'or clair se confondrait avec la
- * craie) ; la classe qui se pose dans le coin.
- * Lue comme un tout : « Ta carte : Amina, CP1 ».
+ * La scène de la création de profil (v4) — elle ne se démonte jamais d'une
+ * étape à l'autre. Un panneau bleu très clair cerclé de la vannerie ; le
+ * personnage choisi, grand, au centre ; sous lui, comme un écolier montre
+ * son ardoise, le prénom qui s'écrit à la craie, première lettre au soleil ;
+ * la classe qui se pose dans le coin. Lue comme un tout : « Ta carte :
+ * Amina, CP1 ».
  */
 export function ProfileStage({
   width,
@@ -127,72 +127,76 @@ export function ProfileStage({
   const name = firstName.trim();
   const slateWidth = Math.min(width - 32, Math.max(220, characterSize * 1.35));
   const nameSize = Math.round(Math.min(56, Math.max(30, slateWidth / 7)));
+  const orbit = Math.round(Math.min(width - 24, characterSize * 1.7));
   return (
     <View
-      style={{ width, height }}
+      style={[styles.stage, { width, height }]}
       accessible
       accessibilityRole="summary"
       accessibilityLabel={fr.profile.stageLabel(name, level ?? '')}
     >
-      <View style={StyleSheet.absoluteFill}>
-        <ProfileStageScene width={width} height={height} />
-      </View>
       <View style={[styles.column, { gap: spacing.md }]}>
-        <View>
-          <Character key={avatarId ?? 'none'} avatarId={avatarId} size={characterSize} joy={joy} />
-          {celebrate ? <WelcomeStars size={characterSize} /> : null}
+        <View style={styles.center}>
+          <Orbit
+            size={orbit}
+            ringColor={colors.brandTintStrong}
+            inner={0.78}
+            center={
+              <View>
+                <Character key={avatarId ?? 'none'} avatarId={avatarId} size={characterSize} joy={joy} />
+                {celebrate ? <WelcomeStars size={characterSize} /> : null}
+              </View>
+            }
+          />
         </View>
 
-        {/* L'ardoise : cadre de bois posé sur sa tranche, face d'ardoise. */}
-        <View style={{ width: slateWidth, paddingBottom: 5 }}>
-          <View style={[styles.lip, { borderRadius: radius.lg + 2 }]} />
-          <View style={[styles.frame, { borderRadius: radius.lg + 2 }]}>
-            <View style={[styles.face, { borderRadius: radius.md, minHeight: nameSize * 2.1 }]}>
-              {name ? (
-                <>
-                  <EcolnaText variant="labelMd" color={chalk} align="center">
-                    {fr.profile.slateIntro}
-                  </EcolnaText>
+        {/* L'ardoise : un panneau d'ardoise mat, le prénom à la craie. */}
+        <View style={{ width: slateWidth, marginTop: -Math.round((orbit - characterSize) / 2) + spacing.sm }}>
+          <View style={[styles.face, shadows.raised, { borderRadius: radius.xl, minHeight: nameSize * 2.1 }]}>
+            {name ? (
+              <>
+                <EcolnaText variant="labelMd" color={chalkDim} align="center">
+                  {fr.profile.slateIntro}
+                </EcolnaText>
+                <EcolnaText
+                  align="center"
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.5}
+                  style={{
+                    fontFamily: fontFamilies.bold,
+                    fontSize: nameSize,
+                    lineHeight: Math.round(nameSize * 1.2),
+                    color: chalk,
+                  }}
+                >
                   <EcolnaText
-                    align="center"
-                    numberOfLines={1}
-                    adjustsFontSizeToFit
-                    minimumFontScale={0.5}
                     style={{
                       fontFamily: fontFamilies.bold,
                       fontSize: nameSize,
-                      lineHeight: Math.round(nameSize * 1.2),
-                      color: chalk,
+                      color: colors.reward,
                     }}
                   >
-                    <EcolnaText
-                      style={{
-                        fontFamily: fontFamilies.bold,
-                        fontSize: nameSize,
-                        color: illustration.metal.gold.base,
-                      }}
-                    >
-                      {name.charAt(0)}
-                    </EcolnaText>
-                    {name.slice(1)}
+                    {name.charAt(0)}
                   </EcolnaText>
-                </>
-              ) : (
-                // Ardoise vide : une ligne de base à la craie et un petit crayon.
-                <View style={styles.emptyRow}>
-                  <View style={styles.dotted}>
-                    {Array.from({ length: 9 }, (_, index) => (
-                      <View key={index} style={styles.dash} />
-                    ))}
-                  </View>
-                  <EcolnaIcon name="pencil" size={22} color={chalkDim} />
+                  {name.slice(1)}
+                </EcolnaText>
+              </>
+            ) : (
+              // Ardoise vide : une ligne de base à la craie et un petit crayon.
+              <View style={styles.emptyRow}>
+                <View style={styles.dotted}>
+                  {Array.from({ length: 9 }, (_, index) => (
+                    <View key={index} style={styles.dash} />
+                  ))}
                 </View>
-              )}
-            </View>
+                <EcolnaIcon name="pencil" size={22} color={chalkDim} />
+              </View>
+            )}
           </View>
           {level ? (
             <View style={styles.levelPill}>
-              <EcolnaText variant="buttonSm" color={colors.onSun}>
+              <EcolnaText variant="buttonSm" color={colors.onReward}>
                 {level}
               </EcolnaText>
             </View>
@@ -204,12 +208,11 @@ export function ProfileStage({
 }
 
 const styles = StyleSheet.create({
+  stage: { backgroundColor: colors.brandTint, overflow: 'hidden' },
   burst: { alignItems: 'center', justifyContent: 'center' },
   star: { position: 'absolute' },
+  center: { alignItems: 'center' },
   column: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.md },
-  ring: { borderWidth: 5, borderColor: colors.card, backgroundColor: colors.card },
-  lip: { position: 'absolute', left: 0, right: 0, bottom: 0, top: 5, backgroundColor: wood.shade },
-  frame: { backgroundColor: wood.base, padding: 9 },
   face: {
     backgroundColor: slate.base,
     alignItems: 'center',
@@ -224,10 +227,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -12,
     right: -10,
-    backgroundColor: colors.sun,
+    backgroundColor: colors.reward,
     borderRadius: radius.pill,
     borderWidth: 3,
-    borderColor: colors.card,
+    borderColor: colors.brandTint,
     paddingHorizontal: spacing.sm,
     paddingVertical: 2,
   },

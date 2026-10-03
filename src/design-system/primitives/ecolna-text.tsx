@@ -13,8 +13,8 @@ interface EcolnaTextProps extends TextProps {
 }
 
 /**
- * The only way text is rendered in ECOLNA. Enforces the Stitch type scale
- * (Quicksand / Plus Jakarta Sans), scales it with the window size — a tablet
+ * The only way text is rendered in ECOLNA. Enforces the v4 type scale
+ * (Ecolna Sans, Andika for taught glyphs), scales it with the window size — a tablet
  * held at arm's length needs bigger letters, not the same letters spread
  * wider — and supports OS font scaling within child-safe bounds.
  */

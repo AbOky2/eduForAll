@@ -275,6 +275,10 @@ export const fr = {
     masteredSkills: 'Notions maîtrisées',
     minutes: (count: number) => `${count} min`,
     progressAnalysis: 'Analyse de progression',
+    bySubject: 'Par discipline',
+    subjectLessons: (done: number, total: number) =>
+      `${done} leçon${done > 1 ? 's' : ''} sur ${total}`,
+    percent: (value: number) => `${value}\u00a0%`,
     recommendation: 'RECOMMANDATION',
     toReview: 'Notions à revoir',
     nothingToReview: 'Aucune notion en difficulté cette semaine.',

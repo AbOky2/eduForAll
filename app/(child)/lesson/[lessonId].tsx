@@ -27,8 +27,8 @@ import {
   EcolnaButton,
   EcolnaCard,
   EcolnaIconButton,
-  EcolnaProgressBar,
   EcolnaScreen,
+  EcolnaSegmentedProgress,
   EcolnaText,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
@@ -197,7 +197,6 @@ function SessionBody({
 
   const step = state.phase === 'completed' ? null : currentStep(state);
   const renderer = step ? rendererFor(step) : null;
-  const progress = state.stepIndex / lesson.steps.length;
 
   return (
     <EcolnaScreen background="exercise" fullWidth>
@@ -209,10 +208,11 @@ function SessionBody({
           onPress={() => setQuitVisible(true)}
         />
         <View style={styles.progressWrap}>
-          <EcolnaProgressBar
-            progress={progress}
-            fill={subject ? subjectColors[subject].deep : undefined}
-            height={isTablet ? 16 : 14}
+          <EcolnaSegmentedProgress
+            total={lesson.steps.length}
+            done={state.phase === 'completed' ? lesson.steps.length : state.stepIndex}
+            fill={subject ? subjectColors[subject].solid : colors.brand}
+            height={isTablet ? 12 : 10}
             accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
           />
         </View>
@@ -237,8 +237,8 @@ function SessionBody({
           ]}
         >
           <EcolnaAudioButton
-            variant="bordered"
-            size={scaled(isTablet ? 48 : 44, scale)}
+            variant="sky"
+            size={scaled(isTablet ? 52 : 46, scale)}
             accessibilityLabel={fr.lesson.replayInstruction}
             playing={playingAudioId === step.instruction.audioId}
             onPress={() => playAudio(step.instruction.audioId)}
@@ -370,7 +370,7 @@ function SessionBody({
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   progressWrap: { flex: 1 },
-  instruction: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.xs },
+  instruction: { flexDirection: 'row', alignItems: 'center', paddingTop: spacing.sm, paddingBottom: spacing.xs },
   instructionText: { flex: 1 },
   body: { flex: 1, width: '100%', alignSelf: 'center' },
   bodyContent: { flexGrow: 1, paddingTop: spacing.sm },

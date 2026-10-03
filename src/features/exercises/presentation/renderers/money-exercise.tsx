@@ -104,7 +104,8 @@ export function MoneyExercise({
       {step.options.map((option) => (
         <EcolnaAnswerCard
           key={option}
-          label={`${option} F`}
+          // Espace insécable : « 10 F » ne se coupe jamais en deux lignes.
+          label={`${option}\u00a0F`}
           glyphVariant={isTablet ? 'displayGlyphSmall' : 'headlineLg'}
           state={
             !interactive && picked !== option
@@ -124,7 +125,7 @@ export function MoneyExercise({
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.2} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({

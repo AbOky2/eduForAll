@@ -311,7 +311,7 @@ export default function CreateProfileScreen() {
           </View>
         </NudgeRing>
         <View style={styles.adultRow}>
-          <EcolnaIcon name="shield" size={20} color={colors.secondary} />
+          <EcolnaIcon name="shield" size={20} color={colors.brand} />
           <EcolnaText variant="bodySm" color={colors.textSecondary} style={styles.flex}>
             {fr.profile.privacyNote}
           </EcolnaText>
@@ -376,7 +376,7 @@ export default function CreateProfileScreen() {
             </EcolnaText>
             {body}
             {help ? (
-              <EcolnaText variant="headlineSm" color={colors.onTertiaryContainer} align="center">
+              <EcolnaText variant="headlineSm" color={colors.brandInk} align="center">
                 {help}
               </EcolnaText>
             ) : null}
@@ -452,8 +452,8 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     backgroundColor: colors.card,
     borderRadius: radius.lg,
-    borderWidth: 3,
-    borderColor: colors.primaryContainer,
+    borderWidth: 2,
+    borderColor: colors.borderStrong,
     paddingHorizontal: spacing.lg,
   },
   levelRow: { flexDirection: 'row', justifyContent: 'center' },

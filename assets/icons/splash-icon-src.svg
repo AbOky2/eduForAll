@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <rect x="112" y="112" width="800" height="672" rx="176" fill="#1f5473"/>
+  <!-- Le symbole seul, dans les deux tiers centraux : Android 12+ ne garde
+       qu'un cercle autour du centre (brief v2 § 11.2). -->
+  <rect x="112" y="112" width="800" height="672" rx="176" fill="#2f5bdb"/>
   <g transform="translate(512 448) scale(0.70) translate(-512 -512)">
-  <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#fbf3e4"/>
-  <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#e0b184"/>
-  <path d="M512 370 L512 816" stroke="#1f5473" stroke-width="40" stroke-linecap="round"/>
+  <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#ffffff"/>
+  <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#ffb81c"/>
+  <path d="M512 370 L512 816" stroke="#2f5bdb" stroke-width="40" stroke-linecap="round"/>
   </g>
-  <text x="512" y="902" font-family="Quicksand" font-size="112" font-weight="700"
-        fill="#1f3b4d" text-anchor="middle" letter-spacing="16">ECOLNA</text>
 </svg>

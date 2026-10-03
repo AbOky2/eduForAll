@@ -72,9 +72,9 @@ export function ImageChoiceExercise({
                 onSubmit({ kind: 'choice', choiceId: choice.id });
               }}
               style={styles.cell}
-              contentStyle={{ minHeight: metrics.objectSize * 1.5 }}
+              contentStyle={{ minHeight: metrics.objectSize * 1.7 }}
             >
-              <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.15)} />
+              <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.35)} />
             </EcolnaAnswerCard>
           ))}
           {/* Une rangée incomplète garde des cases de même largeur. */}
@@ -86,7 +86,8 @@ export function ImageChoiceExercise({
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
+  // L'image est la réponse : elle prend la place, l'écoute se fait plus étroite.
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.62} />;
 }
 
 const styles = StyleSheet.create({

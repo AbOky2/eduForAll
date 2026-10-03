@@ -19,7 +19,7 @@ import { PATTERN_LABELS, strokesForPattern } from './graphism-paths';
 
 type GraphismStep = Extract<ExerciseStep, { type: 'trace_graphism' }>;
 
-const { paper, ruleBlue, ruleRose } = illustration.school;
+const { ruleBlue, ruleRose } = illustration.school;
 
 /** Same generous tolerance as letter tracing — little fingers, never punished. */
 const TOLERANCE = 44;
@@ -27,7 +27,7 @@ const TOLERANCE = 44;
 /**
  * Pre-writing graphism (trace_graphism) — the phase the programme places
  * before any letter (p. 26). The board is a page of the « cahier à double
- * lignes » the child uses in class — cream paper, a blue head line, a rose
+ * lignes » the child uses in class — a white page, a blue head line, a rose
  * base line — and the pattern runs across the row, left to right. What the
  * child has traced stays written in ink.
  */
@@ -118,7 +118,7 @@ export function GraphismExercise({
         rounded="xl"
         padded={false}
         style={[styles.board, { maxHeight: scaled(isTablet ? 300 : 260, scale) }]}
-        backgroundColor={paper.base}
+        backgroundColor={colors.white}
       >
         <GestureDetector gesture={pan}>
           <View

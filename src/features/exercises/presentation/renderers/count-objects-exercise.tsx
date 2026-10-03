@@ -9,7 +9,7 @@ import {
   useExerciseMetrics,
 } from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
-import { EmptyQuantityScene } from '@/design-system/illustrations/scenes';
+import { EmptyQuantityScene } from '@/design-system/illustrations/school-art';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { spacing, subjectColors } from '@/design-system/tokens';
 
@@ -31,7 +31,9 @@ export function CountObjectsExercise({
   const [pressed, setPressed] = useState<number | null>(null);
   const { isTablet, scale } = useResponsive();
   const metrics = useExerciseMetrics();
-  const objectSize = scaled(isTablet ? 76 : 56, scale);
+  // Peu d'objets : plus grands, pour qu'un seul ne se perde pas dans la scène.
+  const boost = step.count <= 2 ? 1.6 : step.count <= 4 ? 1.3 : 1;
+  const objectSize = Math.round(scaled(isTablet ? 76 : 56, scale) * boost);
 
   const prompt = (
     <EcolnaCard

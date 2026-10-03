@@ -58,6 +58,12 @@ const ICONS = {
   crown: 'crown',
   flag: 'flag',
   hand: 'hand-waving',
+  footprints: 'footprints',
+  path: 'path',
+  'seal-check': 'seal-check',
+  'calendar-check': 'calendar-check',
+  'flag-banner': 'flag-banner',
+  confetti: 'confetti',
 };
 
 const root = resolve(process.argv[2] ?? './package');

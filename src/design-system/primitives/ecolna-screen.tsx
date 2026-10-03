@@ -5,13 +5,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '../tokens';
 import { useResponsive } from '../responsive';
 
-type ScreenBackground = 'default' | 'exercise' | 'plain' | 'plain-card';
+type ScreenBackground = 'default' | 'exercise' | 'night' | 'plain' | 'plain-card';
 
 interface EcolnaScreenProps {
   children: ReactNode;
   /**
    * `default`  — la toile claire des écrans de navigation
    * `exercise` — la page blanche d'un exercice : la lettre y est seule
+   * `night`    — la nuit du Sahel : la célébration
    * `plain`    — la toile de l'espace parent ; `plain-card` : alias
    */
   background?: ScreenBackground;
@@ -39,7 +40,12 @@ export function EcolnaScreen({
 }: EcolnaScreenProps) {
   const insets = useSafeAreaInsets();
   const { contentMaxWidth, screenPadding } = useResponsive();
-  const backgroundColor = background === 'exercise' ? colors.exerciseBackground : colors.background;
+  const backgroundColor =
+    background === 'exercise'
+      ? colors.exerciseBackground
+      : background === 'night'
+        ? colors.night
+        : colors.background;
 
   return (
     <View style={[styles.root, { backgroundColor, paddingTop: insets.top }]}>

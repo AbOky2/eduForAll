@@ -10,10 +10,12 @@ import {
 } from 'react-native';
 
 import { SubjectArt, type SubjectArtId } from '@/design-system/icons/subject-art';
-import { OfflineReadyScene, ReadingChildScene } from '@/design-system/illustrations/scenes';
-import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { EcolnaAvatar } from '@/design-system/avatars';
+import { EcolnaLogo } from '@/design-system/brand/ecolna-mark';
+import { Orbit, OrbitChip, OrbitTile } from '@/design-system/illustrations/orbit';
+import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
+import { colors, radius, shadows, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 // Le titre de la page 1, coupé autour du mot mis en couleur.
@@ -29,9 +31,10 @@ const SUBJECTS: { id: SubjectArtId; label: string }[] = [
 ];
 
 /**
- * Onboarding — mockups S02, S03, S04, direction v3. Trois pages qu'on fait
- * glisser ou qu'on avance au bouton : l'école qui accompagne partout, les
- * quatre disciplines du programme, et la promesse « sans connexion ». En
+ * Onboarding — direction v4. Trois pages qu'on fait glisser ou qu'on avance
+ * au bouton : l'école qui accompagne chaque enfant (les personnages de l'app
+ * en orbite), les quatre disciplines du programme, et la promesse « sans
+ * connexion » (tout est déjà dans la tablette). En
  * paysage, l'image à gauche et les mots à droite ; ailleurs, l'image au-dessus.
  * Les pages prennent la largeur RÉELLE du conteneur, pas celle de la fenêtre.
  */
@@ -102,13 +105,15 @@ export default function OnboardingScreen() {
   const titleVariant = isTablet ? 'displayHero' : 'headlineLg';
 
   const tile = Math.round((Math.min(artWidth, artHeight * 1.2) - scaled(spacing.md, scale)) / 2);
+  // Les orbites sont carrées : le plus grand carré qui tient dans la zone d'image.
+  const orbit = Math.round(Math.min(artWidth, artHeight));
+  const chip = Math.round(orbit * 0.16);
+  const friend = Math.round(orbit * 0.19);
 
   return (
     <EcolnaScreen background="default" fullWidth>
       <View style={[styles.topBar, { paddingHorizontal: screenPadding }]}>
-        <EcolnaText variant="headlineMd" color={colors.primary} style={styles.brand}>
-          {fr.common.appName}
-        </EcolnaText>
+        <EcolnaLogo size={scaled(36, scale)} />
         {page < 2 ? <EcolnaButton label={fr.common.skip} variant="ghost" onPress={finish} /> : null}
       </View>
 
@@ -124,12 +129,33 @@ export default function OnboardingScreen() {
           >
             {/* Page 1 — Ton école t'accompagne partout (S02) */}
             {pageOf(
-              <EcolnaCard rounded="xl" padded={false}>
-                <ReadingChildScene width={artWidth} height={artHeight} />
-              </EcolnaCard>,
+              // Les enfants de l'app, autour de l'un d'eux : une école pour chacun.
+              <Orbit
+                size={orbit}
+                center={<EcolnaAvatar avatarId="avatar-2" size={Math.round(orbit * 0.4)} expression="joy" />}
+                satellites={[
+                  { node: <EcolnaAvatar avatarId="avatar-1" size={friend} />, size: friend, angle: -150, ring: 1 },
+                  { node: <EcolnaAvatar avatarId="avatar-9" size={friend} expression="joy" />, size: friend, angle: -38, ring: 1 },
+                  { node: <EcolnaAvatar avatarId="avatar-6" size={friend} expression="joy" />, size: friend, angle: 25, ring: 1 },
+                  { node: <EcolnaAvatar avatarId="avatar-11" size={friend} />, size: friend, angle: 150, ring: 1 },
+                  { node: <EcolnaAvatar avatarId="avatar-8" size={friend} expression="joy" />, size: friend, angle: 98, ring: 1 },
+                  {
+                    node: <OrbitChip icon="book" color={subjectColors.reading.solid} tint={colors.white} size={chip} />,
+                    size: chip,
+                    angle: -95,
+                    ring: 0,
+                  },
+                  {
+                    node: <OrbitChip icon="star" color={colors.reward} tint={colors.white} size={chip} />,
+                    size: chip,
+                    angle: 200,
+                    ring: 0,
+                  },
+                ]}
+              />,
               <EcolnaText variant={titleVariant} align={align}>
                 {welcomeBefore}
-                <EcolnaText variant={titleVariant} color={colors.secondary}>
+                <EcolnaText variant={titleVariant} color={colors.brand}>
                   {fr.onboarding.welcomeTitleHighlight}
                 </EcolnaText>
                 {welcomeAfter}
@@ -149,16 +175,12 @@ export default function OnboardingScreen() {
                     key={subject.id}
                     style={[
                       styles.subjectTile,
-                      {
-                        width: tile,
-                        height: Math.round(tile * 0.92),
-                        backgroundColor: subjectColors[subject.id].face,
-                        borderColor: subjectColors[subject.id].edge,
-                      },
+                      shadows.card,
+                      { width: tile, height: Math.round(tile * 0.92), gap: scaled(spacing.sm, scale) },
                     ]}
                   >
-                    <SubjectArt subject={subject.id} size={Math.round(tile * 0.52)} />
-                    <EcolnaText variant="headlineSm" color={subjectColors[subject.id].ink}>
+                    <SubjectArt subject={subject.id} size={Math.round(tile * 0.46)} />
+                    <EcolnaText variant="headlineSm">
                       {subject.label}
                     </EcolnaText>
                   </View>
@@ -176,9 +198,19 @@ export default function OnboardingScreen() {
 
             {/* Page 3 — Fonctionne sans connexion (S04) */}
             {pageOf(
-              <EcolnaCard rounded="xl" padded={false}>
-                <OfflineReadyScene width={artWidth} height={artHeight} />
-              </EcolnaCard>,
+              // Tout est déjà dans la tablette : les leçons, les sons, les dessins.
+              <Orbit
+                size={orbit}
+                center={<OrbitTile icon="offline-ok" color={colors.success} size={Math.round(orbit * 0.32)} />}
+                satellites={[
+                  { node: <OrbitChip icon="book" color={subjectColors.reading.solid} tint={subjectColors.reading.tint} size={chip} />, size: chip, angle: -120, ring: 1 },
+                  { node: <OrbitChip icon="speaker" color={colors.brand} tint={colors.brandTint} size={chip} />, size: chip, angle: -30, ring: 1 },
+                  { node: <OrbitChip icon="pencil" color={subjectColors.writing.solid} tint={subjectColors.writing.tint} size={chip} />, size: chip, angle: 50, ring: 1 },
+                  { node: <OrbitChip icon="calculator" color={subjectColors.math.solid} tint={subjectColors.math.tint} size={chip} />, size: chip, angle: 140, ring: 1 },
+                  { node: <OrbitChip icon="speech" color={subjectColors.language.solid} tint={subjectColors.language.tint} size={chip} />, size: chip, angle: 215, ring: 1 },
+                  { node: <OrbitChip icon="star" color={colors.reward} tint={colors.white} size={Math.round(chip * 0.8)} />, size: Math.round(chip * 0.8), angle: 100, ring: 0 },
+                ]}
+              />,
               <>
                 <EcolnaText variant={titleVariant} align={align}>
                   {fr.onboarding.offlineTitle}
@@ -205,11 +237,8 @@ export default function OnboardingScreen() {
               style={[
                 styles.dot,
                 index === page
-                  ? { backgroundColor: colors.secondary, width: 32 }
-                  : {
-                      backgroundColor:
-                        index < page ? colors.secondaryFixedDim : colors.surfaceContainerHighest,
-                    },
+                  ? { backgroundColor: colors.brand, width: 28 }
+                  : { backgroundColor: index < page ? colors.brandTintStrong : colors.fillStrong },
               ]}
             />
           ))}
@@ -234,7 +263,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     minHeight: 64,
   },
-  brand: { letterSpacing: 2 },
   pager: { flex: 1 },
   page: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   pageSplit: { flexDirection: 'row' },
@@ -245,14 +273,12 @@ const styles = StyleSheet.create({
   subjectGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   subjectTile: {
     borderRadius: radius.xl,
-    borderWidth: 2,
-    borderBottomWidth: 6,
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.xs,
   },
   footer: { paddingTop: spacing.md, alignItems: 'center' },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: spacing.xs },
-  dot: { height: 12, width: 12, borderRadius: 6 },
+  dot: { height: 10, width: 10, borderRadius: 5 },
   cta: { maxWidth: 560, width: '100%' },
 });

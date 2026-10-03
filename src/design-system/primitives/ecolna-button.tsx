@@ -12,6 +12,9 @@ import { EcolnaText } from './ecolna-text';
  * - `secondary` surface blanche filetée : l'alternative (Rejouer, Annuler) ;
  * - `ghost`     un lien, sans surface (Retour à l'accueil) ;
  * - `danger`    actions destructives de l'espace parent, jamais côté enfant.
+ *
+ * `onDark` : sur la nuit (célébration), `secondary` devient une surface de
+ * verre au texte blanc et `ghost` un lien blanc.
  */
 type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger';
 type ButtonSize = 'lg' | 'md' | 'sm';
@@ -23,6 +26,8 @@ interface EcolnaButtonProps {
   size?: ButtonSize;
   disabled?: boolean;
   icon?: ReactNode;
+  /** Posé sur une surface sombre (la nuit de la célébration). */
+  onDark?: boolean;
   /** Icône après le libellé (« Continuer → »). */
   iconAfter?: boolean;
   accessibilityHint?: string;
@@ -56,6 +61,7 @@ export function EcolnaButton({
   size = 'lg',
   disabled = false,
   icon,
+  onDark = false,
   iconAfter = false,
   accessibilityHint,
   style,
@@ -91,14 +97,16 @@ export function EcolnaButton({
           style,
         ]}
       >
-        {content(colors.brand)}
+        {content(onDark ? colors.white : colors.brand)}
       </Pressable>
     );
   }
 
   const palette = disabled
     ? { face: colors.fill, text: colors.inkDisabled, border: undefined, shadow: undefined }
-    : VARIANTS[variant];
+    : onDark && variant === 'secondary'
+      ? { face: colors.onColorGlass, text: colors.white, border: colors.onColorTrack, shadow: undefined }
+      : VARIANTS[variant];
 
   return (
     <EcolnaGalet

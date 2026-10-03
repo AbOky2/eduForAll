@@ -6,18 +6,21 @@
  *
  * Chrome sert de moteur de rendu, et les polices de l'app lui sont fournies
  * par une feuille @font-face : la bannière et le splash s'écrivent donc en
- * Quicksand, comme l'app, et non dans une police système approchante.
+ * Ecolna Sans, comme l'app, et non dans une police système approchante.
  *
  * Usage : node scripts/tools/render-brand-assets.mjs
+ *   (CHROME_PATH=<chrome> pour un autre moteur, CHROME_NO_SANDBOX=1 en conteneur,
+ *    PLAYWRIGHT_MODULE=<paquet playwright> pour un rendu au pixel près)
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME = process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 /** Opaque, plein cadre : Apple refuse toute transparence sur l'icône d'app. */
 const CIBLES = [
@@ -31,8 +34,8 @@ const CIBLES = [
 ];
 
 const POLICES = [
-  ['Quicksand', 700, 'assets/fonts/Quicksand-Bold.ttf'],
-  ['Quicksand', 600, 'assets/fonts/Quicksand-SemiBold.ttf'],
+  ['Ecolna Sans', 700, 'assets/fonts/EcolnaSans-Bold.ttf'],
+  ['Ecolna Sans', 600, 'assets/fonts/EcolnaSans-SemiBold.ttf'],
 ];
 
 function faceCss() {
@@ -44,6 +47,30 @@ function faceCss() {
     .join('\n');
 }
 
+const css = faceCss();
+const pageHtml = (src, w, h) =>
+  `<meta charset="utf-8"><style>${css}
+     html,body{margin:0;padding:0;width:${w}px;height:${h}px;overflow:hidden}
+     svg{display:block;width:${w}px;height:${h}px}</style>${readFileSync(join(ROOT, src), 'utf8')}`;
+
+// Playwright (PLAYWRIGHT_MODULE=<chemin du paquet>) rend au pixel près ; le
+// mode --screenshot de Chrome laisse parfois une bande vide en bas.
+if (process.env.PLAYWRIGHT_MODULE) {
+  const { chromium } = createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE);
+  const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+  for (const { src, out, w, h, alpha } of CIBLES) {
+    const page = await browser.newPage({ viewport: { width: w, height: h } });
+    await page.setContent(pageHtml(src, w, h));
+    await page.evaluate(() => document.fonts.ready);
+    mkdirSync(dirname(join(ROOT, out)), { recursive: true });
+    await page.screenshot({ path: join(ROOT, out), omitBackground: alpha });
+    await page.close();
+    console.log(`écrit ${out}  (${w}×${h}${alpha ? '' : ', opaque'})`);
+  }
+  await browser.close();
+  process.exit(0);
+}
+
 if (!existsSync(CHROME)) {
   console.error(`❌ Chrome introuvable (${CHROME}) — il sert de moteur de rendu.`);
   process.exit(1);
@@ -51,19 +78,18 @@ if (!existsSync(CHROME)) {
 
 const travail = join(tmpdir(), 'ecolna-brand');
 mkdirSync(travail, { recursive: true });
-const css = faceCss();
 
 for (const { src, out, w, h, alpha } of CIBLES) {
   const page = join(travail, 'page.html');
   writeFileSync(
     page,
-    `<meta charset="utf-8"><style>${css}
-     html,body{margin:0;padding:0;width:${w}px;height:${h}px;overflow:hidden}
-     svg{display:block;width:${w}px;height:${h}px}</style>${readFileSync(join(ROOT, src), 'utf8')}`,
+    pageHtml(src, w, h),
   );
   mkdirSync(dirname(join(ROOT, out)), { recursive: true });
   execFileSync(CHROME, [
     '--headless', '--disable-gpu', '--hide-scrollbars',
+    // Conteneur Linux en root : Chrome refuse de démarrer sans ce drapeau.
+    ...(process.env.CHROME_NO_SANDBOX ? ['--no-sandbox'] : []),
     ...(alpha ? ['--default-background-color=00000000'] : []),
     `--screenshot=${join(ROOT, out)}`, `--window-size=${w},${h}`, `file://${page}`,
   ], { stdio: ['ignore', 'ignore', 'ignore'] });

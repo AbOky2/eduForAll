@@ -83,8 +83,8 @@ const config: ExpoConfig = {
   // Light-only for V1: the Stitch design system is light mode only.
   userInterfaceStyle: 'light',
   icon: './assets/icons/app-icon.png',
-  backgroundColor: '#fbf8ff',
-  primaryColor: '#7d562d',
+  backgroundColor: '#f6f7f9',
+  primaryColor: '#2f5bdb',
   /**
    * Déclare le français comme localisation prise en charge, ce qui met l'UI
    * système d'iOS en français.
@@ -121,7 +121,7 @@ const config: ExpoConfig = {
     adaptiveIcon: {
       // Le fond de l'icône adaptative doit être celui de la marque : Android
       // compose l'avant-plan par-dessus et rogne en cercle ou en écusson.
-      backgroundColor: '#1f5473',
+      backgroundColor: '#2f5bdb',
       foregroundImage: './assets/icons/adaptive-icon-foreground.png',
       monochromeImage: './assets/icons/adaptive-icon-monochrome.png',
     },
@@ -141,7 +141,7 @@ const config: ExpoConfig = {
     [
       'expo-splash-screen',
       {
-        backgroundColor: '#fbf8ff',
+        backgroundColor: '#f6f7f9',
         image: './assets/icons/splash-icon.png',
         imageWidth: 160,
       },

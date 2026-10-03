@@ -2,7 +2,6 @@ import { memo, useMemo } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 import { colors } from '../tokens';
-import { q } from '../illustrations/scene-geometry';
 
 export interface JourneyPoint {
   readonly x: number;
@@ -13,13 +12,15 @@ interface JourneyPathProps {
   width: number;
   height: number;
   points: readonly JourneyPoint[];
-  /** Nombre d'étapes atteintes : la piste est teintée jusqu'à la dernière. */
+  /** Nombre d'étapes atteintes : le chemin est coloré jusqu'à la dernière. */
   reached: number;
-  /** Teinte du chemin parcouru (la tranche de la discipline). */
+  /** Couleur du chemin parcouru. */
   traveled: string;
-  /** Épaisseur de la piste en dp. */
+  /** Épaisseur du trait en dp. */
   thickness: number;
 }
+
+const q = (value: number) => Math.round(value * 10) / 10;
 
 /** Courbe tendue d'une étape à l'autre : départ et arrivée verticaux. */
 function segment(a: JourneyPoint, b: JourneyPoint): string {
@@ -42,10 +43,10 @@ function pathThrough(points: readonly JourneyPoint[]): string {
 }
 
 /**
- * La piste de la carte de progression : un chemin de sable qui serpente
- * d'une étape à l'autre, bordé d'un liseré plus sombre, avec des pas blancs
- * au milieu. Le tronçon déjà parcouru prend la couleur de la discipline —
- * l'enfant voit d'où il vient avant de voir où il va.
+ * Le fil du parcours (direction v4) : un trait net aux bouts ronds qui relie
+ * les étapes en courbes tendues. Ce qui reste est gris clair ; le tronçon
+ * parcouru prend la couleur de la réussite. Ni piste de sable, ni pas, ni
+ * liseré : les étapes sont le sujet, le fil ne fait que les relier.
  */
 export const JourneyPath = memo(function JourneyPath({
   width,
@@ -59,34 +60,12 @@ export const JourneyPath = memo(function JourneyPath({
     const done = points.slice(0, Math.max(0, Math.min(points.length, reached)));
     return { all: pathThrough(points), done: done.length > 1 ? pathThrough(done) : '' };
   }, [points, reached]);
-  const dash = Math.round(thickness * 0.5);
   return (
     <Svg width={width} height={height} pointerEvents="none">
-      <Path
-        d={paths.all}
-        stroke={colors.surfaceContainerHighest}
-        strokeWidth={thickness + 6}
-        strokeLinecap="round"
-        fill="none"
-      />
-      <Path
-        d={paths.all}
-        stroke={colors.surfaceContainerHigh}
-        strokeWidth={thickness}
-        strokeLinecap="round"
-        fill="none"
-      />
+      <Path d={paths.all} stroke={colors.fillStrong} strokeWidth={thickness} strokeLinecap="round" fill="none" />
       {paths.done ? (
         <Path d={paths.done} stroke={traveled} strokeWidth={thickness} strokeLinecap="round" fill="none" />
       ) : null}
-      <Path
-        d={paths.all}
-        stroke={colors.card}
-        strokeWidth={Math.max(3, Math.round(thickness * 0.18))}
-        strokeDasharray={`${dash} ${Math.round(dash * 1.6)}`}
-        strokeLinecap="round"
-        fill="none"
-      />
     </Svg>
   );
 });

@@ -179,7 +179,7 @@ figure{margin:0}
 .art{display:flex;align-items:center;justify-content:center;border-radius:14px;overflow:hidden;
   box-shadow:0 1px 3px rgba(22,26,50,.10)}
 figcaption{height:${LABEL}px;line-height:16px;padding-top:6px;font-size:12px;color:#50453b;text-align:center;
-  overflow:hidden;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+  overflow:hidden;font-family:"Ecolna Sans",system-ui,sans-serif}
 </style></head><body>
 <header><h1>${escape(sheet.title)}</h1>${sheet.subtitle ? `<p class="sub">${escape(sheet.subtitle)}</p>` : ''}</header>
 ${sectionsHtml}

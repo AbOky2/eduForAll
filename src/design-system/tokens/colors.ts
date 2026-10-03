@@ -56,6 +56,8 @@ export const palette = {
   /** Texte vert sur blanc (6,2:1) et sur `successTint` (5,4:1). */
   successInk: '#15703c',
 
+  /** La flamme de la série. */
+  flame: '#ff6b2c',
   /** Réservé aux actions destructives de l'adulte, jamais à l'enfant. */
   danger: '#d92d20',
   dangerTint: '#fef3f2',
@@ -85,6 +87,10 @@ export const colors = {
   /** Sur une surface colorée : un blanc qui s'efface (second ton, piste). */
   onColorSoft: 'rgba(255,255,255,0.55)',
   onColorTrack: 'rgba(255,255,255,0.28)',
+  /** Une surface de verre sur la nuit : bouton second, puce. */
+  onColorGlass: 'rgba(255,255,255,0.12)',
+  /** Texte second sur la nuit (7:1). */
+  onNightSecondary: 'rgba(255,255,255,0.74)',
   /** Ombre : l'encre, très diluée — jamais un brun. */
   shadow: '#0e1526',
   /** Voile derrière une feuille ou une boîte de dialogue. */

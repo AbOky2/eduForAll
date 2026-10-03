@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <!-- ECOLNA — « notre école » : un livre ouvert, deux pages jointes.
+       v4 « Épure » : le bleu de la marque, une page blanche, une page soleil.
        Formes épaisses et sans traits de page : à 40 px, le détail devient du
        bruit. Plein cadre et opaque — Apple refuse toute transparence sur l'icône. -->
-  <rect width="1024" height="1024" fill="#1f5473"/>
-  <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#fbf3e4"/>
-  <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#e0b184"/>
-  <path d="M512 370 L512 816" stroke="#1f5473" stroke-width="40" stroke-linecap="round"/>
+  <rect width="1024" height="1024" fill="#2f5bdb"/>
+  <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#ffffff"/>
+  <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#ffb81c"/>
+  <path d="M512 370 L512 816" stroke="#2f5bdb" stroke-width="40" stroke-linecap="round"/>
 </svg>
