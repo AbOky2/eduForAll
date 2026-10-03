@@ -1,134 +1,114 @@
-import { memo, type ReactElement } from 'react';
-import Svg, { G, Path } from 'react-native-svg';
+import { memo } from 'react';
+import Svg, { Circle, G, Path } from 'react-native-svg';
 
 import { colors } from '../tokens';
-import { M_GLYPHS, renderMGlyph, type IconMode } from './glyphs-m';
-import { S_GLYPHS, renderSGlyph, type IconName } from './glyphs-s';
+import { PHOSPHOR, type IconName } from './phosphor.generated';
 
-export type { IconName } from './glyphs-s';
-export type { IconMode } from './glyphs-m';
+export type { IconName } from './phosphor.generated';
+
+/**
+ * `mono`  : le trait (graisse « bold »), dans `color` — l'état normal ;
+ * `duo`   : un aplat à 20 % sous le trait — l'objet d'une illustration ;
+ * `color` : plein, dans la couleur qui porte le sens de l'icône (étoile
+ *           soleil, coche verte…) — l'état actif, la récompense.
+ */
+export type IconMode = 'mono' | 'duo' | 'color';
 
 /** Modificateur posé en bas à droite (ex. l'onglet « Parents » : cadenas). */
 export type IconModifier = 'lock';
 
 export interface EcolnaIconProps {
   name: IconName;
-  /** Taille en dp (défaut 24). À partir de 32, le dessin du palier M s'il existe. */
+  /** Taille en dp (défaut 24). */
   size?: number;
-  /** Couleur du mode `mono` (défaut `colors.onSurfaceVariant`). */
-  color?: string;
-  /** Rétrocompatible : mode `color` (palier M) ou jumeau plein (palier S). */
+  /** Couleur du trait (défaut : encre secondaire) ; en `color`, remplace la couleur de sens. */
+  color?: string | undefined;
+  /** Rétrocompatible : équivaut à `mode="color"`. */
   filled?: boolean;
-  /** Mode de rendu du palier M (défaut : `filled` ? 'color' : 'mono'). */
   mode?: IconMode;
-  /** Petit cadenas en bas à droite, détaché par un liseré de `modifierBackdrop`. */
   modifier?: IconModifier | undefined;
-  /** Couleur du fond sous l'icône, pour détacher le modificateur (défaut `colors.card`). */
+  /** Couleur du fond sous l'icône, pour détacher le modificateur (défaut blanc). */
   modifierBackdrop?: string;
 }
 
-/** Taille à partir de laquelle le dessin du palier M remplace celui du palier S (§ 6.1). */
-export const M_TIER_MIN_SIZE = 32;
+/** La couleur qui porte le sens d'une icône pleine. */
+const MEANING: Partial<Record<IconName, string>> = {
+  star: colors.reward,
+  sun: colors.reward,
+  trophy: colors.reward,
+  medal: colors.reward,
+  sparkle: colors.reward,
+  lightbulb: colors.reward,
+  flame: '#ff6b2c',
+  check: colors.success,
+  sprout: colors.success,
+  leaf: colors.success,
+  lock: colors.inkDisabled,
+  'offline-ok': colors.success,
+};
 
 /**
- * Le palier dessiné. Optique, pas homothétie : un dessin 24 n'est jamais
- * agrandi quand son jumeau 48 existe. Le palier S n'a que `mono` et le
- * jumeau plein : un mode `duo` ou `color` demandé explicitement prend le
- * dessin M même en petit, puisque c'est lui qui porte la couleur.
- */
-export function iconTier(name: IconName, size: number, mode?: IconMode): 'S' | 'M' {
-  if (M_GLYPHS[name] === undefined) {
-    return 'S';
-  }
-  return size >= M_TIER_MIN_SIZE || mode === 'duo' || mode === 'color' ? 'M' : 'S';
-}
-
-// Cadenas modificateur, grille 48 : le même cadenas rond que le glyphe, plein,
-// détaché du dessin par un liseré de 3 u couleur du fond.
-const MOD_SHACKLE = 'M35.5 36V33A3 3 0 0 1 41.5 33V36';
-const MOD_BODY = 'M44 39A5.5 5.5 0 1 1 33 39A5.5 5.5 0 1 1 44 39Z';
-const ROUND = { strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
-
-function lockModifier(color: string, backdrop: string): ReactElement[] {
-  return [
-    <Path key="m1" d={MOD_SHACKLE} fill="none" stroke={backdrop} strokeWidth={9} {...ROUND} />,
-    <Path key="m2" d={MOD_BODY} fill={backdrop} stroke={backdrop} strokeWidth={6} {...ROUND} />,
-    <Path key="m3" d={MOD_SHACKLE} fill="none" stroke={color} strokeWidth={3} {...ROUND} />,
-    <Path key="m4" d={MOD_BODY} fill={color} />,
-  ];
-}
-
-/**
- * Les éléments d'une icône sont immuables pour un même (nom, palier, mode,
- * couleur, modificateur) : on les garde au lieu de réallouer la liste à
- * chaque rendu. Les modes `duo` et `color` ne dépendent pas de `color`.
- */
-const cache = new Map<string, ReactElement[]>();
-const CACHE_LIMIT = 512;
-
-function iconElements(
-  name: IconName,
-  tier: 'S' | 'M',
-  mode: IconMode,
-  color: string,
-  solidTwin: boolean,
-  modifier: IconModifier | undefined,
-  backdrop: string,
-): ReactElement[] {
-  const ink = tier === 'S' || mode === 'mono' || modifier !== undefined ? color : '';
-  const variant = tier === 'M' ? mode : solidTwin ? 'plein' : 'contour';
-  const key = `${tier}|${name}|${variant}|${ink}|${modifier ?? ''}|${modifier ? backdrop : ''}`;
-  const hit = cache.get(key);
-  if (hit) {
-    return hit;
-  }
-  const m = tier === 'M' ? M_GLYPHS[name] : undefined;
-  const elements = m
-    ? renderMGlyph(m, mode, color)
-    : renderSGlyph(S_GLYPHS[name], color, solidTwin);
-  if (modifier === 'lock') {
-    const lock = lockModifier(color, backdrop);
-    // Le cadenas est dessiné sur la grille 48 ; le palier S le ramène à 24.
-    elements.push(
-      tier === 'M' ? (
-        <G key="mod">{lock}</G>
-      ) : (
-        <G key="mod" transform="scale(0.5)">
-          {lock}
-        </G>
-      ),
-    );
-  }
-  if (cache.size >= CACHE_LIMIT) {
-    cache.clear();
-  }
-  cache.set(key, elements);
-  return elements;
-}
-
-/**
- * Icônes ECOLNA v2 « Galets & craie » (design/brief-identite-v2.md § 6) :
- * glyphes d'interface (palier S, 24 u, trait 2) et pictogrammes enfant
- * (palier M, 48 u, trait 4, modes mono / duo / couleur). Aucun réseau,
- * aucune police d'icônes : tout est dessiné ici.
+ * Icônes v4 « Épure » : la famille Phosphor (licence MIT), embarquée comme
+ * données (`phosphor.generated.ts`) — aucune police d'icônes, aucun réseau.
+ * Une seule famille, trois graisses : la cohérence d'un produit soigné. La
+ * coche « couleur » est une pastille verte au trait blanc : la marque de la
+ * réussite, partout la même.
  */
 export const EcolnaIcon = memo(function EcolnaIcon({
   name,
   size = 24,
-  color = colors.onSurfaceVariant,
+  color,
   filled = false,
   mode,
   modifier,
   modifierBackdrop = colors.card,
 }: EcolnaIconProps) {
-  const resolvedMode: IconMode = mode ?? (filled ? 'color' : 'mono');
-  const tier = iconTier(name, size, mode);
-  // Le jumeau plein du palier S répond à `filled` comme à un mode coloré demandé.
-  const solidTwin = filled || resolvedMode !== 'mono';
-  const grid = tier === 'M' ? 48 : 24;
+  const glyph = PHOSPHOR[name];
+  const resolved: IconMode = mode ?? (filled ? 'color' : 'mono');
+  const ink = color ?? (resolved === 'color' ? (MEANING[name] ?? colors.brand) : resolved === 'duo' ? colors.brand : colors.inkSecondary);
+
+  let body;
+  if (resolved === 'color' && name === 'check') {
+    body = (
+      <>
+        <Circle cx={128} cy={128} r={120} fill={ink} />
+        <G transform="translate(128 128) scale(0.56) translate(-128 -128)">
+          {glyph.bold.map((d) => (
+            <Path key={d} d={d} fill={colors.white} />
+          ))}
+        </G>
+      </>
+    );
+  } else if (resolved === 'color' && name !== 'star-outline') {
+    body = glyph.fill.map((d) => <Path key={d} d={d} fill={ink} />);
+  } else if (resolved === 'duo') {
+    body = (
+      <>
+        {glyph.duoBack.map((d) => (
+          <Path key={`b${d}`} d={d} fill={ink} opacity={0.2} />
+        ))}
+        {glyph.duoFront.map((d) => (
+          <Path key={d} d={d} fill={ink} />
+        ))}
+      </>
+    );
+  } else {
+    body = glyph.bold.map((d) => <Path key={d} d={d} fill={ink} />);
+  }
+
   return (
-    <Svg width={size} height={size} viewBox={`0 0 ${grid} ${grid}`}>
-      {iconElements(name, tier, resolvedMode, color, solidTwin, modifier, modifierBackdrop)}
+    <Svg width={size} height={size} viewBox="0 0 256 256">
+      {body}
+      {modifier === 'lock' ? (
+        <G>
+          <Circle cx={200} cy={200} r={60} fill={modifierBackdrop} />
+          <G transform="translate(200 202) scale(0.34) translate(-128 -128)">
+            {PHOSPHOR.lock.fill.map((d) => (
+              <Path key={d} d={d} fill={ink} />
+            ))}
+          </G>
+        </G>
+      ) : null}
     </Svg>
   );
 });

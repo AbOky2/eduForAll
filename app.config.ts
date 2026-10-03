@@ -150,11 +150,13 @@ const config: ExpoConfig = {
       'expo-font',
       {
         fonts: [
-          './assets/fonts/Quicksand-Regular.ttf',
-          './assets/fonts/Quicksand-Medium.ttf',
-          './assets/fonts/Quicksand-SemiBold.ttf',
-          './assets/fonts/Quicksand-Bold.ttf',
-          './assets/fonts/PlusJakartaSans-SemiBold.ttf',
+          './assets/fonts/EcolnaSans-Regular.ttf',
+          './assets/fonts/EcolnaSans-Medium.ttf',
+          './assets/fonts/EcolnaSans-SemiBold.ttf',
+          './assets/fonts/EcolnaSans-Bold.ttf',
+          './assets/fonts/EcolnaSans-ExtraBold.ttf',
+          './assets/fonts/Andika-Regular.ttf',
+          './assets/fonts/Andika-Bold.ttf',
         ],
       },
     ],

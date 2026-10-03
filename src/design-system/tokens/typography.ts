@@ -1,14 +1,29 @@
 /**
- * Typography tokens. Quicksand carries display/headline/body (including the
- * large pedagogical glyphs); Plus Jakarta Sans 600 carries labels (buttons,
- * nav, badges) — exactly as in the Stitch mockups.
+ * Typographie v4 « Épure ».
+ *
+ * - **Ecolna Sans** porte toute l'interface : c'est Figtree (OFL) dont le
+ *   « a » à un seul étage est figé par défaut (assets/fonts/FONTLOG-EcolnaSans.txt).
+ *   Géométrique, chaleureuse, nette à toutes les graisses ; les titres sont
+ *   serrés (approche négative), le texte courant garde son approche native.
+ *   Ainsi l'enfant ne voit jamais deux formes de « a » : celle de l'école.
+ * - **Andika** (SIL International) porte ce que l'enfant apprend à lire :
+ *   lettres, syllabes, mots, nombres. Dessinée pour l'alphabétisation, elle a
+ *   le « a » et le « g » à un seul étage de l'écriture scolaire, et des b, d,
+ *   p, q qui ne sont pas des miroirs les uns des autres.
+ *
+ * Les tailles sont celles du téléphone ; `useTypography` les multiplie par
+ * l'échelle de la fenêtre (×1,15 / ×1,3, plafonnée par la hauteur).
  */
 export const fontFamilies = {
-  regular: 'Quicksand-Regular',
-  medium: 'Quicksand-Medium',
-  semiBold: 'Quicksand-SemiBold',
-  bold: 'Quicksand-Bold',
-  label: 'PlusJakartaSans-SemiBold',
+  regular: 'EcolnaSans-Regular',
+  medium: 'EcolnaSans-Medium',
+  semiBold: 'EcolnaSans-SemiBold',
+  bold: 'EcolnaSans-Bold',
+  extraBold: 'EcolnaSans-ExtraBold',
+  /** Rétrocompatible : les étiquettes v3 (Plus Jakarta) passent à Ecolna Sans. */
+  label: 'EcolnaSans-SemiBold',
+  glyph: 'Andika-Bold',
+  glyphRegular: 'Andika-Regular',
 } as const;
 
 export type TypographyVariant =
@@ -36,30 +51,26 @@ interface TypographyStyle {
 }
 
 export const typography: Record<TypographyVariant, TypographyStyle> = {
-  /** La voix principale d'un écran d'enfant : salutation, « Bravo ! ». */
-  displayHero: { fontFamily: fontFamilies.bold, fontSize: 36, lineHeight: 44 },
-  /** Huge letters/syllables/numbers the child learns from ("ba", "12 + 5"). */
-  displayGlyph: { fontFamily: fontFamilies.bold, fontSize: 56, lineHeight: 64 },
-  displayGlyphSmall: { fontFamily: fontFamilies.bold, fontSize: 34, lineHeight: 42 },
+  /** La voix d'un écran : salutation, « Bravo ! ». */
+  displayHero: { fontFamily: fontFamilies.extraBold, fontSize: 34, lineHeight: 40, letterSpacing: -0.7 },
+  /** Ce que l'enfant apprend à lire, en grand (« ba », « 12 + 5 »). */
+  displayGlyph: { fontFamily: fontFamilies.glyph, fontSize: 64, lineHeight: 78 },
+  displayGlyphSmall: { fontFamily: fontFamilies.glyph, fontSize: 36, lineHeight: 46 },
 
-  headlineLg: { fontFamily: fontFamilies.bold, fontSize: 28, lineHeight: 36 },
-  headlineMd: { fontFamily: fontFamilies.bold, fontSize: 22, lineHeight: 30 },
-  headlineSm: { fontFamily: fontFamilies.semiBold, fontSize: 18, lineHeight: 26 },
+  headlineLg: { fontFamily: fontFamilies.extraBold, fontSize: 28, lineHeight: 34, letterSpacing: -0.5 },
+  headlineMd: { fontFamily: fontFamilies.bold, fontSize: 22, lineHeight: 28, letterSpacing: -0.3 },
+  headlineSm: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 24, letterSpacing: -0.15 },
 
-  bodyLg: { fontFamily: fontFamilies.medium, fontSize: 17, lineHeight: 26 },
+  bodyLg: { fontFamily: fontFamilies.medium, fontSize: 17, lineHeight: 25 },
   bodyMd: { fontFamily: fontFamilies.medium, fontSize: 15, lineHeight: 22 },
   bodySm: { fontFamily: fontFamilies.regular, fontSize: 13, lineHeight: 18 },
 
-  labelLg: { fontFamily: fontFamilies.label, fontSize: 16, lineHeight: 22, letterSpacing: 0.2 },
-  labelMd: { fontFamily: fontFamilies.label, fontSize: 14, lineHeight: 20, letterSpacing: 0.2 },
-  labelSm: { fontFamily: fontFamilies.label, fontSize: 12, lineHeight: 16, letterSpacing: 0.4 },
+  labelLg: { fontFamily: fontFamilies.semiBold, fontSize: 16, lineHeight: 22 },
+  labelMd: { fontFamily: fontFamilies.semiBold, fontSize: 14, lineHeight: 20 },
+  labelSm: { fontFamily: fontFamilies.semiBold, fontSize: 12, lineHeight: 16, letterSpacing: 0.1 },
 
-  /**
-   * Boutons de l'enfant : Quicksand Bold, dont la rondeur répond à celle des
-   * galets (direction v3 § 5). Plus Jakarta reste aux étiquettes d'info.
-   */
-  button: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 24, letterSpacing: 0.2 },
-  buttonSm: { fontFamily: fontFamilies.bold, fontSize: 15, lineHeight: 20, letterSpacing: 0.2 },
-  /** Pastilles « Nouveau », « En cours » : courtes, en capitales. */
-  tag: { fontFamily: fontFamilies.label, fontSize: 11, lineHeight: 14, letterSpacing: 0.9 },
+  button: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 24 },
+  buttonSm: { fontFamily: fontFamilies.bold, fontSize: 15, lineHeight: 20 },
+  /** Pastilles courtes, en capitales espacées (« NOUVEAU »). */
+  tag: { fontFamily: fontFamilies.bold, fontSize: 11, lineHeight: 14, letterSpacing: 0.8 },
 };

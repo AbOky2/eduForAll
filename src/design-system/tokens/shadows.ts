@@ -1,31 +1,21 @@
 import type { ViewStyle } from 'react-native';
 
 /**
- * Soft, low elevation only — the mockups never use hard drop shadows.
- * Android relies on `elevation`; iOS on shadow* properties.
+ * Élévation v4 : des ombres en couches, douces et froides (l'encre diluée,
+ * jamais un brun), portées par `boxShadow` — natif sur iOS et Android avec la
+ * nouvelle architecture, et sur le web. Contrairement à `elevation`, une
+ * ombre `boxShadow` ne change pas l'ordre d'empilement des vues Android.
+ *
+ * Trois niveaux seulement : posé (carte), levé (carte qu'on touche, au
+ * repos), flottant (barre d'onglets, feuille, boîte de dialogue).
  */
-export const shadows: Record<'card' | 'raised' | 'floating' | 'none', ViewStyle> = {
+export const shadows: Record<'card' | 'raised' | 'floating' | 'none' | 'glowReward' | 'glowBrand', ViewStyle> = {
   none: {},
-  card: {
-    shadowColor: '#7d562d',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  raised: {
-    shadowColor: '#7d562d',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.14,
-    shadowRadius: 16,
-    elevation: 6,
-  },
-  /** Ce qui flotte au-dessus du contenu : barre d'onglets, feuille de réponse. */
-  floating: {
-    shadowColor: '#5b3912',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.16,
-    shadowRadius: 24,
-    elevation: 10,
-  },
+  card: { boxShadow: '0px 1px 2px rgba(14, 21, 38, 0.05), 0px 4px 14px rgba(14, 21, 38, 0.04)' },
+  raised: { boxShadow: '0px 2px 6px rgba(14, 21, 38, 0.06), 0px 12px 28px rgba(14, 21, 38, 0.08)' },
+  floating: { boxShadow: '0px 4px 12px rgba(14, 21, 38, 0.07), 0px 20px 44px rgba(14, 21, 38, 0.13)' },
+  /** Le halo de l'action soleil : elle se voit de loin, sans tranche. */
+  glowReward: { boxShadow: '0px 6px 18px rgba(242, 161, 0, 0.35)' },
+  /** Le halo d'une action pleine de la marque (bouton d'écoute, accent). */
+  glowBrand: { boxShadow: '0px 6px 18px rgba(47, 91, 219, 0.26)' },
 };

@@ -18,23 +18,20 @@ interface EcolnaPillProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const TONES: Record<PillTone, { face: string; edge: string; ink: string; border?: string }> = {
-  white: { face: colors.card, edge: colors.cardEdge, ink: colors.textPrimary, border: colors.cardEdge },
-  sun: { face: colors.tertiaryFixed, edge: colors.tertiaryFixedDim, ink: colors.onTertiaryContainer },
-  petrol: { face: colors.secondaryFixed, edge: colors.secondaryFixedDim, ink: colors.onSecondaryContainer },
-  sand: { face: colors.primaryFixed, edge: colors.primaryFixedDim, ink: colors.onPrimaryContainer },
-  green: {
-    face: colors.feedbackCorrectContainer,
-    edge: colors.feedbackCorrectShade,
-    ink: colors.feedbackCorrect,
-  },
-  // Posée sur la carte héros terre : une pastille claire, sans tranche.
-  glass: { face: colors.primaryDuneNear, edge: colors.primaryDuneNear, ink: colors.onPrimary },
+const TONES: Record<PillTone, { face: string; ink: string; border?: string }> = {
+  white: { face: colors.white, ink: colors.ink, border: colors.border },
+  sun: { face: colors.rewardTint, ink: colors.onReward },
+  petrol: { face: colors.brandTint, ink: colors.brandInk },
+  sand: { face: colors.fill, ink: colors.inkSecondary },
+  green: { face: colors.successTint, ink: colors.successInk },
+  // Posée sur une surface « nuit » ou colorée : un voile blanc, texte blanc.
+  glass: { face: colors.onColorTrack, ink: colors.white },
 };
 
 /**
- * Pastille : un fait court (« 5 jours », « EN COURS », « 3/18 »). Posée, elle
- * n'a pas de tranche ; qu'on la touche, elle devient un petit galet.
+ * Pastille (puce) v4 : un fait court (« 5 jours », « En cours »). Trois tons
+ * utiles — neutre, marque, récompense — et le voile pour les surfaces
+ * colorées. Qu'on la touche, elle s'enfonce comme toute surface.
  */
 export function EcolnaPill({
   label,
@@ -61,10 +58,9 @@ export function EcolnaPill({
     return (
       <EcolnaGalet
         face={palette.face}
-        edge={palette.edge}
         border={palette.border}
+        borderWidth={1}
         radius={radius.pill}
-        depth="sm"
         onPress={onPress}
         accessibilityLabel={accessibilityLabel ?? label}
         hitSlop={8}

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { a11y, colors, radius, spacing, type TypographyVariant } from '../tokens';
+import { a11y, colors, radius, shadows, spacing, type TypographyVariant } from '../tokens';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { scaled, useResponsive } from '../responsive';
 import { EcolnaGalet } from './ecolna-galet';
@@ -35,43 +35,19 @@ interface EcolnaAnswerCardProps {
 }
 
 const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string; ink: string }> = {
-  default: {
-    face: colors.card,
-    edge: colors.cardEdge,
-    border: colors.cardEdge,
-    ink: colors.textPrimary,
-  },
-  selected: {
-    face: colors.secondaryFixed,
-    edge: colors.secondaryFixedDim,
-    border: colors.secondary,
-    ink: colors.onSecondaryContainer,
-  },
-  correct: {
-    face: colors.feedbackCorrectContainer,
-    edge: colors.feedbackCorrectShade,
-    border: colors.feedbackCorrect,
-    ink: colors.feedbackCorrect,
-  },
-  // Doux : pétrole, jamais rouge (le programme et la direction l'interdisent).
-  incorrect: {
-    face: colors.secondaryFixed,
-    edge: colors.secondaryFixedDim,
-    border: colors.secondary,
-    ink: colors.onSecondaryContainer,
-  },
-  disabled: {
-    face: colors.lockedContainer,
-    edge: colors.lockedEdge,
-    border: colors.lockedEdge,
-    ink: colors.textSecondary,
-  },
+  default: { face: colors.white, edge: colors.border, border: colors.border, ink: colors.ink },
+  selected: { face: colors.brandTint, edge: colors.brand, border: colors.brand, ink: colors.brandInk },
+  correct: { face: colors.successTint, edge: colors.success, border: colors.success, ink: colors.successInk },
+  // Doux : le bleu de la marque, jamais rouge (le programme et la direction l'interdisent).
+  incorrect: { face: colors.brandTint, edge: colors.brand, border: colors.brand, ink: colors.brandInk },
+  disabled: { face: colors.fill, edge: colors.fill, border: colors.fill, ink: colors.inkSecondary },
 };
 
 /**
- * Une réponse qu'on touche : un galet blanc (direction v3 § 2). Choisie, elle
- * se pare de pétrole ; juste, de vert avec une coche ; à revoir, de pétrole
- * avec une flèche de reprise — jamais la couleur seule, jamais du rouge.
+ * Une réponse qu'on touche (v4) : une surface blanche, un filet de 2 dp, une
+ * ombre douce ; elle s'enfonce sous le doigt. Choisie : filet bleu de 3 dp sur
+ * un fond bleuté ; juste : vert, avec une pastille cochée ; à revoir : bleu
+ * calme, avec une flèche de reprise — jamais la couleur seule, jamais du rouge.
  */
 export function EcolnaAnswerCard({
   label,
@@ -89,17 +65,16 @@ export function EcolnaAnswerCard({
   const { scale } = useResponsive();
   const look = state === 'selected' && tint ? tint : LOOK[state];
   const disabled = state === 'disabled' || state === 'correct' || state === 'incorrect';
-  const badge = scaled(28, scale);
+  const badge = scaled(30, scale);
   const sunk = state === 'selected' || state === 'correct' || state === 'incorrect';
 
   return (
     <EcolnaGalet
       face={look.face}
-      edge={look.edge}
       border={look.border}
       borderWidth={state === 'default' || state === 'disabled' ? 2 : 3}
-      radius={radius.lg}
-      depth="md"
+      radius={radius.xl}
+      shadow={state === 'default' ? shadows.card : undefined}
       onPress={onPress}
       disabled={disabled}
       pressedLook={sunk}
@@ -126,7 +101,7 @@ export function EcolnaAnswerCard({
               width: badge,
               height: badge,
               borderRadius: badge / 2,
-              backgroundColor: state === 'correct' ? colors.feedbackCorrect : colors.secondary,
+              backgroundColor: state === 'correct' ? colors.success : colors.brand,
             },
           ]}
         >

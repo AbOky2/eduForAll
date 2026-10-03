@@ -1,7 +1,7 @@
 import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 
 import { EcolnaIcon, type IconMode, type IconName } from '../icons/ecolna-icon';
-import { colors } from '../tokens';
+import { colors, shadows } from '../tokens';
 import { scaled, useResponsive } from '../responsive';
 import { EcolnaGalet } from './ecolna-galet';
 
@@ -21,27 +21,18 @@ interface EcolnaIconButtonProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const TONES: Record<IconButtonTone, { face: string; edge: string; ink: string; border?: string }> =
-  {
-    white: {
-      face: colors.card,
-      edge: colors.cardEdge,
-      ink: colors.onSurfaceVariant,
-      border: colors.cardEdge,
-    },
-    sun: { face: colors.sun, edge: colors.sunShade, ink: colors.onSun },
-    petrol: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
-    // Sur une surface déjà colorée : un galet ton sur ton.
-    quiet: {
-      face: colors.surfaceContainer,
-      edge: colors.surfaceContainerHighest,
-      ink: colors.onSurfaceVariant,
-    },
-  };
+const TONES: Record<IconButtonTone, { face: string; ink: string; border?: string; shadow?: ViewStyle }> = {
+  // Le bouton d'icône courant : un disque blanc fileté, posé avec une ombre douce.
+  white: { face: colors.white, ink: colors.ink, border: colors.border, shadow: shadows.card },
+  sun: { face: colors.reward, ink: colors.onReward },
+  petrol: { face: colors.brand, ink: colors.white },
+  // Sur une surface déjà claire : un disque neutre, sans ombre.
+  quiet: { face: colors.fill, ink: colors.ink },
+};
 
 /**
- * Un galet rond qui porte une seule icône : fermer, retour, indice, écouter.
- * Toujours au moins 48 dp, et l'icône au palier M dès que la taille le permet.
+ * Un disque qui porte une seule icône : fermer, retour, indice, écouter.
+ * Toujours au moins 48 dp ; l'icône occupe 46 % du disque.
  */
 export function EcolnaIconButton({
   icon,
@@ -60,24 +51,24 @@ export function EcolnaIconButton({
   return (
     <EcolnaGalet
       face={palette.face}
-      edge={palette.edge}
       border={palette.border}
+      borderWidth={1}
+      shadow={palette.shadow}
       radius={diameter / 2}
-      depth="sm"
       onPress={onPress}
       disabled={disabled}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
       hitSlop={6}
-      // Un bouton rond ne s'étire jamais : dans une colonne, sa tranche
-      // suivrait la largeur du parent.
+      // Un bouton rond ne s'étire jamais dans une colonne.
       style={[styles.self, style]}
       faceStyle={[styles.face, { width: diameter, height: diameter }]}
     >
       <EcolnaIcon
         name={icon}
-        size={Math.round(diameter * 0.52)}
-        color={palette.ink}
+        size={Math.round(diameter * 0.46)}
+        // En mode couleur, l'icône garde la couleur de son sens (ampoule soleil…).
+        color={iconMode === 'mono' ? palette.ink : undefined}
         mode={iconMode}
       />
     </EcolnaGalet>

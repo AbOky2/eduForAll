@@ -1,5 +1,7 @@
-import { StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
 
+import { useReducedMotion } from '../accessibility/use-reduced-motion';
 import { colors, radius } from '../tokens';
 import { scaled, useResponsive } from '../responsive';
 
@@ -11,73 +13,67 @@ interface EcolnaProgressBarProps {
   /** Famille du remplissage ; `fill` l'emporte (couleur de discipline). */
   tone?: ProgressTone;
   fill?: string | undefined;
-  /** Piste ; défaut sable, `onColor` pour une barre posée sur une couleur. */
+  /** Piste ; défaut `fill` neutre, une teinte claire sur une surface colorée. */
   track?: string | undefined;
-  /** Épaisseur en dp avant mise à l'échelle (défaut 12). */
+  /** Épaisseur en dp avant mise à l'échelle (défaut 10). */
   height?: number;
   accessibilityLabel?: string;
 }
 
 const TONES: Record<ProgressTone, string> = {
-  sun: colors.sun,
-  sand: colors.primaryContainer,
-  brown: colors.primary,
-  blue: colors.secondary,
-  green: colors.feedbackCorrect,
+  sun: colors.reward,
+  sand: colors.reward,
+  brown: colors.brand,
+  blue: colors.brand,
+  green: colors.success,
 };
 
 /**
- * Barre de progression « bonbon » : une piste sable creusée, un remplissage
- * plein avec un reflet sur son tiers haut. Toujours au moins une pastille
- * visible dès que la progression n'est pas nulle — un enfant qui a fait une
- * chose doit la voir.
+ * Barre de progression v4 : une piste neutre franche, un remplissage plein,
+ * sans reflet. La valeur glisse jusqu'à sa place sur un ressort (aussitôt en
+ * mouvement réduit). Dès qu'il y a du progrès, au moins une pastille ronde
+ * est visible : un enfant qui a fait une chose doit la voir.
  */
 export function EcolnaProgressBar({
   progress,
   tone = 'sun',
   fill,
-  track = colors.surfaceContainerHigh,
-  height = 12,
+  track = colors.fill,
+  height = 10,
   accessibilityLabel = 'Progression',
 }: EcolnaProgressBarProps) {
   const { scale } = useResponsive();
+  const reducedMotion = useReducedMotion();
   const thickness = scaled(height, scale);
   const clamped = Math.min(1, Math.max(0, progress));
   const color = fill ?? TONES[tone];
-  const shine = Math.max(2, Math.round(thickness * 0.24));
+  const [value] = useState(() => new Animated.Value(clamped));
+
+  useEffect(() => {
+    if (reducedMotion) {
+      value.setValue(clamped);
+      return;
+    }
+    Animated.spring(value, { toValue: clamped, speed: 10, bounciness: 2, useNativeDriver: false }).start();
+  }, [clamped, reducedMotion, value]);
+
   return (
     <View
       accessibilityRole="progressbar"
       accessibilityLabel={accessibilityLabel}
       accessibilityValue={{ min: 0, max: 100, now: Math.round(clamped * 100) }}
-      style={[
-        styles.track,
-        { height: thickness, borderRadius: thickness / 2, backgroundColor: track },
-      ]}
+      style={[styles.track, { height: thickness, borderRadius: thickness / 2, backgroundColor: track }]}
     >
       {clamped > 0 ? (
-        <View
+        <Animated.View
           style={{
-            width: `${clamped * 100}%`,
+            width: value.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'], extrapolate: 'clamp' }),
             minWidth: thickness,
             height: thickness,
             borderRadius: thickness / 2,
             backgroundColor: color,
           }}
-        >
-          <View
-            style={[
-              styles.shine,
-              {
-                top: Math.round(thickness * 0.2),
-                left: thickness / 2,
-                right: thickness / 2,
-                height: shine,
-                borderRadius: shine / 2,
-              },
-            ]}
-          />
-        </View>
+        />
       ) : null}
     </View>
   );
@@ -85,5 +81,4 @@ export function EcolnaProgressBar({
 
 const styles = StyleSheet.create({
   track: { width: '100%', overflow: 'hidden', borderRadius: radius.pill },
-  shine: { position: 'absolute', backgroundColor: colors.highlight },
 });

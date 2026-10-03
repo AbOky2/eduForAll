@@ -126,7 +126,7 @@ async function seed(page) {
     reducedMotion: process.env.REDUCED ? 'reduce' : 'no-preference',
   });
   await ctx.addInitScript(() => {
-    const fonts = ['Quicksand-Regular', 'Quicksand-Medium', 'Quicksand-SemiBold', 'Quicksand-Bold', 'PlusJakartaSans-SemiBold'];
+    const fonts = ['EcolnaSans-Regular', 'EcolnaSans-Medium', 'EcolnaSans-SemiBold', 'EcolnaSans-Bold', 'EcolnaSans-ExtraBold', 'Andika-Regular', 'Andika-Bold'];
     const css = fonts.map((f) => `@font-face{font-family:"${f}";src:url(/__fonts/${f}.ttf) format("truetype");}`).join('') + '*{scrollbar-width:none}';
     const add = () => { const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s); };
     if (document.head) add(); else document.addEventListener('DOMContentLoaded', add);

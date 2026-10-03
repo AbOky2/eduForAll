@@ -119,11 +119,13 @@ const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const FONTS: [string, number, string][] = [
-  ['Quicksand', 400, 'assets/fonts/Quicksand-Regular.ttf'],
-  ['Quicksand', 500, 'assets/fonts/Quicksand-Medium.ttf'],
-  ['Quicksand', 600, 'assets/fonts/Quicksand-SemiBold.ttf'],
-  ['Quicksand', 700, 'assets/fonts/Quicksand-Bold.ttf'],
-  ['Plus Jakarta Sans', 600, 'assets/fonts/PlusJakartaSans-SemiBold.ttf'],
+  ['Ecolna Sans', 400, 'assets/fonts/EcolnaSans-Regular.ttf'],
+  ['Ecolna Sans', 500, 'assets/fonts/EcolnaSans-Medium.ttf'],
+  ['Ecolna Sans', 600, 'assets/fonts/EcolnaSans-SemiBold.ttf'],
+  ['Ecolna Sans', 700, 'assets/fonts/EcolnaSans-Bold.ttf'],
+  ['Ecolna Sans', 800, 'assets/fonts/EcolnaSans-ExtraBold.ttf'],
+  ['Andika', 400, 'assets/fonts/Andika-Regular.ttf'],
+  ['Andika', 700, 'assets/fonts/Andika-Bold.ttf'],
 ];
 const fontCss = FONTS.filter(([, , file]) => existsSync(join(ROOT, file)))
   .map(([family, weight, file]) => {
@@ -131,7 +133,7 @@ const fontCss = FONTS.filter(([, , file]) => existsSync(join(ROOT, file)))
     return `@font-face{font-family:"${family}";font-weight:${weight};src:url(data:font/ttf;base64,${data}) format("truetype")}`;
   })
   .join('\n');
-// Les composants nomment les polices comme dans l'app (« Quicksand-Bold »).
+// Les composants nomment les polices comme dans l'app (« EcolnaSans-Bold »).
 const aliasCss = FONTS.filter(([, , file]) => existsSync(join(ROOT, file)))
   .map(([family, weight, file]) => {
     const alias = file.split('/').pop()!.replace('.ttf', '');
@@ -165,7 +167,7 @@ ${fontCss}
 ${aliasCss}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;width:${PAGE_WIDTH}px;height:${pageHeight}px;overflow:hidden;background:#f3f1f8;
-  font-family:"Quicksand",system-ui,sans-serif;color:#161a32}
+  font-family:"Ecolna Sans",system-ui,sans-serif;color:#141824}
 header{height:${HEADER}px;padding:${PAD - 12}px ${PAD}px 0}
 h1{margin:0;font-size:26px;font-weight:700}
 .sub{margin:6px 0 0;font-size:15px;color:#50453b}

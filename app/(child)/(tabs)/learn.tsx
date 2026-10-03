@@ -32,7 +32,7 @@ export default function ModuleSelectionScreen() {
   const { splitPanes, isTablet, scale, screenPadding, height } = useResponsive();
   // Une tablette 7" couchée n'a que 600 dp : l'objet rapetisse avant que les
   // portes ne passent sous la barre d'onglets.
-  const portalArt = splitPanes ? (height < 720 ? 84 : 112) : 136;
+  const portalArt = splitPanes ? (height < 720 ? 64 : 80) : 88;
   const profile = useActiveProfile((state) => state.profile);
   const [explained, setExplained] = useState<Subject | null>(null);
   const subjects: SubjectProgress[] =
@@ -88,7 +88,7 @@ export default function ModuleSelectionScreen() {
                 subject={subject.subject}
                 label={LABELS[subject.subject]}
                 hint={fr.learn.subjectHints[subject.subject]}
-                status={subject.completed > 0 ? null : fr.home.newBadge}
+                status={null}
                 artSize={portalArt}
                 completed={subject.completed}
                 total={subject.total}

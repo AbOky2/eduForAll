@@ -103,7 +103,20 @@ export const fr = {
           ? 'Une leçon faite aujourd’hui. Bravo !'
           : `${count} leçons faites aujourd’hui. Quelle énergie !`,
     streak: (days: number) => (days > 1 ? `${days} jours de suite` : 'Premier jour'),
+    /** La série, en court sur la puce soleil. */
+    streakShort: (days: number) => (days > 1 ? `${days} jours` : '1 jour'),
     lockedExplain: 'Termine d’abord les leçons d’avant, et ça s’ouvrira.',
+    /** L'état d'une matière, dit en mots (jamais une fraction pour l'enfant). */
+    subjectState: {
+      new: 'À découvrir',
+      started: 'En cours',
+      done: 'Terminé',
+      locked: 'Bientôt',
+    },
+    /** La carte du jour. */
+    todayEyebrow: (subject: string, world: string) => `${subject} · ${world}`,
+    lessonMeta: (steps: number, minutes: number) =>
+      `${steps} activité${steps > 1 ? 's' : ''} · ${minutes} min`,
     reviseTitle: 'On revoit ensemble ?',
     reviseCount: (count: number) => (count > 1 ? `${count} notions à revoir` : '1 notion à revoir'),
   },
@@ -242,6 +255,8 @@ export const fr = {
   },
   offline: {
     badge: 'Mode hors-connexion actif',
+    /** La puce de l'accueil : une promesse, pas une alerte. */
+    chip: 'Sans internet',
     title: 'Tu peux continuer à apprendre sans internet.',
     subtitle: 'Tes leçons favorites sont toujours là.',
   },

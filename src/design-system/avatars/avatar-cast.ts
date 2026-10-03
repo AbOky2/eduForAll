@@ -9,17 +9,15 @@
  * proche de celui qu'il avait choisi. Les invariants sont verrouillés par
  * `avatar-cast.test.ts`.
  */
-import type { BackdropName, SkinTone } from '@/design-system/tokens';
-
 import type {
-  AccessoryId,
-  BackdropMotif,
-  BrowShape,
-  GarmentId,
-  HairStyleId,
-  NoseShape,
-  SchoolMarker,
-} from './avatar-parts';
+  PortraitAccessory as AccessoryId,
+  PortraitBackdrop as BackdropName,
+  PortraitBrow as BrowShape,
+  PortraitGarment as GarmentId,
+  PortraitHair as HairStyleId,
+  PortraitNose as NoseShape,
+  PortraitSkin as SkinTone,
+} from './portrait';
 
 export const AVATAR_ART_IDS = [
   'avatar-1',
@@ -46,23 +44,11 @@ export interface AvatarArt {
   readonly hair: HairStyleId;
   readonly garment: GarmentId;
   readonly backdrop: BackdropName;
-  /** Un seul marqueur d'écolier par enfant. */
-  readonly marker: SchoolMarker;
   readonly accessories: readonly AccessoryId[];
   /** La forme du visage varie aussi, pas seulement la couleur (sourcils, nez). */
   readonly brows: BrowShape;
   readonly nose: NoseShape;
 }
-
-/** Un motif par famille de disque : on reconnaît un paysage, jamais un logo. */
-export const BACKDROP_MOTIFS: Record<BackdropName, BackdropMotif> = {
-  sky: 'lake-wave',
-  sand: 'dune',
-  sun: 'rising-sun',
-  mint: 'acacia',
-  lavender: 'palm-fan',
-  rose: 'rising-sun',
-};
 
 export const AVATAR_CAST: readonly AvatarArt[] = [
   {
@@ -71,8 +57,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'cacao',
     hair: 'side-part',
     garment: 'school-shirt',
-    backdrop: 'sky',
-    marker: 'strap',
+    backdrop: 'sand',
     accessories: [],
     brows: 'straight',
     nose: 'broad',
@@ -83,8 +68,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'acajou',
     hair: 'puffs',
     garment: 'pagne-dress',
-    backdrop: 'sun',
-    marker: 'slate',
+    backdrop: 'sky',
     accessories: ['stud-earrings'],
     brows: 'arch',
     nose: 'round',
@@ -95,8 +79,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'miel',
     hair: 'mini-afro',
     garment: 'jalabiya',
-    backdrop: 'sand',
-    marker: 'strap',
+    backdrop: 'rose',
     accessories: [],
     brows: 'lifted',
     nose: 'broad',
@@ -107,8 +90,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'miel',
     hair: 'cornrow-braids',
     garment: 'plain-top',
-    backdrop: 'lavender',
-    marker: 'pencil',
+    backdrop: 'sun',
     accessories: [],
     brows: 'round',
     nose: 'button',
@@ -119,8 +101,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'sable',
     hair: 'knotted-scarf',
     garment: 'claudine-dress',
-    backdrop: 'sun',
-    marker: 'slate',
+    backdrop: 'lavender',
     accessories: ['hoop-earrings'],
     brows: 'arch',
     nose: 'button',
@@ -131,8 +112,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'ebene',
     hair: 'round-afro',
     garment: 'polo',
-    backdrop: 'sky',
-    marker: 'strap',
+    backdrop: 'rose',
     accessories: ['glasses'],
     brows: 'arch',
     nose: 'round',
@@ -143,8 +123,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'cacao',
     hair: 'natural-afro',
     garment: 'school-dress',
-    backdrop: 'lavender',
-    marker: 'pencil',
+    backdrop: 'sun',
     accessories: ['bead-necklace'],
     brows: 'round',
     nose: 'round',
@@ -155,8 +134,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'acajou',
     hair: 'bucket-hat',
     garment: 'striped-tshirt',
-    backdrop: 'sun',
-    marker: 'slate',
+    backdrop: 'sky',
     accessories: [],
     brows: 'straight',
     nose: 'broad',
@@ -167,8 +145,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'ebene',
     hair: 'side-loops',
     garment: 'embroidered-dress',
-    backdrop: 'sand',
-    marker: 'strap',
+    backdrop: 'mint',
     accessories: [],
     brows: 'lifted',
     nose: 'broad',
@@ -180,7 +157,6 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     hair: 'shaved-line',
     garment: 'checked-shirt',
     backdrop: 'mint',
-    marker: 'pencil',
     accessories: ['hearing-aid'],
     brows: 'lifted',
     nose: 'round',
@@ -191,8 +167,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'cannelle',
     hair: 'crown-bun',
     garment: 'boubou-top',
-    backdrop: 'sky',
-    marker: 'strap',
+    backdrop: 'sand',
     accessories: [],
     brows: 'arch',
     nose: 'broad',
@@ -203,8 +178,7 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'sable',
     hair: 'soft-curls',
     garment: 'pocket-tshirt',
-    backdrop: 'mint',
-    marker: 'pencil',
+    backdrop: 'lavender',
     accessories: [],
     brows: 'round',
     nose: 'broad',

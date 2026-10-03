@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
 import { fr } from '@/localization/fr/strings';
-import { a11y, colors } from '../tokens';
+import { a11y, colors, shadows } from '../tokens';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { EcolnaGalet } from './ecolna-galet';
 
@@ -29,14 +29,12 @@ const VARIANTS: Record<
   AudioButtonVariant,
   { face: string; edge: string; ink: string; border?: string }
 > = {
-  sand: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
-  sky: { face: colors.secondaryFixed, edge: colors.secondaryFixedDim, ink: colors.secondary },
-  bordered: {
-    face: colors.card,
-    edge: colors.cardEdge,
-    ink: colors.secondary,
-    border: colors.cardEdge,
-  },
+  // Le grand bouton d'un exercice : le disque plein de la marque.
+  sand: { face: colors.brand, edge: colors.brand, ink: colors.white },
+  // Posé à côté d'un mot : un disque bleuté.
+  sky: { face: colors.brandTint, edge: colors.brandTint, ink: colors.brand },
+  // Réentendre une consigne : un disque blanc fileté.
+  bordered: { face: colors.white, edge: colors.border, ink: colors.brand, border: colors.border },
 };
 
 /**
@@ -94,10 +92,10 @@ export function EcolnaAudioButton({
       ) : null}
       <EcolnaGalet
         face={palette.face}
-        edge={palette.edge}
         border={palette.border}
+        borderWidth={1}
+        shadow={variant === 'sand' ? shadows.glowBrand : variant === 'bordered' ? shadows.card : undefined}
         radius={size / 2}
-        depth={size >= 64 ? 'md' : 'sm'}
         onPress={onPress}
         disabled={disabled}
         accessibilityLabel={accessibilityLabel}
@@ -105,7 +103,7 @@ export function EcolnaAudioButton({
         hitSlop={6}
         faceStyle={[styles.face, { width: size, height: size }]}
       >
-        <EcolnaIcon name="speaker" size={Math.round(size * 0.56)} color={palette.ink} mode="mono" />
+        <EcolnaIcon name="speaker" size={Math.round(size * 0.48)} color={palette.ink} mode="color" />
       </EcolnaGalet>
     </View>
   );

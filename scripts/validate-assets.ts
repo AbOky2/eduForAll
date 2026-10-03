@@ -10,11 +10,13 @@ const ROOT = join(__dirname, '..');
 const problems: string[] = [];
 
 const REQUIRED_FILES = [
-  'assets/fonts/Quicksand-Regular.ttf',
-  'assets/fonts/Quicksand-Medium.ttf',
-  'assets/fonts/Quicksand-SemiBold.ttf',
-  'assets/fonts/Quicksand-Bold.ttf',
-  'assets/fonts/PlusJakartaSans-SemiBold.ttf',
+  'assets/fonts/EcolnaSans-Regular.ttf',
+  'assets/fonts/EcolnaSans-Medium.ttf',
+  'assets/fonts/EcolnaSans-SemiBold.ttf',
+  'assets/fonts/EcolnaSans-Bold.ttf',
+  'assets/fonts/EcolnaSans-ExtraBold.ttf',
+  'assets/fonts/Andika-Regular.ttf',
+  'assets/fonts/Andika-Bold.ttf',
   'assets/icons/app-icon.png',
   'assets/icons/adaptive-icon-foreground.png',
   'assets/icons/adaptive-icon-monochrome.png',

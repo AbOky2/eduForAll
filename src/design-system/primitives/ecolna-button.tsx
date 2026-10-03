@@ -1,16 +1,16 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { colors, radius, spacing, type TypographyVariant } from '../tokens';
+import { colors, radius, shadows, spacing, type TypographyVariant } from '../tokens';
 import { scaled, useResponsive } from '../responsive';
 import { EcolnaGalet } from './ecolna-galet';
 import { EcolnaText } from './ecolna-text';
 
 /**
  * - `primary`   le soleil : l'action principale de l'enfant (une par écran) ;
- * - `accent`    pétrole : action forte mais seconde (Réessayer, Valider côté parent) ;
- * - `secondary` galet blanc : l'alternative (Rejouer, Annuler) ;
- * - `ghost`     un lien, sans galet (Retour à l'accueil) ;
+ * - `accent`    la marque : action forte mais seconde (Réessayer, Valider côté parent) ;
+ * - `secondary` surface blanche filetée : l'alternative (Rejouer, Annuler) ;
+ * - `ghost`     un lien, sans surface (Retour à l'accueil) ;
  * - `danger`    actions destructives de l'espace parent, jamais côté enfant.
  */
 type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger';
@@ -32,21 +32,17 @@ interface EcolnaButtonProps {
 
 const VARIANTS: Record<
   Exclude<ButtonVariant, 'ghost'>,
-  { face: string; edge: string; text: string; border?: string }
+  { face: string; text: string; border?: string; shadow?: ViewStyle }
 > = {
-  primary: { face: colors.sun, edge: colors.sunShade, text: colors.onSun },
-  accent: { face: colors.secondary, edge: colors.secondaryShade, text: colors.onSecondary },
-  secondary: {
-    face: colors.card,
-    edge: colors.cardEdge,
-    text: colors.secondary,
-    border: colors.cardEdge,
-  },
-  danger: { face: colors.errorContainer, edge: colors.errorEdge, text: colors.onErrorContainer },
+  // Le soleil porte son propre halo doré : l'action se voit de loin.
+  primary: { face: colors.reward, text: colors.onReward, shadow: shadows.glowReward },
+  accent: { face: colors.brand, text: colors.white, shadow: shadows.glowBrand },
+  secondary: { face: colors.white, text: colors.ink, border: colors.borderStrong },
+  danger: { face: colors.dangerTint, text: colors.dangerInk, border: '#fecdca' },
 };
 
 const SIZES: Record<ButtonSize, { height: number; text: TypographyVariant; padding: number }> = {
-  // Action principale de l'enfant : ≥ 64 dp, une cible qu'on ne rate pas.
+  // Action principale de l'enfant : 60 dp × l'échelle, une cible qu'on ne rate pas.
   lg: { height: 60, text: 'button', padding: spacing.xxl },
   md: { height: 52, text: 'button', padding: spacing.xl },
   // Espace parent, actions de ligne.
@@ -95,22 +91,23 @@ export function EcolnaButton({
           style,
         ]}
       >
-        {content(colors.primary)}
+        {content(colors.brand)}
       </Pressable>
     );
   }
 
   const palette = disabled
-    ? { face: colors.lockedContainer, edge: colors.lockedEdge, text: colors.locked }
+    ? { face: colors.fill, text: colors.inkDisabled, border: undefined, shadow: undefined }
     : VARIANTS[variant];
 
   return (
     <EcolnaGalet
       face={palette.face}
-      edge={palette.edge}
-      border={'border' in palette ? palette.border : undefined}
+      border={palette.border}
+      borderWidth={1.5}
       radius={radius.pill}
-      depth={size === 'sm' ? 'sm' : 'md'}
+      shadow={palette.shadow}
+      haptic={variant === 'primary' || variant === 'accent' ? 'light' : 'selection'}
       onPress={onPress}
       disabled={disabled}
       accessibilityLabel={label}

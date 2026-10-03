@@ -9,10 +9,10 @@ interface EcolnaCardProps {
   children: ReactNode;
   onPress?: (() => void) | undefined;
   /** Rounded 24 for hero cards, 16 for standard cards. */
-  rounded?: 'lg' | 'xl';
+  rounded?: 'lg' | 'xl' | 'xxl';
   padded?: boolean;
   backgroundColor?: string;
-  /** Tranche du galet quand la carte se touche (défaut : `cardEdge`). */
+  /** Héritage v3 (la tranche) : ignoré. */
   edgeColor?: string | undefined;
   accessibilityLabel?: string | undefined;
   accessibilityHint?: string | undefined;
@@ -22,10 +22,9 @@ interface EcolnaCardProps {
 }
 
 /**
- * La carte. Celle qu'on touche est un galet (direction v3 § 2) : face
- * blanche, liseré et tranche sable, elle s'enfonce sous le doigt. Celle qu'on
- * regarde seulement est posée à plat — un liseré, une ombre courte, pas de
- * tranche : la tranche veut dire « touche-moi ».
+ * La carte v4 : une surface blanche, un filet, une ombre douce. Celle qu'on
+ * touche s'enfonce sous le doigt (ressort) ; celle qu'on regarde est posée.
+ * Une carte colorée (`backgroundColor`) n'a pas de filet : sa couleur suffit.
  */
 export function EcolnaCard({
   children,
@@ -33,7 +32,6 @@ export function EcolnaCard({
   rounded = 'lg',
   padded = true,
   backgroundColor = colors.card,
-  edgeColor,
   accessibilityLabel,
   accessibilityHint,
   style,
@@ -48,42 +46,47 @@ export function EcolnaCard({
     return (
       <EcolnaGalet
         face={backgroundColor}
-        edge={edgeColor ?? colors.cardEdge}
-        border={white ? colors.cardEdge : undefined}
+        border={white ? colors.border : undefined}
         radius={cornerRadius}
-        depth={rounded === 'xl' ? 'lg' : 'md'}
+        shadow={shadows.raised}
         onPress={onPress}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={accessibilityHint}
         style={style}
-        faceStyle={[styles.clip, { padding }, contentStyle]}
+        faceStyle={[{ padding }, contentStyle]}
       >
         {children}
       </EcolnaGalet>
     );
   }
 
+  const surface = {
+    borderRadius: cornerRadius,
+    padding,
+    backgroundColor,
+    borderColor: white ? colors.border : 'transparent',
+    borderWidth: white ? 1 : 0,
+  };
+
+  // Une carte-cadre (sans marge, une illustration dedans) découpe son contenu
+  // dans l'arrondi ; l'ombre se pose alors sur un contenant à part, car un
+  // `overflow: hidden` la rognerait sur iOS.
+  if (!padded) {
+    return (
+      <View accessibilityLabel={accessibilityLabel} style={[shadows.card, styles.curve, { borderRadius: cornerRadius }, style]}>
+        <View style={[styles.clip, surface, contentStyle]}>{children}</View>
+      </View>
+    );
+  }
+
   return (
-    <View
-      accessibilityLabel={accessibilityLabel}
-      style={[
-        styles.clip,
-        shadows.card,
-        {
-          borderRadius: cornerRadius,
-          padding,
-          backgroundColor,
-          borderColor: white ? colors.cardEdge : 'transparent',
-          borderWidth: white ? 1.5 : 0,
-        },
-        style,
-      ]}
-    >
+    <View accessibilityLabel={accessibilityLabel} style={[styles.curve, shadows.card, surface, style, contentStyle]}>
       {children}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  clip: { overflow: 'hidden' },
+  clip: { overflow: 'hidden', flexGrow: 1, borderCurve: 'continuous' },
+  curve: { borderCurve: 'continuous' },
 });

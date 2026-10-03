@@ -1,0 +1,18 @@
+Ecolna Sans — journal de la police (FONTLOG)
+============================================
+
+Ecolna Sans est une version modifiée de Figtree
+(https://github.com/erikdkennedy/figtree), Copyright 2022 The Figtree Project
+Authors, distribuée sous SIL Open Font License 1.1 (texte : OFL-Figtree.txt).
+Figtree ne déclare aucun nom réservé ; la version modifiée est renommée pour
+ne pas être confondue avec l'originale.
+
+Modification (2026-10, projet ECOLNA)
+- Le jeu stylistique ss01 de Figtree (« a » à un seul étage, et ses accentués
+  à á â ã ä å ā ă ą ǎ) est figé dans la table cmap : c'est désormais la forme
+  par défaut. Ainsi, tout ce que voit un enfant de CP — consignes, boutons,
+  lettres apprises (police Andika) — n'a qu'une seule forme de « a », celle de
+  l'écriture scolaire.
+- Outil : opentype-feature-freezer (pyftfeatfreeze -f ss01 -R 'Figtree/Ecolna Sans').
+- Graisses : Regular, Medium, SemiBold, Bold, ExtraBold. Aucun autre glyphe,
+  aucune métrique n'est modifié.

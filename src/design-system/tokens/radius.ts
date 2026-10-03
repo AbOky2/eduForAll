@@ -1,10 +1,15 @@
-/** Border radii from the Stitch Tailwind config (4/8/12/16/24/full). */
+/**
+ * Rayons v4. Les surfaces sont généreusement arrondies, sans jamais devenir
+ * des pilules (sauf les boutons d'action, les puces et les pistes) :
+ * 12 champ et petite tuile · 16 réponse · 20 carte · 28 grand panneau.
+ */
 export const radius = {
-  xs: 4,
-  sm: 8,
+  xs: 6,
+  sm: 10,
   md: 12,
   lg: 16,
-  xl: 24,
+  xl: 20,
+  xxl: 28,
   pill: 999,
 } as const;
 

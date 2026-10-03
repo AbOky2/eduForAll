@@ -4,8 +4,7 @@ import { EcolnaIcon } from '../icons/ecolna-icon';
 import { SubjectArt, type SubjectArtId } from '../icons/subject-art';
 import { EcolnaGalet, EcolnaProgressBar, EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
-import { colors, radius, spacing, subjectColors } from '../tokens';
-import { EcolnaPill } from './ecolna-pill';
+import { colors, radius, shadows, spacing, subjectColors } from '../tokens';
 import { fr } from '@/localization/fr/strings';
 
 interface SubjectPortalProps {
@@ -55,113 +54,113 @@ export function SubjectPortal({
 }: SubjectPortalProps) {
   const { scale } = useResponsive();
   const family = subjectColors[subject];
-  const face = locked ? colors.lockedContainer : family.face;
-  const edge = locked ? colors.lockedEdge : family.edge;
-  // Le gris « fermé » reste aux icônes : un texte doit se lire (4,5:1).
-  const ink = locked ? colors.textSecondary : family.ink;
   const progress = total === 0 ? 0 : completed / total;
   const portal = layout === 'portal';
-
-  const bar = (
-    <View style={styles.progressRow}>
-      <View style={styles.bar}>
-        <EcolnaProgressBar
-          progress={progress}
-          fill={locked ? colors.locked : family.deep}
-          track={colors.card}
-          height={12}
-          accessibilityLabel={fr.a11y.progress(label, completed, total)}
-        />
-      </View>
-      <EcolnaText variant="labelMd" color={ink}>
-        {`${completed}/${total}`}
-      </EcolnaText>
-    </View>
-  );
+  // Ouverte : la couleur profonde de la discipline, tout en blanc dessus.
+  // Fermée : une surface neutre, l'emblème en gris — toujours reconnaissable.
+  const face = locked ? colors.fill : family.deep;
+  const ink = locked ? colors.inkSecondary : colors.white;
+  const soft = locked ? colors.inkSecondary : colors.onColorSoft;
+  const state = locked
+    ? fr.home.subjectState.locked
+    : completed === 0
+      ? fr.home.subjectState.new
+      : completed >= total
+        ? fr.home.subjectState.done
+        : fr.home.subjectState.started;
+  const pad = scaled(portal ? spacing.xl : spacing.lg, scale);
 
   return (
     <EcolnaGalet
       face={face}
-      edge={edge}
-      radius={radius.xl}
-      depth="lg"
+      radius={radius.xxl}
+      shadow={locked ? undefined : shadows.raised}
       onPress={onPress}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
       style={portal ? styles.portalOuter : undefined}
       faceStyle={[
         portal ? styles.portalFace : styles.rowFace,
-        {
-          padding: scaled(portal ? spacing.lg : spacing.md, scale),
-          gap: scaled(portal ? spacing.sm : spacing.md, scale),
-        },
+        { padding: pad, gap: scaled(spacing.md, scale) },
       ]}
     >
-      <View>
-        <SubjectArt subject={subject} size={scaled(portal ? artSize : 72, scale)} muted={locked} />
+      <View style={styles.artRow}>
+        <SubjectArt
+          subject={subject}
+          size={scaled(portal ? artSize : 64, scale)}
+          variant={locked ? 'tile' : 'glyph'}
+          muted={locked}
+        />
         {locked ? (
-          <View style={styles.lock}>
-            <EcolnaIcon name="lock" size={scaled(portal ? 32 : 24, scale)} color={colors.locked} />
-          </View>
+          <EcolnaIcon
+            name="lock"
+            size={scaled(24, scale)}
+            color={colors.inkDisabled}
+            mode="color"
+          />
         ) : null}
       </View>
       <View style={portal ? styles.portalText : styles.rowText}>
-        <EcolnaText variant="headlineMd" color={ink} align={portal ? 'center' : 'left'}>
+        <EcolnaText variant={portal ? 'headlineLg' : 'headlineMd'} color={ink}>
           {label}
         </EcolnaText>
-        {explanation ? (
-          <EcolnaText
-            variant="headlineSm"
-            color={colors.textPrimary}
-            align={portal ? 'center' : 'left'}
-            accessibilityLiveRegion="polite"
-          >
-            {explanation}
-          </EcolnaText>
-        ) : (
-          <EcolnaText
-            variant="bodyMd"
-            color={colors.textSecondary}
-            align={portal ? 'center' : 'left'}
-          >
-            {hint}
-          </EcolnaText>
+        <EcolnaText
+          variant={explanation ? 'bodyLg' : 'bodyMd'}
+          color={explanation ? ink : soft}
+          accessibilityLiveRegion={explanation ? 'polite' : undefined}
+        >
+          {explanation ?? hint}
+        </EcolnaText>
+        {portal ? null : (
+          <View style={[styles.footer, { marginTop: scaled(spacing.xs, scale) }]}>
+            <EcolnaText variant="labelMd" color={soft}>
+              {status ?? state}
+            </EcolnaText>
+            {locked ? null : (
+              <View style={styles.bar}>
+                <EcolnaProgressBar
+                  progress={progress}
+                  fill={colors.white}
+                  track={colors.onColorTrack}
+                  height={8}
+                  accessibilityLabel={fr.a11y.progress(label, completed, total)}
+                />
+              </View>
+            )}
+          </View>
         )}
-        {status ? (
-          <EcolnaPill
-            label={status}
-            tone="white"
-            variant="labelSm"
-            style={portal ? styles.centerPill : undefined}
-          />
-        ) : null}
-        {portal ? null : bar}
       </View>
-      {/* Art et titre ancrés en haut (les titres s'alignent d'une porte à
-          l'autre), la barre posée en bas, l'air entre les deux. */}
       {portal ? <View style={styles.spacer} /> : null}
-      {portal ? <View style={styles.portalBar}>{bar}</View> : null}
-      {portal ? null : (
-        <EcolnaIcon
-          name={locked ? 'lock' : 'chevron-right'}
-          size={scaled(24, scale)}
-          color={locked ? colors.locked : ink}
-        />
-      )}
+      {portal ? (
+        <View style={styles.footer}>
+          <EcolnaText variant="labelMd" color={soft}>
+            {status ?? state}
+          </EcolnaText>
+          {locked ? null : (
+            <View style={styles.bar}>
+              <EcolnaProgressBar
+                progress={progress}
+                fill={colors.white}
+                track={colors.onColorTrack}
+                height={8}
+                accessibilityLabel={fr.a11y.progress(label, completed, total)}
+              />
+            </View>
+          )}
+        </View>
+      ) : null}
     </EcolnaGalet>
   );
 }
 
 const styles = StyleSheet.create({
   portalOuter: { flex: 1 },
-  portalFace: { alignItems: 'center' },
+  portalFace: {},
   spacer: { flexGrow: 1 },
-  portalText: { alignItems: 'center', gap: spacing.xxs },
-  portalBar: { alignSelf: 'stretch' },
-  centerPill: { alignSelf: 'center', marginTop: spacing.xxs },
+  artRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  portalText: { gap: spacing.xxs },
   rowFace: { flexDirection: 'row', alignItems: 'center' },
   rowText: { flex: 1, gap: spacing.xxs },
-  lock: { position: 'absolute', right: 0, bottom: 0 },
-  progressRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  bar: { flex: 1 },
+  footer: { gap: spacing.xs },
+  bar: { alignSelf: 'stretch' },
 });

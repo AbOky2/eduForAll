@@ -1,40 +1,45 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
+  Animated,
   Pressable,
   StyleSheet,
-  View,
   type AccessibilityRole,
   type AccessibilityState,
   type Insets,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
-import { depth as depthTokens, type DepthToken } from '../tokens/depth';
-import { scaled, useResponsive } from '../responsive';
+import { useReducedMotion } from '../accessibility/use-reduced-motion';
+import type { DepthToken } from '../tokens/depth';
+
+export type HapticKind = 'selection' | 'light' | 'none';
 
 export interface EcolnaGaletProps {
   children: ReactNode;
-  /** Couleur de la face. */
+  /** Couleur de la surface. */
   face: string;
-  /** Couleur de la tranche — le ton `shade` de la même famille. */
-  edge: string;
-  /** Liseré de la face (galets blancs sur fond clair). */
+  /** Héritage v3 (la tranche) : ignoré — une surface v4 n'a plus de tranche. */
+  edge?: string | undefined;
+  /** Filet de la surface (cartes blanches sur fond clair). */
   border?: string | undefined;
   borderWidth?: number | undefined;
   radius: number;
-  /** Hauteur de la tranche ; mise à l'échelle de la fenêtre. */
+  /** Héritage v3 : ignoré. */
   depth?: DepthToken | number | undefined;
   onPress?: (() => void) | undefined;
   onPressIn?: (() => void) | undefined;
   disabled?: boolean | undefined;
-  /** Garde la face enfoncée (choix posé, onglet actif). */
+  /** Choix posé : la surface ne rebondit plus (l'état se lit dans ses couleurs). */
   pressedLook?: boolean | undefined;
+  /** Retour tactile à l'appui (défaut : `selection` pour ce qui se touche). */
+  haptic?: HapticKind | undefined;
   /** Style du conteneur (largeur, marges, flex). */
   style?: StyleProp<ViewStyle>;
-  /** Style de la face (padding, disposition du contenu). */
+  /** Style de la surface (padding, disposition du contenu). */
   faceStyle?: StyleProp<ViewStyle>;
-  /** Ombre portée, posée sous la tranche (ce qui flotte seulement). */
+  /** Ombre de la surface (`shadows.card` / `raised` / `floating`). */
   shadow?: ViewStyle | undefined;
   accessibilityRole?: AccessibilityRole | undefined;
   accessibilityLabel?: string | undefined;
@@ -44,27 +49,38 @@ export interface EcolnaGaletProps {
   testID?: string | undefined;
 }
 
+/** Ressort de l'appui : vif à l'enfoncement, souple au relâché. */
+const PRESS_IN = { toValue: 0.96, speed: 40, bounciness: 0, useNativeDriver: true } as const;
+const PRESS_OUT = { toValue: 1, speed: 18, bounciness: 9, useNativeDriver: true } as const;
+
+export function triggerHaptic(kind: HapticKind): void {
+  if (kind === 'selection') {
+    Haptics.selectionAsync().catch(() => undefined);
+  } else if (kind === 'light') {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => undefined);
+  }
+}
+
 /**
- * Le galet (direction v3 § 2) : une face posée sur sa tranche. Appuyer
- * enfonce la face de toute la hauteur de la tranche, qu'elle recouvre alors —
- * l'objet a l'air physique, et l'enfant voit qu'il a agi en moins d'une image.
+ * La surface v4 « Épure » — tout ce qui se pose ou se touche : une face plate,
+ * un filet, une ombre douce. Ce qui se touche le dit par le mouvement, pas par
+ * une épaisseur dessinée : à l'appui, la surface s'enfonce (ressort à 0,96) et
+ * l'appareil répond d'un léger retour haptique. Sans `onPress`, c'est un
+ * simple objet posé, sans rôle de bouton.
  *
- * Seule une transformation bouge : ni la hauteur du galet ni ses voisins ne
- * changent à l'appui. Sans `onPress`, le galet est un simple objet posé (une
- * carte qu'on regarde), sans rôle de bouton.
+ * (Le nom `EcolnaGalet` reste pour les écrans v3 ; `EcolnaSurface` est l'alias v4.)
  */
 export function EcolnaGalet({
   children,
   face,
-  edge,
   border,
-  borderWidth = 2,
+  borderWidth = 1.5,
   radius,
-  depth = 'md',
   onPress,
   onPressIn,
   disabled = false,
   pressedLook = false,
+  haptic = 'selection',
   style,
   faceStyle,
   shadow,
@@ -75,54 +91,35 @@ export function EcolnaGalet({
   hitSlop,
   testID,
 }: EcolnaGaletProps) {
-  const { scale } = useResponsive();
-  const lift = scaled(typeof depth === 'number' ? depth : depthTokens[depth], scale);
-  // Android empile par `elevation` avant l'ordre des enfants : une tranche
-  // ombrée passerait devant sa face. La face reçoit la même élévation, sans
-  // ombre propre, et reste dessus.
-  const elevation = shadow?.elevation ?? 0;
-  const faceLayer = elevation > 0 ? { elevation, shadowColor: 'transparent' } : null;
+  const reducedMotion = useReducedMotion();
+  const [scale] = useState(() => new Animated.Value(1));
 
-  const layers = (pressed: boolean) => {
-    const sunk = pressedLook || (pressed && !disabled);
-    return (
-      <>
-        <View
-          style={[styles.edge, { top: lift, borderRadius: radius, backgroundColor: edge }, shadow]}
-        />
-        <View
-          style={[
-            styles.face,
-            {
-              borderRadius: radius,
-              backgroundColor: face,
-              borderColor: border,
-              borderWidth: border ? borderWidth : 0,
-              transform: [{ translateY: sunk ? lift : 0 }],
-            },
-            faceLayer,
-            faceStyle,
-          ]}
-        >
-          {children}
-        </View>
-      </>
-    );
-  };
+  const surface = [
+    styles.face,
+    {
+      borderRadius: radius,
+      backgroundColor: face,
+      borderColor: border,
+      borderWidth: border ? borderWidth : 0,
+    },
+    shadow,
+    faceStyle,
+  ];
 
   if (!onPress) {
     return (
-      <View
-        style={[{ paddingBottom: lift }, style]}
+      <Animated.View
+        style={[surface, style]}
         accessibilityRole={accessibilityRole}
         accessibilityLabel={accessibilityLabel}
         testID={testID}
       >
-        {layers(false)}
-      </View>
+        {children}
+      </Animated.View>
     );
   }
 
+  const animate = !reducedMotion && !pressedLook && !disabled;
   return (
     <Pressable
       accessibilityRole={accessibilityRole ?? 'button'}
@@ -130,20 +127,34 @@ export function EcolnaGalet({
       accessibilityHint={accessibilityHint}
       accessibilityState={{ disabled, ...accessibilityState }}
       disabled={disabled}
-      onPress={onPress}
-      onPressIn={onPressIn}
+      onPress={() => {
+        triggerHaptic(haptic);
+        onPress();
+      }}
+      onPressIn={() => {
+        if (animate) {
+          Animated.spring(scale, PRESS_IN).start();
+        }
+        onPressIn?.();
+      }}
+      onPressOut={() => {
+        if (animate) {
+          Animated.spring(scale, PRESS_OUT).start();
+        }
+      }}
       hitSlop={hitSlop}
       testID={testID}
-      style={[{ paddingBottom: lift }, style]}
+      style={style}
     >
-      {({ pressed }) => layers(pressed)}
+      <Animated.View style={[surface, { transform: [{ scale }] }]}>{children}</Animated.View>
     </Pressable>
   );
 }
 
+export const EcolnaSurface = EcolnaGalet;
+
 const styles = StyleSheet.create({
-  edge: { position: 'absolute', left: 0, right: 0, bottom: 0 },
-  // La face remplit le galet dans les deux axes : une carte en ligne ou une
-  // tuile de grille à hauteur imposée ne laisse jamais dépasser sa tranche.
-  face: { flexGrow: 1 },
+  // La surface remplit son conteneur : une carte en ligne ou une tuile de
+  // grille à hauteur imposée ne laisse jamais d'écart.
+  face: { flexGrow: 1, borderCurve: 'continuous' },
 });

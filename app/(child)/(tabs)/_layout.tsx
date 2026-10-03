@@ -7,7 +7,7 @@ import { useReducedMotion } from '@/design-system/accessibility/use-reduced-moti
 import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
 import { EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, illustration, radius, shadows, spacing } from '@/design-system/tokens';
+import { colors, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 /** Minimal shape of the tab-bar props we consume (no direct react-navigation import). */
@@ -23,9 +23,9 @@ const TAB_META: Record<string, { label: string; icon: IconName }> = {
 };
 
 /**
- * Le galet de l'onglet actif. Il naît à chaque changement d'onglet (il est
- * monté sous l'onglet choisi) : un ressort court 0,6 → 1, instantané quand le
- * système demande moins de mouvement.
+ * La capsule de l'onglet actif (un fond bleuté derrière l'icône pleine). Elle
+ * naît à chaque changement d'onglet : un ressort court 0,6 → 1, instantané
+ * quand le système demande moins de mouvement.
  */
 function ActivePebble({ size }: { size: number }) {
   const reducedMotion = useReducedMotion();
@@ -47,7 +47,7 @@ function ActivePebble({ size }: { size: number }) {
       pointerEvents="none"
       style={[
         styles.pebble,
-        { width: size, height: size, borderRadius: size / 2, transform: [{ scale: grow }] },
+        { width: size * 1.5, height: size * 0.82, borderRadius: size, transform: [{ scale: grow }] },
       ]}
     />
   );
@@ -75,9 +75,8 @@ function TabButton({
   // Un téléphone en paysage est « medium » par sa largeur mais n'a que 390 dp
   // de haut : la barre se compacte d'après la hauteur, pas la classe.
   const roomy = isTablet && height >= 520;
-  const iconSize = roomy ? 48 : height < 520 ? 34 : 40;
-  const pebble = roomy ? 64 : height < 520 ? 46 : 56;
-  const slotWidth = roomy ? 120 : 96;
+  const iconSize = roomy ? 30 : height < 520 ? 24 : 28;
+  const pebble = roomy ? 48 : height < 520 ? 38 : 44;
   return (
     <Pressable
       accessibilityRole={parentsDoor ? 'button' : 'tab'}
@@ -86,7 +85,7 @@ function TabButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.slot,
-        { minWidth: slotWidth, transform: [{ scale: pressed ? 0.94 : 1 }] },
+        { transform: [{ scale: pressed ? 0.94 : 1 }] },
       ]}
     >
       <View style={[styles.iconBox, { width: pebble, height: pebble }]}>
@@ -97,14 +96,14 @@ function TabButton({
             name={icon}
             size={iconSize}
             mode={focused ? 'color' : 'mono'}
-            color={colors.onSurfaceVariant}
+            color={focused ? colors.brand : colors.inkTertiary}
             modifier={parentsDoor ? 'lock' : undefined}
           />
         </View>
       </View>
       <EcolnaText
         variant={focused ? 'buttonSm' : 'labelMd'}
-        color={focused ? colors.onPrimaryContainer : colors.onSurfaceVariant}
+        color={focused ? colors.brandInk : colors.inkSecondary}
         style={{ fontSize: scaled(14, Math.min(scale, 1.15)) }}
       >
         {label}
@@ -114,10 +113,9 @@ function TabButton({
 }
 
 /**
- * La barre d'onglets : une pilule blanche qui flotte sur la dune du fond
- * (brief v2 § 6.6). Elle reste dans le flux — les écrans n'ont rien à
- * réserver sous leur contenu — et la bande qui l'entoure reprend la teinte de
- * la dune proche, pour que le paysage continue sous elle.
+ * La barre d'onglets v4 : une capsule blanche qui flotte sur la toile, trois
+ * emplacements égaux. Elle reste dans le flux — les écrans n'ont rien à
+ * réserver sous leur contenu.
  *
  * « Parents » n'est pas un onglet : il ouvre la porte parentale par-dessus le
  * parcours de l'enfant. Onglet réel, il restait actif derrière la pile parent
@@ -141,9 +139,9 @@ function EcolnaTabBar({ state, navigation }: EcolnaTabBarProps) {
           styles.bar,
           shadows.floating,
           {
-            minHeight: short ? 62 : isTablet ? 92 : 80,
+            minHeight: short ? 58 : isTablet ? 80 : 70,
             paddingVertical: short ? 2 : spacing.xs,
-            maxWidth: isTablet ? 600 : undefined,
+            maxWidth: isTablet ? 480 : undefined,
           },
         ]}
       >
@@ -162,7 +160,6 @@ function EcolnaTabBar({ state, navigation }: EcolnaTabBarProps) {
             />
           );
         })}
-        <View style={styles.doorGap} />
         <TabButton
           label={fr.tabs.parents}
           icon="parents"
@@ -189,7 +186,7 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   band: {
-    backgroundColor: illustration.ambient.duneNear,
+    backgroundColor: colors.background,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.xs,
     alignItems: 'center',
@@ -198,15 +195,14 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    backgroundColor: colors.card,
+    backgroundColor: colors.white,
     borderRadius: radius.pill,
-    borderWidth: 1.5,
-    borderColor: colors.cardEdge,
-    paddingHorizontal: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.xs,
   },
-  slot: { alignItems: 'center', justifyContent: 'center', gap: 2, paddingVertical: 2 },
+  // Trois emplacements égaux : l'espacement ne dépend plus de la longueur des mots.
+  slot: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2, paddingVertical: 2 },
   iconBox: { alignItems: 'center', justifyContent: 'center' },
-  pebble: { position: 'absolute', backgroundColor: colors.primaryFixedDim },
-  doorGap: { width: spacing.xs },
+  pebble: { position: 'absolute', backgroundColor: colors.brandTint },
 });

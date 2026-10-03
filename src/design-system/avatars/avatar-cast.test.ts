@@ -1,12 +1,11 @@
 import { render } from '@testing-library/react-native';
 import { createElement } from 'react';
 
-import type { SkinTone } from '@/design-system/tokens';
 import { AVATAR_IDS } from '@/features/child-profile/domain/child-profile';
 import { fr } from '@/localization/fr/strings';
 
 import { AVATAR_ART_IDS, AVATAR_CAST, avatarArt } from './avatar-cast';
-import { GARMENTS, HAIR_COVERAGE } from './avatar-parts';
+import { HAIR_COVERAGE, PORTRAIT_GARMENTS as GARMENTS, type PortraitSkin as SkinTone } from './portrait';
 import { EcolnaAvatar } from './ecolna-avatar';
 
 /** Invariants de la distribution — design/brief-identite-v2.md § 8.3. */
