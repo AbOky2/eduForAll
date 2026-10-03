@@ -147,7 +147,7 @@ export function AttributeExercise({
             key={choice.id}
             onPress={() => submit(choice.id)}
             accessibilityLabel={choice.label ?? `${choice.shape} ${choice.color}`}
-            state={!interactive && !selected ? 'disabled' : selected ? 'selected' : 'default'}
+            state={interactive ? 'default' : selected ? 'selected' : 'disabled'}
             style={styles.cell}
             contentStyle={[styles.cellFace, { minHeight: cell * 1.4 }]}
           >

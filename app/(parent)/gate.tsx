@@ -55,6 +55,10 @@ export default function ParentGateScreen() {
   const challenge = useMemo(() => CHALLENGES[attempt % CHALLENGES.length]!, [attempt]);
 
   const valider = () => {
+    // Champ vide : rien à vérifier (le bouton n'est jamais grisé pour autant).
+    if (saisie.trim().length === 0) {
+      return;
+    }
     if (Number(saisie.trim()) === challenge.answer) {
       router.replace('/(parent)/dashboard');
       return;
@@ -135,7 +139,6 @@ export default function ParentGateScreen() {
               label={fr.parent.gateEnter}
               variant="accent"
               onPress={valider}
-              disabled={saisie.trim().length === 0}
             />
           </EcolnaCard>
 

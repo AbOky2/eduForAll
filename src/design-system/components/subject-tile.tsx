@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { SubjectArt, type SubjectArtId } from '../icons/subject-art';
-import { EcolnaGalet, EcolnaProgressBar, EcolnaText } from '../primitives';
+import { EcolnaGalet, EcolnaProgressRing, EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
 import { colors, radius, shadows, spacing, subjectColors } from '../tokens';
 import { fr } from '@/localization/fr/strings';
@@ -69,7 +69,21 @@ export function SubjectTile({
       faceStyle={[styles.face, { padding: pad, gap: scaled(spacing.sm, scale) }]}
     >
       <View style={[styles.top, row && styles.topRow, { gap: scaled(row ? spacing.sm : spacing.md, scale) }]}>
-        <SubjectArt subject={subject} size={scaled(artSize, scale)} muted={locked} />
+        {locked ? (
+          <SubjectArt subject={subject} size={scaled(artSize, scale)} muted />
+        ) : (
+          // La progression de la discipline : l'anneau autour de son emblème,
+          // le même codage qu'« Apprendre » (plein, il passe au soleil).
+          <EcolnaProgressRing
+            progress={progress}
+            size={scaled(artSize + 12, scale)}
+            stroke={scaled(4, scale)}
+            color={family.solid}
+            track={family.tintStrong}
+          >
+            <SubjectArt subject={subject} size={scaled(artSize - 2, scale)} />
+          </EcolnaProgressRing>
+        )}
         <View style={[styles.words, row ? styles.wordsRow : { marginTop: scaled(spacing.xs, scale) }]}>
           <EcolnaText variant={row ? 'headlineSm' : 'headlineMd'} color={locked ? colors.inkSecondary : colors.ink} numberOfLines={1}>
             {label}
@@ -84,9 +98,6 @@ export function SubjectTile({
           </View>
         ) : null}
       </View>
-      {locked ? null : (
-        <EcolnaProgressBar progress={progress} fill={family.solid} height={8} accessibilityLabel={fr.a11y.progress(label, completed, total)} />
-      )}
     </EcolnaGalet>
   );
 }

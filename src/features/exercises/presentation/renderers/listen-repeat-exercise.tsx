@@ -54,8 +54,8 @@ export function ListenRepeatExercise({
       </EcolnaStimulus>
       <EcolnaButton
         label={fr.lesson.repeatDone}
-        disabled={!interactive}
-        onPress={() => onSubmit({ kind: 'acknowledge' })}
+        // Jamais grisé : pendant le retour, l'appui ne fait simplement rien.
+        onPress={() => interactive && onSubmit({ kind: 'acknowledge' })}
         style={styles.done}
       />
     </View>

@@ -120,6 +120,9 @@ export function SubjectPortal({
               variant={explanation ? 'bodyLg' : 'bodyMd'}
               color={explanation ? ink : soft}
               align="center"
+              numberOfLines={explanation ? 4 : 2}
+              // Deux lignes réservées : titres et puces des quatre portes alignés.
+              style={{ minHeight: scaled(44, scale) }}
               accessibilityLiveRegion={explanation ? 'polite' : undefined}
             >
               {explanation ?? hint}
@@ -181,11 +184,11 @@ export function SubjectPortal({
 
 const styles = StyleSheet.create({
   portalOuter: { flex: 1 },
-  portalFace: { alignItems: 'center', justifyContent: 'center' },
+  portalFace: { alignItems: 'center', justifyContent: 'flex-start' },
   center: { alignItems: 'center', justifyContent: 'center' },
   lockBadge: { position: 'absolute', right: -6, bottom: -6 },
   portalText: { alignItems: 'center' },
-  stateChip: { borderRadius: radius.pill, paddingVertical: 4 },
+  stateChip: { borderRadius: radius.pill, paddingVertical: 4, marginTop: 'auto' },
   rowFace: { flexDirection: 'row', alignItems: 'center' },
   rowText: { flex: 1, gap: spacing.xxs },
   footer: { gap: spacing.xs },

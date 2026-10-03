@@ -3,6 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
+import { EcolnaAvatar } from '../avatars';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { EcolnaButton } from '../primitives/ecolna-button';
 import { EcolnaText } from '../primitives/ecolna-text';
@@ -14,6 +15,10 @@ interface FeedbackBannerProps {
   message: string;
   actionLabel: string;
   onAction: () => void;
+  /** Le personnage de l'enfant, qui réagit (joie ou calme). */
+  avatarId?: string | undefined;
+  /** Après trop d'essais : on avance (bouton soleil « Continuer »). */
+  moveOn?: boolean;
 }
 
 /**
@@ -24,7 +29,14 @@ interface FeedbackBannerProps {
  * jamais une croix rouge, jamais un son qui gronde. Elle monte d'un ressort
  * court (instantanée en mouvement réduit).
  */
-export function FeedbackBanner({ kind, message, actionLabel, onAction }: FeedbackBannerProps) {
+export function FeedbackBanner({
+  kind,
+  message,
+  actionLabel,
+  onAction,
+  avatarId,
+  moveOn = false,
+}: FeedbackBannerProps) {
   const reducedMotion = useReducedMotion();
   const insets = useSafeAreaInsets();
   const { scale, isTablet, contentMaxWidth, screenPadding } = useResponsive();
@@ -44,7 +56,10 @@ export function FeedbackBanner({ kind, message, actionLabel, onAction }: Feedbac
   }, [reducedMotion, translate]);
 
   const isCorrect = kind === 'correct';
+  const forward = isCorrect || moveOn;
   const disc = scaled(isTablet ? 56 : 48, scale);
+  const portrait = scaled(isTablet ? 72 : 60, scale);
+  const pip = scaled(28, scale);
   return (
     <Animated.View
       accessibilityLiveRegion="polite"
@@ -72,19 +87,53 @@ export function FeedbackBanner({ kind, message, actionLabel, onAction }: Feedbac
         ]}
       >
         <View style={[styles.row, { gap: scaled(spacing.md, scale) }, isTablet && styles.flex]}>
-          <View
-            style={[
-              styles.disc,
-              {
-                width: disc,
-                height: disc,
-                borderRadius: disc / 2,
-                backgroundColor: isCorrect ? colors.success : colors.brand,
-              },
-            ]}
-          >
-            <EcolnaIcon name={isCorrect ? 'check' : 'replay'} size={Math.round(disc * 0.56)} color={colors.white} />
-          </View>
+          {avatarId ? (
+            // Le personnage de l'enfant réagit : la joie quand c'est juste, le
+            // calme sinon ; la pastille du verdict à son épaule.
+            <View>
+              <EcolnaAvatar
+                avatarId={avatarId}
+                size={portrait}
+                expression={isCorrect ? 'joy' : 'calm'}
+              />
+              <View
+                style={[
+                  styles.pip,
+                  {
+                    width: pip,
+                    height: pip,
+                    borderRadius: pip / 2,
+                    backgroundColor: isCorrect ? colors.success : colors.brand,
+                    borderColor: isCorrect ? colors.successTint : colors.brandTint,
+                  },
+                ]}
+              >
+                <EcolnaIcon
+                  name={isCorrect ? 'check' : 'replay'}
+                  size={Math.round(pip * 0.56)}
+                  color={colors.white}
+                />
+              </View>
+            </View>
+          ) : (
+            <View
+              style={[
+                styles.disc,
+                {
+                  width: disc,
+                  height: disc,
+                  borderRadius: disc / 2,
+                  backgroundColor: isCorrect ? colors.success : colors.brand,
+                },
+              ]}
+            >
+              <EcolnaIcon
+                name={isCorrect ? 'check' : 'replay'}
+                size={Math.round(disc * 0.56)}
+                color={colors.white}
+              />
+            </View>
+          )}
           <EcolnaText
             variant={isTablet ? 'headlineLg' : 'headlineMd'}
             color={isCorrect ? colors.successInk : colors.brandInk}
@@ -95,14 +144,14 @@ export function FeedbackBanner({ kind, message, actionLabel, onAction }: Feedbac
         </View>
         <EcolnaButton
           label={actionLabel}
-          variant={isCorrect ? 'primary' : 'accent'}
+          variant={forward ? 'primary' : 'accent'}
           // Un pictogramme pour qui ne lit pas encore : avancer, ou recommencer.
           icon={
             <EcolnaIcon
-              name={isCorrect ? 'play' : 'replay'}
+              name={forward ? 'play' : 'replay'}
               size={scaled(20, scale)}
-              color={isCorrect ? colors.onReward : colors.white}
-              filled={isCorrect}
+              color={forward ? colors.onReward : colors.white}
+              filled={forward}
             />
           }
           onPress={onAction}
@@ -126,6 +175,14 @@ const styles = StyleSheet.create({
   content: { width: '100%' },
   row: { flexDirection: 'row', alignItems: 'center' },
   disc: { alignItems: 'center', justifyContent: 'center' },
+  pip: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+  },
   flex: { flex: 1 },
   tabletButton: { minWidth: 240 },
 });

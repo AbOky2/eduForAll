@@ -1,11 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
-  EcolnaButton,
   EcolnaCard,
   EcolnaText,
   useExerciseMetrics,
@@ -60,6 +59,16 @@ export function GraphismExercise({
 
   const currentStroke = scaledStrokes[strokeIndex] ?? null;
   const done = strokeIndex >= strokes.length;
+
+  // Le motif est entièrement tracé : l'étape se valide seule.
+  useEffect(() => {
+    if (!done || !interactive) {
+      return undefined;
+    }
+    const timer = setTimeout(() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true }), 650);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done, interactive]);
 
   const advance = (x: number, y: number) => {
     if (!currentStroke || done) {
@@ -195,12 +204,8 @@ export function GraphismExercise({
       </EcolnaCard>
 
       {done ? (
-        <EcolnaButton
-          label={fr.common.verify}
-          disabled={!interactive}
-          onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
-          style={styles.verify}
-        />
+        // Le tracé fini se valide de lui-même : pas de bouton à chercher.
+        <View style={{ minHeight: scaled(60, scale) }} />
       ) : (
         <EcolnaText
           variant="headlineSm"

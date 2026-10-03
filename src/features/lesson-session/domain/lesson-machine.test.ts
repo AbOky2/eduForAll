@@ -4,6 +4,8 @@ import {
   createLessonMachine,
   currentStep,
   lessonReducer,
+  willMoveOn,
+  type LessonEvent,
   type LessonMachineState,
 } from './lesson-machine';
 
@@ -112,5 +114,31 @@ describe('lesson state machine', () => {
     });
     expect(state.phase).toBe('awaiting_answer');
     expect(state.attemptsOnCurrentStep).toBe(0);
+  });
+
+  it('ouvre l’indice de lui-même au deuxième essai manqué, puis passe à la suite au troisième', () => {
+    let state = present(createLessonMachine(buildLesson()));
+    // La dernière étape (former « ba ») porte un indice.
+    state = { ...state, stepIndex: 2, phase: 'awaiting_answer' };
+    const wrong: LessonEvent = {
+      type: 'ANSWER_SUBMITTED',
+      answer: { kind: 'sequence', values: ['m', 'a'] },
+    };
+
+    state = lessonReducer(state, wrong);
+    state = lessonReducer(state, { type: 'FEEDBACK_DISMISSED' });
+    expect(state.phase).toBe('awaiting_answer');
+
+    state = lessonReducer(state, wrong);
+    state = lessonReducer(state, { type: 'FEEDBACK_DISMISSED' });
+    expect(state.phase).toBe('showing_hint');
+    expect(state.hintShownOnCurrentStep).toBe(true);
+
+    state = lessonReducer(state, { type: 'HINT_DISMISSED' });
+    state = lessonReducer(state, wrong);
+    expect(willMoveOn(state)).toBe(true);
+    state = lessonReducer(state, { type: 'FEEDBACK_DISMISSED' });
+    expect(state.phase).toBe('completed');
+    expect(state.outcomes[0]).toMatchObject({ firstTryCorrect: false, attempts: 3, usedHint: true });
   });
 });

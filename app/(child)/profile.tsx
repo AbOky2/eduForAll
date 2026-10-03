@@ -74,7 +74,7 @@ export default function ChildProfileScreen() {
   };
 
   const hero = scaled(isTablet ? 136 : 112, scale);
-  const badgeColumns = splitPanes ? 4 : isTablet ? 5 : 3;
+  const badgeColumns = splitPanes ? 3 : isTablet ? 5 : 3;
   const gap = scaled(spacing.lg, scale);
 
   const identity = (

@@ -44,7 +44,7 @@ export default function SettingsScreen() {
 
   return (
     <EcolnaScreen background="plain">
-      <EcolnaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineMd" />
+      <EcolnaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineLg" alignTitle="left" />
 
       <View style={[styles.content, { paddingHorizontal: screenPadding }]}>
         <EcolnaCard rounded="lg" padded={false} contentStyle={styles.group}>
@@ -91,7 +91,7 @@ export default function SettingsScreen() {
 
           {/* Offline info */}
           <View style={styles.row}>
-            <EcolnaIcon name="offline-ok" size={22} color={colors.brand} />
+            <EcolnaIcon name="offline-ok" size={22} color={colors.success} filled />
             <View style={styles.rowLabel}>
               <EcolnaText variant="bodyLg">{fr.settings.offlineInfo}</EcolnaText>
               <EcolnaText variant="bodySm" color={colors.textSecondary}>

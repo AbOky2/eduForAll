@@ -74,7 +74,8 @@ function TabButton({
   const { isTablet, scale, height } = useResponsive();
   // Un téléphone en paysage est « medium » par sa largeur mais n'a que 390 dp
   // de haut : la barre se compacte d'après la hauteur, pas la classe.
-  const roomy = isTablet && height >= 520;
+  // Une tablette 7" couchée (600 dp) garde sa hauteur pour le contenu.
+  const roomy = isTablet && height >= 700;
   const iconSize = roomy ? 30 : height < 520 ? 24 : 28;
   const pebble = roomy ? 48 : height < 520 ? 38 : 44;
   return (
@@ -131,7 +132,7 @@ function EcolnaTabBar({ state, navigation }: EcolnaTabBarProps) {
     <View
       style={[
         styles.band,
-        { paddingBottom: Math.max(insets.bottom, short ? spacing.xxs : spacing.sm) + spacing.xxs },
+        { paddingBottom: Math.max(insets.bottom, height < 700 ? spacing.xxs : spacing.sm) + spacing.xxs },
       ]}
     >
       <View
@@ -139,7 +140,7 @@ function EcolnaTabBar({ state, navigation }: EcolnaTabBarProps) {
           styles.bar,
           shadows.floating,
           {
-            minHeight: short ? 58 : isTablet ? 80 : 70,
+            minHeight: short ? 58 : height < 700 ? 64 : isTablet ? 80 : 70,
             paddingVertical: short ? 2 : spacing.xs,
             maxWidth: isTablet ? 480 : undefined,
           },

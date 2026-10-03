@@ -61,11 +61,7 @@ function CoinFace({ value, size }: { value: Coin; size: number }) {
  * laid out on the mat — the first real-life use of addition at CP. The
  * instruction is said (and replayed) by the lesson header.
  */
-export function MoneyExercise({
-  step,
-  interactive,
-  onSubmit,
-}: ExerciseRendererProps<MoneyStep>) {
+export function MoneyExercise({ step, interactive, onSubmit }: ExerciseRendererProps<MoneyStep>) {
   const [picked, setPicked] = useState<number | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
@@ -89,13 +85,7 @@ export function MoneyExercise({
           // Espace insécable : « 10 F » ne se coupe jamais en deux lignes.
           label={`${option}\u00a0F`}
           glyphVariant={isTablet ? 'displayGlyphSmall' : 'headlineLg'}
-          state={
-            !interactive && picked !== option
-              ? 'disabled'
-              : picked === option
-                ? 'selected'
-                : 'default'
-          }
+          state={interactive ? 'default' : picked === option ? 'selected' : 'disabled'}
           onPress={() => {
             setPicked(option);
             onSubmit({ kind: 'number', value: option });

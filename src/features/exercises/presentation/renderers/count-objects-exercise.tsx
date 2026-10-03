@@ -29,10 +29,10 @@ export function CountObjectsExercise({
   onSubmit,
 }: ExerciseRendererProps<CountStep>) {
   const [pressed, setPressed] = useState<number | null>(null);
-  const { isTablet, scale } = useResponsive();
+  const { isTablet, scale, splitPanes } = useResponsive();
   const metrics = useExerciseMetrics();
   // Peu d'objets : plus grands, pour qu'un seul ne se perde pas dans la scène.
-  const boost = step.count <= 2 ? 2.1 : step.count <= 4 ? 1.4 : 1;
+  const boost = step.count <= 2 ? 2.6 : step.count <= 4 ? 1.5 : 1;
   const objectSize = Math.round(scaled(isTablet ? 76 : 56, scale) * boost);
 
   const prompt = (
@@ -56,25 +56,19 @@ export function CountObjectsExercise({
   );
 
   const answers = (
-    <View style={[styles.options, { gap: metrics.gap }]}>
+    <View style={[styles.options, splitPanes && styles.fill, { gap: metrics.gap }]}>
       {step.options.map((option) => (
         <EcolnaAnswerCard
           key={option}
           label={String(option)}
           glyphVariant={metrics.answerGlyph}
-          state={
-            !interactive && pressed !== option
-              ? 'disabled'
-              : pressed === option
-                ? 'selected'
-                : 'default'
-          }
+          state={interactive ? 'default' : pressed === option ? 'selected' : 'disabled'}
           onPress={() => {
             setPressed(option);
             onSubmit({ kind: 'number', value: option });
           }}
           style={[styles.numberCard, { maxWidth: metrics.tileWidth * 1.2 }]}
-          contentStyle={{ minHeight: metrics.answerHeight }}
+          contentStyle={{ minHeight: metrics.answerHeight, flexGrow: 1 }}
         />
       ))}
     </View>
@@ -91,6 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  options: { flexDirection: 'row', justifyContent: 'center' },
+  options: { flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch' },
+  fill: { flex: 1 },
   numberCard: { flex: 1 },
 });

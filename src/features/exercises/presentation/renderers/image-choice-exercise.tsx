@@ -60,13 +60,7 @@ export function ImageChoiceExercise({
             <EcolnaAnswerCard
               key={choice.id}
               accessibilityLabel={choice.label ?? choice.id}
-              state={
-                !interactive && pressedId !== choice.id
-                  ? 'disabled'
-                  : pressedId === choice.id
-                    ? 'selected'
-                    : 'default'
-              }
+              state={interactive ? 'default' : pressedId === choice.id ? 'selected' : 'disabled'}
               onPress={() => {
                 setPressedId(choice.id);
                 onSubmit({ kind: 'choice', choiceId: choice.id });

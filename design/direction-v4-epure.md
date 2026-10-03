@@ -164,8 +164,21 @@ servi que de références de proportions : aucun tracé n'en provient.
   parole, le haut-parleur est réservé au son à trouver.
 - **Tracer** : l'ardoise est de nuit ; le modèle se dessine depuis le chemin
   lui-même (bande de craie pâle), les jalons dessus, le suivant au soleil.
-- **Relier** : un point d'accroche au bord de chaque carte, un trait de la
-  teinte de la paire entre deux cartes reliées.
+- **Relier** : un point d'accroche au bord de chaque carte (bleu au choix,
+  teinte de la paire une fois reliée), un trait de cette teinte entre les deux.
+- **Le personnage réagit** : dans la feuille de retour, l'enfant (joie si
+  c'est juste, calme sinon) porte la pastille du verdict.
+- **L'aide monte d'elle-même** : au deuxième essai manqué, l'indice s'ouvre et
+  se dit ; au troisième, « On reverra ça ensemble. » et l'on avance — l'étape
+  part en révision. Un enfant ne tourne jamais en rond.
+- **Rien à juger, pas de « Bravo »** : écouter, répéter et tracer enchaînent
+  sans feuille de retour ; le tracé se valide seul, la lettre brille au soleil.
+- **Les lignes du cahier** : sur l'ardoise, la ligne de base (pleine), la
+  hauteur d'x et les hampes (tiretées) ; les lettres courtes sont posées sur
+  la même hauteur d'x.
+- **Plus grand sur grande tablette** : au-delà de 780 dp de haut, réponses et
+  images grandissent ; le contenu s'ancre sous la consigne (un tiers de l'air
+  au-dessus, deux tiers au-dessous).
 
 ## 8 quater. Mise en page
 

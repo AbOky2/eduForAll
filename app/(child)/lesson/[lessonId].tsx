@@ -15,6 +15,7 @@ import {
   createLessonMachine,
   currentStep,
   lessonReducer,
+  willMoveOn,
 } from '@/features/lesson-session/domain/lesson-machine';
 import { recordLessonCompletion } from '@/features/progress/application/record-lesson-completion';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
@@ -38,6 +39,9 @@ import { a11y, colors, spacing, subjectColors } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
 
 const log = createLogger('lesson-session');
+
+/** Des étapes sans réponse à juger : on les enchaîne sans verdict. */
+const QUIET_STEPS = new Set(['listen', 'listen_and_repeat', 'trace_letter', 'trace_graphism']);
 
 /**
  * Lesson session (mockups S10–S15). Presentation shell around the pure
@@ -189,6 +193,33 @@ function SessionBody({
     }
   }, [state.phase, state.lastFeedback, profileId, lesson, state]);
 
+  // Écouter, répéter, tracer : rien à juger. Le pas est enregistré par l'effet
+  // ci-dessus, puis on enchaîne sans feuille « Bravo » — la félicitation garde
+  // son sens pour les vraies réussites.
+  useEffect(() => {
+    if (state.phase !== 'showing_feedback' || state.lastFeedback !== 'correct') {
+      return;
+    }
+    if (QUIET_STEPS.has(currentStep(state).type)) {
+      dispatch({ type: 'FEEDBACK_DISMISSED' });
+    }
+  }, [state]);
+
+  // L'indice s'ouvre (demandé, ou de lui-même après deux essais) : il est dit.
+  useEffect(() => {
+    if (state.phase !== 'showing_hint' || !soundEnabled) {
+      return;
+    }
+    const hintAudio = currentStep(state).hint?.audioId;
+    if (hintAudio) {
+      audio.current
+        .play(hintAudio)
+        .then(() => markPlaying(hintAudio))
+        .catch((cause) => log.warn(`hint audio failed: ${String(cause)}`));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.phase, state.stepIndex, soundEnabled]);
+
   // Completion: score, persist, navigate to the result screen.
   useEffect(() => {
     if (state.phase !== 'completed' || completionHandled.current) {
@@ -262,7 +293,8 @@ function SessionBody({
           <EcolnaAudioButton
             variant="sky"
             icon="speech"
-            size={isTablet ? a11y.childTouchTarget : scaled(48, scale)}
+            // Le diamètre du bouton « fermer » : consigne et barre partent du même bord.
+            size={Math.max(a11y.childTouchTarget, scaled(52, scale))}
             accessibilityLabel={fr.lesson.replayInstruction}
             playing={playingAudioId === step.instruction.audioId}
             onPress={() => playAudio(step.instruction.audioId)}
@@ -330,16 +362,28 @@ function SessionBody({
       </ScrollView>
 
       {/* Feedback */}
-      {state.phase === 'showing_feedback' && state.lastFeedback ? (
+      {state.phase === 'showing_feedback' &&
+      state.lastFeedback &&
+      !(state.lastFeedback === 'correct' && step && QUIET_STEPS.has(step.type)) ? (
         <FeedbackBanner
           kind={state.lastFeedback}
-          message={pickFeedback(
-            state.lastFeedback === 'correct'
-              ? fr.lesson.feedbackCorrect
-              : fr.lesson.feedbackIncorrect,
-            state.stepIndex + state.attemptsOnCurrentStep,
-          )}
-          actionLabel={state.lastFeedback === 'correct' ? fr.common.continue : fr.common.retry}
+          avatarId={avatarId}
+          moveOn={willMoveOn(state)}
+          message={
+            willMoveOn(state)
+              ? fr.lesson.moveOn
+              : pickFeedback(
+                  state.lastFeedback === 'correct'
+                    ? fr.lesson.feedbackCorrect
+                    : fr.lesson.feedbackIncorrect,
+                  state.stepIndex + state.attemptsOnCurrentStep,
+                )
+          }
+          actionLabel={
+            state.lastFeedback === 'correct' || willMoveOn(state)
+              ? fr.common.continue
+              : fr.common.retry
+          }
           onAction={() => dispatch({ type: 'FEEDBACK_DISMISSED' })}
         />
       ) : null}
@@ -365,6 +409,7 @@ function SessionBody({
             <EcolnaText variant="bodyLg">{step.hint.text}</EcolnaText>
             <EcolnaButton
               label={fr.common.understood}
+              icon={<EcolnaIcon name="check" size={scaled(20, scale)} color={colors.onReward} />}
               onPress={() => dispatch({ type: 'HINT_DISMISSED' })}
             />
           </EcolnaCard>

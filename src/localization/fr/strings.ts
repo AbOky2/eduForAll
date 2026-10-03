@@ -133,7 +133,7 @@ export const fr = {
   },
   learn: {
     chooseModule: 'Que veux-tu apprendre ?',
-    readyToday: 'Prêt à apprendre aujourd’hui ?',
+    readyToday: 'Choisis une matière.',
     levelTitle: (level: string) => `Niveau ${level}`,
     cp1Motto: 'Continue ton aventure !',
     cp2Motto: 'En route vers l’oasis des savoirs !',
@@ -175,6 +175,8 @@ export const fr = {
     soundPositions: { debut: 'au début', milieu: 'au milieu', fin: 'à la fin' },
     maskedWord: 'Mot à compléter',
     feedbackCorrect: ['Bien joué !', 'Bravo !', 'Oui, c’est ça !', 'Super !', 'Exactement !'],
+    /** Trois essais : on avance sans gronder, la révision reprendra l'étape. */
+    moveOn: 'On reverra ça ensemble.',
     feedbackIncorrect: [
       'Presque ! Essayons ensemble.',
       'Écoute encore une fois.',
@@ -248,7 +250,7 @@ export const fr = {
     days: (count: number) => (count > 1 ? `${count} jours` : `${count} jour`),
   },
   revision: {
-    title: 'On va revoir ce qui est difficile.',
+    title: 'On revoit ensemble.',
     /** Pourquoi une notion revient — dit à l'adulte, jamais à l'enfant. */
     reasons: {
       repeated_errors: 'Cette notion a posé plusieurs difficultés récemment.',
@@ -256,7 +258,7 @@ export const fr = {
       not_practiced_recently: 'Cette notion n’a pas été pratiquée depuis un moment.',
       confusion_pair: 'Deux sons proches sont parfois confondus : on les compare ensemble.',
     },
-    subtitle: 'Pas de stress, on prend notre temps pour bien comprendre.',
+    subtitle: 'On prend notre temps pour bien comprendre.',
     start: 'Commencer la révision',
     inLessons: 'Ces notions reviendront dans tes prochaines leçons.',
     empty: 'Rien à revoir pour l’instant. Continue comme ça !',
@@ -271,14 +273,14 @@ export const fr = {
   parent: {
     gateTitle: 'Espace parents',
     gateSubtitle: 'Cet espace est réservé aux parents.',
-    gateQuestion: 'Pour entrer, écris le résultat de cette opération :',
-    gatePlaceholder: 'Ta réponse',
+    gateQuestion: 'Pour entrer, écrivez le résultat de cette opération :',
+    gatePlaceholder: 'Votre réponse',
     gateEnter: 'Entrer',
     gateWrong: 'Ce n’est pas la bonne réponse.',
     dashboardTitle: (firstName: string) => `Tableau de bord ${of(firstName)}`,
     dashboardSubtitle: 'Suivez sa progression et ses accomplissements récents.',
     currentLevel: 'Niveau actuel',
-    lessonsCompleted: 'Leçons complétées',
+    lessonsCompleted: 'Leçons terminées',
     timeToday: 'Temps aujourd’hui',
     masteredSkills: 'Notions maîtrisées',
     minutes: (count: number) => `${count} min`,
@@ -290,8 +292,8 @@ export const fr = {
     recommendation: 'RECOMMANDATION',
     toReview: 'Notions à revoir',
     nothingToReview: 'Aucune notion en difficulté cette semaine.',
-    proudTitle: 'Fier des résultats ?',
-    share: 'Partager la progression',
+    proudTitle: 'Envie de partager ses progrès ?',
+    share: 'Partager',
     switchProfile: 'Changer de profil',
   },
   settings: {

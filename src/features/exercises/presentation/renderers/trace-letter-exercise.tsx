@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Svg, { Circle, Path, Polyline } from 'react-native-svg';
+import Svg, { Circle, Line, Path, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { SlateBoard } from '@/design-system/components/slate-board';
@@ -11,13 +11,14 @@ import { colors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
-import { strokesForLetter } from './letter-paths';
+import { strokesForLetter, WRITING_LINES } from './letter-paths';
 
 type TraceStep = Extract<ExerciseStep, { type: 'trace_letter' }>;
 
 /** La craie sur l'ardoise de nuit : le trait de l'enfant, le modèle, les jalons. */
 const CHALK = colors.white;
-const GUIDE = colors.onColorTrack;
+const GUIDE = colors.onColorGuide;
+const LINE = colors.onColorTrack;
 const DOT = colors.onNightSecondary;
 
 /**
@@ -64,7 +65,7 @@ export function TraceLetterExercise({
   onSubmit,
 }: ExerciseRendererProps<TraceStep>) {
   const strokes = useMemo(() => strokesForLetter(step.letter), [step.letter]);
-  const { isTablet, scale } = useResponsive();
+  const { isTablet, isLandscape, scale, width, height, screenPadding } = useResponsive();
   const metrics = useExerciseMetrics();
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
   const [strokeIndex, setStrokeIndex] = useState(0);
@@ -93,6 +94,17 @@ export function TraceLetterExercise({
 
   const currentStroke = scaledStrokes[strokeIndex] ?? null;
   const done = strokes !== null && strokeIndex >= (strokes?.length ?? 0);
+
+  // La lettre est entièrement tracée : elle brille un instant au soleil, puis
+  // l'étape se valide seule.
+  useEffect(() => {
+    if (!done || !interactive) {
+      return undefined;
+    }
+    const timer = setTimeout(() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true }), 650);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done, interactive]);
 
   const advance = (x: number, y: number) => {
     if (!currentStroke || done) {
@@ -166,7 +178,17 @@ export function TraceLetterExercise({
   return (
     <View style={[styles.container, { gap: metrics.gap }]}>
       {/* L'ardoise prend la hauteur que la consigne et le bouton lui laissent, sans dépasser sa taille de cahier. */}
-      <SlateBoard style={[styles.board, { maxHeight: scaled(isTablet ? 400 : 340, scale) }]}>
+      <SlateBoard
+        style={[
+          styles.board,
+          {
+            // Debout, l'ardoise grandit presque en carré : le geste a la place.
+            maxHeight: isLandscape
+              ? scaled(isTablet ? 400 : 340, scale)
+              : Math.min(width - 2 * screenPadding, Math.round(height * 0.55)),
+          },
+        ]}
+      >
         <GestureDetector gesture={pan}>
           <View
             style={styles.canvas}
@@ -174,6 +196,25 @@ export function TraceLetterExercise({
             accessibilityLabel={fr.lesson.traceLetterLabel(step.letter)}
           >
             <Svg width="100%" height="100%">
+              {/* Les lignes du cahier : on pose la lettre sur la ligne de base. */}
+              {box.side > 0
+                ? (['ascender', 'xHeight', 'baseline'] as const).map((line) => {
+                    const y = box.top + WRITING_LINES[line] * box.side;
+                    return (
+                      <Line
+                        key={line}
+                        x1={scaled(20, scale)}
+                        x2={boardSize.width - scaled(20, scale)}
+                        y1={y}
+                        y2={y}
+                        stroke={LINE}
+                        strokeWidth={2}
+                        strokeDasharray={line === 'baseline' ? '1 0' : '8 8'}
+                        opacity={line === 'ascender' ? 0.6 : 1}
+                      />
+                    );
+                  })
+                : null}
               {/* Le modèle : chaque trait de la lettre, en bande de craie pâle. */}
               {scaledStrokes.map((stroke, index) =>
                 stroke.length > 1 ? (
@@ -201,7 +242,7 @@ export function TraceLetterExercise({
                   key={`w-${index}`}
                   points={stroke.map(([x, y]) => `${x},${y}`).join(' ')}
                   fill="none"
-                  stroke={CHALK}
+                  stroke={done ? colors.reward : CHALK}
                   strokeWidth={strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -244,12 +285,8 @@ export function TraceLetterExercise({
       </SlateBoard>
 
       {done ? (
-        <EcolnaButton
-          label={fr.common.verify}
-          disabled={!interactive}
-          onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
-          style={styles.verify}
-        />
+        // Le tracé fini se valide de lui-même : pas de bouton à chercher.
+        <View style={{ minHeight: scaled(60, scale) }} />
       ) : (
         <EcolnaText
           variant="headlineSm"

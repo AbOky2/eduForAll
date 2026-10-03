@@ -50,6 +50,8 @@ interface WorldNode {
   totalLessons: number;
   completedLessons: number;
   nextLessonId: string | null;
+  /** La prochaine leçon est déjà entamée : « Continuer », comme l'accueil. */
+  nextLessonStarted: boolean;
   lessons: LessonRow[];
 }
 
@@ -132,6 +134,7 @@ export default function LevelMapScreen() {
             totalLessons: lessons.length,
             completedLessons: completed.length,
             nextLessonId: nextLesson?.id ?? null,
+            nextLessonStarted: nextLesson ? byLesson.get(nextLesson.id)?.status === 'in_progress' : false,
             lessons: lessons.map((lesson) => ({
               id: lesson.id,
               title: lesson.title,
@@ -296,7 +299,7 @@ export default function LevelMapScreen() {
                   ? point.x + outer / 2 + labelGap
                   : point.x - outer / 2 - labelGap - labelWidth;
                 const nodeSubject = subjectId ?? entry.world.subject;
-                const action = entry.completedLessons > 0 ? fr.common.continue : fr.common.start;
+                const action = entry.nextLessonStarted ? fr.common.continue : fr.common.start;
                 return (
                   <View
                     key={entry.world.id}
@@ -360,7 +363,8 @@ export default function LevelMapScreen() {
                       {entry.state === 'completed' ? (
                         <StarLine stars={averageStars(entry)} />
                       ) : null}
-                      {entry.state === 'current' ? (
+                      {/* Couché, l'action vit dans le volet : une seule action soleil par écran. */}
+                      {entry.state === 'current' && !splitPanes ? (
                         <StartButton
                           label={action}
                           height={bubble}
@@ -491,7 +495,7 @@ function WorldPanel({
 }) {
   const { scale } = useResponsive();
   const family = subjectColors[subject];
-  const action = entry.completedLessons > 0 ? fr.common.continue : fr.common.start;
+  const action = entry.nextLessonStarted ? fr.common.continue : fr.common.start;
   const disc = scaled(36, scale);
   return (
     <View
@@ -544,14 +548,17 @@ function WorldPanel({
                       ? colors.success
                       : next
                         ? family.solid
-                        : colors.fill,
+                        : colors.white,
+                    // À venir : la grammaire du monde fermé, jamais un gris.
+                    borderWidth: lesson.done || next ? 0 : 2,
+                    borderColor: family.tintStrong,
                   },
                 ]}
               >
                 {lesson.done ? (
                   <EcolnaIcon name="check" size={Math.round(disc * 0.56)} color={colors.white} />
                 ) : (
-                  <EcolnaText variant="labelLg" color={next ? colors.white : colors.inkSecondary}>
+                  <EcolnaText variant="labelLg" color={next ? colors.white : family.ink}>
                     {String(index + 1)}
                   </EcolnaText>
                 )}
@@ -560,7 +567,7 @@ function WorldPanel({
                 <EcolnaText
                   variant="labelLg"
                   numberOfLines={2}
-                  color={lesson.done || next ? colors.ink : colors.inkSecondary}
+                  color={colors.ink}
                 >
                   {lesson.title}
                 </EcolnaText>

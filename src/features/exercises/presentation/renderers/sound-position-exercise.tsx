@@ -86,12 +86,7 @@ export function SoundPositionExercise({
   const answers = (
     <View style={[styles.options, { gap: metrics.gap }, !isTablet && styles.optionsRow]}>
       {POSITIONS.map((position, index) => {
-        const state =
-          !interactive && picked !== position
-            ? 'disabled'
-            : picked === position
-              ? 'selected'
-              : 'default';
+        const state = interactive ? 'default' : picked === position ? 'selected' : 'disabled';
         return (
           <EcolnaAnswerCard
             key={position}

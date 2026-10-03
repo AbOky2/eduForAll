@@ -184,7 +184,7 @@ export default function ParentDashboardScreen() {
 
   const shareCard = (
     <EcolnaCard rounded="xl" style={styles.shareCard}>
-      <EcolnaAvatar avatarId={profile.avatarId} size={scaled(72, scale)} expression="joy" />
+      <EcolnaIcon name="share" size={scaled(32, scale)} color={colors.brand} />
       <EcolnaText variant="headlineSm" align="center">
         {fr.parent.proudTitle}
       </EcolnaText>

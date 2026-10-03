@@ -76,13 +76,7 @@ export function ChoiceExercise({
           label={choice.label}
           glyph={choice.label.length <= 6}
           glyphVariant={metrics.answerGlyph}
-          state={
-            !interactive && pressedId !== choice.id
-              ? 'disabled'
-              : pressedId === choice.id
-                ? 'selected'
-                : 'default'
-          }
+          state={interactive ? 'default' : pressedId === choice.id ? 'selected' : 'disabled'}
           onPress={() => submit(choice.id)}
           style={grid ? styles.gridItem : undefined}
           contentStyle={{ minHeight: metrics.answerHeight }}

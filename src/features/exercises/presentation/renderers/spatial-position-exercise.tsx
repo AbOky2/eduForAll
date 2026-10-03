@@ -149,7 +149,7 @@ export function SpatialPositionExercise({
               onSubmit({ kind: 'choice', choiceId: choice.id });
             }}
             accessibilityLabel={choice.relation.replace('-', ' ')}
-            state={!interactive && !selected ? 'disabled' : selected ? 'selected' : 'default'}
+            state={interactive ? 'default' : selected ? 'selected' : 'disabled'}
             contentStyle={styles.cellFace}
           >
             <Scene

@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 
 import type { LevelId } from '@/content/schemas/curriculum-schema';
 import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
-import { EcolnaAvatar } from '@/design-system/avatars';
+import { AvatarSilhouette, EcolnaAvatar } from '@/design-system/avatars';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { Orbit } from '@/design-system/illustrations/orbit';
 import { EcolnaText } from '@/design-system/primitives';
@@ -26,15 +26,6 @@ interface ProfileStageProps {
   showSlate?: boolean;
 }
 
-/** En attendant le choix : six enfants de l'app autour d'une place libre. */
-const WAITING = [
-  { id: 'avatar-2', angle: -90 },
-  { id: 'avatar-3', angle: -30 },
-  { id: 'avatar-9', angle: 30 },
-  { id: 'avatar-6', angle: 90 },
-  { id: 'avatar-11', angle: 150 },
-  { id: 'avatar-1', angle: 210 },
-] as const;
 
 /** Les étoiles de la bienvenue : 7 étoiles éclosent dans un rayon ≈ 0,62 × le personnage, en 600 ms. */
 function WelcomeStars({ size }: { size: number }) {
@@ -110,10 +101,8 @@ function Character({
       {avatarId ? (
         <EcolnaAvatar avatarId={avatarId} size={size} expression={joy ? 'joy' : 'calm'} />
       ) : (
-        // La place libre : un disque bleuté et un sourire, qui attend « toi ».
-        <View style={[styles.waiting, { width: size, height: size, borderRadius: size / 2 }]}>
-          <EcolnaIcon name="smiley" size={Math.round(size * 0.46)} color={colors.brand} />
-        </View>
+        // La place libre : la silhouette des personnages de l'app, qui attend « toi ».
+        <AvatarSilhouette size={size} />
       )}
     </Animated.View>
   );
@@ -141,10 +130,7 @@ export function ProfileStage({
   const name = firstName.trim();
   const slateWidth = Math.min(width - 32, Math.max(220, characterSize * 1.35));
   const nameSize = Math.round(Math.min(56, Math.max(30, slateWidth / 7)));
-  const orbit = Math.round(
-    Math.min(width - 24, height - 24, characterSize * (avatarId ? 1.7 : 2.1)),
-  );
-  const friend = Math.round(characterSize * 0.36);
+  const orbit = Math.round(Math.min(width - 24, height - 24, characterSize * 1.7));
   return (
     <View
       style={[styles.stage, { width, height }]}
@@ -158,16 +144,6 @@ export function ProfileStage({
             size={orbit}
             ringColor={colors.brandTintStrong}
             inner={0.78}
-            satellites={
-              avatarId
-                ? []
-                : WAITING.map((entry) => ({
-                    node: <EcolnaAvatar avatarId={entry.id} size={friend} />,
-                    size: friend,
-                    angle: entry.angle,
-                    ring: 1 as const,
-                  }))
-            }
             center={
               <View>
                 <Character

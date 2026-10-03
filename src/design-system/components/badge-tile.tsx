@@ -32,7 +32,8 @@ export function BadgeTile({
 }: BadgeTileProps) {
   return (
     <View
-      style={[styles.tile, { width: Math.max(96, size + 24) }]}
+      // La cellule donne la largeur : le nom passe sur deux lignes, jamais sur la voisine.
+      style={[styles.tile, { width: '100%', maxWidth: Math.max(96, size + 24) }]}
       accessibilityRole="image"
       accessibilityLabel={`${label}. ${earned ? description : `${description} ${lockedHint}`}`}
     >
@@ -50,5 +51,5 @@ export function BadgeTile({
 }
 
 const styles = StyleSheet.create({
-  tile: { alignItems: 'center', gap: spacing.xxs },
+  tile: { alignItems: 'center', gap: spacing.xxs, paddingHorizontal: spacing.xxs, alignSelf: 'center' },
 });

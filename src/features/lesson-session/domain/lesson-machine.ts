@@ -37,6 +37,51 @@ export type LessonEvent =
   | { type: 'HINT_DISMISSED' }
   | { type: 'FEEDBACK_DISMISSED' };
 
+/** Au deuxième essai manqué, l'indice s'ouvre de lui-même. */
+export const HINT_AFTER_ATTEMPTS = 2;
+/**
+ * Au troisième, on avance : un enfant ne tourne jamais en rond sur une étape.
+ * L'étape n'est pas réussie du premier coup, la révision la reprendra.
+ */
+export const MOVE_ON_AFTER_ATTEMPTS = 3;
+
+/** La feuille de retour annonce-t-elle qu'on passe à la suite malgré l'erreur ? */
+export function willMoveOn(state: LessonMachineState): boolean {
+  return (
+    state.lastFeedback === 'incorrect' && state.attemptsOnCurrentStep >= MOVE_ON_AFTER_ATTEMPTS
+  );
+}
+
+/** Enregistre l'issue de l'étape et passe à la suivante (ou termine). */
+function advance(state: LessonMachineState): LessonMachineState {
+  const step = currentStep(state);
+  const outcome: StepOutcome = {
+    stepId: step.id,
+    exerciseType: step.type,
+    firstTryCorrect:
+      state.lastFeedback === 'correct' &&
+      state.attemptsOnCurrentStep === 1 &&
+      !state.hintShownOnCurrentStep,
+    attempts: state.attemptsOnCurrentStep,
+    usedHint: state.hintShownOnCurrentStep,
+    skills: step.skills,
+  };
+  const outcomes = [...state.outcomes, outcome];
+  const isLastStep = state.stepIndex >= state.lesson.steps.length - 1;
+  if (isLastStep) {
+    return { ...state, phase: 'completed', outcomes, lastFeedback: null };
+  }
+  return {
+    ...state,
+    phase: 'presenting',
+    stepIndex: state.stepIndex + 1,
+    attemptsOnCurrentStep: 0,
+    hintShownOnCurrentStep: false,
+    lastFeedback: null,
+    outcomes,
+  };
+}
+
 export function createLessonMachine(lesson: Lesson, resumeAtStepIndex = 0): LessonMachineState {
   const stepIndex = Math.min(Math.max(resumeAtStepIndex, 0), lesson.steps.length - 1);
   return {
@@ -94,34 +139,28 @@ export function lessonReducer(state: LessonMachineState, event: LessonEvent): Le
       if (state.phase !== 'showing_feedback') {
         return state;
       }
-      // Wrong answer: stay on the step for a kind retry.
       if (state.lastFeedback === 'incorrect') {
+        // Trop d'essais : on avance, la révision reprendra l'étape.
+        if (state.attemptsOnCurrentStep >= MOVE_ON_AFTER_ATTEMPTS) {
+          return advance(state);
+        }
+        // Deuxième erreur : l'aide monte d'elle-même, si l'étape en a une.
+        if (
+          state.attemptsOnCurrentStep >= HINT_AFTER_ATTEMPTS &&
+          currentStep(state).hint &&
+          !state.hintShownOnCurrentStep
+        ) {
+          return {
+            ...state,
+            phase: 'showing_hint',
+            hintShownOnCurrentStep: true,
+            lastFeedback: null,
+          };
+        }
+        // Sinon : on reste sur l'étape, pour un nouvel essai en douceur.
         return { ...state, phase: 'awaiting_answer', lastFeedback: null };
       }
-      // Correct: record the outcome and advance (or complete).
-      const step = currentStep(state);
-      const outcome: StepOutcome = {
-        stepId: step.id,
-        exerciseType: step.type,
-        firstTryCorrect: state.attemptsOnCurrentStep === 1 && !state.hintShownOnCurrentStep,
-        attempts: state.attemptsOnCurrentStep,
-        usedHint: state.hintShownOnCurrentStep,
-        skills: step.skills,
-      };
-      const outcomes = [...state.outcomes, outcome];
-      const isLastStep = state.stepIndex >= state.lesson.steps.length - 1;
-      if (isLastStep) {
-        return { ...state, phase: 'completed', outcomes, lastFeedback: null };
-      }
-      return {
-        ...state,
-        phase: 'presenting',
-        stepIndex: state.stepIndex + 1,
-        attemptsOnCurrentStep: 0,
-        hintShownOnCurrentStep: false,
-        lastFeedback: null,
-        outcomes,
-      };
+      return advance(state);
     }
 
     default: {

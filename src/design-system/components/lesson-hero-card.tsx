@@ -50,7 +50,7 @@ export function LessonHeroCard({
   const compact = !isTablet || isLandscape;
   // Une tablette 7" couchée (600 dp) : titre et bouton resserrés.
   const short = height < 700;
-  const art = scaled(isTablet ? (isLandscape ? (height < 700 ? 76 : 92) : 112) : 76, scale);
+  const art = scaled(isTablet ? (isLandscape ? (height < 700 ? 62 : 92) : 112) : 76, scale);
   const pad = scaled(
     isTablet && !isLandscape ? spacing.xl : short ? spacing.md : spacing.lg,
     scale,

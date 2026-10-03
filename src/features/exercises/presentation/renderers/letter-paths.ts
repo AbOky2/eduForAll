@@ -524,6 +524,41 @@ export const LETTER_STROKES: Record<string, readonly Stroke[]> = {
   ],
 };
 
+/** Les lignes du cahier, dans la boîte normalisée (y vers le bas). */
+export const WRITING_LINES = { ascender: 0.07, xHeight: 0.34, baseline: 0.85 } as const;
+
+/** Les lettres sans hampe : leur corps tient entre la hauteur d'x et la ligne de base. */
+const SHORT_LETTERS = new Set(['a', 'c', 'e', 'é', 'è', 'ê', 'g', 'm', 'n', 'o', 'p', 'q', 'r', 's', 'u', 'v', 'w', 'x', 'y', 'z']);
+
+/**
+ * Pose le corps d'une lettre courte sur les lignes : son sommet sur la
+ * hauteur d'x, sa base inchangée, les jambages et les accents à leur place.
+ * Les squelettes ont été dessinés à des hauteurs d'x différentes (0,22 à
+ * 0,34) ; sur une ardoise lignée, l'écart se verrait.
+ */
+function onTheLines(letter: string, strokes: readonly Stroke[]): readonly Stroke[] {
+  if (!SHORT_LETTERS.has(letter)) {
+    return strokes;
+  }
+  // Un accent est un trait entièrement au-dessus de 0,2 : il ne compte pas dans le corps.
+  const body = strokes.filter((stroke) => stroke.some(([, y]) => y >= 0.2));
+  const top = Math.min(...body.flat().map(([, y]) => y));
+  const { xHeight, baseline } = WRITING_LINES;
+  if (!(top < baseline) || Math.abs(top - xHeight) < 0.005) {
+    return strokes;
+  }
+  const k = (baseline - xHeight) / (baseline - top);
+  return strokes.map((stroke) =>
+    body.includes(stroke)
+      ? stroke.map(([x, y]) => [x, y <= baseline ? baseline - (baseline - y) * k : y] as const)
+      : stroke,
+  );
+}
+
+const ON_THE_LINES = new Map(
+  Object.entries(LETTER_STROKES).map(([letter, strokes]) => [letter, onTheLines(letter, strokes)]),
+);
+
 export function strokesForLetter(letter: string): readonly Stroke[] | null {
-  return LETTER_STROKES[letter.toLowerCase()] ?? null;
+  return ON_THE_LINES.get(letter.toLowerCase()) ?? null;
 }

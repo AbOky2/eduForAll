@@ -72,13 +72,7 @@ export function TapValueExercise({
           key={option}
           label={option}
           glyphVariant={metrics.answerGlyph}
-          state={
-            !interactive && pressed !== option
-              ? 'disabled'
-              : pressed === option
-                ? 'selected'
-                : 'default'
-          }
+          state={interactive ? 'default' : pressed === option ? 'selected' : 'disabled'}
           onPress={() => {
             setPressed(option);
             onSubmit({ kind: 'value', value: option });

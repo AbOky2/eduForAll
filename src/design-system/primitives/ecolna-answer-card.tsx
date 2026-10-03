@@ -35,7 +35,8 @@ interface EcolnaAnswerCardProps {
 }
 
 const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string; ink: string }> = {
-  default: { face: colors.white, edge: colors.border, border: colors.border, ink: colors.ink },
+  // Le bord d'une réponse au repos se voit au soleil, sur un écran bon marché.
+  default: { face: colors.white, edge: colors.borderStrong, border: colors.borderStrong, ink: colors.ink },
   selected: { face: colors.brandTint, edge: colors.brand, border: colors.brand, ink: colors.brandInk },
   correct: { face: colors.successTint, edge: colors.success, border: colors.success, ink: colors.successInk },
   // Doux : le bleu de la marque, jamais rouge (le programme et la direction l'interdisent).

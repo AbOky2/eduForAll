@@ -59,8 +59,8 @@ export function ListenExercise({
       </View>
       <EcolnaButton
         label={fr.common.next}
-        disabled={!interactive}
-        onPress={() => onSubmit({ kind: 'acknowledge' })}
+        // Jamais grisé : pendant le retour, l'appui ne fait simplement rien.
+        onPress={() => interactive && onSubmit({ kind: 'acknowledge' })}
         style={styles.next}
       />
     </View>

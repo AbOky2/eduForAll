@@ -29,6 +29,20 @@ describe('copie française', () => {
     expect(labels.filter((label) => /\b(Bon|Roi|Grand|Élève|appliqué|travailleur|lecteur)\b/.test(label))).toEqual([]);
   });
 
+  it('s’adresse à l’enfant sans présumer de son genre', () => {
+    // « Prêt », « Fier », « Content » s'accordent : une fille lirait un masculin.
+    const texts: string[] = [];
+    const collect = (value: unknown): void => {
+      if (typeof value === 'string') {
+        texts.push(value);
+      } else if (value && typeof value === 'object') {
+        Object.values(value).forEach(collect);
+      }
+    };
+    collect(fr);
+    expect(texts.filter((text) => /\b(Prêt|Fier|Content|Heureux)\b/.test(text))).toEqual([]);
+  });
+
   it('reste en français : aucun anglicisme d’interface', () => {
     const texts: string[] = [];
     const collect = (value: unknown): void => {
@@ -39,7 +53,7 @@ describe('copie française', () => {
       }
     };
     collect(fr);
-    expect(texts.filter((text) => /\b(offline|online|loading|settings|reset|login|badge[sd]? unlocked)\b/i.test(text))).toEqual([]);
+    expect(texts.filter((text) => /\b(offline|online|loading|settings|reset|login|stress|badge[sd]? unlocked)\b/i.test(text))).toEqual([]);
   });
 
   it('met en couleur un mot qui figure bien dans le titre d’accueil', () => {

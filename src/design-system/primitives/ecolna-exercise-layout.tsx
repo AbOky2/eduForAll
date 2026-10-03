@@ -74,15 +74,32 @@ export interface ExerciseMetrics {
 }
 
 export function useExerciseMetrics(): ExerciseMetrics {
-  const { isTablet, scale } = useResponsive();
+  const { isTablet, scale, height } = useResponsive();
+  // Une grande tablette (≥ 780 dp de haut) a la place de réponses plus
+  // grandes : la largeur seule laissait l'exercice tassé au milieu du blanc.
+  const roomy = isTablet && height >= 780;
   return {
-    answerHeight: scaled(isTablet ? 96 : 72, scale),
-    tileWidth: scaled(isTablet ? 120 : 88, scale),
+    answerHeight: scaled(roomy ? 124 : isTablet ? 96 : 72, scale),
+    tileWidth: scaled(roomy ? 148 : isTablet ? 120 : 88, scale),
     answerGlyph: isTablet ? 'displayGlyph' : 'displayGlyphSmall',
-    objectSize: scaled(isTablet ? 96 : 72, scale),
-    listenSize: scaled(isTablet ? 100 : 88, scale),
+    objectSize: scaled(roomy ? 118 : isTablet ? 96 : 72, scale),
+    listenSize: scaled(roomy ? 116 : isTablet ? 100 : 88, scale),
     gap: scaled(isTablet ? spacing.lg : spacing.md, scale),
   };
+}
+
+/**
+ * Le contenu s'ancre près de la consigne : deux tiers de l'air au-dessous,
+ * un tiers au-dessus, plutôt qu'un centrage qui le détache de ce qu'elle dit.
+ */
+function Anchored({ children }: { children: ReactNode }) {
+  return (
+    <View style={styles.anchored}>
+      <View style={styles.above} />
+      {children}
+      <View style={styles.below} />
+    </View>
+  );
 }
 
 /**
@@ -104,34 +121,41 @@ export function EcolnaExerciseLayout({
   // Sans stimulus à montrer (la consigne suffit), les réponses se centrent :
   // un volet vide à gauche ferait croire qu'une image n'a pas chargé.
   if (!prompt) {
-    return <View style={[styles.stack, styles.alone]}>{answers}</View>;
+    return (
+      <Anchored>
+        <View style={styles.alone}>{answers}</View>
+      </Anchored>
+    );
   }
 
   if (!splitPanes) {
     return (
-      <View style={[styles.stack, { gap }]}>
-        {prompt}
-        {answers}
-      </View>
+      <Anchored>
+        <View style={{ gap }}>
+          {prompt}
+          {answers}
+        </View>
+      </Anchored>
     );
   }
 
   return (
-    <View style={styles.splitFrame}>
+    <Anchored>
       <View style={[styles.split, { gap }]}>
         <View style={[styles.pane, { flex: promptWeight, gap: scaled(spacing.md, scale) }]}>
           <StimulusFillContext.Provider value>{prompt}</StimulusFillContext.Provider>
         </View>
         <View style={[styles.pane, { gap: scaled(spacing.md, scale) }]}>{answers}</View>
       </View>
-    </View>
+    </Anchored>
   );
 }
 
 const styles = StyleSheet.create({
-  stack: { flex: 1, justifyContent: 'center' },
+  anchored: { flex: 1 },
+  above: { flex: 1 },
+  below: { flex: 2 },
   alone: { width: '100%', maxWidth: 640, alignSelf: 'center' },
-  splitFrame: { flex: 1, justifyContent: 'center' },
   // Les deux volets prennent la hauteur du plus grand : bords communs.
   split: { flexDirection: 'row', alignItems: 'stretch' },
   pane: { flex: 1, justifyContent: 'center' },

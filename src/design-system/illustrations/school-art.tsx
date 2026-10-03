@@ -11,7 +11,6 @@ import { illustration } from '../tokens';
  */
 
 const nature = illustration.nature;
-const white = illustration.white;
 const wood = illustration.school.wood;
 
 type Pt = readonly [number, number];
@@ -103,7 +102,6 @@ const POT = {
   underRim: 'M27 70H69L68 74H28Z',
   rim: 'M26 56H70A4 4 0 0 1 74 60V66A4 4 0 0 1 70 70H26A4 4 0 0 1 22 66V60A4 4 0 0 1 26 56Z',
   rimLower: 'M22 63H74V66A4 4 0 0 1 70 70H26A4 4 0 0 1 22 66Z',
-  glint: 'M33 75L35 83',
 } as const;
 
 /**
@@ -147,7 +145,6 @@ export const ClassLevelArt = memo(function ClassLevelArt({
       <Path d={`${POT.bodyShade}${POT.underRim}`} fill={clay.shade} />
       <Path d={POT.rim} fill={clay.light} />
       <Path d={POT.rimLower} fill={clay.base} />
-      {selected ? <Path d={POT.glint} stroke={white} strokeWidth={3} strokeLinecap="round" /> : null}
     </Svg>
   );
 });

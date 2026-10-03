@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
@@ -84,7 +84,7 @@ export default function RevisionScreen() {
   const intro = (
     <View style={[styles.intro, { gap: scaled(spacing.sm, scale) }]}>
       <View style={[styles.sproutDisc, { width: disc, height: disc, borderRadius: disc / 2 }]}>
-        <EcolnaIcon name="refresh" size={Math.round(disc * 0.5)} color={colors.brand} />
+        <EcolnaIcon name="replay" size={Math.round(disc * 0.5)} color={colors.brand} />
       </View>
       <EcolnaText variant={isTablet ? 'displayHero' : 'headlineLg'} align="center">
         {fr.revision.title}
@@ -109,31 +109,52 @@ export default function RevisionScreen() {
             l'emblème de sa discipline devant. */}
         <EcolnaCard rounded="xl" padded={false}>
           {items.map((item, index) => (
-            <View
+            // Chaque notion s'ouvre sur sa leçon : ce qui ressemble à une ligne de liste se touche.
+            <Pressable
               key={item.skillId}
-              style={[
+              accessibilityRole="button"
+              accessibilityLabel={item.label}
+              disabled={!item.lessonId}
+              onPress={() => item.lessonId && router.push(`/(child)/lesson/${item.lessonId}`)}
+              style={({ pressed }) => [
                 styles.row,
                 index > 0 && styles.rowRule,
-                { gap: scaled(spacing.md, scale), padding: scaled(spacing.md, scale) },
+                {
+                  gap: scaled(spacing.md, scale),
+                  padding: scaled(spacing.md, scale),
+                  opacity: pressed ? 0.7 : 1,
+                },
               ]}
             >
               {item.subject ? (
                 <SubjectArt subject={item.subject} size={scaled(40, scale)} />
               ) : (
-                <View style={[styles.leaf, { width: scaled(40, scale), height: scaled(40, scale) }]}>
-                  <EcolnaIcon name="sprout" size={scaled(24, scale)} color={colors.success} filled />
+                <View
+                  style={[styles.leaf, { width: scaled(40, scale), height: scaled(40, scale) }]}
+                >
+                  <EcolnaIcon
+                    name="sprout"
+                    size={scaled(24, scale)}
+                    color={colors.success}
+                    filled
+                  />
                 </View>
               )}
               <EcolnaText variant="headlineSm" style={styles.flex}>
                 {item.label.charAt(0).toUpperCase() + item.label.slice(1)}
               </EcolnaText>
-            </View>
+              {item.lessonId ? (
+                <EcolnaIcon name="chevron-right" size={scaled(22, scale)} color={colors.brand} />
+              ) : null}
+            </Pressable>
           ))}
         </EcolnaCard>
         {firstLesson ? (
           <EcolnaButton
             label={fr.revision.start}
-            icon={<EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onReward} filled />}
+            icon={
+              <EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onReward} filled />
+            }
             onPress={() => router.push(`/(child)/lesson/${firstLesson}`)}
           />
         ) : (
@@ -194,6 +215,11 @@ const styles = StyleSheet.create({
   emptyCard: { alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xl },
   row: { flexDirection: 'row', alignItems: 'center' },
   rowRule: { borderTopWidth: 1, borderTopColor: colors.border },
-  leaf: { alignItems: 'center', justifyContent: 'center', borderRadius: radius.md, backgroundColor: colors.successTint },
+  leaf: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.md,
+    backgroundColor: colors.successTint,
+  },
   flex: { flex: 1 },
 });

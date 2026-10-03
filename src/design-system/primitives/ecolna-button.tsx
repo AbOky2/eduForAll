@@ -43,7 +43,7 @@ const VARIANTS: Record<
   primary: { face: colors.reward, text: colors.onReward, shadow: shadows.glowReward },
   accent: { face: colors.brand, text: colors.white, shadow: shadows.glowBrand },
   secondary: { face: colors.white, text: colors.ink, border: colors.borderStrong },
-  danger: { face: colors.dangerTint, text: colors.dangerInk, border: '#fecdca' },
+  danger: { face: colors.dangerTint, text: colors.dangerInk, border: colors.errorEdge },
 };
 
 const SIZES: Record<ButtonSize, { height: number; text: TypographyVariant; padding: number }> = {

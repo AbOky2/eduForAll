@@ -62,13 +62,7 @@ export function MiniStoryExercise({
           key={choice.id}
           label={choice.label}
           glyph={false}
-          state={
-            !interactive && pressedId !== choice.id
-              ? 'disabled'
-              : pressedId === choice.id
-                ? 'selected'
-                : 'default'
-          }
+          state={interactive ? 'default' : pressedId === choice.id ? 'selected' : 'disabled'}
           onPress={() => {
             setPressedId(choice.id);
             onSubmit({ kind: 'choice', choiceId: choice.id });

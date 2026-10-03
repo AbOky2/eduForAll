@@ -115,8 +115,8 @@ export default function ChildHomeScreen() {
           { padding: scaled(spacing.lg, scale), gap: scaled(spacing.md, scale) },
         ]}
       >
-        <View style={[styles.revisionIcon, { width: scaled(52, scale), height: scaled(52, scale), borderRadius: scaled(16, scale) }]}>
-          <EcolnaIcon name="refresh" size={scaled(28, scale)} color={colors.brand} />
+        <View style={[styles.revisionIcon, { width: scaled(52, scale), height: scaled(52, scale), borderRadius: scaled(26, scale) }]}>
+          <EcolnaIcon name="replay" size={scaled(28, scale)} color={colors.brand} />
         </View>
         <View style={styles.revisionText}>
           <EcolnaText variant="headlineSm">{fr.home.reviseTitle}</EcolnaText>
@@ -202,7 +202,10 @@ export default function ChildHomeScreen() {
 
         {/* Mes matières */}
         <View style={{ gap: scaled(short ? spacing.sm : spacing.md, scale) }}>
-          <EcolnaText variant={short ? 'headlineSm' : 'headlineMd'}>{fr.home.activities}</EcolnaText>
+          {/* 7" couchée : un titre discret, la place va aux tuiles. */}
+          <EcolnaText variant={short && splitPanes ? 'labelLg' : short ? 'headlineSm' : 'headlineMd'}>
+            {fr.home.activities}
+          </EcolnaText>
           <View style={{ gap }}>
             {chunk(summary?.subjects ?? [], columns).map((row, rowIndex) => (
               <View key={rowIndex} style={[styles.gridRow, { gap }]}>

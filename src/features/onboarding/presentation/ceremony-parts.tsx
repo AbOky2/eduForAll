@@ -64,7 +64,12 @@ export function LevelCard({ level, selected, onSelect, width, height }: LevelCar
       <EcolnaText variant="displayGlyph" color={selected ? colors.brand : colors.ink}>
         {level === 'CP1' ? '1' : '2'}
       </EcolnaText>
-      <ClassLevelArt level={level} size={art} selected={selected} />
+      <ClassLevelArt
+        level={level}
+        size={art}
+        selected={selected}
+        groundShade={selected ? colors.brandTintStrong : colors.fill}
+      />
       <EcolnaText variant="headlineMd" color={selected ? colors.brandInk : colors.textPrimary}>
         {level}
       </EcolnaText>
@@ -90,6 +95,9 @@ const styles = StyleSheet.create({
     right: spacing.sm,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.success,
+    // Le bleu du choix ; le vert reste au verdict « juste ».
+    backgroundColor: colors.brand,
+    borderWidth: 3,
+    borderColor: colors.white,
   },
 });

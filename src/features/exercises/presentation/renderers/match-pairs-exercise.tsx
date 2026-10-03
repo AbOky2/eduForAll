@@ -4,6 +4,7 @@ import Svg, { Circle, G, Line } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { EcolnaAnswerCard, useExerciseMetrics } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, pairTints } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -46,6 +47,10 @@ export function MatchPairsExercise({
   const [matches, setMatches] = useState<{ pairId: string; matchedPairId: string }[]>([]);
 
   const metrics = useExerciseMetrics();
+  const { splitPanes, scale, contentMaxWidth } = useResponsive();
+  // La gouttière où se tirent les traits : assez large pour qu'un trait se lise comme un geste.
+  const link = Math.round(metrics.gap * (splitPanes ? 5 : 2.5));
+  const dot = scaled(8, scale);
   // Le centre vertical de chaque carte (dans sa colonne), pour tirer les traits.
   const [centers, setCenters] = useState<Record<string, number>>({});
   const [columnWidth, setColumnWidth] = useState(0);
@@ -76,14 +81,11 @@ export function MatchPairsExercise({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.columns, { gap: metrics.gap * 2.5 }]}>
+    <View style={[styles.container, { maxWidth: contentMaxWidth }]}>
+      <View style={[styles.columns, { gap: link }]}>
         {/* Les traits et les points d'accroche, dans la gouttière entre les colonnes. */}
         {columnWidth > 0 ? (
-          <View
-            pointerEvents="none"
-            style={[styles.links, { left: columnWidth, width: metrics.gap * 2.5 }]}
-          >
+          <View pointerEvents="none" style={[styles.links, { left: columnWidth, width: link }]}>
             <Svg width="100%" height="100%">
               {matches.map((match, index) => {
                 const from = centers[`l-${match.pairId}`];
@@ -92,9 +94,9 @@ export function MatchPairsExercise({
                 return from !== undefined && to !== undefined && tint ? (
                   <Line
                     key={match.pairId}
-                    x1={0}
+                    x1={dot + 2}
                     y1={from}
-                    x2={metrics.gap * 2.5}
+                    x2={link - dot - 2}
                     y2={to}
                     stroke={tint.border}
                     strokeWidth={6}
@@ -105,26 +107,39 @@ export function MatchPairsExercise({
               {step.pairs.map((pair) => {
                 const left = centers[`l-${pair.id}`];
                 const right = centers[`r-${pair.id}`];
+                const leftPair = pairOfLeft.get(pair.id);
+                const rightPair = pairOfRight.get(pair.id);
+                // Le point se remplit : bleu au choix, teinte de la paire une fois reliée.
+                const fillOf = (paired: number | undefined, choosing: boolean) =>
+                  paired !== undefined
+                    ? (tintOf(paired)?.border ?? colors.brand)
+                    : choosing
+                      ? colors.brand
+                      : colors.white;
                 return (
                   <G key={`dots-${pair.id}`}>
                     {left !== undefined ? (
                       <Circle
-                        cx={7}
+                        cx={dot + 2}
                         cy={left}
-                        r={6}
-                        fill={colors.white}
-                        stroke={colors.borderStrong}
-                        strokeWidth={2}
+                        r={dot}
+                        fill={fillOf(leftPair, selectedLeft === pair.id)}
+                        stroke={
+                          leftPair !== undefined || selectedLeft === pair.id
+                            ? colors.white
+                            : colors.inkTertiary
+                        }
+                        strokeWidth={3}
                       />
                     ) : null}
                     {right !== undefined ? (
                       <Circle
-                        cx={metrics.gap * 2.5 - 7}
+                        cx={link - dot - 2}
                         cy={right}
-                        r={6}
-                        fill={colors.white}
-                        stroke={colors.borderStrong}
-                        strokeWidth={2}
+                        r={dot}
+                        fill={fillOf(rightPair, false)}
+                        stroke={rightPair !== undefined ? colors.white : colors.inkTertiary}
+                        strokeWidth={3}
                       />
                     ) : null}
                   </G>
@@ -196,7 +211,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     width: '100%',
-    maxWidth: 820,
+
     alignSelf: 'center',
   },
   columns: { flexDirection: 'row' },

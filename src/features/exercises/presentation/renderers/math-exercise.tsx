@@ -266,13 +266,7 @@ export function MathExercise({
           key={`${option}-${index}`}
           label={String(option)}
           glyphVariant={metrics.answerGlyph}
-          state={
-            !interactive && pressed !== option
-              ? 'disabled'
-              : pressed === option
-                ? 'selected'
-                : 'default'
-          }
+          state={interactive ? 'default' : pressed === option ? 'selected' : 'disabled'}
           onPress={() => submit(option)}
           style={[styles.numberCard, { maxWidth: metrics.tileWidth * 1.3 }]}
           contentStyle={{ minHeight: metrics.answerHeight }}

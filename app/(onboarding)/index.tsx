@@ -15,7 +15,7 @@ import { EcolnaLogo } from '@/design-system/brand/ecolna-mark';
 import { Orbit, OrbitChip, OrbitTile } from '@/design-system/illustrations/orbit';
 import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, radius, shadows, spacing, subjectColors } from '@/design-system/tokens';
+import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 // Le titre de la page 1, coupé autour du mot mis en couleur.
@@ -114,7 +114,15 @@ export default function OnboardingScreen() {
     <EcolnaScreen background="default" fullWidth>
       <View style={[styles.topBar, { paddingHorizontal: screenPadding }]}>
         <EcolnaLogo size={scaled(36, scale)} />
-        {page < 2 ? <EcolnaButton label={fr.common.skip} variant="ghost" onPress={finish} /> : null}
+        {/* La place de « Passer » reste réservée à la dernière page : le logo ne saute pas. */}
+        <View style={{ opacity: page < 2 ? 1 : 0 }} pointerEvents={page < 2 ? 'auto' : 'none'}>
+          <EcolnaButton
+            label={fr.common.skip}
+            variant="ghost"
+            onPress={finish}
+            style={{ marginRight: -scaled(spacing.md, scale) }}
+          />
+        </View>
       </View>
 
       <View style={styles.pager} onLayout={onLayout}>
@@ -173,14 +181,19 @@ export default function OnboardingScreen() {
                 {SUBJECTS.map((subject) => (
                   <View
                     key={subject.id}
+                    // On regarde, on ne touche pas : un aplat teinté, sans filet ni ombre.
                     style={[
                       styles.subjectTile,
-                      shadows.card,
-                      { width: tile, height: Math.round(tile * 0.92), gap: scaled(spacing.sm, scale) },
+                      {
+                        width: tile,
+                        height: Math.round(tile * 0.92),
+                        gap: scaled(spacing.sm, scale),
+                        backgroundColor: subjectColors[subject.id].tint,
+                      },
                     ]}
                   >
                     <SubjectArt subject={subject.id} size={Math.round(tile * 0.46)} />
-                    <EcolnaText variant="headlineSm">
+                    <EcolnaText variant="headlineSm" color={subjectColors[subject.id].ink}>
                       {subject.label}
                     </EcolnaText>
                   </View>
@@ -280,7 +293,6 @@ const styles = StyleSheet.create({
   subjectGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   subjectTile: {
     borderRadius: radius.xl,
-    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },

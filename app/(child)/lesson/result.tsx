@@ -12,9 +12,14 @@ import { EcolnaAvatar } from '@/design-system/avatars';
 import { Confetti } from '@/design-system/components/confetti';
 import { StarRow } from '@/design-system/components/star-row';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import {
+  EcolnaButton,
+  EcolnaIconButton,
+  EcolnaScreen,
+  EcolnaText,
+} from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, radius, spacing } from '@/design-system/tokens';
+import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
 
@@ -78,6 +83,30 @@ export default function LessonResultScreen() {
     />
   );
 
+  // Les médailles gagnées, posées sur la nuit (elles sont faites pour elle).
+  const badges =
+    newBadges.length > 0 ? (
+      <View style={[styles.badges, { gap: scaled(spacing.sm, scale) }]}>
+        <View style={styles.badgeTitle}>
+          <EcolnaIcon name="sparkle" size={scaled(20, scale)} mode="color" />
+          <EcolnaText variant="labelLg" color={colors.white}>
+            {newBadges.length > 1 ? fr.achievements.unlockedMany : fr.achievements.unlocked}
+          </EcolnaText>
+        </View>
+        <View style={styles.badgeRow}>
+          {newBadges.map((id) => (
+            <AchievementBadge
+              key={id}
+              id={id}
+              earned
+              size={scaled(isTablet ? 88 : 72, scale)}
+              onDark
+            />
+          ))}
+        </View>
+      </View>
+    ) : null;
+
   const celebration = (
     <View style={[styles.celebration, { gap: scaled(spacing.lg, scale) }]}>
       <View style={[styles.center, { width: halo, height: halo }]}>
@@ -120,7 +149,7 @@ export default function LessonResultScreen() {
           </View>
         </View>
       </View>
-      {sideBySide ? null : starRow}
+      {sideBySide ? badges : starRow}
     </View>
   );
 
@@ -157,27 +186,7 @@ export default function LessonResultScreen() {
             : fr.result.needsReview}
       </EcolnaText>
 
-      {newBadges.length > 0 ? (
-        // Le badge gagné, posé sur un verre : les médailles sont faites pour la nuit.
-        <View
-          style={[
-            styles.badges,
-            { gap: scaled(spacing.sm, scale), padding: scaled(spacing.md, scale) },
-          ]}
-        >
-          <View style={styles.badgeTitle}>
-            <EcolnaIcon name="sparkle" size={scaled(20, scale)} mode="color" />
-            <EcolnaText variant="labelLg" color={colors.white}>
-              {newBadges.length > 1 ? fr.achievements.unlockedMany : fr.achievements.unlocked}
-            </EcolnaText>
-          </View>
-          <View style={styles.badgeRow}>
-            {newBadges.map((id) => (
-              <AchievementBadge key={id} id={id} earned size={scaled(sideBySide ? 60 : 72, scale)} onDark />
-            ))}
-          </View>
-        </View>
-      ) : null}
+      {sideBySide ? null : badges}
 
       <View style={[styles.buttons, { gap: scaled(spacing.sm, scale) }]}>
         {nextLessonId ? (
@@ -203,14 +212,6 @@ export default function LessonResultScreen() {
             onPress={() => router.replace(`/(child)/lesson/${lessonId}`)}
           />
         ) : null}
-        {nextLessonId ? (
-          <EcolnaButton
-            label={fr.result.backHome}
-            variant="ghost"
-            onDark
-            onPress={() => router.replace('/(child)/(tabs)')}
-          />
-        ) : null}
       </View>
     </View>
   );
@@ -218,6 +219,14 @@ export default function LessonResultScreen() {
   return (
     <EcolnaScreen background="night" fullWidth>
       <StatusBar style="light" />
+      {/* Revenir à l'accueil : la croix de la leçon, en haut, hors du moment de fête. */}
+      <View style={[styles.close, { paddingHorizontal: screenPadding }]}>
+        <EcolnaIconButton
+          icon="close"
+          accessibilityLabel={fr.result.backHome}
+          onPress={() => router.replace('/(child)/(tabs)')}
+        />
+      </View>
       {/* Centré quand tout tient, défilable sinon (badges, petite fenêtre). */}
       <ScrollView
         contentContainerStyle={[
@@ -255,7 +264,8 @@ const styles = StyleSheet.create({
   },
   words: { width: '100%', maxWidth: 520, alignItems: 'stretch' },
   title: { gap: spacing.xxs },
-  badges: { alignItems: 'center', backgroundColor: colors.onColorGlass, borderRadius: radius.xl },
+  badges: { alignItems: 'center' },
+  close: { position: 'absolute', top: spacing.sm, left: 0, zIndex: 2 },
   badgeTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   badgeRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12 },
   buttons: { marginTop: spacing.sm },
