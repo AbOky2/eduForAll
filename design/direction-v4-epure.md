@@ -103,18 +103,80 @@ trait blanc, partout la même.
 - **Leçon** : une barre segmentée, un segment par exercice, dans la couleur de
   la discipline ; le segment en cours se remplit à demi sur un ressort.
 - **Discipline** : un anneau autour de son emblème ; plein, il passe au soleil.
+- **Parcours** (`level-map.tsx`) : un fil net de 8 dp relie les mondes en
+  courbes tendues — gris ce qui reste, vert ce qui est parcouru. Monde fini :
+  disque vert, coche blanche, ses étoiles sous son nom. Monde du jour : disque
+  à la couleur de la discipline, emblème blanc, cerclé de l'anneau de ses
+  leçons faites, et le bouton soleil « Commencer » sous son nom. Fermé :
+  disque blanc cerclé de gris, cadenas.
 - **Aucune fraction sous les yeux de l'enfant** : les nombres restent à
-  l'espace parent.
+  l'espace parent (qui gagne une ligne par discipline).
 - Plus de reflet, plus de piste invisible : la piste neutre `fill` (#EEF0F3).
 
 ## 8. Les douze enfants
 
-Redessinés sur une grille stricte (`avatars/portrait.tsx`) : tête 52 × 55,
-yeux pleins avec un point de lumière, sourcils de la couleur des cheveux,
-joues corail à faible opacité, bouche d'un trait (calme) ou ouverte (joie,
-yeux plissés). Aucun contour, aucun reflet, aucun accessoire d'écolier. La
-coiffure et le vêtement font le personnage. La distribution (six peaux, deux
-aides techniques, aucun marqueur religieux) et ses tests sont inchangés.
+Redessinés sur une construction mesurée (`avatars/portrait.tsx`, repère
+120) : tête ovale 54 × 58, oreilles, cou et buste ; coiffures construites par
+des fonctions (festons, nattes en chaîne, natte relevée effilée), calculées
+une fois au chargement. Yeux pleins avec un point de lumière, sourcils de la
+couleur des cheveux, nez par personnage, joues prémélangées (aucune
+opacité), bouche d'un trait (calme) ou ouverte avec la langue (joie, yeux
+plissés, sourcils levés). Aucun contour, aucun reflet, aucun accessoire
+d'écolier ; disques de fond clairs, attribués pour que deux voisins de la
+grille ne partagent jamais le leur. Sous 64 dp, détail réduit (budget de
+40 éléments SVG, une seule découpe). La distribution (six peaux, deux aides
+techniques, aucun marqueur religieux) et ses tests sont inchangés. Les
+planches de bibliothèques d'avatars consultées pendant la recherche n'ont
+servi que de références de proportions : aucun tracé n'en provient.
+
+## 8 bis. Médailles, illustrations, marque
+
+- **Médailles** (`illustrations/badge-art.tsx`) : un médaillon plat en deux
+  disques — couronne claire, cœur plein — cerclé d'un filet blanc, et un
+  pictogramme Phosphor ; les jalons de leçons portent 1 à 4 points. À
+  gagner : la même forme en gris, avec une pastille cadenas.
+- **Illustrations « orbite »** (`illustrations/orbit.tsx`) : deux cercles
+  concentriques (la vannerie de la carte du jour et de la célébration), un
+  sujet au centre, des satellites — les personnages de l'app, ou des
+  pastilles de pictogrammes. Elles remplacent les scènes de paysage
+  (onboarding, hors connexion, création de profil).
+- **Célébration** : la nuit, l'enfant en joie cerclé de la vannerie, trois
+  étoiles plates qui éclosent, une pluie de confettis unique (aucune en
+  mouvement réduit).
+- **Marque** : le livre ouvert de l'icône passe aux couleurs v4 — fond bleu
+  marque, page blanche, page soleil (`assets/icons/*.svg`, `npm run
+  brand:assets`) ; `brand/ecolna-mark.tsx` en est la même géométrie dans
+  l'interface. La finale du logo (ardoise ou éléphanteau, brief v2 § 11)
+  reste à trancher par le propriétaire : ce recoloriage ne la préjuge pas.
+
+## 8 ter. L'exercice
+
+- **Regarder ≠ toucher** : le stimulus (ce qu'on regarde ou écoute) est une
+  surface plate dans la teinte de la discipline, sans filet ni ombre
+  (`EcolnaStimulus`) ; les réponses sont blanches, filetées, ombrées. Côte à
+  côte, le stimulus prend la hauteur du bloc de réponses : bords communs.
+- **Le verdict sur la carte** : pendant la feuille de retour, la carte choisie
+  devient verte et cochée (juste) ou bleue avec la flèche de reprise (à
+  revoir) ; les autres restent blanches, inertes — jamais grisées
+  (`AnswerVerdictContext`).
+- **La consigne est dite d'elle-même** à chaque exercice, puis le son de
+  l'exercice (`playSequence`) ; le bouton de consigne porte une bulle de
+  parole, le haut-parleur est réservé au son à trouver.
+- **Tracer** : l'ardoise est de nuit ; le modèle se dessine depuis le chemin
+  lui-même (bande de craie pâle), les jalons dessus, le suivant au soleil.
+- **Relier** : un point d'accroche au bord de chaque carte, un trait de la
+  teinte de la paire entre deux cartes reliées.
+
+## 8 quater. Mise en page
+
+- Une seule gouttière (`screenPadding`) : la marge de la classe de fenêtre,
+  élargie pour que le contenu ne dépasse jamais la colonne lisible. Le bord
+  gauche et le bouton retour tombent au même endroit sur tous les écrans.
+- Couché, deux volets : le parcours montre à droite les leçons du monde du
+  jour ; le profil, son identité à gauche et sa collection à droite.
+- Une couleur par rôle, tenue partout : la révision (« on revoit ») est
+  bleue, la série de jours est un soleil, le statut « sans internet » est une
+  puce blanche à pictogramme vert.
 
 ## 9. Mouvement
 
@@ -126,4 +188,5 @@ au mouvement réduit du système.
 
 Tranches, reflets, dunes et acacias d'écran, rayons de soleil, motifs dans
 les disques d'avatar, accessoires rognés, fractions pour l'enfant, deux formes
-de « a », titres colorés par discipline, pastilles « Nouveau ! » en série.
+de « a », titres colorés par discipline, pastilles « Nouveau ! » en série,
+festons et biseaux de médaille, cadres de bois, papier crème, pistes de sable.

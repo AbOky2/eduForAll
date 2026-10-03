@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AccessibilityInfo, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { findWorld } from '@/features/curriculum/application/curriculum-catalog';
+import { findWorld, lessonOrWorldCover } from '@/features/curriculum/application/curriculum-catalog';
 import {
   loadHomeSummary,
   type HomeSummary,
@@ -67,14 +67,16 @@ export default function ChildHomeScreen() {
   // Paysage : quatre colonnes ; portrait et téléphone : deux par deux.
   const columns = splitPanes ? 4 : 2;
   const gap = scaled(isTablet && !short ? spacing.lg : spacing.md, scale);
-  const sectionGap = scaled(isTablet && !short ? spacing.xl : spacing.lg, scale);
-  const avatarSize = scaled(isTablet && !short ? 64 : 52, scale);
+  const sectionGap = scaled(isTablet && !short ? spacing.xl : short ? spacing.md : spacing.lg, scale);
+  const avatarSize = scaled(isTablet && !short ? 64 : short ? 44 : 52, scale);
 
   const greeting = (
     <View style={styles.greeting}>
       {/* Un prénom long (30 caractères permis) passe sur deux lignes, puis rapetisse : jamais tronqué. */}
       <EcolnaText
-        variant={isTablet && !short ? 'displayHero' : 'headlineLg'}
+        // Le grand titre seulement couché : debout, les pastilles lui prennent
+        // la place et « Bonjour Amina ! » se couperait en deux.
+        variant={splitPanes && !short ? 'displayHero' : 'headlineLg'}
         numberOfLines={2}
         adjustsFontSizeToFit
         minimumFontScale={0.7}
@@ -114,7 +116,7 @@ export default function ChildHomeScreen() {
         ]}
       >
         <View style={[styles.revisionIcon, { width: scaled(52, scale), height: scaled(52, scale), borderRadius: scaled(16, scale) }]}>
-          <EcolnaIcon name="sprout" size={scaled(30, scale)} mode="color" />
+          <EcolnaIcon name="refresh" size={scaled(28, scale)} color={colors.brand} />
         </View>
         <View style={styles.revisionText}>
           <EcolnaText variant="headlineSm">{fr.home.reviseTitle}</EcolnaText>
@@ -188,6 +190,8 @@ export default function ChildHomeScreen() {
                   recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson
                 } : ${recommendation.title}`}
                 onPress={() => router.push(`/(child)/lesson/${recommendation.lessonId}`)}
+                style={splitPanes ? styles.fill : undefined}
+                cover={lessonOrWorldCover(recommendation.lessonId)}
               />
             </View>
             {revision}
@@ -211,8 +215,10 @@ export default function ChildHomeScreen() {
                     total={subject.total}
                     locked={subject.locked}
                     explanation={explained === subject.subject ? fr.home.lockedExplain : null}
-                    artSize={splitPanes ? 40 : isTablet ? 56 : 48}
-                    layout={splitPanes ? 'row' : 'stack'}
+                    artSize={splitPanes ? 40 : isTablet ? 44 : 48}
+                    // Tablette : en ligne (quatre couché, deux par deux debout),
+                    // pour que les quatre disciplines tiennent sans défiler.
+                    layout={isTablet ? 'row' : 'stack'}
                     onPress={() => openSubject(subject)}
                   />
                 ))}
@@ -226,17 +232,18 @@ export default function ChildHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: spacing.xxxl },
+  scroll: { paddingBottom: spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center' },
   greeting: { flex: 1, gap: 2 },
   pills: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   heroRow: { flexDirection: 'row', alignItems: 'stretch' },
   heroMain: { flex: 2.4 },
+  fill: { flexGrow: 1 },
   revisionSide: { flex: 1 },
   revisionRow: { flexDirection: 'row', alignItems: 'center' },
   revisionColumn: { justifyContent: 'space-between' },
   revisionText: { flex: 1, gap: 2 },
   revisionGo: { alignSelf: 'flex-end' },
-  revisionIcon: { backgroundColor: colors.successTint, alignItems: 'center', justifyContent: 'center' },
+  revisionIcon: { backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center' },
   gridRow: { flexDirection: 'row', alignItems: 'stretch' },
 });

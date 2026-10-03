@@ -82,6 +82,6 @@ const styles = StyleSheet.create({
     bottom: -8,
     left: -8,
     borderWidth: 4,
-    borderColor: colors.tertiary,
+    borderColor: colors.rewardInk,
   },
 });

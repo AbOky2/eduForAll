@@ -39,7 +39,6 @@ const MEANING: Partial<Record<IconName, string>> = {
   medal: colors.reward,
   sparkle: colors.reward,
   lightbulb: colors.reward,
-  flame: colors.flame,
   check: colors.success,
   sprout: colors.success,
   leaf: colors.success,

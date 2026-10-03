@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
@@ -53,7 +53,7 @@ export function ChoiceExercise({
   };
 
   const prompt = (
-    <EcolnaCard rounded="xl" style={[styles.stage, { minHeight: metrics.listenSize * 1.8 }]}>
+    <EcolnaStimulus style={[styles.stage, { minHeight: metrics.listenSize * 1.8 }]}>
       {step.type === 'text_multiple_choice' ? (
         <EcolnaText variant={isTablet ? 'displayGlyphSmall' : 'headlineLg'} align="center">
           {step.question}
@@ -65,7 +65,7 @@ export function ChoiceExercise({
           onPress={() => playAudio(step.audioId)}
         />
       )}
-    </EcolnaCard>
+    </EcolnaStimulus>
   );
 
   const answers = (

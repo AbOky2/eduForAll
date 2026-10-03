@@ -65,7 +65,7 @@ export function StarRow({
   total = 3,
   size = 44,
   celebrate = false,
-  inactiveColor = colors.starInactive,
+  inactiveColor = colors.fillStrong,
 }: StarRowProps) {
   const reducedMotion = useReducedMotion();
   return (

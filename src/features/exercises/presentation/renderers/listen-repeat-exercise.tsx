@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAudioButton,
   EcolnaButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaText,
   useExerciseMetrics,
 } from '@/design-system/primitives';
@@ -39,7 +39,7 @@ export function ListenRepeatExercise({
   const long = step.text.length > 12;
   return (
     <View style={[styles.container, { gap: metrics.gap }]}>
-      <EcolnaCard rounded="xl" style={[styles.card, { gap: metrics.gap }]}>
+      <EcolnaStimulus style={[styles.card, { gap: metrics.gap }]}>
         <EcolnaAudioButton
           size={metrics.listenSize}
           playing={playingAudioId === step.audioId}
@@ -51,7 +51,7 @@ export function ListenRepeatExercise({
         >
           {step.text}
         </EcolnaText>
-      </EcolnaCard>
+      </EcolnaStimulus>
       <EcolnaButton
         label={fr.lesson.repeatDone}
         disabled={!interactive}

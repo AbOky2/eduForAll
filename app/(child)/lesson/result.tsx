@@ -67,13 +67,39 @@ export default function LessonResultScreen() {
   const halo = Math.round(avatar * 1.62);
   const check = scaled(isTablet ? 48 : 40, scale);
 
+  // Les étoiles sont la récompense : grandes, en tête des mots quand on est
+  // couché, entre l'enfant et le titre sinon.
+  const starRow = (
+    <StarRow
+      earned={stars}
+      size={scaled(isTablet && !sideBySide ? 60 : 48, scale)}
+      celebrate
+      inactiveColor={colors.onColorTrack}
+    />
+  );
+
   const celebration = (
     <View style={[styles.celebration, { gap: scaled(spacing.lg, scale) }]}>
       <View style={[styles.center, { width: halo, height: halo }]}>
         <View pointerEvents="none" style={StyleSheet.absoluteFill}>
           <Svg width={halo} height={halo}>
-            <Circle cx={halo / 2} cy={halo / 2} r={halo / 2 - 1} stroke={colors.onColorTrack} strokeWidth={1.5} fill="none" opacity={0.45} />
-            <Circle cx={halo / 2} cy={halo / 2} r={avatar / 2 + (halo - avatar) / 4} stroke={colors.onColorTrack} strokeWidth={1.5} fill="none" />
+            <Circle
+              cx={halo / 2}
+              cy={halo / 2}
+              r={halo / 2 - 1}
+              stroke={colors.onColorTrack}
+              strokeWidth={1.5}
+              fill="none"
+              opacity={0.45}
+            />
+            <Circle
+              cx={halo / 2}
+              cy={halo / 2}
+              r={avatar / 2 + (halo - avatar) / 4}
+              stroke={colors.onColorTrack}
+              strokeWidth={1.5}
+              fill="none"
+            />
           </Svg>
         </View>
         <View>
@@ -82,27 +108,47 @@ export default function LessonResultScreen() {
           <View
             style={[
               styles.check,
-              { width: check, height: check, borderRadius: check / 2, borderWidth: scaled(4, scale) },
+              {
+                width: check,
+                height: check,
+                borderRadius: check / 2,
+                borderWidth: scaled(4, scale),
+              },
             ]}
           >
             <EcolnaIcon name="check" size={Math.round(check * 0.5)} color={colors.white} />
           </View>
         </View>
       </View>
-      <StarRow
-        earned={stars}
-        size={scaled(isTablet ? 48 : 40, scale)}
-        celebrate
-        inactiveColor={colors.onColorTrack}
-      />
+      {sideBySide ? null : starRow}
     </View>
   );
 
   const words = (
-    <View style={[styles.words, { gap: scaled(spacing.md, scale) }]}>
-      <EcolnaText variant="displayHero" align="center" color={colors.white}>
-        {fr.result.title}
-      </EcolnaText>
+    <View style={[styles.words, { gap: scaled(sideBySide ? spacing.sm : spacing.md, scale) }]}>
+      {sideBySide ? starRow : null}
+      {/* Lu d'un trait par le lecteur d'écran, affiché en deux temps. */}
+      <View
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel={fr.result.title}
+        style={styles.title}
+      >
+        <EcolnaText
+          variant="displayHero"
+          align="center"
+          color={colors.white}
+          style={{
+            fontSize: scaled(isTablet ? 48 : 40, scale),
+            lineHeight: scaled(isTablet ? 56 : 48, scale),
+          }}
+        >
+          {fr.result.bravo}
+        </EcolnaText>
+        <EcolnaText variant="headlineMd" align="center" color={colors.white}>
+          {fr.result.lessonDone}
+        </EcolnaText>
+      </View>
       <EcolnaText variant="bodyLg" color={colors.onNightSecondary} align="center">
         {stars === 3
           ? fr.result.perfect
@@ -112,15 +158,22 @@ export default function LessonResultScreen() {
       </EcolnaText>
 
       {newBadges.length > 0 ? (
-        // Le badge gagné, sur une feuille blanche : il se lit comme dans la collection.
-        <View style={[styles.badges, { gap: scaled(spacing.sm, scale), padding: scaled(spacing.md, scale) }]}>
+        // Le badge gagné, posé sur un verre : les médailles sont faites pour la nuit.
+        <View
+          style={[
+            styles.badges,
+            { gap: scaled(spacing.sm, scale), padding: scaled(spacing.md, scale) },
+          ]}
+        >
           <View style={styles.badgeTitle}>
             <EcolnaIcon name="sparkle" size={scaled(20, scale)} mode="color" />
-            <EcolnaText variant="labelLg">{fr.achievements.unlocked}</EcolnaText>
+            <EcolnaText variant="labelLg" color={colors.white}>
+              {newBadges.length > 1 ? fr.achievements.unlockedMany : fr.achievements.unlocked}
+            </EcolnaText>
           </View>
           <View style={styles.badgeRow}>
             {newBadges.map((id) => (
-              <AchievementBadge key={id} id={id} earned size={scaled(72, scale)} />
+              <AchievementBadge key={id} id={id} earned size={scaled(sideBySide ? 60 : 72, scale)} onDark />
             ))}
           </View>
         </View>
@@ -130,7 +183,9 @@ export default function LessonResultScreen() {
         {nextLessonId ? (
           <EcolnaButton
             label={fr.result.nextLesson}
-            icon={<EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onReward} filled />}
+            icon={
+              <EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onReward} filled />
+            }
             onPress={() => router.replace(`/(child)/lesson/${nextLessonId}`)}
           />
         ) : (
@@ -199,7 +254,8 @@ const styles = StyleSheet.create({
     borderColor: colors.night,
   },
   words: { width: '100%', maxWidth: 520, alignItems: 'stretch' },
-  badges: { alignItems: 'center', backgroundColor: colors.white, borderRadius: radius.xl },
+  title: { gap: spacing.xxs },
+  badges: { alignItems: 'center', backgroundColor: colors.onColorGlass, borderRadius: radius.xl },
   badgeTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   badgeRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12 },
   buttons: { marginTop: spacing.sm },

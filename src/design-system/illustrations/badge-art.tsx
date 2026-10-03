@@ -63,7 +63,7 @@ interface Family {
 const FAMILY = {
   success: { ring: colors.successTint, core: colors.success, glyph: colors.white },
   brand: { ring: colors.brandTint, core: colors.brand, glyph: colors.white },
-  gold: { ring: colors.rewardTint, core: colors.reward, glyph: colors.tertiary },
+  gold: { ring: colors.rewardTint, core: colors.reward, glyph: colors.rewardInk },
   night: { ring: colors.brandTintStrong, core: colors.night, glyph: colors.reward },
   language: { ring: subjectColors.language.tint, core: subjectColors.language.solid, glyph: colors.white },
   reading: { ring: subjectColors.reading.tint, core: subjectColors.reading.solid, glyph: colors.white },
@@ -73,7 +73,7 @@ const FAMILY = {
 
 const BADGES: Record<BadgeArtId, { icon: IconName; family: keyof typeof FAMILY; tier?: number }> = {
   'first-lesson': { icon: 'footprints', family: 'success', tier: 1 },
-  'five-lessons': { icon: 'path', family: 'language', tier: 2 },
+  'five-lessons': { icon: 'path', family: 'brand', tier: 2 },
   'twenty-lessons': { icon: 'learn', family: 'brand', tier: 3 },
   'fifty-lessons': { icon: 'trophy', family: 'gold', tier: 4 },
   'first-perfect': { icon: 'seal-check', family: 'success' },
@@ -83,7 +83,7 @@ const BADGES: Record<BadgeArtId, { icon: IconName; family: keyof typeof FAMILY; 
   speaker: { icon: 'speech', family: 'language' },
   writer: { icon: 'pencil', family: 'writing' },
   counter: { icon: 'crown', family: 'math' },
-  'streak-three': { icon: 'flame', family: 'reading' },
+  'streak-three': { icon: 'sun', family: 'gold' },
   'streak-seven': { icon: 'calendar-check', family: 'brand' },
   'star-collector': { icon: 'star', family: 'gold' },
 };

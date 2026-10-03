@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Svg, { Circle, Polyline } from 'react-native-svg';
+import Svg, { Circle, Path, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { SlateBoard } from '@/design-system/components/slate-board';
 import { EcolnaButton, EcolnaText, useExerciseMetrics } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, fontFamilies, illustration } from '@/design-system/tokens';
+import { colors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -15,15 +15,45 @@ import { strokesForLetter } from './letter-paths';
 
 type TraceStep = Extract<ExerciseStep, { type: 'trace_letter' }>;
 
-const { chalk, chalkDim, chalkGhost } = illustration.school;
+/** La craie sur l'ardoise de nuit : le trait de l'enfant, le modèle, les jalons. */
+const CHALK = colors.white;
+const GUIDE = colors.onColorTrack;
+const DOT = colors.onNightSecondary;
+
+/**
+ * Une courbe douce par les jalons (Catmull-Rom → Bézier) : le modèle de la
+ * lettre se dessine depuis le chemin lui-même, si bien que modèle et jalons
+ * coïncident toujours.
+ */
+function smoothPath(points: readonly (readonly [number, number])[]): string {
+  const [first] = points;
+  if (!first) {
+    return '';
+  }
+  let d = `M${first[0]} ${first[1]}`;
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    if (!p1 || !p2) {
+      break;
+    }
+    const p0 = points[i - 1] ?? p1;
+    const p3 = points[i + 2] ?? p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += `C${c1[0]} ${c1[1]} ${c2[0]} ${c2[1]} ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
 
 /** Generous checkpoint radius: little fingers, small screens, no false failures. */
 const TOLERANCE = 42;
 
 /**
- * Guided letter tracing (trace_letter), on the pupil's slate. The model
- * letter is a ghost of old chalk; the path is a line of faint chalk dots; the
- * next dot is a sun; what the child has traced stays written in fresh chalk.
+ * Guided letter tracing (trace_letter), on the pupil's slate (v4 : l'ardoise
+ * de nuit). The model letter is a wide band of faint chalk drawn from the path
+ * itself; the checkpoints are chalk dots on it; the next dot is a sun; what
+ * the child has traced stays written in fresh chalk.
  * Passing near each checkpoint in order is enough — precision is never
  * punished. The letter is drawn in a square box: a letter stretched across a
  * landscape tablet would not be the letter of the notebook any more.
@@ -120,8 +150,8 @@ export function TraceLetterExercise({
     );
   }
 
-  const strokeWidth = scaled(isTablet ? 14 : 12, scale);
-  const ghostSize = Math.round(box.side * 0.95);
+  const strokeWidth = scaled(isTablet ? 16 : 13, scale);
+  const guideWidth = Math.round(strokeWidth * 2.6);
   // Ce qui est déjà écrit : chaque trait fini, puis le début du trait en cours.
   const written = scaledStrokes
     .map((stroke, sIndex) =>
@@ -137,21 +167,6 @@ export function TraceLetterExercise({
     <View style={[styles.container, { gap: metrics.gap }]}>
       {/* L'ardoise prend la hauteur que la consigne et le bouton lui laissent, sans dépasser sa taille de cahier. */}
       <SlateBoard style={[styles.board, { maxHeight: scaled(isTablet ? 400 : 340, scale) }]}>
-        <View style={styles.ghost} pointerEvents="none">
-          {box.side > 0 ? (
-            <EcolnaText
-              variant="displayGlyph"
-              color={chalkGhost}
-              style={{
-                fontFamily: fontFamilies.bold,
-                fontSize: ghostSize,
-                lineHeight: Math.round(ghostSize * 1.15),
-              }}
-            >
-              {step.letter}
-            </EcolnaText>
-          ) : null}
-        </View>
         <GestureDetector gesture={pan}>
           <View
             style={styles.canvas}
@@ -159,12 +174,34 @@ export function TraceLetterExercise({
             accessibilityLabel={fr.lesson.traceLetterLabel(step.letter)}
           >
             <Svg width="100%" height="100%">
+              {/* Le modèle : chaque trait de la lettre, en bande de craie pâle. */}
+              {scaledStrokes.map((stroke, index) =>
+                stroke.length > 1 ? (
+                  <Path
+                    key={`g-${index}`}
+                    d={smoothPath(stroke)}
+                    fill="none"
+                    stroke={GUIDE}
+                    strokeWidth={guideWidth}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ) : stroke[0] ? (
+                  <Circle
+                    key={`g-${index}`}
+                    cx={stroke[0][0]}
+                    cy={stroke[0][1]}
+                    r={guideWidth / 2}
+                    fill={GUIDE}
+                  />
+                ) : null,
+              )}
               {written.map((stroke, index) => (
                 <Polyline
                   key={`w-${index}`}
                   points={stroke.map(([x, y]) => `${x},${y}`).join(' ')}
                   fill="none"
-                  stroke={chalk}
+                  stroke={CHALK}
                   strokeWidth={strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -183,9 +220,9 @@ export function TraceLetterExercise({
                       key={`${sIndex}-${cIndex}`}
                       cx={x}
                       cy={y}
-                      r={isNext ? scaled(16, scale) : scaled(7, scale)}
-                      fill={isNext ? colors.sun : chalkDim}
-                      stroke={isNext ? colors.sunShade : chalkDim}
+                      r={isNext ? scaled(17, scale) : scaled(8, scale)}
+                      fill={isNext ? colors.reward : DOT}
+                      stroke={isNext ? colors.white : DOT}
                       strokeWidth={isNext ? 3 : 0}
                     />
                   );
@@ -195,7 +232,7 @@ export function TraceLetterExercise({
                 <Polyline
                   points={trail.join(' ')}
                   fill="none"
-                  stroke={chalk}
+                  stroke={CHALK}
                   strokeWidth={strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -236,15 +273,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   board: { alignSelf: 'stretch', flexGrow: 1, flexShrink: 1, minHeight: 180 },
-  ghost: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   canvas: { flex: 1 },
   verify: { alignSelf: 'center', minWidth: 260 },
 });

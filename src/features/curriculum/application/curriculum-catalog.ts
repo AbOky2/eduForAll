@@ -177,6 +177,54 @@ export function lessonsOfWorld(worldId: string): readonly LessonSummary[] {
 }
 
 /** First lesson that trains a given skill — drives the revision screen. */
+/**
+ * L'image d'une leçon : le premier pictogramme que montrent ses exercices
+ * (une image à choisir, des objets à compter…). Lu dans le JSON brut, sans
+ * valider la leçon : l'accueil n'a besoin que d'un identifiant.
+ */
+export function lessonCoverIllustration(lessonId: string): string | null {
+  const raw = getIndex().rawLessonById.get(lessonId);
+  const keys = ['illustrationId', 'rightIllustrationId', 'objectIllustrationId', 'referenceIllustrationId'];
+  let found: string | null = null;
+  const walk = (value: unknown): void => {
+    if (found !== null || value === null || typeof value !== 'object') {
+      return;
+    }
+    if (Array.isArray(value)) {
+      value.forEach(walk);
+      return;
+    }
+    for (const [key, inner] of Object.entries(value)) {
+      if (found !== null) {
+        return;
+      }
+      if (keys.includes(key) && typeof inner === 'string') {
+        found = inner;
+      } else {
+        walk(inner);
+      }
+    }
+  };
+  walk((raw as { steps?: unknown } | undefined)?.steps);
+  return found;
+}
+
+/** L'image d'une leçon, ou à défaut la première image de son monde. */
+export function lessonOrWorldCover(lessonId: string): string | null {
+  const own = lessonCoverIllustration(lessonId);
+  if (own) {
+    return own;
+  }
+  const world = worldOfLesson(lessonId);
+  for (const lesson of world?.lessons ?? []) {
+    const cover = lessonCoverIllustration(lesson.id);
+    if (cover) {
+      return cover;
+    }
+  }
+  return null;
+}
+
 export function lessonForSkill(skillId: string): string | null {
   return getIndex().lessonIdBySkill.get(skillId) ?? null;
 }

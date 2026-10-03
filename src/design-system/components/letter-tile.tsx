@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import { EcolnaGalet, EcolnaText } from '../primitives';
-import { colors, radius, spacing, type TypographyVariant } from '../tokens';
+import { colors, radius, shadows, spacing, type TypographyVariant } from '../tokens';
 
 interface LetterTileProps {
   label: string;
@@ -16,9 +16,9 @@ interface LetterTileProps {
 }
 
 /**
- * Une tuile qu'on pose : lettre, syllabe ou mot. Dans la réserve, un galet
- * blanc qui attend ; posée, elle passe au pétrole — on voit ce qu'on a
- * construit, et la toucher la renvoie dans la réserve.
+ * Une tuile qu'on pose : lettre, syllabe ou mot. Dans la réserve, une tuile
+ * blanche filetée qui attend ; posée, elle passe au bleu du choix — on voit
+ * ce qu'on a construit, et la toucher la renvoie dans la réserve.
  */
 export function LetterTile({
   label,
@@ -33,12 +33,11 @@ export function LetterTile({
   const placed = tone === 'placed';
   return (
     <EcolnaGalet
-      face={disabled ? colors.lockedContainer : placed ? colors.secondaryFixed : colors.card}
-      edge={disabled ? colors.lockedEdge : placed ? colors.secondaryFixedDim : colors.cardEdge}
-      border={placed ? colors.secondary : colors.cardEdge}
+      face={disabled ? colors.fill : placed ? colors.brandTint : colors.white}
+      border={disabled ? colors.fill : placed ? colors.brand : colors.border}
       borderWidth={placed ? 3 : 2}
       radius={radius.lg}
-      depth="md"
+      shadow={disabled || placed ? undefined : shadows.card}
       onPress={onPress}
       disabled={disabled}
       accessibilityLabel={accessibilityLabel ?? label}
@@ -46,7 +45,7 @@ export function LetterTile({
     >
       <EcolnaText
         variant={variant}
-        color={disabled ? colors.textSecondary : placed ? colors.onSecondaryContainer : colors.textPrimary}
+        color={disabled ? colors.textSecondary : placed ? colors.brandInk : colors.textPrimary}
       >
         {label}
       </EcolnaText>

@@ -22,7 +22,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   return (
     <View style={styles.container}>
       <View style={styles.bubble}>
-        <EcolnaIcon name="leaf" size={40} color={colors.tertiaryContainer} />
+        <EcolnaIcon name="leaf" size={40} color={colors.reward} />
       </View>
       <EcolnaText variant="headlineMd" align="center">
         {fr.errors.genericTitle}
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: colors.tertiaryFixed,
+    backgroundColor: colors.rewardTint,
     alignItems: 'center',
     justifyContent: 'center',
   },

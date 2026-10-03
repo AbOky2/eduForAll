@@ -16,6 +16,11 @@ interface EcolnaAudioButtonProps {
   playing?: boolean;
   disabled?: boolean;
   accessibilityLabel?: string;
+  /**
+   * `speech` : la consigne (une bulle de parole — « ce qu'il faut faire ») ;
+   * par défaut le haut-parleur, réservé au son à trouver (« ce qu'on cherche »).
+   */
+  icon?: 'speaker' | 'speech';
 }
 
 /**
@@ -49,6 +54,7 @@ export function EcolnaAudioButton({
   playing = false,
   disabled = false,
   accessibilityLabel = fr.common.listen,
+  icon = 'speaker',
 }: EcolnaAudioButtonProps) {
   // Jamais sous la cible tactile minimale, quelle que soit l'échelle demandée.
   const size = Math.max(a11y.minTouchTarget, requestedSize);
@@ -83,7 +89,7 @@ export function EcolnaAudioButton({
               width: size,
               height: size,
               borderRadius: size / 2,
-              borderColor: colors.secondaryFixedDim,
+              borderColor: colors.brandTintStrong,
               opacity: ringOpacity,
               transform: [{ scale: ringScale }],
             },
@@ -103,7 +109,7 @@ export function EcolnaAudioButton({
         hitSlop={6}
         faceStyle={[styles.face, { width: size, height: size }]}
       >
-        <EcolnaIcon name="speaker" size={Math.round(size * 0.48)} color={palette.ink} mode="color" />
+        <EcolnaIcon name={icon} size={Math.round(size * 0.48)} color={palette.ink} filled={icon === 'speech'} />
       </EcolnaGalet>
     </View>
   );

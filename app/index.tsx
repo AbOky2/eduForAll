@@ -46,7 +46,7 @@ export default function BootstrapScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.bubble}>
-          <EcolnaIcon name="refresh" size={40} color={colors.secondary} />
+          <EcolnaIcon name="refresh" size={40} color={colors.brand} />
         </View>
         <EcolnaText variant="headlineMd" align="center">
           {fr.errors.initFailedTitle}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: colors.secondaryFixed,
+    backgroundColor: colors.brandTint,
     alignItems: 'center',
     justifyContent: 'center',
   },

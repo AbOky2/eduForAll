@@ -88,7 +88,7 @@ export default function ParentGateScreen() {
         >
           {keyboard ? null : (
             <View style={[styles.badge, { width: scaled(80, scale), height: scaled(80, scale) }]}>
-              <EcolnaIcon name="shield" size={scaled(40, scale)} color={colors.secondary} />
+              <EcolnaIcon name="shield" size={scaled(40, scale)} color={colors.brand} />
             </View>
           )}
           <View style={styles.titles}>
@@ -116,7 +116,7 @@ export default function ParentGateScreen() {
               }}
               onSubmitEditing={valider}
               placeholder={fr.parent.gatePlaceholder}
-              placeholderTextColor={colors.outline}
+              placeholderTextColor={colors.inkTertiary}
               keyboardType="number-pad"
               returnKeyType="done"
               maxLength={4}
@@ -127,7 +127,7 @@ export default function ParentGateScreen() {
               ]}
             />
             {wrong ? (
-              <EcolnaText variant="bodyMd" color={colors.secondary} align="center">
+              <EcolnaText variant="bodyMd" color={colors.brand} align="center">
                 {fr.parent.gateWrong}
               </EcolnaText>
             ) : null}
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   titles: { gap: spacing.xxs, maxWidth: 520 },
   badge: {
     borderRadius: radius.pill,
-    backgroundColor: colors.secondaryFixed,
+    backgroundColor: colors.brandTint,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: radius.lg,
     borderWidth: 2,
-    borderColor: colors.cardEdge,
+    borderColor: colors.border,
     backgroundColor: colors.surfaceContainerLow,
     textAlign: 'center',
     fontFamily: fontFamilies.bold,
     color: colors.textPrimary,
     paddingHorizontal: spacing.md,
   },
-  inputWrong: { borderColor: colors.secondary },
+  inputWrong: { borderColor: colors.brand },
 });

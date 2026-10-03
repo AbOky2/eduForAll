@@ -31,7 +31,12 @@ export interface Responsive {
    * close, not the same letters stretched across more pixels.
    */
   readonly scale: number;
-  /** Horizontal screen margin. */
+  /**
+   * La gouttière de l'écran : la marge de la classe de fenêtre, élargie pour
+   * que le contenu ne dépasse jamais la colonne lisible. Une seule valeur,
+   * appliquée par tous les écrans : le bord gauche (et le bouton retour)
+   * tombe au même endroit d'un écran à l'autre.
+   */
   readonly screenPadding: number;
   /**
    * Maximum width of the readable column. Beyond this the content is centred
@@ -91,6 +96,7 @@ export function useResponsive(): Responsive {
       isLandscape,
       splitPanes: windowSize === 'expanded' && isLandscape,
       ...base,
+      screenPadding: Math.max(base.screenPadding, Math.round((width - base.contentMaxWidth) / 2)),
       scale: Math.min(base.scale, heightScaleCap(height)),
     };
   }, [width, height]);

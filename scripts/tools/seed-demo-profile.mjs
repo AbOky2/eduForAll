@@ -74,7 +74,8 @@ lecons.forEach((lecon, index) => {
   db.prepare(
     `INSERT INTO learning_sessions (id, child_profile_id, started_at, ended_at, lessons_completed)
      VALUES (?, ?, ?, ?, 1)`,
-  ).run(`demo-s-${index}`, PROFIL, jour(recul), jour(recul));
+  // Une vraie séance dure : 12 minutes, pas zéro (le tableau parent les compte).
+  ).run(`demo-s-${index}`, PROFIL, jour(recul), new Date(Date.parse(jour(recul)) + 12 * 60000).toISOString());
 });
 
 // Maîtrise par notion, et une notion laissée en difficulté pour que l'atelier

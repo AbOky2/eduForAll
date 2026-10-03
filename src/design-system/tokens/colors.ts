@@ -51,13 +51,13 @@ export const palette = {
   rewardTint: '#fff1cc',
   /** Texte sur `reward` (9,6:1). */
   onReward: '#2b1b00',
+  /** L'ambre foncé : un texte ou un pictogramme « soleil » sur fond clair (5,6:1). */
+  rewardInk: '#8a5a00',
   success: '#1f9d55',
   successTint: '#e3f5ea',
   /** Texte vert sur blanc (6,2:1) et sur `successTint` (5,4:1). */
   successInk: '#15703c',
 
-  /** La flamme de la série. */
-  flame: '#ff6b2c',
   /** Réservé aux actions destructives de l'adulte, jamais à l'enfant. */
   danger: '#d92d20',
   dangerTint: '#fef3f2',
@@ -114,7 +114,7 @@ export const colors = {
   secondaryFixedDim: palette.brandTintStrong,
   secondaryShade: palette.brandPressed,
 
-  tertiary: '#8a5a00',
+  tertiary: palette.rewardInk,
   onTertiary: palette.white,
   tertiaryContainer: palette.reward,
   onTertiaryContainer: palette.onReward,

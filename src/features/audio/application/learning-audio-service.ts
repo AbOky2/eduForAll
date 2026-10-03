@@ -17,6 +17,13 @@ export type PlaybackRate = 0.75 | 1;
 export interface LearningAudioService {
   preload(audioIds: readonly string[]): Promise<void>;
   play(audioId: string): Promise<void>;
+  /**
+   * Joue des sons l'un après l'autre (la consigne, puis le mot de l'exercice).
+   * `onStart` est appelé au début de chacun. Un `play` ou un `stop` l'interrompt.
+   */
+  playSequence(audioIds: readonly string[], onStart?: (audioId: string) => void): Promise<void>;
+  /** Le son lancé il y a moins de `withinMs` ms, s'il y en a un. */
+  justStarted(withinMs: number): string | null;
   replay(): Promise<void>;
   pause(): void;
   stop(): void;
@@ -31,6 +38,9 @@ export function createLearningAudioService(
 ): LearningAudioService {
   let player: AudioPlayer | null = null;
   let currentAudioId: string | null = null;
+  let startedAt = 0;
+  // Chaque séquence porte un jeton : un nouveau son l'invalide.
+  let sequence = 0;
   let rate: PlaybackRate = 1;
   let configured = false;
 
@@ -51,6 +61,21 @@ export function createLearningAudioService(
     }
   }
 
+  async function start(audioId: string): Promise<void> {
+    await ensureAudioMode();
+    const source = resolveSource(audioId);
+    if (source === null) {
+      throw new AudioAssetNotFoundError(audioId);
+    }
+    // Replace instead of overlapping: a second tap restarts the sound.
+    releasePlayer();
+    player = createAudioPlayer(source);
+    player.setPlaybackRate(rate);
+    currentAudioId = audioId;
+    startedAt = Date.now();
+    player.play();
+  }
+
   return {
     async preload(audioIds) {
       // Sources are bundled require() results; RN resolves them synchronously.
@@ -63,17 +88,32 @@ export function createLearningAudioService(
     },
 
     async play(audioId) {
-      await ensureAudioMode();
-      const source = resolveSource(audioId);
-      if (source === null) {
-        throw new AudioAssetNotFoundError(audioId);
-      }
-      // Replace instead of overlapping: a second tap restarts the sound.
-      releasePlayer();
-      player = createAudioPlayer(source);
-      player.setPlaybackRate(rate);
-      currentAudioId = audioId;
-      player.play();
+      sequence += 1;
+      await start(audioId);
+    },
+
+    async playSequence(audioIds, onStart) {
+      sequence += 1;
+      const token = sequence;
+      const next = async (index: number): Promise<void> => {
+        const audioId = audioIds[index];
+        if (audioId === undefined || token !== sequence) {
+          return;
+        }
+        await start(audioId);
+        onStart?.(audioId);
+        const current = player;
+        current?.addListener('playbackStatusUpdate', (status) => {
+          if (status.didJustFinish && token === sequence && current === player) {
+            void next(index + 1).catch((cause) => log.warn(`sequence failed: ${String(cause)}`));
+          }
+        });
+      };
+      await next(0);
+    },
+
+    justStarted(withinMs) {
+      return currentAudioId !== null && Date.now() - startedAt <= withinMs ? currentAudioId : null;
     },
 
     async replay() {
@@ -89,6 +129,7 @@ export function createLearningAudioService(
     },
 
     stop() {
+      sequence += 1;
       if (player) {
         player.pause();
         void player.seekTo(0);

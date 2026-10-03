@@ -20,26 +20,28 @@ interface EcolnaScreenProps {
   withBottomInset?: boolean;
   /** Adds the standard horizontal margin. Screens that scroll add their own. */
   padded?: boolean;
-  /** Retire la colonne de lecture : l'écran compose lui-même toute la largeur. */
+  /**
+   * Héritage : la colonne de lecture est désormais tenue par la gouttière
+   * (`screenPadding`, qui s'élargit sur les grandes fenêtres). Sans effet.
+   */
   fullWidth?: boolean;
 }
 
 /**
  * Every screen sits inside this. v4 « Épure » : aucun décor — la couleur,
  * l'espace et le contenu portent l'écran ; le sentiment du lieu vit dans trois
- * moments dessinés (accueil, carte, célébration). Sur tablette, le contenu
- * tient dans une colonne de largeur lisible, sauf si l'écran compose lui-même
- * toute la largeur.
+ * moments dessinés (accueil, carte, célébration). Sur tablette, la gouttière
+ * (`screenPadding`) borne le contenu à la colonne de largeur lisible : chaque
+ * écran a le même bord gauche.
  */
 export function EcolnaScreen({
   children,
   background = 'default',
   withBottomInset = true,
   padded = false,
-  fullWidth = false,
 }: EcolnaScreenProps) {
   const insets = useSafeAreaInsets();
-  const { contentMaxWidth, screenPadding } = useResponsive();
+  const { screenPadding } = useResponsive();
   const backgroundColor =
     background === 'exercise'
       ? colors.exerciseBackground
@@ -54,7 +56,6 @@ export function EcolnaScreen({
           style={[
             styles.content,
             {
-              maxWidth: fullWidth ? undefined : contentMaxWidth,
               paddingBottom: withBottomInset ? insets.bottom + spacing.md : 0,
               paddingHorizontal: padded ? screenPadding : 0,
             },

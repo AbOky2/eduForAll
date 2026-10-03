@@ -100,10 +100,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: 3,
     borderRadius: 2,
-    backgroundColor: colors.onSurfaceVariant,
+    backgroundColor: colors.inkSecondary,
     transform: [{ rotate: '45deg' }],
   },
-  token: { backgroundColor: colors.tertiaryContainer },
+  token: { backgroundColor: colors.reward },
   card: {
     backgroundColor: colors.surfaceContainerLow,
     borderRadius: radius.md,

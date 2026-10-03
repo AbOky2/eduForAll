@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
@@ -40,8 +40,7 @@ export function TapValueExercise({
 
   const prompt =
     step.type === 'fill_missing_letter' || audioId ? (
-      <EcolnaCard
-        rounded="xl"
+      <EcolnaStimulus
         style={[styles.stage, { minHeight: metrics.listenSize * 1.8, gap: metrics.gap }]}
       >
         {step.type === 'fill_missing_letter' ? (
@@ -63,7 +62,7 @@ export function TapValueExercise({
             onPress={() => playAudio(audioId)}
           />
         ) : null}
-      </EcolnaCard>
+      </EcolnaStimulus>
     ) : null;
 
   const answers = (

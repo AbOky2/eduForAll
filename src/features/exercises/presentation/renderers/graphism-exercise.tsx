@@ -152,7 +152,7 @@ export function GraphismExercise({
                   key={`w-${index}`}
                   points={stroke.map(([x, y]) => `${x},${y}`).join(' ')}
                   fill="none"
-                  stroke={colors.secondary}
+                  stroke={colors.brand}
                   strokeWidth={ink}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -172,8 +172,8 @@ export function GraphismExercise({
                       cx={x}
                       cy={y}
                       r={isNext ? scaled(14, scale) : scaled(6, scale)}
-                      fill={isDone ? colors.secondary : isNext ? colors.sun : colors.outlineVariant}
-                      stroke={isNext ? colors.sunShade : colors.outlineVariant}
+                      fill={isDone ? colors.brand : isNext ? colors.reward : colors.borderStrong}
+                      stroke={isNext ? colors.rewardPressed : colors.borderStrong}
                       strokeWidth={isNext ? 3 : 0}
                     />
                   );
@@ -183,7 +183,7 @@ export function GraphismExercise({
                 <Polyline
                   points={trail.join(' ')}
                   fill="none"
-                  stroke={colors.secondary}
+                  stroke={colors.brand}
                   strokeWidth={ink}
                   strokeLinecap="round"
                   strokeLinejoin="round"

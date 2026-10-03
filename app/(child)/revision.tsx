@@ -3,7 +3,11 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { lessonForSkill, worldOfLesson } from '@/features/curriculum/application/curriculum-catalog';
+import {
+  findLesson,
+  lessonForSkill,
+  worldOfLesson,
+} from '@/features/curriculum/application/curriculum-catalog';
 import { describeSkill } from '@/features/parent-space/application/parent-dashboard';
 import { REVISION_BATCH } from '@/features/revision/domain/revision-engine';
 import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
@@ -58,9 +62,12 @@ export default function RevisionScreen() {
                 // l'espace parent. L'enfant voit la notion, pas le reproche.
                 open.map(({ skillId }) => {
                   const lessonId = lessonForSkill(skillId);
+                  // L'enfant lit le nom de la leçon (« Ma maison : l'histoire »),
+                  // jamais un identifiant de compétence.
+                  const lesson = lessonId ? findLesson(lessonId) : null;
                   return {
                     skillId,
-                    label: describeSkill(skillId),
+                    label: lesson?.title ?? describeSkill(skillId),
                     lessonId,
                     subject: lessonId ? (worldOfLesson(lessonId)?.subject ?? null) : null,
                   };
@@ -77,7 +84,7 @@ export default function RevisionScreen() {
   const intro = (
     <View style={[styles.intro, { gap: scaled(spacing.sm, scale) }]}>
       <View style={[styles.sproutDisc, { width: disc, height: disc, borderRadius: disc / 2 }]}>
-        <EcolnaIcon name="sprout" size={Math.round(disc * 0.56)} color={colors.success} filled />
+        <EcolnaIcon name="refresh" size={Math.round(disc * 0.5)} color={colors.brand} />
       </View>
       <EcolnaText variant={isTablet ? 'displayHero' : 'headlineLg'} align="center">
         {fr.revision.title}
@@ -143,7 +150,7 @@ export default function RevisionScreen() {
       <View style={[styles.header, { paddingHorizontal: screenPadding }]}>
         <EcolnaIconButton icon="arrow-back" accessibilityLabel={fr.common.back} onPress={goBack} />
       </View>
-      {splitPanes ? (
+      {splitPanes && items.length > 2 ? (
         <View
           style={[
             styles.split,
@@ -159,6 +166,7 @@ export default function RevisionScreen() {
             styles.scroll,
             { paddingHorizontal: screenPadding, gap: scaled(spacing.xl, scale) },
           ]}
+          style={styles.column}
           showsVerticalScrollIndicator={false}
         >
           {intro}
@@ -173,10 +181,12 @@ const styles = StyleSheet.create({
   header: { paddingVertical: spacing.sm },
   split: { flex: 1, flexDirection: 'row', alignItems: 'center' },
   pane: { flex: 1 },
-  scroll: { paddingBottom: spacing.xxl },
+  scroll: { paddingBottom: spacing.xxl, flexGrow: 1, justifyContent: 'center' },
+  // Une ou deux notions : une seule colonne centrée, lisible d'un coup d'œil.
+  column: { width: '100%', maxWidth: 720, alignSelf: 'center' },
   intro: { alignItems: 'center' },
   sproutDisc: {
-    backgroundColor: colors.successTint,
+    backgroundColor: colors.brandTint,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.sm,

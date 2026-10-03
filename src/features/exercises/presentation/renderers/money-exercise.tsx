@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Text as SvgText } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
-  EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   useExerciseMetrics,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, illustration, spacing } from '@/design-system/tokens';
+import { illustration, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -60,43 +59,26 @@ function CoinFace({ value, size }: { value: Coin; size: number }) {
 /**
  * « Les pièces de monnaie » (programme p. 59). The child adds up the coins
  * laid out on the mat — the first real-life use of addition at CP. The
- * instruction is said by the lesson header; here, only its replay.
+ * instruction is said (and replayed) by the lesson header.
  */
 export function MoneyExercise({
   step,
   interactive,
   onSubmit,
-  playAudio,
-  playingAudioId,
 }: ExerciseRendererProps<MoneyStep>) {
   const [picked, setPicked] = useState<number | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const coin = scaled(isTablet ? 84 : 64, scale);
 
-  useEffect(() => {
-    playAudio(step.instruction.audioId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step.id]);
-
   const prompt = (
-    <EcolnaCard
-      rounded="xl"
-      backgroundColor={colors.surfaceContainer}
-      style={[styles.mat, { gap: metrics.gap, minHeight: coin * 2.6 }]}
-    >
+    <EcolnaStimulus style={[styles.mat, { gap: metrics.gap, minHeight: coin * 2.6 }]}>
       <View style={[styles.coins, { gap: scaled(spacing.sm, scale) }]}>
         {step.coins.map((value, index) => (
           <CoinFace key={`${value}-${index}`} value={value} size={coin} />
         ))}
       </View>
-      <EcolnaAudioButton
-        variant="sky"
-        size={scaled(52, scale)}
-        playing={playingAudioId === step.instruction.audioId}
-        onPress={() => playAudio(step.instruction.audioId)}
-      />
-    </EcolnaCard>
+    </EcolnaStimulus>
   );
 
   const answers = (

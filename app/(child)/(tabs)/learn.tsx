@@ -32,7 +32,7 @@ export default function ModuleSelectionScreen() {
   const { splitPanes, isTablet, scale, screenPadding, height } = useResponsive();
   // Une tablette 7" couchée n'a que 600 dp : l'objet rapetisse avant que les
   // portes ne passent sous la barre d'onglets.
-  const portalArt = splitPanes ? (height < 720 ? 64 : 80) : 88;
+  const portalArt = splitPanes ? (height < 720 ? 64 : 96) : 96;
   const profile = useActiveProfile((state) => state.profile);
   const [explained, setExplained] = useState<Subject | null>(null);
   const subjects: SubjectProgress[] =
@@ -52,8 +52,7 @@ export default function ModuleSelectionScreen() {
     <EcolnaScreen background="default" withBottomInset={false}>
       <ScrollView
         contentContainerStyle={[
-          // En paysage, les quatre portes occupent toute la hauteur libre.
-          splitPanes && styles.fill,
+          styles.grow,
           {
             paddingHorizontal: screenPadding,
             gap,
@@ -72,43 +71,38 @@ export default function ModuleSelectionScreen() {
           </EcolnaText>
         </View>
 
-        {rows.map((row, index) => (
-          <View
-            key={index}
-            style={[
-              styles.row,
-              { gap },
-              columns > 1 && styles.rowStretch,
-              splitPanes && styles.fill,
-            ]}
-          >
-            {row.map((subject) => (
-              <SubjectPortal
-                key={subject.subject}
-                subject={subject.subject}
-                label={LABELS[subject.subject]}
-                hint={fr.learn.subjectHints[subject.subject]}
-                status={null}
-                artSize={portalArt}
-                completed={subject.completed}
-                total={subject.total}
-                locked={subject.locked}
-                layout={columns > 1 ? 'portal' : 'row'}
-                explanation={explained === subject.subject ? fr.home.lockedExplain : null}
-                accessibilityLabel={`${LABELS[subject.subject]}${subject.locked ? `, ${fr.learn.locked}` : ''}`}
-                accessibilityHint={subject.locked ? fr.learn.lockedA11yHint : undefined}
-                onPress={() => {
-                  if (subject.locked) {
-                    setExplained(subject.subject);
-                    AccessibilityInfo.announceForAccessibility(fr.home.lockedExplain);
-                    return;
-                  }
-                  router.push(`/(child)/level-map?subject=${subject.subject}`);
-                }}
-              />
-            ))}
-          </View>
-        ))}
+        {/* Les portes gardent leur hauteur naturelle et se centrent sous le titre. */}
+        <View style={[styles.fill, { gap }]}>
+          {rows.map((row, index) => (
+            <View key={index} style={[styles.row, { gap }, columns > 1 && styles.rowStretch]}>
+              {row.map((subject) => (
+                <SubjectPortal
+                  key={subject.subject}
+                  subject={subject.subject}
+                  label={LABELS[subject.subject]}
+                  hint={fr.learn.subjectHints[subject.subject]}
+                  status={null}
+                  artSize={portalArt}
+                  completed={subject.completed}
+                  total={subject.total}
+                  locked={subject.locked}
+                  layout={columns > 1 ? 'portal' : 'row'}
+                  explanation={explained === subject.subject ? fr.home.lockedExplain : null}
+                  accessibilityLabel={`${LABELS[subject.subject]}${subject.locked ? `, ${fr.learn.locked}` : ''}`}
+                  accessibilityHint={subject.locked ? fr.learn.lockedA11yHint : undefined}
+                  onPress={() => {
+                    if (subject.locked) {
+                      setExplained(subject.subject);
+                      AccessibilityInfo.announceForAccessibility(fr.home.lockedExplain);
+                      return;
+                    }
+                    router.push(`/(child)/level-map?subject=${subject.subject}`);
+                  }}
+                />
+              ))}
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </EcolnaScreen>
   );
@@ -117,6 +111,7 @@ export default function ModuleSelectionScreen() {
 const styles = StyleSheet.create({
   titles: { gap: spacing.xxs },
   row: {},
-  fill: { flexGrow: 1 },
+  grow: { flexGrow: 1 },
+  fill: { flexGrow: 1, justifyContent: 'center' },
   rowStretch: { flexDirection: 'row', alignItems: 'stretch' },
 });

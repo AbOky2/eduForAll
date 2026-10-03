@@ -12,6 +12,8 @@ interface BadgeTileProps {
   /** Ajouté à la description quand le badge n'est pas gagné. */
   lockedHint: string;
   size?: number | undefined;
+  /** Posée sur la nuit (célébration) : libellé blanc. */
+  onDark?: boolean | undefined;
 }
 
 /**
@@ -19,7 +21,15 @@ interface BadgeTileProps {
  * silhouette et garde son nom et ce qu'il faut faire pour l'obtenir : un
  * badge est un objectif, jamais une boîte mystère.
  */
-export function BadgeTile({ id, label, description, earned, lockedHint, size = 64 }: BadgeTileProps) {
+export function BadgeTile({
+  id,
+  label,
+  description,
+  earned,
+  lockedHint,
+  size = 64,
+  onDark = false,
+}: BadgeTileProps) {
   return (
     <View
       style={[styles.tile, { width: Math.max(96, size + 24) }]}
@@ -30,7 +40,7 @@ export function BadgeTile({ id, label, description, earned, lockedHint, size = 6
       <EcolnaText
         variant="labelSm"
         align="center"
-        color={earned ? colors.textPrimary : colors.textSecondary}
+        color={onDark ? colors.white : earned ? colors.textPrimary : colors.textSecondary}
         numberOfLines={2}
       >
         {label}

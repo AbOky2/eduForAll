@@ -29,15 +29,14 @@ function CurrentSegment({ fill, thickness }: { fill: string; thickness: number }
     Animated.spring(grow, { toValue: 1, speed: 8, bounciness: 4, useNativeDriver: false }).start();
   }, [grow, reducedMotion]);
   return (
-    <View style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.fill }]}>
+    <View style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.fillStrong }]}>
       <Animated.View
         style={{
-          width: grow.interpolate({ inputRange: [0, 1], outputRange: ['0%', '45%'] }),
+          width: grow.interpolate({ inputRange: [0, 1], outputRange: ['0%', '50%'] }),
           minWidth: thickness,
           height: thickness,
           borderRadius: thickness / 2,
           backgroundColor: fill,
-          opacity: 0.45,
         }}
       />
     </View>
@@ -47,7 +46,8 @@ function CurrentSegment({ fill, thickness }: { fill: string; thickness: number }
 /**
  * La progression d'une leçon : un segment par exercice, comme les pas d'un
  * chemin. Faits : pleins, dans la couleur de la discipline ; en cours : à
- * demi teinté ; à venir : la piste neutre. L'enfant voit combien il en reste
+ * moitié plein, dans la même couleur, sans transparence ; à venir : la piste
+ * neutre, assez soutenue pour se voir au soleil. L'enfant voit combien il en reste
  * sans lire un nombre.
  */
 export function EcolnaSegmentedProgress({
@@ -79,7 +79,7 @@ export function EcolnaSegmentedProgress({
         ) : (
           <View
             key={index}
-            style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.fill }]}
+            style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.fillStrong }]}
           />
         ),
       )}

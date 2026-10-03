@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { a11y, colors, radius, shadows, spacing, type TypographyVariant } from '../tokens';
@@ -40,14 +40,25 @@ const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string
   correct: { face: colors.successTint, edge: colors.success, border: colors.success, ink: colors.successInk },
   // Doux : le bleu de la marque, jamais rouge (le programme et la direction l'interdisent).
   incorrect: { face: colors.brandTint, edge: colors.brand, border: colors.brand, ink: colors.brandInk },
-  disabled: { face: colors.fill, edge: colors.fill, border: colors.fill, ink: colors.inkSecondary },
+  // Inerte pendant le retour, mais jamais grisée : un enfant lit le gris
+  // comme « c'est cassé ». Elle garde son aspect, sans ombre.
+  disabled: { face: colors.white, edge: colors.border, border: colors.border, ink: colors.ink },
 };
+
+/**
+ * Le verdict de l'étape, fourni par l'écran de leçon pendant la feuille de
+ * retour : la carte choisie (`selected`) le montre elle-même — verte et
+ * cochée si c'est juste, bleue avec la flèche de reprise sinon. Une paire
+ * teintée (relier) garde sa teinte.
+ */
+export const AnswerVerdictContext = createContext<'correct' | 'incorrect' | null>(null);
 
 /**
  * Une réponse qu'on touche (v4) : une surface blanche, un filet de 2 dp, une
  * ombre douce ; elle s'enfonce sous le doigt. Choisie : filet bleu de 3 dp sur
  * un fond bleuté ; juste : vert, avec une pastille cochée ; à revoir : bleu
- * calme, avec une flèche de reprise — jamais la couleur seule, jamais du rouge.
+ * calme, avec une flèche de reprise — jamais la couleur seule, jamais du rouge,
+ * jamais de gris (voir `AnswerVerdictContext`).
  */
 export function EcolnaAnswerCard({
   label,
@@ -63,23 +74,25 @@ export function EcolnaAnswerCard({
   mark,
 }: EcolnaAnswerCardProps) {
   const { scale } = useResponsive();
-  const look = state === 'selected' && tint ? tint : LOOK[state];
-  const disabled = state === 'disabled' || state === 'correct' || state === 'incorrect';
+  const verdict = useContext(AnswerVerdictContext);
+  const shown: AnswerCardState = state === 'selected' && verdict && !tint ? verdict : state;
+  const look = shown === 'selected' && tint ? tint : LOOK[shown];
+  const disabled = shown === 'disabled' || shown === 'correct' || shown === 'incorrect';
   const badge = scaled(30, scale);
-  const sunk = state === 'selected' || state === 'correct' || state === 'incorrect';
+  const sunk = shown === 'selected' || shown === 'correct' || shown === 'incorrect';
 
   return (
     <EcolnaGalet
       face={look.face}
       border={look.border}
-      borderWidth={state === 'default' || state === 'disabled' ? 2 : 3}
+      borderWidth={shown === 'default' || shown === 'disabled' ? 2 : 3}
       radius={radius.xl}
-      shadow={state === 'default' ? shadows.card : undefined}
+      shadow={shown === 'default' ? shadows.card : undefined}
       onPress={onPress}
       disabled={disabled}
       pressedLook={sunk}
       accessibilityLabel={accessibilityLabel ?? label}
-      accessibilityState={{ disabled, selected: state === 'selected' }}
+      accessibilityState={{ disabled, selected: shown === 'selected' }}
       style={style}
       faceStyle={[
         styles.face,
@@ -93,7 +106,7 @@ export function EcolnaAnswerCard({
             {label}
           </EcolnaText>
         ) : null)}
-      {state === 'correct' || state === 'incorrect' ? (
+      {shown === 'correct' || shown === 'incorrect' ? (
         <View
           style={[
             styles.badge,
@@ -101,12 +114,12 @@ export function EcolnaAnswerCard({
               width: badge,
               height: badge,
               borderRadius: badge / 2,
-              backgroundColor: state === 'correct' ? colors.success : colors.brand,
+              backgroundColor: shown === 'correct' ? colors.success : colors.brand,
             },
           ]}
         >
           <EcolnaIcon
-            name={state === 'correct' ? 'check' : 'replay'}
+            name={shown === 'correct' ? 'check' : 'replay'}
             size={Math.round(badge * 0.62)}
             color={colors.onPrimary}
           />

@@ -13,7 +13,7 @@ export default function NotFoundScreen() {
     <EcolnaScreen background="default">
       <View style={styles.container}>
         <View style={styles.badge}>
-          <EcolnaIcon name="compass" size={40} color={colors.secondary} />
+          <EcolnaIcon name="compass" size={40} color={colors.brand} />
         </View>
         <EcolnaText variant="headlineMd" align="center">
           {fr.errors.contentUnavailable}
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: colors.secondaryFixed,
+    backgroundColor: colors.brandTint,
     alignItems: 'center',
     justifyContent: 'center',
   },

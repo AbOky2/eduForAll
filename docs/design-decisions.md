@@ -157,3 +157,29 @@ Mode d'emploi : `docs/visual-qa.md`.
 - *Paysage partout* : réussite et hors-connexion se mettent côte à côte dès
   qu'un écran couché fait 640 dp de large, téléphone compris ; le banc capture
   aussi les tablettes du pilote (`tab7-l`, `tab7-p`, `tab10-l`).
+
+## Refonte v4 « Épure » (octobre 2026)
+
+La v3 « Galets en relief » a été jugée datée par le propriétaire (« trop
+ringard ») au moment où l'app doit convaincre des cadres du ministère et des
+investisseurs. La v4 la remplace entièrement ; `design/direction-v4-epure.md`
+en est la référence.
+
+- **Plat, précis, doux** : plus de tranche sous les surfaces, plus de reflet ;
+  la profondeur vient d'ombres `boxShadow` en couches (sans effet sur
+  l'empilement Android). Ce qui se touche le dit par un ressort à 0,96 et un
+  retour haptique.
+- **Une couleur par rôle** : bleu marque (choisir), soleil (agir,
+  récompenser), nuit (grands moments), vert (réussir), une teinte par
+  discipline aux noms du pays. Jamais de rouge pour l'enfant.
+- **Une seule forme de « a »** : Ecolna Sans (Figtree, « a » scolaire figé)
+  pour l'interface, Andika pour ce que l'enfant apprend à lire. Polices lues
+  depuis le bundle (`useFonts`), aucun réseau.
+- **Pictogrammes Phosphor** (MIT), embarqués comme données.
+- **Progression sans fraction pour l'enfant** : barre segmentée par leçon,
+  anneau par discipline, fil du parcours ; les nombres vont à l'espace
+  parent.
+- **Illustrations** : les personnages et les objets de l'école plutôt que le
+  paysage — portraits redessinés, médailles plates, compositions « orbite ».
+- Retirés : scènes et décors v3, glyphes M/S, jeton `depth`, polices
+  Quicksand et Plus Jakarta Sans.

@@ -78,7 +78,7 @@ export default function ChildProfileScreen() {
   const gap = scaled(spacing.lg, scale);
 
   const identity = (
-    <EcolnaCard rounded="xl" padded={false} style={styles.identity}>
+    <EcolnaCard rounded="xl" padded={false}>
       <View style={[styles.who, { gap: scaled(spacing.sm, scale), padding: scaled(spacing.xl, scale) }]}>
         <EcolnaAvatar avatarId={profile.avatarId} size={hero} popOut />
         <EcolnaText variant="displayHero" align="center">
@@ -92,7 +92,7 @@ export default function ChildProfileScreen() {
         <View style={styles.rule} />
         <Stat icon="star" color={colors.reward} value={String(stats?.totalStars ?? 0)} label={fr.childProfile.starsEarned} />
         <View style={styles.rule} />
-        <Stat icon="flame" color={colors.flame} value={String(stats?.bestStreakDays ?? 0)} label={fr.childProfile.bestStreak} />
+        <Stat icon="sun" color={colors.reward} value={String(stats?.bestStreakDays ?? 0)} label={fr.childProfile.bestStreak} />
       </View>
     </EcolnaCard>
   );
@@ -105,7 +105,7 @@ export default function ChildProfileScreen() {
           tone="sun"
           variant="labelMd"
           icon={<EcolnaIcon name="medal" size={scaled(16, scale)} color={colors.rewardDeep} filled />}
-          label={fr.achievements.countEarned(earnedSet.size, ACHIEVEMENT_IDS.length)}
+          label={fr.achievements.earnedCount(earnedSet.size)}
         />
       </View>
       <EcolnaText variant="bodyMd" color={colors.textSecondary}>
@@ -167,10 +167,9 @@ export default function ChildProfileScreen() {
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   split: { flex: 1, flexDirection: 'row' },
-  leftPane: { flex: 0.9, justifyContent: 'center' },
+  leftPane: { flex: 0.9, paddingTop: spacing.sm },
   rightPane: { flex: 1.2 },
   scrollBottom: { paddingBottom: spacing.xxl, paddingTop: spacing.sm },
-  identity: { overflow: 'hidden' },
   who: { alignItems: 'center' },
   center: { alignSelf: 'center' },
   statStrip: { flexDirection: 'row', borderTopWidth: 1, borderTopColor: colors.border },

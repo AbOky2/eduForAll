@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   board: {
     alignItems: 'center',
     borderRadius: radius.xl,
-    backgroundColor: colors.surfaceContainer,
+    backgroundColor: colors.fill,
     borderWidth: 2,
     borderColor: colors.surfaceContainerHighest,
   },
@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
   sentence: { alignSelf: 'stretch', alignItems: 'center', flexGrow: 1, flexShrink: 1 },
   hollow: {
     borderRadius: radius.lg,
-    backgroundColor: colors.surfaceContainerHigh,
+    backgroundColor: colors.fillStrong,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: colors.outlineVariant,
+    borderColor: colors.borderStrong,
   },
   chipsRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   verify: { alignSelf: 'center', minWidth: 260 },

@@ -12,7 +12,6 @@ import {
 import * as Haptics from 'expo-haptics';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
-import type { DepthToken } from '../tokens/depth';
 
 export type HapticKind = 'selection' | 'light' | 'none';
 
@@ -20,14 +19,10 @@ export interface EcolnaGaletProps {
   children: ReactNode;
   /** Couleur de la surface. */
   face: string;
-  /** Héritage v3 (la tranche) : ignoré — une surface v4 n'a plus de tranche. */
-  edge?: string | undefined;
   /** Filet de la surface (cartes blanches sur fond clair). */
   border?: string | undefined;
   borderWidth?: number | undefined;
   radius: number;
-  /** Héritage v3 : ignoré. */
-  depth?: DepthToken | number | undefined;
   onPress?: (() => void) | undefined;
   onPressIn?: (() => void) | undefined;
   disabled?: boolean | undefined;

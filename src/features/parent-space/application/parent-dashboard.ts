@@ -15,22 +15,107 @@ export interface ParentDashboardData {
   readonly recommendations: string[];
 }
 
-/** Turns a skill id into parent-readable French ("skill-son-ba" → "le son « ba »"). */
+/** Les thèmes dont l'identifiant ne se lit pas tel quel. */
+const TOPIC_LABELS: Record<string, string> = {
+  subtraction: 'soustraction',
+  'table-5': 'table de 5',
+  'table-addition': 'table d’addition',
+  'table-soustraction': 'table de soustraction',
+  'double-moitie': 'double et moitié',
+  'double-decimetre': 'double décimètre',
+  reperes: 'repères dans l’espace',
+  verbes: 'problèmes (ajouter, enlever)',
+  problemes: 'problèmes',
+  comparaisons: 'comparer les nombres',
+  quantites: 'quantités',
+  signes: 'signes + − =',
+  retenue: 'retenue',
+  'boucle-haut': 'boucles vers le haut',
+  'ligne-horizontale': 'lignes horizontales',
+  pont: 'ponts',
+  rond: 'ronds',
+  points: 'points',
+  dictee: 'dictée',
+  copie: 'copie',
+  structures: 'structure des phrases',
+  comprehension: 'compréhension',
+  'corps-humain': 'le corps humain',
+  ecole: 'l’école',
+  fetes: 'les fêtes',
+  marche: 'le marché',
+  metiers: 'les métiers',
+  'phenomenes-naturels': 'les phénomènes naturels',
+  combinatoire: 'assembler les syllabes',
+  phrase: 'lire une phrase',
+  'en-lettres': 'écrits en lettres',
+  ecriture: 'écrire les nombres',
+};
+
+const topicLabel = (topic: string) => TOPIC_LABELS[topic] ?? topic.replace(/-/g, ' ');
+
+/** Les accents encodés des identifiants (« e1 » → « é », scripts/content/audio.ts). */
+const ACCENTS: Record<string, string> = {
+  a1: 'à',
+  a2: 'â',
+  a3: 'ä',
+  e1: 'é',
+  e2: 'è',
+  e3: 'ê',
+  e4: 'ë',
+  i1: 'î',
+  i2: 'ï',
+  o1: 'ô',
+  o2: 'ö',
+  oe1: 'œ',
+  u1: 'ù',
+  u2: 'û',
+  u3: 'ü',
+  c1: 'ç',
+};
+const decode = (token: string) => ACCENTS[token] ?? token;
+
+/** « ac-ec-oc-ic » → « ac », « ec », « oc », « ic ». */
+function soundsLabel(topic: string): string {
+  if (topic === 'semi-voyelles') {
+    return 'les semi-voyelles';
+  }
+  if (topic.startsWith('equiv-')) {
+    return `les façons d’écrire le son « ${decode(topic.slice(6))} »`;
+  }
+  const parts = topic.split('-').map(decode);
+  return parts.length === 1
+    ? `le son « ${parts[0]} »`
+    : `les sons ${parts.map((part) => `« ${part} »`).join(', ')}`;
+}
+
+/**
+ * Une compétence en français lisible par un parent (« skill-son-ba » → « le
+ * son « ba » »). Jamais un fragment d'identifiant nu : chaque famille porte
+ * son nom (le calcul, l'écriture, le langage…).
+ */
 export function describeSkill(skillId: string): string {
   const withoutPrefix = skillId.replace(/^skill-/, '');
   const [kind = '', ...rest] = withoutPrefix.split('-');
   const topic = rest.join('-');
   switch (kind) {
     case 'son':
-      return `le son « ${topic} »`;
+      return soundsLabel(topic);
     case 'lettre':
-      return `la lettre « ${topic} »`;
+      return `la lettre « ${decode(topic)} »`;
     case 'nombre':
-      return `les nombres (${topic.replace(/-/g, ' ')})`;
+      return /^\d/.test(topic)
+        ? `les nombres de ${topic.replace('-', ' à ')}`
+        : `les nombres (${topicLabel(topic)})`;
     case 'lecture':
-      return `la lecture (${topic.replace(/-/g, ' ')})`;
+      return `la lecture (${topicLabel(topic)})`;
+    case 'calcul':
+      return `le calcul (${topicLabel(topic)})`;
+    case 'ecriture':
+      return `l’écriture (${topicLabel(topic)})`;
+    case 'langage':
+      return `le langage (${topicLabel(topic)})`;
     default:
-      return topic.replace(/-/g, ' ');
+      return `la notion « ${topicLabel(withoutPrefix)} »`;
   }
 }
 
@@ -106,7 +191,11 @@ export async function loadParentDashboard(
     childProfileId,
   );
 
-  const open = await createRevisionRepository(db).findOpen(childProfileId, 3, new Date().toISOString());
+  const open = await createRevisionRepository(db).findOpen(
+    childProfileId,
+    3,
+    new Date().toISOString(),
+  );
   const recommendations = open.map(
     (entry) =>
       `Revoyez ensemble ${describeSkill(entry.skillId)}. ${fr.revision.reasons[entry.reason]}`,

@@ -81,7 +81,8 @@ async function seed(page) {
       );
       await db.runAsync(
         'INSERT OR REPLACE INTO learning_sessions (id, child_profile_id, started_at, ended_at, lessons_completed) VALUES (?, ?, ?, ?, 1)',
-        `demo-s-${i}`, P, jour(recul), jour(recul),
+        // Une vraie séance dure : 12 minutes, pas zéro (le tableau parent les compte).
+        `demo-s-${i}`, P, jour(recul), new Date(Date.parse(jour(recul)) + 12 * 60000).toISOString(),
       );
     }
     const notions = await db.getAllAsync(

@@ -309,6 +309,79 @@ export const illustration = {
     lineOnCream: '#f1e5ce',
     lineOnSand: '#d6a676',
   },
+
+  /**
+   * Pictogrammes de contenu v4 « Épure » (`illustrations/object-icons.tsx`,
+   * `illustrations/curriculum-icons.tsx`) : ce que l'enfant compte, nomme,
+   * associe à un mot. Une rampe par matière — `light` (la face que touche le
+   * soleil, en haut à gauche), `base`, `shade` (la face à l'ombre, et les
+   * détails : yeux d'animaux mis à part, nervures, coutures, pattes du fond).
+   * Aucun contour : une forme se détache de la carte blanche par sa `base`,
+   * et de sa voisine par la teinte. Les blancs (`porcelain`, `wool`, `cloud`)
+   * gardent une `shade` assez soutenue pour dessiner leur silhouette sur
+   * une carte blanche. Les familles franches (`blue`, `orange`, `green`,
+   * `violet`, `pink`) sont celles des tissus des portraits v4.
+   */
+  objects: {
+    // ── Familles franches (tissus, peintures, plastiques) ────────────────
+    red: { light: '#ff806a', base: '#e8473a', shade: '#c2312a' },
+    orange: { light: '#ff9b72', base: '#f2643f', shade: '#d34d2b' },
+    sun: { light: '#ffd560', base: '#ffb81c', shade: '#e69500' },
+    green: { light: '#56cf8b', base: '#21a05d', shade: '#168048' },
+    blue: { light: '#7d9cf8', base: '#3b63f0', shade: '#2b4bd0' },
+    sky: { light: '#c3e5fd', base: '#7fc3f2', shade: '#4ba2dc' },
+    violet: { light: '#a994f9', base: '#7c5cf2', shade: '#6243d6' },
+    pink: { light: '#f78ab4', base: '#ec4c8b', shade: '#cf3272' },
+    teal: { light: '#5fd0cc', base: '#12a3a0', shade: '#0c8582' },
+
+    // ── Végétal ───────────────────────────────────────────────────────────
+    leaf: { light: '#88cb5e', base: '#52a647', shade: '#388539' },
+    grass: { light: '#c6dc6c', base: '#9ec552', shade: '#78a33d' },
+    /** La mangue du Tchad : jaune au soleil, vert-jaune, verte à l'ombre. */
+    mango: { light: '#f8da50', base: '#cdd248', shade: '#97b93c' },
+    straw: { light: '#f7d78a', base: '#e7b863', shade: '#c99642' },
+    wood: { light: '#d39b63', base: '#b07842', shade: '#8a5a2e' },
+    bark: { light: '#a2734c', base: '#7f5639', shade: '#603e28' },
+    peanut: { light: '#efcb94', base: '#d8a86b', shade: '#b8874d' },
+
+    // ── Terre, cuisine ───────────────────────────────────────────────────
+    /** Mur de banco (terre crue) et crépi. */
+    banco: { light: '#f1cca6', base: '#e0aa79', shade: '#c38a58' },
+    /** Poterie : canari, jarre, tuile. */
+    clay: { light: '#eaa275', base: '#d07f4e', shade: '#ad6136' },
+    bread: { light: '#f2bd6c', base: '#dc9240', shade: '#b77128' },
+    meat: { light: '#ec7a6e', base: '#cb4b42', shade: '#a3332d' },
+    /** Coquille des œufs de poule du pays, brun clair. */
+    egg: { light: '#fcebd5', base: '#f0d3ae', shade: '#d6b088' },
+
+    // ── Pelages et plumes ────────────────────────────────────────────────
+    /** La chèvre rousse du Sahel. */
+    fawn: { light: '#dca670', base: '#c2854c', shade: '#9b6433' },
+    /** Le zébu rouge mbororo. */
+    rust: { light: '#cc7150', base: '#ac5232', shade: '#873a20' },
+    /** Chameau, chien du village. */
+    sand: { light: '#efcd98', base: '#dcb073', shade: '#bc8e52' },
+    /** Lion : robe dorée ; la crinière prend `rust`. */
+    lion: { light: '#ffd27a', base: '#f2b444', shade: '#d39226' },
+    ginger: { light: '#f7b06a', base: '#e8893f', shade: '#c56c28' },
+    /** La poule rousse des cours. */
+    feather: { light: '#f5c47e', base: '#d9964a', shade: '#b2722f' },
+    wool: { light: '#ffffff', base: '#f2ebdf', shade: '#d8c9b2' },
+    /** Âne : gris chaud. */
+    donkey: { light: '#c3bcb6', base: '#a59d96', shade: '#857c75' },
+    /** Éléphant, loup : gris froids. */
+    elephant: { light: '#b0b9c9', base: '#939daf', shade: '#768094' },
+    wolf: { light: '#9aa1b1', base: '#7a8294', shade: '#5d6577' },
+
+    // ── Matériaux ─────────────────────────────────────────────────────────
+    metal: { light: '#eef1f5', base: '#c9d0db', shade: '#a2acbc' },
+    /** Pneus, guidons, cadres sombres : une encre douce, jamais le noir. */
+    rubber: { light: '#4b5265', base: '#343a4a', shade: '#252a36' },
+    porcelain: { light: '#ffffff', base: '#eef1f5', shade: '#d2d9e4' },
+    cloud: { light: '#ffffff', base: '#dce6f3', shade: '#b9c8de' },
+    /** Le corps des insectes et des petits détails sombres. */
+    ink: { light: '#5a6176', base: '#3c4255', shade: '#2a2f3e' },
+  },
 } as const;
 
 export type FabricName = keyof typeof illustration.fabric;

@@ -2,13 +2,18 @@ export { EcolnaText } from './ecolna-text';
 export { EcolnaScreen } from './ecolna-screen';
 export { EcolnaButton } from './ecolna-button';
 export { EcolnaCard } from './ecolna-card';
-export { EcolnaAnswerCard } from './ecolna-answer-card';
+export { AnswerVerdictContext, EcolnaAnswerCard } from './ecolna-answer-card';
 export type { AnswerCardState } from './ecolna-answer-card';
 export { EcolnaProgressBar } from './ecolna-progress-bar';
 export { EcolnaSegmentedProgress } from './ecolna-segmented-progress';
 export { EcolnaProgressRing } from './ecolna-progress-ring';
 export { EcolnaAudioButton } from './ecolna-audio-button';
-export { EcolnaExerciseLayout, useExerciseMetrics } from './ecolna-exercise-layout';
+export {
+  EcolnaExerciseLayout,
+  EcolnaStimulus,
+  ExerciseSubjectContext,
+  useExerciseMetrics,
+} from './ecolna-exercise-layout';
 export type { ExerciseMetrics } from './ecolna-exercise-layout';
 export { EcolnaGalet, EcolnaSurface, triggerHaptic } from './ecolna-galet';
 export type { EcolnaGaletProps, HapticKind } from './ecolna-galet';

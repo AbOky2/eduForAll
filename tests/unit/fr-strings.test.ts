@@ -18,6 +18,30 @@ describe('copie française', () => {
     expect(fr.achievements.countEarned(5, 14)).toBe('5 badges sur 14');
   });
 
+  it('ne montre à l’enfant que ce qu’il a gagné, jamais une fraction', () => {
+    expect(fr.achievements.earnedCount(1)).toBe('1 badge');
+    expect(fr.achievements.earnedCount(5)).toBe('5 badges');
+  });
+
+  it('nomme les médailles pour les filles comme pour les garçons', () => {
+    // Une fille qui gagne « Bon lecteur » ou « Roi du calcul » ne s'y reconnaît pas.
+    const labels = Object.values(fr.achievements.labels);
+    expect(labels.filter((label) => /\b(Bon|Roi|Grand|Élève|appliqué|travailleur|lecteur)\b/.test(label))).toEqual([]);
+  });
+
+  it('reste en français : aucun anglicisme d’interface', () => {
+    const texts: string[] = [];
+    const collect = (value: unknown): void => {
+      if (typeof value === 'string') {
+        texts.push(value);
+      } else if (value && typeof value === 'object') {
+        Object.values(value).forEach(collect);
+      }
+    };
+    collect(fr);
+    expect(texts.filter((text) => /\b(offline|online|loading|settings|reset|login|badge[sd]? unlocked)\b/i.test(text))).toEqual([]);
+  });
+
   it('met en couleur un mot qui figure bien dans le titre d’accueil', () => {
     expect(fr.onboarding.welcomeTitle).toContain(fr.onboarding.welcomeTitleHighlight);
   });

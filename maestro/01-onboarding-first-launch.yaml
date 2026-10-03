@@ -18,7 +18,7 @@ appId: td.ecolna.app.dev
 - tapOn: 'Suivant'
 
 # Onboarding 3/3 — la promesse hors connexion
-- assertVisible: 'Fonctionne sans connexion.'
+- assertVisible: 'Tout marche sans internet.'
 - tapOn: 'Créer mon profil'
 
 # Création du profil — la cérémonie en trois étapes (brief v2 § 12) :

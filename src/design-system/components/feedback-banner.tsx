@@ -96,6 +96,15 @@ export function FeedbackBanner({ kind, message, actionLabel, onAction }: Feedbac
         <EcolnaButton
           label={actionLabel}
           variant={isCorrect ? 'primary' : 'accent'}
+          // Un pictogramme pour qui ne lit pas encore : avancer, ou recommencer.
+          icon={
+            <EcolnaIcon
+              name={isCorrect ? 'play' : 'replay'}
+              size={scaled(20, scale)}
+              color={isCorrect ? colors.onReward : colors.white}
+              filled={isCorrect}
+            />
+          }
           onPress={onAction}
           style={isTablet ? styles.tabletButton : undefined}
         />

@@ -4,14 +4,14 @@ import { StyleSheet, View } from 'react-native';
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   useExerciseMetrics,
 } from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { EmptyQuantityScene } from '@/design-system/illustrations/school-art';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { spacing, subjectColors } from '@/design-system/tokens';
+import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -32,15 +32,11 @@ export function CountObjectsExercise({
   const { isTablet, scale } = useResponsive();
   const metrics = useExerciseMetrics();
   // Peu d'objets : plus grands, pour qu'un seul ne se perde pas dans la scène.
-  const boost = step.count <= 2 ? 1.6 : step.count <= 4 ? 1.3 : 1;
+  const boost = step.count <= 2 ? 2.1 : step.count <= 4 ? 1.4 : 1;
   const objectSize = Math.round(scaled(isTablet ? 76 : 56, scale) * boost);
 
   const prompt = (
-    <EcolnaCard
-      rounded="xl"
-      backgroundColor={subjectColors.math.face}
-      style={[styles.scene, { minHeight: scaled(isTablet ? 260 : 190, scale) }]}
-    >
+    <EcolnaStimulus style={[styles.scene, { minHeight: scaled(isTablet ? 260 : 190, scale) }]}>
       {step.count === 0 ? (
         <View accessibilityRole="image" accessibilityLabel={`0 ${step.objectName}`}>
           <EmptyQuantityScene size={scaled(isTablet ? 200 : 150, scale)} />
@@ -56,7 +52,7 @@ export function CountObjectsExercise({
           ))}
         </View>
       )}
-    </EcolnaCard>
+    </EcolnaStimulus>
   );
 
   const answers = (
@@ -84,7 +80,7 @@ export function CountObjectsExercise({
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.1} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1} />;
 }
 
 const styles = StyleSheet.create({

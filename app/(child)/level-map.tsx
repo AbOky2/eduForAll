@@ -36,6 +36,13 @@ import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 type WorldNodeState = 'completed' | 'current' | 'locked';
 
+interface LessonRow {
+  id: string;
+  title: string;
+  done: boolean;
+  stars: number;
+}
+
 interface WorldNode {
   world: WorldSummary;
   state: WorldNodeState;
@@ -43,6 +50,7 @@ interface WorldNode {
   totalLessons: number;
   completedLessons: number;
   nextLessonId: string | null;
+  lessons: LessonRow[];
 }
 
 const SUBJECT_LABELS: Record<Subject, string> = {
@@ -73,7 +81,7 @@ export default function LevelMapScreen() {
   const goBack = useSafeBack();
   const { subject } = useLocalSearchParams<{ subject?: string }>();
   const profile = useActiveProfile((state) => state.profile);
-  const { isTablet, scale, screenPadding } = useResponsive();
+  const { isTablet, scale, screenPadding, splitPanes } = useResponsive();
   const [nodes, setNodes] = useState<WorldNode[]>([]);
   const [width, setWidth] = useState(0);
   const [explained, setExplained] = useState<string | null>(null);
@@ -124,6 +132,12 @@ export default function LevelMapScreen() {
             totalLessons: lessons.length,
             completedLessons: completed.length,
             nextLessonId: nextLesson?.id ?? null,
+            lessons: lessons.map((lesson) => ({
+              id: lesson.id,
+              title: lesson.title,
+              done: byLesson.get(lesson.id)?.status === 'completed',
+              stars: byLesson.get(lesson.id)?.stars ?? 0,
+            })),
           };
         });
         if (!cancelled) {
@@ -147,9 +161,15 @@ export default function LevelMapScreen() {
   const step = scaled(isTablet ? 176 : 160, scale);
   const bubble = scaled(isTablet ? 48 : 44, scale);
   const top = Math.round(currentOuter / 2 + scaled(spacing.xl, scale));
-  const amplitude = isTablet ? Math.min(width * 0.2, scaled(190, scale)) : width * 0.22;
-  // Tablette : gauche, centre, droite, centre ; téléphone : gauche, droite.
-  const pattern = isTablet ? [-1, 0, 1, 0] : [-1, 1];
+  // Couché, le volet du monde prend la droite : le chemin zigzague en deux
+  // temps, chaque étiquette du côté libre. Tablette debout : gauche, centre,
+  // droite, centre ; téléphone : gauche, droite.
+  const amplitude = splitPanes
+    ? width * 0.24
+    : isTablet
+      ? Math.min(width * 0.2, scaled(190, scale))
+      : width * 0.22;
+  const pattern = isTablet && !splitPanes ? [-1, 0, 1, 0] : [-1, 1];
   const points: JourneyPoint[] = useMemo(
     () =>
       nodes.map((_, index) => ({
@@ -157,7 +177,7 @@ export default function LevelMapScreen() {
         y: top + index * step,
       })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [nodes, width, amplitude, top, step, isTablet],
+    [nodes, width, amplitude, top, step, isTablet, splitPanes],
   );
   const contentHeight = top + Math.max(0, nodes.length - 1) * step + scaled(140, scale);
   const currentIndex = nodes.findIndex((entry) => entry.state === 'current');
@@ -215,7 +235,9 @@ export default function LevelMapScreen() {
         ]}
       >
         <EcolnaIconButton icon="arrow-back" accessibilityLabel={fr.common.back} onPress={goBack} />
-        {subjectId ? <SubjectArt subject={subjectId} size={scaled(isTablet ? 52 : 44, scale)} /> : null}
+        {subjectId ? (
+          <SubjectArt subject={subjectId} size={scaled(isTablet ? 52 : 44, scale)} />
+        ) : null}
         <View style={styles.headerText}>
           <EcolnaText variant={isTablet ? 'headlineLg' : 'headlineMd'} numberOfLines={1}>
             {subjectId
@@ -228,115 +250,138 @@ export default function LevelMapScreen() {
         </View>
       </View>
 
-      <ScrollView
-        ref={scrollRef}
-        onLayout={onLayout}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ height: contentHeight }}
+      <View
+        style={
+          splitPanes
+            ? [styles.panes, { paddingRight: screenPadding, gap: scaled(spacing.lg, scale) }]
+            : styles.flex
+        }
       >
-        {width > 0 && points.length > 0 ? (
-          <View style={StyleSheet.absoluteFill} pointerEvents="none">
-            <JourneyPath
-              width={width}
-              height={contentHeight}
-              points={points}
-              reached={reached}
-              traveled={colors.success}
-              thickness={scaled(isTablet ? 8 : 7, scale)}
-            />
-          </View>
-        ) : null}
+        <ScrollView
+          ref={scrollRef}
+          style={styles.flex}
+          onLayout={onLayout}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ height: contentHeight }}
+        >
+          {width > 0 && points.length > 0 ? (
+            <View style={StyleSheet.absoluteFill} pointerEvents="none">
+              <JourneyPath
+                width={width}
+                height={contentHeight}
+                points={points}
+                reached={reached}
+                traveled={colors.success}
+                thickness={scaled(isTablet ? 8 : 7, scale)}
+              />
+            </View>
+          ) : null}
 
-        {width > 0
-          ? nodes.map((entry, index) => {
-              const point = points[index];
-              if (!point) {
-                return null;
-              }
-              const offset = pattern[index % pattern.length] ?? 0;
-              // L'étiquette va du côté où il y a de la place.
-              const labelOnRight = offset < 0 || (offset === 0 && index % 4 === 1);
-              const outer = entry.state === 'current' ? currentOuter : node;
-              // L'étiquette prend la place libre de son côté, sans déborder de l'écran.
-              const room = labelOnRight
-                ? width - (point.x + outer / 2 + labelGap) - screenPadding
-                : point.x - outer / 2 - labelGap - screenPadding;
-              const labelWidth = Math.max(0, Math.min(labelMax, room));
-              const labelLeft = labelOnRight
-                ? point.x + outer / 2 + labelGap
-                : point.x - outer / 2 - labelGap - labelWidth;
-              const nodeSubject = subjectId ?? entry.world.subject;
-              const action = entry.completedLessons > 0 ? fr.common.continue : fr.common.start;
-              return (
-                <View key={entry.world.id} style={StyleSheet.absoluteFill} pointerEvents="box-none">
-                  <JourneyNode
-                    entry={entry}
-                    subject={nodeSubject}
-                    size={entry.state === 'current' ? currentNode : node}
-                    ring={{ gap: ringGap, stroke: ringStroke }}
-                    style={{
-                      position: 'absolute',
-                      left: point.x - outer / 2,
-                      top: point.y - outer / 2,
-                    }}
-                    onPress={() => open(entry)}
-                  />
+          {width > 0
+            ? nodes.map((entry, index) => {
+                const point = points[index];
+                if (!point) {
+                  return null;
+                }
+                const offset = pattern[index % pattern.length] ?? 0;
+                // L'étiquette va du côté où il y a de la place.
+                const labelOnRight = offset < 0 || (offset === 0 && index % 4 === 1);
+                const outer = entry.state === 'current' ? currentOuter : node;
+                // L'étiquette prend la place libre de son côté, sans déborder de l'écran.
+                const room = labelOnRight
+                  ? width - (point.x + outer / 2 + labelGap) - screenPadding
+                  : point.x - outer / 2 - labelGap - screenPadding;
+                const labelWidth = Math.max(0, Math.min(labelMax, room));
+                const labelLeft = labelOnRight
+                  ? point.x + outer / 2 + labelGap
+                  : point.x - outer / 2 - labelGap - labelWidth;
+                const nodeSubject = subjectId ?? entry.world.subject;
+                const action = entry.completedLessons > 0 ? fr.common.continue : fr.common.start;
+                return (
                   <View
-                    style={[
-                      styles.label,
-                      {
-                        left: labelLeft,
-                        width: labelWidth,
-                        top: point.y - scaled(isTablet ? 30 : 28, scale) - (entry.state === 'current' ? bubble / 2 : 0),
-                        alignItems: labelOnRight ? 'flex-start' : 'flex-end',
-                      },
-                    ]}
+                    key={entry.world.id}
+                    style={StyleSheet.absoluteFill}
+                    pointerEvents="box-none"
                   >
-                    <EcolnaText
-                      variant="headlineSm"
-                      align={labelOnRight ? 'left' : 'right'}
-                      color={entry.state === 'locked' ? colors.textSecondary : colors.textPrimary}
-                      numberOfLines={2}
+                    <JourneyNode
+                      entry={entry}
+                      subject={nodeSubject}
+                      size={entry.state === 'current' ? currentNode : node}
+                      ring={{ gap: ringGap, stroke: ringStroke }}
+                      style={{
+                        position: 'absolute',
+                        left: point.x - outer / 2,
+                        top: point.y - outer / 2,
+                      }}
+                      onPress={() => open(entry)}
+                    />
+                    <View
+                      style={[
+                        styles.label,
+                        {
+                          left: labelLeft,
+                          width: labelWidth,
+                          top:
+                            point.y -
+                            scaled(isTablet ? 30 : 28, scale) -
+                            (entry.state === 'current' ? bubble / 2 : 0),
+                          alignItems: labelOnRight ? 'flex-start' : 'flex-end',
+                        },
+                      ]}
                     >
-                      {entry.world.title}
-                    </EcolnaText>
-                    {explained === entry.world.id ? (
                       <EcolnaText
-                        variant="bodyLg"
-                        color={colors.brandInk}
+                        variant="headlineSm"
                         align={labelOnRight ? 'left' : 'right'}
-                        numberOfLines={3}
-                        accessibilityLiveRegion="polite"
-                      >
-                        {fr.learn.lockedHint}
-                      </EcolnaText>
-                    ) : (
-                      <EcolnaText
-                        variant="bodySm"
-                        color={colors.textSecondary}
-                        align={labelOnRight ? 'left' : 'right'}
+                        color={colors.textPrimary}
                         numberOfLines={2}
                       >
-                        {entry.world.subtitle}
+                        {entry.world.title}
                       </EcolnaText>
-                    )}
-                    {entry.state === 'completed' ? (
-                      <StarLine stars={averageStars(entry)} />
-                    ) : null}
-                    {entry.state === 'current' ? (
-                      <StartButton
-                        label={action}
-                        height={bubble}
-                        onPress={() => open(entry)}
-                        accessibilityLabel={`${action} : ${entry.world.title}`}
-                      />
-                    ) : null}
+                      {explained === entry.world.id ? (
+                        <EcolnaText
+                          variant="bodyLg"
+                          color={colors.brandInk}
+                          align={labelOnRight ? 'left' : 'right'}
+                          numberOfLines={3}
+                          accessibilityLiveRegion="polite"
+                        >
+                          {fr.learn.lockedHint}
+                        </EcolnaText>
+                      ) : (
+                        <EcolnaText
+                          variant="bodySm"
+                          color={colors.textSecondary}
+                          align={labelOnRight ? 'left' : 'right'}
+                          numberOfLines={2}
+                        >
+                          {entry.world.subtitle}
+                        </EcolnaText>
+                      )}
+                      {entry.state === 'completed' ? (
+                        <StarLine stars={averageStars(entry)} />
+                      ) : null}
+                      {entry.state === 'current' ? (
+                        <StartButton
+                          label={action}
+                          height={bubble}
+                          onPress={() => open(entry)}
+                          accessibilityLabel={`${action} : ${entry.world.title}`}
+                        />
+                      ) : null}
+                    </View>
                   </View>
-                </View>
-              );
-            })
-          : null}
-      </ScrollView>
+                );
+              })
+            : null}
+        </ScrollView>
+        {splitPanes && currentIndex >= 0 && nodes[currentIndex] ? (
+          <WorldPanel
+            entry={nodes[currentIndex]}
+            subject={subjectId ?? nodes[currentIndex].world.subject}
+            onOpen={(lessonId) => router.push(`/(child)/lesson/${lessonId}`)}
+          />
+        ) : null}
+      </View>
     </EcolnaScreen>
   );
 }
@@ -367,8 +412,18 @@ function StartButton({
     }
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(breath, { toValue: 1, duration: 1100, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
-        Animated.timing(breath, { toValue: 0, duration: 1100, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(breath, {
+          toValue: 1,
+          duration: 1100,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(breath, {
+          toValue: 0,
+          duration: 1100,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
       ]),
     );
     loop.start();
@@ -376,7 +431,9 @@ function StartButton({
   }, [breath, reducedMotion]);
   const scaleValue = breath.interpolate({ inputRange: [0, 1], outputRange: [1, 1.04] });
   return (
-    <Animated.View style={[{ marginTop: scaled(spacing.sm, scale), transform: [{ scale: scaleValue }] }]}>
+    <Animated.View
+      style={[{ marginTop: scaled(spacing.sm, scale), transform: [{ scale: scaleValue }] }]}
+    >
       <EcolnaGalet
         face={colors.reward}
         radius={radius.pill}
@@ -399,7 +456,10 @@ function StartButton({
 function StarLine({ stars }: { stars: number }) {
   const { scale } = useResponsive();
   return (
-    <View style={[styles.stars, { marginTop: scaled(spacing.xxs, scale) }]} accessibilityLabel={fr.a11y.stars(stars, 3)}>
+    <View
+      style={[styles.stars, { marginTop: scaled(spacing.xxs, scale) }]}
+      accessibilityLabel={fr.a11y.stars(stars, 3)}
+    >
       {[0, 1, 2].map((index) => (
         <EcolnaIcon
           key={index}
@@ -409,6 +469,151 @@ function StarLine({ stars }: { stars: number }) {
           color={index < stars ? colors.reward : colors.fillStrong}
         />
       ))}
+    </View>
+  );
+}
+
+/**
+ * Couché, le second volet : le monde du jour ouvert comme un sommaire. Son
+ * emblème dans l'anneau de ses leçons, son nom, puis chaque leçon — faite
+ * (coche verte, étoiles), la prochaine (bouton soleil), les suivantes
+ * (leur numéro, simplement). L'enfant voit ce que contient le monde avant d'y
+ * entrer.
+ */
+function WorldPanel({
+  entry,
+  subject,
+  onOpen,
+}: {
+  entry: WorldNode;
+  subject: Subject;
+  onOpen: (lessonId: string) => void;
+}) {
+  const { scale } = useResponsive();
+  const family = subjectColors[subject];
+  const action = entry.completedLessons > 0 ? fr.common.continue : fr.common.start;
+  const disc = scaled(36, scale);
+  return (
+    <View
+      style={[
+        styles.panel,
+        shadows.card,
+        { padding: scaled(spacing.lg, scale), gap: scaled(spacing.md, scale) },
+      ]}
+    >
+      <View style={[styles.panelHead, { gap: scaled(spacing.md, scale) }]}>
+        <EcolnaProgressRing
+          progress={entry.completedLessons / Math.max(1, entry.totalLessons)}
+          size={scaled(64, scale)}
+          stroke={scaled(5, scale)}
+          color={family.solid}
+          track={family.tintStrong}
+        >
+          <SubjectArt subject={subject} size={scaled(44, scale)} />
+        </EcolnaProgressRing>
+        <View style={styles.headerText}>
+          <EcolnaText variant="tag" color={family.ink}>
+            {fr.learn.worldLessons}
+          </EcolnaText>
+          <EcolnaText variant="headlineMd" numberOfLines={2}>
+            {entry.world.title}
+          </EcolnaText>
+        </View>
+      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ gap: scaled(spacing.xs, scale) }}
+      >
+        {entry.lessons.map((lesson, index) => {
+          const next = lesson.id === entry.nextLessonId;
+          const row = (
+            <View
+              style={[
+                styles.lessonRow,
+                { gap: scaled(spacing.sm, scale), minHeight: scaled(56, scale) },
+              ]}
+            >
+              <View
+                style={[
+                  styles.lessonDisc,
+                  {
+                    width: disc,
+                    height: disc,
+                    borderRadius: disc / 2,
+                    backgroundColor: lesson.done
+                      ? colors.success
+                      : next
+                        ? family.solid
+                        : colors.fill,
+                  },
+                ]}
+              >
+                {lesson.done ? (
+                  <EcolnaIcon name="check" size={Math.round(disc * 0.56)} color={colors.white} />
+                ) : (
+                  <EcolnaText variant="labelLg" color={next ? colors.white : colors.inkSecondary}>
+                    {String(index + 1)}
+                  </EcolnaText>
+                )}
+              </View>
+              <View style={styles.headerText}>
+                <EcolnaText
+                  variant="labelLg"
+                  numberOfLines={2}
+                  color={lesson.done || next ? colors.ink : colors.inkSecondary}
+                >
+                  {lesson.title}
+                </EcolnaText>
+                {lesson.done ? (
+                  <View style={styles.rowStars}>
+                    {[0, 1, 2].map((star) => (
+                      <EcolnaIcon
+                        key={star}
+                        name="star"
+                        filled
+                        size={scaled(14, scale)}
+                        color={star < lesson.stars ? colors.reward : colors.fillStrong}
+                      />
+                    ))}
+                  </View>
+                ) : null}
+              </View>
+              {next ? (
+                <View
+                  style={[
+                    styles.nextPill,
+                    shadows.glowReward,
+                    { height: scaled(40, scale), paddingHorizontal: scaled(spacing.md, scale) },
+                  ]}
+                >
+                  <EcolnaIcon name="play" size={scaled(16, scale)} color={colors.onReward} filled />
+                  <EcolnaText variant="buttonSm" color={colors.onReward}>
+                    {action}
+                  </EcolnaText>
+                </View>
+              ) : null}
+            </View>
+          );
+          // Une leçon faite se rejoue, la prochaine s'ouvre ; les suivantes attendent.
+          return lesson.done || next ? (
+            <EcolnaGalet
+              key={lesson.id}
+              face={next ? family.tint : colors.white}
+              radius={radius.lg}
+              haptic="selection"
+              onPress={() => onOpen(lesson.id)}
+              accessibilityLabel={next ? `${action} : ${lesson.title}` : lesson.title}
+              faceStyle={{ paddingHorizontal: scaled(spacing.sm, scale) }}
+            >
+              {row}
+            </EcolnaGalet>
+          ) : (
+            <View key={lesson.id} style={{ paddingHorizontal: scaled(spacing.sm, scale) }}>
+              {row}
+            </View>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 }
@@ -440,10 +645,8 @@ function JourneyNode({
   const a11y = `${entry.world.title} : ${entry.world.subtitle}${entry.state === 'locked' ? `. ${fr.learn.lockedHint}` : ''}`;
   const disc = (
     <EcolnaGalet
-      face={
-        entry.state === 'completed' ? colors.success : current ? family.solid : colors.white
-      }
-      border={entry.state === 'locked' ? colors.fillStrong : undefined}
+      face={entry.state === 'completed' ? colors.success : current ? family.solid : colors.white}
+      border={entry.state === 'locked' ? family.tintStrong : undefined}
       borderWidth={scaled(3, scale)}
       radius={size / 2}
       shadow={current ? shadows.raised : entry.state === 'completed' ? shadows.card : shadows.none}
@@ -458,7 +661,8 @@ function JourneyNode({
       ) : current ? (
         <SubjectArt subject={subject} size={Math.round(size * 0.74)} variant="glyph" />
       ) : (
-        <EcolnaIcon name="lock" size={Math.round(size * 0.36)} color={colors.inkDisabled} filled />
+        // Fermé, mais déjà de sa discipline : l'enfant sait ce qui l'attend.
+        <EcolnaIcon name="lock" size={Math.round(size * 0.34)} color={family.solid} filled />
       )}
     </EcolnaGalet>
   );
@@ -466,13 +670,19 @@ function JourneyNode({
     const outer = size + 2 * (ring.gap + ring.stroke);
     return (
       <View style={[style, { width: outer, height: outer }]}>
+        {/* Un disque de toile sous l'anneau : le fil s'arrête à son bord. */}
+        <View style={[styles.ringBed, { width: outer, height: outer, borderRadius: outer / 2 }]} />
         <EcolnaProgressRing
           progress={entry.completedLessons / Math.max(1, entry.totalLessons)}
           size={outer}
           stroke={ring.stroke}
           color={family.solid}
           track={family.tintStrong}
-          accessibilityLabel={fr.a11y.progress(entry.world.title, entry.completedLessons, entry.totalLessons)}
+          accessibilityLabel={fr.a11y.progress(
+            entry.world.title,
+            entry.completedLessons,
+            entry.totalLessons,
+          )}
         >
           {disc}
         </EcolnaProgressRing>
@@ -489,4 +699,24 @@ const styles = StyleSheet.create({
   label: { position: 'absolute', gap: 2 },
   nodeFace: { alignItems: 'center', justifyContent: 'center' },
   stars: { flexDirection: 'row', justifyContent: 'center', gap: 2 },
+  ringBed: { position: 'absolute', backgroundColor: colors.background },
+  flex: { flex: 1 },
+  panes: { flex: 1, flexDirection: 'row', paddingBottom: spacing.md },
+  panel: {
+    flex: 0.85,
+    backgroundColor: colors.white,
+    borderRadius: radius.xxl,
+    marginTop: spacing.sm,
+  },
+  panelHead: { flexDirection: 'row', alignItems: 'center' },
+  lessonRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.xs },
+  lessonDisc: { alignItems: 'center', justifyContent: 'center' },
+  rowStars: { flexDirection: 'row', gap: 2, marginTop: 2 },
+  nextPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.reward,
+  },
 });

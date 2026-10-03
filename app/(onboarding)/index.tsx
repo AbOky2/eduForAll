@@ -77,7 +77,7 @@ export default function OnboardingScreen() {
     ? Math.round((size.width - screenPadding * 3) * 0.55)
     : Math.min(size.width - screenPadding * 2, scaled(isTablet ? 640 : 360, scale));
   const artHeight = Math.round(
-    Math.min(artWidth * (splitPanes ? 0.75 : 0.62), size.height * (splitPanes ? 0.78 : 0.48)),
+    Math.min(artWidth * (splitPanes ? 0.9 : 0.62), size.height * (splitPanes ? 0.86 : 0.48)),
   );
 
   const pageOf = (art: ReactNode, words: ReactNode) => (
@@ -88,7 +88,7 @@ export default function OnboardingScreen() {
         splitPanes && styles.pageSplit,
       ]}
     >
-      <View style={splitPanes ? styles.artPane : undefined}>{art}</View>
+      <View style={splitPanes ? styles.artPane : { marginBottom: scaled(spacing.lg, scale) }}>{art}</View>
       <View
         style={[
           styles.words,
@@ -138,7 +138,7 @@ export default function OnboardingScreen() {
                   { node: <EcolnaAvatar avatarId="avatar-9" size={friend} expression="joy" />, size: friend, angle: -38, ring: 1 },
                   { node: <EcolnaAvatar avatarId="avatar-6" size={friend} expression="joy" />, size: friend, angle: 25, ring: 1 },
                   { node: <EcolnaAvatar avatarId="avatar-11" size={friend} />, size: friend, angle: 150, ring: 1 },
-                  { node: <EcolnaAvatar avatarId="avatar-8" size={friend} expression="joy" />, size: friend, angle: 98, ring: 1 },
+                  { node: <EcolnaAvatar avatarId="avatar-8" size={friend} expression="joy" />, size: friend, angle: 90, ring: 1 },
                   {
                     node: <OrbitChip icon="book" color={subjectColors.reading.solid} tint={colors.white} size={chip} />,
                     size: chip,
@@ -148,7 +148,7 @@ export default function OnboardingScreen() {
                   {
                     node: <OrbitChip icon="star" color={colors.reward} tint={colors.white} size={chip} />,
                     size: chip,
-                    angle: 200,
+                    angle: 60,
                     ring: 0,
                   },
                 ]}
@@ -203,12 +203,19 @@ export default function OnboardingScreen() {
                 size={orbit}
                 center={<OrbitTile icon="offline-ok" color={colors.success} size={Math.round(orbit * 0.32)} />}
                 satellites={[
-                  { node: <OrbitChip icon="book" color={subjectColors.reading.solid} tint={subjectColors.reading.tint} size={chip} />, size: chip, angle: -120, ring: 1 },
-                  { node: <OrbitChip icon="speaker" color={colors.brand} tint={colors.brandTint} size={chip} />, size: chip, angle: -30, ring: 1 },
-                  { node: <OrbitChip icon="pencil" color={subjectColors.writing.solid} tint={subjectColors.writing.tint} size={chip} />, size: chip, angle: 50, ring: 1 },
-                  { node: <OrbitChip icon="calculator" color={subjectColors.math.solid} tint={subjectColors.math.tint} size={chip} />, size: chip, angle: 140, ring: 1 },
-                  { node: <OrbitChip icon="speech" color={subjectColors.language.solid} tint={subjectColors.language.tint} size={chip} />, size: chip, angle: 215, ring: 1 },
-                  { node: <OrbitChip icon="star" color={colors.reward} tint={colors.white} size={Math.round(chip * 0.8)} />, size: Math.round(chip * 0.8), angle: 100, ring: 0 },
+                  // Les quatre disciplines, avec leurs emblèmes de partout, et l'étoile.
+                  ...SUBJECTS.map((subject, index) => ({
+                    node: <SubjectArt subject={subject.id} size={chip} />,
+                    size: chip,
+                    angle: -90 + index * 72,
+                    ring: 1 as const,
+                  })),
+                  {
+                    node: <OrbitChip icon="star" color={colors.reward} tint={colors.white} size={chip} />,
+                    size: chip,
+                    angle: 198,
+                    ring: 1,
+                  },
                 ]}
               />,
               <>

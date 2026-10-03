@@ -203,7 +203,9 @@ export default function CreateProfileScreen() {
     ? Math.min(scaled(240, scale), Math.round(stageHeight * 0.4), Math.round(stageWidth * 0.62))
     : Math.round(Math.min(stageHeight * (isTablet ? 0.48 : 0.44), isTablet ? 240 : 96));
   const panelWidth = splitPanes ? width - stageWidth : width;
-  const panelInner = Math.min(panelWidth - screenPadding * 2, 760);
+  // Un demi-écran : sa propre marge, pas la gouttière de tout l'écran.
+  const panelPadding = splitPanes ? scaled(spacing.xl, scale) : screenPadding;
+  const panelInner = Math.min(panelWidth - panelPadding * 2, 760);
   const gap = scaled(spacing.lg, scale);
 
   const levelWidth = Math.min(
@@ -249,8 +251,9 @@ export default function CreateProfileScreen() {
             setAvatarId(id as AvatarId);
             setNudge(0);
           }}
-          minAvatar={80}
-          maxAvatar={104}
+          // Couché, quatre colonnes de trois : les douze tiennent sans défiler.
+          minAvatar={splitPanes ? 56 : 80}
+          maxAvatar={splitPanes ? 92 : 104}
           labelFor={(id, index) =>
             fr.avatars.tileLabel(index + 1, fr.avatars.descriptions[id as AvatarId])
           }
@@ -281,7 +284,7 @@ export default function CreateProfileScreen() {
                 setNudge(0);
               }}
               placeholder={fr.profile.firstNamePlaceholder}
-              placeholderTextColor={colors.outline}
+              placeholderTextColor={colors.inkTertiary}
               maxLength={30}
               autoCapitalize="words"
               autoCorrect={false}
@@ -336,14 +339,18 @@ export default function CreateProfileScreen() {
             ))}
           </View>
         </NudgeRing>
-        <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
-          {fr.profile.levelAdultNote}
-        </EcolnaText>
+        {/* Une phrase pour l'adulte, marquée comme telle (vouvoiement, pictogramme parents). */}
+        <View style={[styles.adultRow, styles.center]}>
+          <EcolnaIcon name="parents" size={20} color={colors.textSecondary} />
+          <EcolnaText variant="bodySm" color={colors.textSecondary}>
+            {fr.profile.levelAdultNote}
+          </EcolnaText>
+        </View>
       </View>
     ) : null;
 
   const panel = (
-    <View style={[styles.panel, { paddingHorizontal: screenPadding }]} pointerEvents="box-none">
+    <View style={[styles.panel, { paddingHorizontal: panelPadding }]} pointerEvents="box-none">
       <View style={[styles.topRow, { gap: scaled(spacing.md, scale) }]}>
         {step !== 'welcome' ? (
           <EcolnaIconButton
@@ -380,17 +387,18 @@ export default function CreateProfileScreen() {
                 {help}
               </EcolnaText>
             ) : null}
-            {step !== 'welcome' || goVisible ? (
-              <EcolnaButton
-                label={action}
-                onPress={advance}
-                disabled={saving}
-                style={styles.action}
-              />
-            ) : null}
           </View>
         </FadeIn>
       </ScrollView>
+      {/* Le bouton d'étape reste au pied du panneau : il ne passe jamais sous
+          la grille, un enfant ne fait pas défiler pour le chercher. */}
+      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, spacing.md) + spacing.xs }]}>
+        <View style={{ width: panelInner }}>
+          {step !== 'welcome' || goVisible ? (
+            <EcolnaButton label={action} onPress={advance} disabled={saving} />
+          ) : null}
+        </View>
+      </View>
     </View>
   );
 
@@ -402,6 +410,7 @@ export default function CreateProfileScreen() {
         avatarId={avatarId}
         firstName={firstName}
         level={step === 'avatar' || step === 'name' ? null : level}
+        showSlate={step !== 'avatar'}
         characterSize={characterSize}
         joy={step === 'welcome' || avatarId !== null}
         celebrate={step === 'welcome'}
@@ -445,6 +454,7 @@ const styles = StyleSheet.create({
   panelScroll: { flexGrow: 1, justifyContent: 'center', paddingVertical: spacing.lg },
   stepColumn: { alignSelf: 'center' },
   adultRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  center: { alignSelf: 'center' },
   inputRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   input: {
     flex: 1,
@@ -457,5 +467,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   levelRow: { flexDirection: 'row', justifyContent: 'center' },
-  action: { marginTop: spacing.xs },
+  footer: { alignItems: 'center', paddingTop: spacing.sm },
 });

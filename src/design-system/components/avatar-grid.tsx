@@ -16,9 +16,10 @@ interface AvatarTileProps {
 }
 
 /**
- * Une tuile de personnage. Choisie : anneau pétrole, coche ronde, petit
- * ressort ×1,06 et sourire — quatre indices, jamais la couleur seule
- * (brief v2 § 12.3). Aucune tuile n'est grisée.
+ * Un personnage à choisir : son portrait rond, sans cadre. Choisi : un
+ * anneau bleu autour (le bleu du choix), une pastille cochée, un petit
+ * ressort ×1,06 et le sourire — quatre indices, jamais la couleur seule
+ * (brief v2 § 12.3). Aucun personnage n'est grisé.
  */
 function AvatarTile({ avatarId, selected, size, label, onSelect }: AvatarTileProps) {
   const reducedMotion = useReducedMotion();
@@ -51,20 +52,19 @@ function AvatarTile({ avatarId, selected, size, label, onSelect }: AvatarTilePro
     >
       <Animated.View
         style={[
-          styles.tile,
           {
             padding: ring + 2,
-            borderRadius: radius.xl,
+            borderRadius: radius.pill,
             borderWidth: ring,
-            borderColor: selected ? colors.secondary : colors.cardEdge,
+            borderColor: selected ? colors.brand : 'transparent',
             transform: [{ scale: grow }],
           },
         ]}
       >
         <EcolnaAvatar avatarId={avatarId} size={size} expression={selected ? 'joy' : 'calm'} />
         {selected ? (
-          <View style={[styles.check, { borderRadius: check }]}>
-            <EcolnaIcon name="check" size={check} mode="color" />
+          <View style={[styles.check, { width: check, height: check, borderRadius: check / 2 }]}>
+            <EcolnaIcon name="check" size={Math.round(check * 0.56)} color={colors.white} />
           </View>
         ) : null}
       </Animated.View>
@@ -177,7 +177,15 @@ export function AvatarGrid({
 }
 
 const styles = StyleSheet.create({
-  tile: { backgroundColor: colors.card },
-  check: { position: 'absolute', top: -8, right: -8, backgroundColor: colors.card, padding: 2 },
+  check: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.brand,
+    borderWidth: 3,
+    borderColor: colors.white,
+  },
   row: { flexDirection: 'row', justifyContent: 'center' },
 });

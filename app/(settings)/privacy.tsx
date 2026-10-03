@@ -21,7 +21,7 @@ export default function PrivacyScreen() {
         <EcolnaCard rounded="xl" style={styles.card}>
           {COMMITMENTS.map((commitment) => (
             <View key={commitment} style={styles.row}>
-              <EcolnaIcon name="check" size={22} color={colors.feedbackCorrect} />
+              <EcolnaIcon name="check" size={22} color={colors.success} />
               <EcolnaText variant="bodyLg" style={styles.rowText}>
                 {commitment}
               </EcolnaText>

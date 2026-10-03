@@ -43,7 +43,9 @@ export const Orbit = memo(function Orbit({
   ringColor = colors.fillStrong,
   inner = 0.66,
 }: OrbitProps) {
-  const outerR = size / 2 - 2;
+  // Les satellites restent dans le carré, quel que soit leur angle.
+  const margin = Math.max(0, ...satellites.map((satellite) => satellite.size)) / 2 + 2;
+  const outerR = size / 2 - margin;
   const radii = [outerR * inner, outerR] as const;
   return (
     <View style={{ width: size, height: size }} aria-hidden importantForAccessibility="no-hide-descendants">
@@ -97,14 +99,14 @@ export function OrbitChip({
   );
 }
 
-/** Le sujet d'une orbite : une tuile pleine aux coins doux, un pictogramme blanc. */
+/** Le sujet d'une orbite : un disque plein, un pictogramme blanc. */
 export function OrbitTile({ icon, color, size }: { icon: IconName; color: string; size: number }) {
   return (
     <View
       style={[
         styles.chip,
         shadows.raised,
-        { width: size, height: size, borderRadius: size * 0.3, backgroundColor: color },
+        { width: size, height: size, borderRadius: size / 2, backgroundColor: color },
       ]}
     >
       <EcolnaIcon name={icon} size={Math.round(size * 0.52)} color={colors.white} filled />

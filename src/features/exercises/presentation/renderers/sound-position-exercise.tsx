@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
@@ -65,22 +65,22 @@ export function SoundPositionExercise({
   }, [step.id]);
 
   const prompt = (
-    <EcolnaCard rounded="xl" style={[styles.wordCard, { gap: metrics.gap }]}>
+    <EcolnaStimulus style={[styles.wordCard, { gap: metrics.gap }]}>
       <View style={styles.soundBadge}>
-        <EcolnaText variant="displayGlyphSmall" color={colors.onPrimaryContainer}>
+        <EcolnaText variant="displayGlyphSmall" color={colors.brandInk}>
           {step.sound}
         </EcolnaText>
       </View>
-      <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
+      <EcolnaText variant="displayGlyph" align="center" color={colors.brand}>
         {step.word}
       </EcolnaText>
-      <PositionBars lit={null} width={scaled(isTablet ? 56 : 46, scale)} color={colors.primary} />
+      <PositionBars lit={null} width={scaled(isTablet ? 56 : 46, scale)} color={colors.brand} />
       <EcolnaAudioButton
         size={scaled(isTablet ? 72 : 60, scale)}
         playing={playingAudioId === step.audioId}
         onPress={() => playAudio(step.audioId)}
       />
-    </EcolnaCard>
+    </EcolnaStimulus>
   );
 
   const answers = (
@@ -110,13 +110,9 @@ export function SoundPositionExercise({
             <PositionBars
               lit={index}
               width={scaled(isTablet ? 40 : 26, scale)}
-              color={state === 'disabled' ? colors.locked : colors.secondary}
+              color={colors.brand}
             />
-            <EcolnaText
-              variant="headlineSm"
-              align="center"
-              color={state === 'disabled' ? colors.textSecondary : colors.textPrimary}
-            >
+            <EcolnaText variant="headlineSm" align="center" color={colors.textPrimary}>
               {fr.lesson.soundPositions[position]}
             </EcolnaText>
           </EcolnaAnswerCard>
@@ -134,7 +130,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xxs,
     borderRadius: radius.pill,
-    backgroundColor: colors.primaryFixed,
+    backgroundColor: colors.brandTint,
   },
   bars: { flexDirection: 'row' },
   bar: { borderRadius: radius.pill },

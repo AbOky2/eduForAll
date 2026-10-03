@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
@@ -39,7 +39,7 @@ export function MiniStoryExercise({
   }, [step.id]);
 
   const prompt = (
-    <EcolnaCard rounded="xl" style={[styles.storyCard, { gap: scaled(spacing.md, scale) }]}>
+    <EcolnaStimulus style={[styles.storyCard, { gap: scaled(spacing.md, scale) }]}>
       <EcolnaAudioButton
         variant="sky"
         size={scaled(isTablet ? 60 : 52, scale)}
@@ -49,7 +49,7 @@ export function MiniStoryExercise({
       <ScrollView style={styles.storyScroll} showsVerticalScrollIndicator={false}>
         <EcolnaText variant={isTablet ? 'headlineSm' : 'bodyLg'}>{step.story}</EcolnaText>
       </ScrollView>
-    </EcolnaCard>
+    </EcolnaStimulus>
   );
 
   const answers = (

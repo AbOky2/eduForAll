@@ -13,7 +13,7 @@ import {
   EcolnaScreen,
   EcolnaText,
 } from '@/design-system/primitives';
-import { colors, spacing, typography, type TypographyVariant } from '@/design-system/tokens';
+import { colors, spacing, subjectColors, typography, type TypographyVariant } from '@/design-system/tokens';
 
 const ICONS: IconName[] = [
   'speaker',
@@ -88,14 +88,18 @@ export default function DesignSystemGallery() {
           <View style={styles.wrap}>
             {(
               [
-                ['primary', colors.primary],
-                ['primaryContainer', colors.primaryContainer],
-                ['secondary', colors.secondary],
-                ['secondaryContainer', colors.secondaryContainer],
-                ['tertiaryContainer', colors.tertiaryContainer],
-                ['exerciseBackground', colors.exerciseBackground],
-                ['feedbackCorrect', colors.feedbackCorrect],
-                ['error', colors.error],
+                ['brand', colors.brand],
+                ['brandTint', colors.brandTint],
+                ['reward', colors.reward],
+                ['night', colors.night],
+                ['success', colors.success],
+                ['canvas', colors.canvas],
+                ['fill', colors.fill],
+                ['ink', colors.ink],
+                ['language', subjectColors.language.solid],
+                ['reading', subjectColors.reading.solid],
+                ['writing', subjectColors.writing.solid],
+                ['math', subjectColors.math.solid],
               ] as const
             ).map(([name, value]) => (
               <View key={name} style={styles.swatchWrap}>
@@ -137,7 +141,7 @@ export default function DesignSystemGallery() {
           <View style={styles.wrap}>
             {ICONS.map((name) => (
               <View key={name} style={styles.iconCell}>
-                <EcolnaIcon name={name} size={26} color={colors.onSurfaceVariant} />
+                <EcolnaIcon name={name} size={26} color={colors.inkSecondary} />
               </View>
             ))}
           </View>

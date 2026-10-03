@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAudioButton,
   EcolnaButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaText,
   useExerciseMetrics,
 } from '@/design-system/primitives';
@@ -39,8 +39,7 @@ export function ListenExercise({
   const glyphSize = scaled(isTablet ? 150 : 110, scale);
   return (
     <View style={[styles.container, { gap: metrics.gap }]}>
-      <EcolnaCard
-        rounded="xl"
+      <EcolnaStimulus
         style={[styles.glyphCard, { minHeight: scaled(isTablet ? 300 : 240, scale) }]}
       >
         <EcolnaText
@@ -50,7 +49,7 @@ export function ListenExercise({
         >
           {step.glyph}
         </EcolnaText>
-      </EcolnaCard>
+      </EcolnaStimulus>
       <View style={[styles.audioWrap, { marginTop: -metrics.listenSize * 0.5 - metrics.gap }]}>
         <EcolnaAudioButton
           size={metrics.listenSize * 0.8}

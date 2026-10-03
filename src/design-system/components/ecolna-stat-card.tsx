@@ -49,7 +49,9 @@ export function EcolnaStatCard({
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  // Pastille en haut : les valeurs d'une rangée tombent sur la même ligne,
+  // qu'une tuile porte une barre ou non.
+  card: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md },
   disc: { alignItems: 'center', justifyContent: 'center', borderRadius: radius.pill },
   text: { flex: 1, gap: spacing.xxs },
 });

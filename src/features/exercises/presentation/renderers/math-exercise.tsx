@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
@@ -142,7 +142,7 @@ const QuantityScene = memo(function QuantityScene({
         size={size}
         accessibilityLabel={of(a)}
       />
-      <EcolnaText variant="displayGlyphSmall" color={colors.primary}>
+      <EcolnaText variant="displayGlyphSmall" color={colors.brand}>
         +
       </EcolnaText>
       <QuantityCard
@@ -188,7 +188,7 @@ export function MathExercise({
   // les deux nombres sont les réponses.
   const prompt =
     step.type === 'compare_numbers' ? null : (
-      <EcolnaCard rounded="xl" style={[styles.board, { gap: metrics.gap }]}>
+      <EcolnaStimulus style={[styles.board, { gap: metrics.gap }]}>
         {isOperation(step) ? (
           <>
             {step.showQuantities ? (
@@ -201,7 +201,7 @@ export function MathExercise({
                 size={iconSize}
               />
             ) : null}
-            <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
+            <EcolnaText variant="displayGlyph" align="center" color={colors.brand}>
               {step.a} {OPERATOR[step.type]} {step.b} = ?
             </EcolnaText>
           </>
@@ -220,7 +220,7 @@ export function MathExercise({
               >
                 <EcolnaText
                   variant="displayGlyphSmall"
-                  color={value === null ? colors.outline : colors.textPrimary}
+                  color={value === null ? colors.inkTertiary : colors.textPrimary}
                 >
                   {value === null ? '?' : String(value)}
                 </EcolnaText>
@@ -256,7 +256,7 @@ export function MathExercise({
             ) : null}
           </View>
         ) : null}
-      </EcolnaCard>
+      </EcolnaStimulus>
     );
 
   const answers = (
@@ -302,10 +302,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xs,
   },
   sequenceGap: {
-    backgroundColor: colors.tertiaryFixed,
+    backgroundColor: colors.rewardTint,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: colors.tertiaryContainer,
+    borderColor: colors.reward,
   },
   shares: { gap: spacing.xs, alignItems: 'center' },
   share: {

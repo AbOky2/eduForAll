@@ -2,10 +2,13 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { EcolnaPill } from '@/design-system/components/ecolna-pill';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { Orbit, OrbitChip, OrbitTile } from '@/design-system/illustrations/orbit';
+import { EcolnaAvatar } from '@/design-system/avatars';
+import { SubjectArt } from '@/design-system/icons/subject-art';
+import { Orbit } from '@/design-system/illustrations/orbit';
+import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, spacing, subjectColors } from '@/design-system/tokens';
+import { colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
@@ -16,6 +19,7 @@ import { useSafeBack } from '@/shared/hooks/use-safe-back';
  */
 export default function OfflineInfoScreen() {
   const goBack = useSafeBack();
+  const profile = useActiveProfile((state) => state.profile);
   const { scale, isTablet, isLandscape, screenPadding, width, height } = useResponsive();
   // Côte à côte dès qu'on est couché et qu'il y a la place (téléphone compris).
   const sideBySide = isLandscape && width >= 640;
@@ -33,9 +37,9 @@ export default function OfflineInfoScreen() {
   const words = (
     <View style={[styles.words, { gap: scaled(spacing.md, scale) }]}>
       <EcolnaPill
-        tone="sun"
+        tone="white"
         label={fr.offline.badge}
-        icon={<EcolnaIcon name="offline-ok" size={scaled(20, scale)} color={colors.rewardDeep} filled />}
+        icon={<EcolnaIcon name="offline-ok" size={scaled(20, scale)} color={colors.success} filled />}
         style={sideBySide ? undefined : styles.center}
       />
       <EcolnaText
@@ -72,13 +76,21 @@ export default function OfflineInfoScreen() {
         {/* Tout est déjà dans la tablette : les leçons, les sons, les dessins. */}
         <Orbit
           size={art}
-          center={<OrbitTile icon="offline-ok" color={colors.success} size={Math.round(art * 0.32)} />}
-          satellites={[
-            { node: <OrbitChip icon="book" color={subjectColors.reading.solid} tint={subjectColors.reading.tint} size={chip} />, size: chip, angle: -125, ring: 1 },
-            { node: <OrbitChip icon="speaker" color={colors.brand} tint={colors.brandTint} size={chip} />, size: chip, angle: -35, ring: 1 },
-            { node: <OrbitChip icon="pencil" color={subjectColors.writing.solid} tint={subjectColors.writing.tint} size={chip} />, size: chip, angle: 45, ring: 1 },
-            { node: <OrbitChip icon="calculator" color={subjectColors.math.solid} tint={subjectColors.math.tint} size={chip} />, size: chip, angle: 140, ring: 1 },
-          ]}
+          center={
+            <View>
+              <EcolnaAvatar avatarId={profile?.avatarId ?? 'avatar-1'} size={Math.round(art * 0.36)} expression="joy" />
+              <View style={[styles.okBadge, { width: chip * 0.8, height: chip * 0.8, borderRadius: chip * 0.4 }]}>
+                <EcolnaIcon name="offline-ok" size={Math.round(chip * 0.44)} color={colors.white} filled />
+              </View>
+            </View>
+          }
+          // L'enfant au centre, ses quatre disciplines autour : tout est là.
+          satellites={(['language', 'reading', 'writing', 'math'] as const).map((subject, index) => ({
+            node: <SubjectArt subject={subject} size={chip} />,
+            size: chip,
+            angle: -135 + index * 90,
+            ring: 1 as const,
+          }))}
         />
         {words}
       </ScrollView>
@@ -92,4 +104,14 @@ const styles = StyleSheet.create({
   words: { flexShrink: 1, maxWidth: 480 },
   center: { alignSelf: 'center' },
   button: { marginTop: spacing.sm },
+  okBadge: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.success,
+    borderWidth: 3,
+    borderColor: colors.background,
+  },
 });

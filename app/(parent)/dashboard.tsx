@@ -107,7 +107,7 @@ export default function ParentDashboardScreen() {
       label={fr.parent.timeToday}
       value={fr.parent.minutes(data?.minutesToday ?? 0)}
       container={colors.rewardTint}
-      tint={colors.tertiary}
+      tint={colors.rewardInk}
       style={styles.flex}
     />,
   ];
@@ -203,7 +203,6 @@ export default function ParentDashboardScreen() {
     <EcolnaScreen background="plain" fullWidth={splitPanes}>
       <EcolnaScreenHeader
         onBack={goBack}
-        title={fr.parent.gateTitle}
         right={
           <EcolnaIconButton
             icon="gear"
@@ -240,7 +239,7 @@ export default function ParentDashboardScreen() {
             </View>
             <View style={[styles.flex, { gap }]}>
               {analysis}
-              {shareCard}
+              <View style={styles.grow}>{shareCard}</View>
             </View>
           </View>
         ) : (
@@ -279,5 +278,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.xs,
   },
-  shareCard: { alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  shareCard: { alignItems: 'center', justifyContent: 'center', gap: spacing.sm, flexGrow: 1 },
+  grow: { flexGrow: 1 },
 });

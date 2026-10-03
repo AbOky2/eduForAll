@@ -24,7 +24,7 @@ interface EcolnaCardProps {
 /**
  * La carte v4 : une surface blanche, un filet, une ombre douce. Celle qu'on
  * touche s'enfonce sous le doigt (ressort) ; celle qu'on regarde est posée.
- * Une carte colorée (`backgroundColor`) n'a pas de filet : sa couleur suffit.
+ * Une carte colorée (`backgroundColor`) n'a ni filet ni ombre : sa couleur suffit.
  */
 export function EcolnaCard({
   children,
@@ -73,14 +73,14 @@ export function EcolnaCard({
   // `overflow: hidden` la rognerait sur iOS.
   if (!padded) {
     return (
-      <View accessibilityLabel={accessibilityLabel} style={[shadows.card, styles.curve, { borderRadius: cornerRadius }, style]}>
+      <View accessibilityLabel={accessibilityLabel} style={[white && shadows.card, styles.curve, { borderRadius: cornerRadius }, style]}>
         <View style={[styles.clip, surface, contentStyle]}>{children}</View>
       </View>
     );
   }
 
   return (
-    <View accessibilityLabel={accessibilityLabel} style={[styles.curve, shadows.card, surface, style, contentStyle]}>
+    <View accessibilityLabel={accessibilityLabel} style={[styles.curve, white && shadows.card, surface, style, contentStyle]}>
       {children}
     </View>
   );

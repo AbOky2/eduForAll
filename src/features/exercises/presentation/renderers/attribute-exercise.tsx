@@ -33,7 +33,7 @@ function AttributeShape({
   scale: number;
   size: number;
 }) {
-  const stroke = color === illustration.officialColors.blanc ? colors.outline : 'none';
+  const stroke = color === illustration.officialColors.blanc ? colors.inkTertiary : 'none';
   const s = Math.max(0.3, Math.min(1, scale));
   const cx = size / 2;
   const cy = size / 2;

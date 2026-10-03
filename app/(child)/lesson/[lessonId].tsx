@@ -23,6 +23,8 @@ import { EcolnaAvatar } from '@/design-system/avatars';
 import { FeedbackBanner } from '@/design-system/components/feedback-banner';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import {
+  AnswerVerdictContext,
+  ExerciseSubjectContext,
   EcolnaAudioButton,
   EcolnaButton,
   EcolnaCard,
@@ -32,7 +34,7 @@ import {
   EcolnaText,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, spacing, subjectColors } from '@/design-system/tokens';
+import { a11y, colors, spacing, subjectColors } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
 
 const log = createLogger('lesson-session');
@@ -119,19 +121,19 @@ function SessionBody({
     return () => service.dispose();
   }, []);
 
+  // L'anneau « en train de parler » du bouton qui joue, ~2,5 s.
+  const markPlaying = (audioId: string) => {
+    setPlayingAudioId(audioId);
+    setTimeout(() => setPlayingAudioId((current) => (current === audioId ? null : current)), 2500);
+  };
+
   const playAudio = (audioId: string) => {
     if (!soundEnabled) {
       return;
     }
     audio.current
       .play(audioId)
-      .then(() => {
-        setPlayingAudioId(audioId);
-        setTimeout(
-          () => setPlayingAudioId((current) => (current === audioId ? null : current)),
-          2500,
-        );
-      })
+      .then(() => markPlaying(audioId))
       .catch((cause) => log.warn(`audio failed for ${audioId}: ${String(cause)}`));
   };
 
@@ -143,9 +145,25 @@ function SessionBody({
     void getDatabase().then((db) =>
       createProgressRepository(db).saveStepReached(profileId, asId(lesson.id), state.stepIndex),
     );
+    // Un enfant de CP ne lit pas encore : la consigne est dite d'elle-même à
+    // chaque exercice, puis le son que l'exercice vient de lancer (le mot, la
+    // syllabe — les effets des enfants passent avant celui-ci).
+    if (soundEnabled) {
+      const presented = lesson.steps[state.stepIndex];
+      if (presented) {
+        const stimulus = audio.current.justStarted(600);
+        const intro = [presented.instruction.audioId];
+        if (stimulus && stimulus !== presented.instruction.audioId) {
+          intro.push(stimulus);
+        }
+        audio.current
+          .playSequence(intro, markPlaying)
+          .catch((cause) => log.warn(`instruction audio failed: ${String(cause)}`));
+      }
+    }
     // Auto-advance: presentation immediately awaits the child's answer.
     dispatch({ type: 'STEP_PRESENTED' });
-  }, [state.phase, state.stepIndex, profileId, lesson]);
+  }, [state.phase, state.stepIndex, profileId, lesson, soundEnabled]);
 
   // Record every attempt (for the revision engine and parent dashboard).
   useEffect(() => {
@@ -201,7 +219,12 @@ function SessionBody({
   return (
     <EcolnaScreen background="exercise" fullWidth>
       {/* En-tête : fermer — progression — indice. */}
-      <View style={[styles.header, { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) }]}>
+      <View
+        style={[
+          styles.header,
+          { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) },
+        ]}
+      >
         <EcolnaIconButton
           icon="close"
           accessibilityLabel={fr.lesson.quit}
@@ -212,7 +235,7 @@ function SessionBody({
             total={lesson.steps.length}
             done={state.phase === 'completed' ? lesson.steps.length : state.stepIndex}
             fill={subject ? subjectColors[subject].solid : colors.brand}
-            height={isTablet ? 12 : 10}
+            height={isTablet ? 14 : 10}
             accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
           />
         </View>
@@ -238,12 +261,16 @@ function SessionBody({
         >
           <EcolnaAudioButton
             variant="sky"
-            size={scaled(isTablet ? 52 : 46, scale)}
+            icon="speech"
+            size={isTablet ? a11y.childTouchTarget : scaled(48, scale)}
             accessibilityLabel={fr.lesson.replayInstruction}
             playing={playingAudioId === step.instruction.audioId}
             onPress={() => playAudio(step.instruction.audioId)}
           />
-          <EcolnaText variant={isTablet ? 'headlineLg' : 'headlineMd'} style={styles.instructionText}>
+          <EcolnaText
+            variant={isTablet ? 'headlineLg' : 'headlineMd'}
+            style={styles.instructionText}
+          >
             {step.instruction.text}
           </EcolnaText>
         </View>
@@ -252,7 +279,10 @@ function SessionBody({
       {/* Exercise body — centré quand il tient, défilable sinon (petite
           fenêtre couchée) : un contenu centré trop haut déborderait sur la consigne. */}
       <ScrollView
-        style={[styles.body, { maxWidth: isTablet ? contentMaxWidth + screenPadding * 2 : undefined }]}
+        style={[
+          styles.body,
+          { maxWidth: isTablet ? contentMaxWidth + screenPadding * 2 : undefined },
+        ]}
         contentContainerStyle={[
           styles.bodyContent,
           { paddingHorizontal: screenPadding, paddingBottom: scaled(spacing.lg, scale) },
@@ -264,17 +294,26 @@ function SessionBody({
         keyboardShouldPersistTaps="handled"
       >
         {step && renderer ? (
-          // key remounts the renderer per step: fresh local state, no reset effects.
-          // playAudio only touches the audio ref inside event handlers, never during render.
-          // eslint-disable-next-line react-hooks/refs
-          createElement(renderer, {
-            key: step.id,
-            step,
-            interactive: state.phase === 'awaiting_answer',
-            onSubmit: (answer) => dispatch({ type: 'ANSWER_SUBMITTED', answer }),
-            playAudio,
-            playingAudioId,
-          })
+          // Pendant la feuille de retour, la carte choisie montre elle-même le verdict.
+          <ExerciseSubjectContext.Provider value={subject}>
+            <AnswerVerdictContext.Provider
+              value={state.phase === 'showing_feedback' ? state.lastFeedback : null}
+            >
+              {
+                // key remounts the renderer per step: fresh local state, no reset effects.
+                // playAudio only touches the audio ref inside event handlers, never during render.
+                // eslint-disable-next-line react-hooks/refs
+                createElement(renderer, {
+                  key: step.id,
+                  step,
+                  interactive: state.phase === 'awaiting_answer',
+                  onSubmit: (answer) => dispatch({ type: 'ANSWER_SUBMITTED', answer }),
+                  playAudio,
+                  playingAudioId,
+                })
+              }
+            </AnswerVerdictContext.Provider>
+          </ExerciseSubjectContext.Provider>
         ) : step ? (
           <View style={styles.missing}>
             <EcolnaText variant="bodyLg" align="center" color={colors.textSecondary}>
@@ -370,7 +409,12 @@ function SessionBody({
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   progressWrap: { flex: 1 },
-  instruction: { flexDirection: 'row', alignItems: 'center', paddingTop: spacing.sm, paddingBottom: spacing.xs },
+  instruction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
+  },
   instructionText: { flex: 1 },
   body: { flex: 1, width: '100%', alignSelf: 'center' },
   bodyContent: { flexGrow: 1, paddingTop: spacing.sm },

@@ -87,10 +87,8 @@ export const LETTER_STROKES: Record<string, readonly Stroke[]> = {
       [0.5, 0.6],
       [0.5, 0.85],
     ],
-    [
-      [0.5, 0.15],
-      [0.5, 0.18],
-    ],
+    // Le point : un seul jalon, validé d'un toucher.
+    [[0.5, 0.16]],
   ],
   l: [
     [
@@ -175,10 +173,7 @@ export const LETTER_STROKES: Record<string, readonly Stroke[]> = {
       [0.34, 1.0],
       [0.2, 0.92],
     ],
-    [
-      [0.56, 0.14],
-      [0.56, 0.17],
-    ],
+    [[0.56, 0.155]],
   ],
   k: [
     [

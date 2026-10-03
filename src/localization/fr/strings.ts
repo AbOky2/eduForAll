@@ -44,7 +44,7 @@ export const fr = {
     welcomeTitleHighlight: 't’accompagne',
     subjectsTitle: 'Langage, lecture, écriture et calcul.',
     subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
-    offlineTitle: 'Fonctionne sans connexion.',
+    offlineTitle: 'Tout marche sans internet.',
     offlineSubtitle: 'Apprends partout, tout le temps.',
     createProfile: 'Créer mon profil',
     tagline: 'Apprendre partout, même sans internet',
@@ -132,13 +132,15 @@ export const fr = {
     parents: 'Parents',
   },
   learn: {
-    chooseModule: 'Choisis ton module',
+    chooseModule: 'Que veux-tu apprendre ?',
     readyToday: 'Prêt à apprendre aujourd’hui ?',
     levelTitle: (level: string) => `Niveau ${level}`,
     cp1Motto: 'Continue ton aventure !',
     cp2Motto: 'En route vers l’oasis des savoirs !',
     locked: 'Encore un peu de patience !',
     lockedHint: 'Termine d’abord le monde précédent.',
+    /** Le second volet du parcours, couché. */
+    worldLessons: 'LES LEÇONS DE CE MONDE',
     /** Ce que fait un appui sur une porte ou un monde fermé. */
     lockedA11yHint: 'Explique pourquoi c’est fermé.',
     /** Ce qu'on fait dans chaque discipline, pour l'adulte qui lit l'écran. */
@@ -172,7 +174,7 @@ export const fr = {
     pairLabel: (label: string, pair: number) => `${label}, paire ${pair}`,
     soundPositions: { debut: 'au début', milieu: 'au milieu', fin: 'à la fin' },
     maskedWord: 'Mot à compléter',
-    feedbackCorrect: ['Bien joué !', 'Bravo !', 'Tu progresses !', 'Super !', 'C’est ça !'],
+    feedbackCorrect: ['Bien joué !', 'Bravo !', 'Oui, c’est ça !', 'Super !', 'Exactement !'],
     feedbackIncorrect: [
       'Presque ! Essayons ensemble.',
       'Écoute encore une fois.',
@@ -184,6 +186,9 @@ export const fr = {
   },
   result: {
     title: 'Bravo ! Tu as terminé la leçon.',
+    /** Le titre en deux temps : le cri, puis ce qu'on a fait. */
+    bravo: 'Bravo !',
+    lessonDone: 'Tu as terminé la leçon.',
     perfect: 'Trois étoiles ! C’est parfait.',
     oneMoreStar: 'Tu peux rejouer pour gagner plus d’étoiles.',
     needsReview: 'On reverra certaines notions ensemble, tout va bien.',
@@ -194,21 +199,24 @@ export const fr = {
     title: 'Tes badges',
     subtitle: 'Chaque badge récompense un vrai progrès.',
     unlocked: 'Nouveau badge !',
+    unlockedMany: 'Nouveaux badges !',
     lockedHint: 'Continue pour le découvrir.',
     countEarned: (earned: number, total: number) =>
       `${earned} badge${earned > 1 ? 's' : ''} sur ${total}`,
+    /** Ce que voit l'enfant : ce qu'il a, jamais une fraction. */
+    earnedCount: (earned: number) => `${earned} badge${earned > 1 ? 's' : ''}`,
     labels: {
       'first-lesson': 'Premiers pas',
       'five-lessons': 'On continue !',
-      'twenty-lessons': 'Élève appliqué',
-      'fifty-lessons': 'Grand travailleur',
+      'twenty-lessons': 'Vingt leçons',
+      'fifty-lessons': 'Cinquante leçons',
       'first-perfect': 'Sans faute',
       'five-perfect': 'Cinq sans faute',
       'first-world': 'Monde terminé',
-      reader: 'Bon lecteur',
+      reader: 'Belle lecture',
       speaker: 'Belle parole',
       writer: 'Belle écriture',
-      counter: 'Roi du calcul',
+      counter: 'As du calcul',
       'streak-three': 'Trois jours de suite',
       'streak-seven': 'Une semaine entière',
       'star-collector': 'Cinquante étoiles',
@@ -254,11 +262,11 @@ export const fr = {
     empty: 'Rien à revoir pour l’instant. Continue comme ça !',
   },
   offline: {
-    badge: 'Mode hors-connexion actif',
+    badge: 'Tout marche sans internet',
     /** La puce de l'accueil : une promesse, pas une alerte. */
     chip: 'Sans internet',
     title: 'Tu peux continuer à apprendre sans internet.',
-    subtitle: 'Tes leçons favorites sont toujours là.',
+    subtitle: 'Toutes tes leçons sont là, même sans internet.',
   },
   parent: {
     gateTitle: 'Espace parents',
@@ -293,12 +301,12 @@ export const fr = {
     french: 'Français',
     chadianArabic: 'Arabe tchadien',
     comingSoon: 'Bientôt disponible',
-    offlineInfo: 'Informations offline',
+    offlineInfo: 'Sans internet',
     offlineStatus: 'Tout est téléchargé',
     about: 'À propos du projet',
     privacy: 'Confidentialité',
     diagnostics: 'Diagnostic',
-    resetProgress: 'Réinitialiser progression',
+    resetProgress: 'Réinitialiser la progression',
     resetTitle: 'Tout effacer ?',
     resetMessage:
       'La progression, les étoiles et les profils seront supprimés pour toujours. Cette action est irréversible.',

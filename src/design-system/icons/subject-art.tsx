@@ -1,9 +1,10 @@
 /**
  * Emblèmes de discipline v4 « Épure » (direction v4 § 6) — grille 48 × 48.
  *
- * Une famille, comme des icônes d'app : une forme pleine aux coins doux dans
- * la couleur de la discipline, un symbole blanc et un second ton clair (la
- * teinte de la discipline). Aucun contour, aucun reflet, aucune ombre.
+ * Une famille : un disque plein dans la couleur de la discipline — le cercle,
+ * géométrie de toute la v4 (vannerie, anneaux, médailles, portraits) —, un
+ * symbole blanc et un second ton clair (la teinte de la discipline). Aucun
+ * contour, aucun reflet, aucune ombre.
  *
  * | Discipline | Couleur          | Symbole                                         |
  * |------------|------------------|-------------------------------------------------|
@@ -119,7 +120,7 @@ export const SubjectArt = memo(function SubjectArt({
       : { main: colors.white, second: colors.onColorSoft, accent: family.deep };
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48">
-      {tile ? <Rect x={0} y={0} width={48} height={48} rx={14} fill={muted ? colors.fill : family.solid} /> : null}
+      {tile ? <Circle cx={24} cy={24} r={24} fill={muted ? colors.fill : family.solid} /> : null}
       <EmblemSymbol subject={subject} tones={tones} />
     </Svg>
   );

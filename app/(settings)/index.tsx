@@ -47,10 +47,10 @@ export default function SettingsScreen() {
       <EcolnaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineMd" />
 
       <View style={[styles.content, { paddingHorizontal: screenPadding }]}>
-        <EcolnaCard rounded="lg" padded={false} style={styles.group}>
+        <EcolnaCard rounded="lg" padded={false} contentStyle={styles.group}>
           {/* Sound */}
           <View style={styles.row}>
-            <EcolnaIcon name="speaker" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaIcon name="speaker" size={22} color={colors.inkSecondary} />
             <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.sound}
             </EcolnaText>
@@ -58,7 +58,7 @@ export default function SettingsScreen() {
               accessibilityLabel={fr.settings.sound}
               value={soundEnabled}
               onValueChange={toggleSound}
-              trackColor={{ true: colors.secondary, false: colors.surfaceContainerHighest }}
+              trackColor={{ true: colors.brand, false: colors.surfaceContainerHighest }}
               thumbColor={colors.card}
             />
           </View>
@@ -67,7 +67,7 @@ export default function SettingsScreen() {
           {/* Language */}
           <View style={styles.rowColumn}>
             <View style={styles.rowInner}>
-              <EcolnaIcon name="book" size={22} color={colors.onSurfaceVariant} />
+              <EcolnaIcon name="book" size={22} color={colors.inkSecondary} />
               <EcolnaText variant="bodyLg" style={styles.rowLabel}>
                 {fr.settings.language}
               </EcolnaText>
@@ -91,7 +91,7 @@ export default function SettingsScreen() {
 
           {/* Offline info */}
           <View style={styles.row}>
-            <EcolnaIcon name="offline-ok" size={22} color={colors.secondary} />
+            <EcolnaIcon name="offline-ok" size={22} color={colors.brand} />
             <View style={styles.rowLabel}>
               <EcolnaText variant="bodyLg">{fr.settings.offlineInfo}</EcolnaText>
               <EcolnaText variant="bodySm" color={colors.textSecondary}>
@@ -107,11 +107,11 @@ export default function SettingsScreen() {
             onPress={() => router.push('/(settings)/privacy')}
             style={styles.row}
           >
-            <EcolnaIcon name="shield" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaIcon name="shield" size={22} color={colors.inkSecondary} />
             <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.privacy}
             </EcolnaText>
-            <EcolnaIcon name="chevron-right" size={20} color={colors.outline} />
+            <EcolnaIcon name="chevron-right" size={20} color={colors.inkTertiary} />
           </Pressable>
           <View style={styles.divider} />
           <Pressable
@@ -119,11 +119,11 @@ export default function SettingsScreen() {
             onPress={() => router.push('/(settings)/diagnostics')}
             style={styles.row}
           >
-            <EcolnaIcon name="gear" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaIcon name="gear" size={22} color={colors.inkSecondary} />
             <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.diagnostics}
             </EcolnaText>
-            <EcolnaIcon name="chevron-right" size={20} color={colors.outline} />
+            <EcolnaIcon name="chevron-right" size={20} color={colors.inkTertiary} />
           </Pressable>
         </EcolnaCard>
 
@@ -132,7 +132,7 @@ export default function SettingsScreen() {
           label={fr.settings.resetProgress}
           variant="danger"
           size="md"
-          icon={<EcolnaIcon name="trash" size={20} color={colors.onErrorContainer} />}
+          icon={<EcolnaIcon name="trash" size={20} color={colors.dangerInk} />}
           onPress={() => setResetStep(1)}
         />
       </View>
@@ -147,7 +147,7 @@ export default function SettingsScreen() {
         <View style={[styles.modalBackdrop, { padding: screenPadding }]}>
           <EcolnaCard rounded="xl" style={styles.modalCard}>
             <View style={styles.modalIcon}>
-              <EcolnaIcon name="trash" size={28} color={colors.onErrorContainer} />
+              <EcolnaIcon name="trash" size={28} color={colors.dangerInk} />
             </View>
             <EcolnaText variant="headlineSm" align="center">
               {fr.settings.resetTitle}
@@ -170,7 +170,7 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg, width: '100%', maxWidth: 760, alignSelf: 'center', paddingTop: spacing.sm },
+  content: { gap: spacing.lg, width: '100%', paddingTop: spacing.sm },
   group: { paddingVertical: spacing.xs },
   row: {
     flexDirection: 'row',
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   rowColumn: { paddingHorizontal: spacing.lg, paddingVertical: spacing.md, gap: spacing.sm },
   rowInner: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   rowLabel: { flex: 1 },
-  divider: { height: 1.5, backgroundColor: colors.surfaceContainer, marginHorizontal: spacing.lg },
+  divider: { height: 1.5, backgroundColor: colors.fill, marginHorizontal: spacing.lg },
   radioGroup: { gap: spacing.sm, paddingLeft: spacing.xl + spacing.sm },
   radioRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   radio: {
@@ -191,12 +191,12 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 2,
-    borderColor: colors.outlineVariant,
+    borderColor: colors.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  radioActive: { borderColor: colors.secondary },
-  radioDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: colors.secondary },
+  radioActive: { borderColor: colors.brand },
+  radioDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: colors.brand },
   modalBackdrop: { flex: 1, backgroundColor: colors.scrim, justifyContent: 'center', alignItems: 'center' },
   modalCard: { gap: spacing.md, width: '100%', maxWidth: 480 },
   modalIcon: {
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: colors.errorContainer,
+    backgroundColor: colors.dangerTint,
     alignItems: 'center',
     justifyContent: 'center',
   },

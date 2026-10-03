@@ -5,7 +5,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
+  EcolnaStimulus,
   EcolnaExerciseLayout,
   useExerciseMetrics,
 } from '@/design-system/primitives';
@@ -34,13 +34,13 @@ export function ImageChoiceExercise({
   }, [step.id]);
 
   const prompt = step.audioId ? (
-    <EcolnaCard rounded="xl" style={[styles.stage, { minHeight: metrics.listenSize * 1.8 }]}>
+    <EcolnaStimulus style={[styles.stage, { minHeight: metrics.listenSize * 1.8 }]}>
       <EcolnaAudioButton
         size={metrics.listenSize}
         playing={playingAudioId === step.audioId}
         onPress={() => step.audioId && playAudio(step.audioId)}
       />
-    </EcolnaCard>
+    </EcolnaStimulus>
   ) : null;
 
   // Deux ou trois images : une rangée ; quatre : deux par deux ; cinq ou six :
@@ -72,9 +72,9 @@ export function ImageChoiceExercise({
                 onSubmit({ kind: 'choice', choiceId: choice.id });
               }}
               style={styles.cell}
-              contentStyle={{ minHeight: metrics.objectSize * 1.7 }}
+              contentStyle={{ minHeight: metrics.objectSize * 2 }}
             >
-              <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.35)} />
+              <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.6)} />
             </EcolnaAnswerCard>
           ))}
           {/* Une rangée incomplète garde des cases de même largeur. */}
@@ -87,7 +87,7 @@ export function ImageChoiceExercise({
   );
 
   // L'image est la réponse : elle prend la place, l'écoute se fait plus étroite.
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.62} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.45} />;
 }
 
 const styles = StyleSheet.create({

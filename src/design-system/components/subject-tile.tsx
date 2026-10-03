@@ -41,7 +41,7 @@ export function SubjectTile({
   artSize = 64,
   layout = 'stack',
 }: SubjectTileProps) {
-  const { scale } = useResponsive();
+  const { scale, height } = useResponsive();
   const family = subjectColors[subject];
   const progress = total === 0 ? 0 : completed / total;
   const state = locked
@@ -52,7 +52,8 @@ export function SubjectTile({
         ? fr.home.subjectState.done
         : fr.home.subjectState.started;
   const row = layout === 'row';
-  const pad = scaled(row ? spacing.md : spacing.lg, scale);
+  // Une tablette 7" couchée : la tuile se resserre pour tenir sous la barre d'onglets.
+  const pad = scaled(row ? (height < 700 ? spacing.sm : spacing.md) : spacing.lg, scale);
 
   return (
     <EcolnaGalet
@@ -69,7 +70,7 @@ export function SubjectTile({
     >
       <View style={[styles.top, row && styles.topRow, { gap: scaled(row ? spacing.sm : spacing.md, scale) }]}>
         <SubjectArt subject={subject} size={scaled(artSize, scale)} muted={locked} />
-        <View style={[styles.words, !row && { marginTop: scaled(spacing.xs, scale) }]}>
+        <View style={[styles.words, row ? styles.wordsRow : { marginTop: scaled(spacing.xs, scale) }]}>
           <EcolnaText variant={row ? 'headlineSm' : 'headlineMd'} color={locked ? colors.inkSecondary : colors.ink} numberOfLines={1}>
             {label}
           </EcolnaText>
@@ -96,5 +97,6 @@ const styles = StyleSheet.create({
   top: { alignItems: 'flex-start' },
   topRow: { flexDirection: 'row', alignItems: 'center' },
   words: { gap: 2, flexShrink: 1 },
+  wordsRow: { flex: 1 },
   lock: { position: 'absolute', top: 0, right: 0 },
 });
