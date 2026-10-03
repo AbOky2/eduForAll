@@ -29,7 +29,7 @@ function CurrentSegment({ fill, thickness }: { fill: string; thickness: number }
     Animated.spring(grow, { toValue: 1, speed: 8, bounciness: 4, useNativeDriver: false }).start();
   }, [grow, reducedMotion]);
   return (
-    <View style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.borderStrong }]}>
+    <View style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.track }]}>
       <Animated.View
         style={{
           width: grow.interpolate({ inputRange: [0, 1], outputRange: ['0%', '50%'] }),
@@ -79,7 +79,7 @@ export function EcolnaSegmentedProgress({
         ) : (
           <View
             key={index}
-            style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.borderStrong }]}
+            style={[styles.segment, { height: thickness, borderRadius: thickness / 2, backgroundColor: colors.track }]}
           />
         ),
       )}

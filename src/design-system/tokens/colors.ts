@@ -149,6 +149,9 @@ export const colors = {
   outline: palette.inkTertiary,
   outlineVariant: palette.borderStrong,
 
+  /** La piste de toute progression (barre, anneau, segments) : visible sur blanc comme sur la toile. */
+  track: palette.borderStrong,
+
   feedbackCorrect: palette.success,
   feedbackCorrectContainer: palette.successTint,
   feedbackCorrectShade: '#b7e9cc',
@@ -156,7 +159,8 @@ export const colors = {
   feedbackIncorrectContainer: palette.brandTint,
 
   starActive: palette.reward,
-  starInactive: palette.fillStrong,
+  /** L'étoile à gagner : un contour, pas un aplat — la forme dit « pas encore », même au soleil. */
+  starInactive: palette.inkDisabled,
 
   /** Fermé : l'icône en gris clair, le texte en encre secondaire. */
   locked: palette.inkDisabled,

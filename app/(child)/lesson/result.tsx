@@ -79,7 +79,8 @@ export default function LessonResultScreen() {
       earned={stars}
       size={scaled(isTablet && !sideBySide ? 60 : 48, scale)}
       celebrate
-      inactiveColor={colors.onColorTrack}
+      inactiveColor={colors.onColorSoft}
+      onDark
     />
   );
 

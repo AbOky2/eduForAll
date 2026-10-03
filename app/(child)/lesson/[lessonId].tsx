@@ -44,6 +44,16 @@ const log = createLogger('lesson-session');
 const QUIET_STEPS = new Set(['listen', 'listen_and_repeat', 'trace_letter', 'trace_graphism']);
 
 /**
+ * L'étape fait-elle entendre quelque chose (un son, un mot, une histoire) ?
+ * « Écoute encore une fois » n'a de sens que là ; ailleurs on dit « regarde ».
+ */
+function makesSound(step: object): boolean {
+  return ['audioId', 'storyAudioId', 'statementAudioId'].some(
+    (key) => typeof (step as Record<string, unknown>)[key] === 'string',
+  );
+}
+
+/**
  * Lesson session (mockups S10–S15). Presentation shell around the pure
  * lesson state machine: it renders the current step via the registry,
  * persists progression after every transition, and survives interruption
@@ -271,9 +281,10 @@ function SessionBody({
           />
         </View>
         {step?.hint ? (
+          // Un disque soleil, l'ampoule à l'encre : l'aide se voit en plein soleil (9,6:1).
           <EcolnaIconButton
             icon="lightbulb"
-            iconMode="color"
+            tone="sun"
             accessibilityLabel={fr.lesson.hint}
             onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
           />
@@ -375,7 +386,9 @@ function SessionBody({
               : pickFeedback(
                   state.lastFeedback === 'correct'
                     ? fr.lesson.feedbackCorrect
-                    : fr.lesson.feedbackIncorrect,
+                    : step && makesSound(step)
+                      ? fr.lesson.feedbackIncorrectListen
+                      : fr.lesson.feedbackIncorrectLook,
                   state.stepIndex + state.attemptsOnCurrentStep,
                 )
           }

@@ -28,7 +28,7 @@ export function EcolnaProgressRing({
   size,
   stroke,
   color,
-  track = colors.fill,
+  track = colors.track,
   children,
   accessibilityLabel,
 }: EcolnaProgressRingProps) {

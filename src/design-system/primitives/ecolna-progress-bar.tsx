@@ -38,7 +38,7 @@ export function EcolnaProgressBar({
   progress,
   tone = 'sun',
   fill,
-  track = colors.fill,
+  track = colors.track,
   height = 10,
   accessibilityLabel = 'Progression',
 }: EcolnaProgressBarProps) {

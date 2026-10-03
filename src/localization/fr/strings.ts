@@ -145,10 +145,10 @@ export const fr = {
     lockedA11yHint: 'Explique pourquoi c’est fermé.',
     /** Ce qu'on fait dans chaque discipline, pour l'adulte qui lit l'écran. */
     subjectHints: {
-      language: 'Parler, écouter, raconter',
-      reading: 'Les lettres et les sons',
-      writing: 'Tracer et écrire',
-      math: 'Compter et calculer',
+      language: 'Parler, écouter',
+      reading: 'Lettres et sons',
+      writing: 'Tracer, écrire',
+      math: 'Compter, calculer',
     },
   },
   lesson: {
@@ -177,9 +177,15 @@ export const fr = {
     feedbackCorrect: ['Bien joué !', 'Bravo !', 'Oui, c’est ça !', 'Super !', 'Exactement !'],
     /** Trois essais : on avance sans gronder, la révision reprendra l'étape. */
     moveOn: 'On reverra ça ensemble.',
-    feedbackIncorrect: [
+    /** « À revoir » quand l'exercice fait entendre quelque chose. */
+    feedbackIncorrectListen: [
       'Presque ! Essayons ensemble.',
       'Écoute encore une fois.',
+      'On réessaie, tout doucement.',
+    ],
+    /** « À revoir » quand il n'y a rien à écouter : on regarde, on compte. */
+    feedbackIncorrectLook: [
+      'Presque ! Essayons ensemble.',
       'Regarde bien, tu vas y arriver.',
       'On réessaie, tout doucement.',
     ],
@@ -267,8 +273,8 @@ export const fr = {
     badge: 'Tout marche sans internet',
     /** La puce de l'accueil : une promesse, pas une alerte. */
     chip: 'Sans internet',
-    title: 'Tu peux continuer à apprendre sans internet.',
-    subtitle: 'Toutes tes leçons sont là, même sans internet.',
+    title: 'Tout est déjà dans ta tablette.',
+    subtitle: 'Tes leçons, les sons et les images marchent partout.',
   },
   parent: {
     gateTitle: 'Espace parents',
