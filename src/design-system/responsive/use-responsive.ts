@@ -65,6 +65,18 @@ const BY_SIZE: Record<
   expanded: { scale: 1.3, screenPadding: 48, contentMaxWidth: 1000, gridColumns: 3 },
 };
 
+/**
+ * The scale the window's height can carry. Width alone would hand a phone held
+ * sideways (915 × 412) the same 1.3 as a 10" tablet, and a 7" tablet in
+ * landscape (1024 × 600) letters its exercises cannot fit vertically.
+ */
+export function heightScaleCap(height: number): number {
+  if (height < 520) {
+    return BY_SIZE.compact.scale;
+  }
+  return height < 720 ? BY_SIZE.medium.scale : BY_SIZE.expanded.scale;
+}
+
 export function useResponsive(): Responsive {
   const { width, height } = useWindowDimensions();
   return useMemo(() => {
@@ -79,6 +91,7 @@ export function useResponsive(): Responsive {
       isLandscape,
       splitPanes: windowSize === 'expanded' && isLandscape,
       ...base,
+      scale: Math.min(base.scale, heightScaleCap(height)),
     };
   }, [width, height]);
 }

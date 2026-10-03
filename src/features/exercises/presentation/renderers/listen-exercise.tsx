@@ -39,7 +39,10 @@ export function ListenExercise({
   const glyphSize = scaled(isTablet ? 150 : 110, scale);
   return (
     <View style={[styles.container, { gap: metrics.gap }]}>
-      <EcolnaCard rounded="xl" style={[styles.glyphCard, { minHeight: scaled(isTablet ? 300 : 240, scale) }]}>
+      <EcolnaCard
+        rounded="xl"
+        style={[styles.glyphCard, { minHeight: scaled(isTablet ? 300 : 240, scale) }]}
+      >
         <EcolnaText
           variant="displayGlyph"
           align="center"
@@ -68,6 +71,7 @@ export function ListenExercise({
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center' },
   glyphCard: { alignItems: 'center', justifyContent: 'center' },
-  audioWrap: { alignItems: 'center' },
+  // Le galet d'écoute mord sur la carte : il doit passer devant son élévation.
+  audioWrap: { alignItems: 'center', zIndex: 4, elevation: 4 },
   next: { alignSelf: 'center', minWidth: 240 },
 });

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
-import { colors } from '../tokens';
+import { fr } from '@/localization/fr/strings';
+import { a11y, colors } from '../tokens';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { EcolnaGalet } from './ecolna-galet';
 
@@ -24,17 +25,19 @@ interface EcolnaAudioButtonProps {
  * - `sky`      un petit bouton posé à côté d'un mot ;
  * - `bordered` un galet blanc, pour une consigne qu'on peut réentendre.
  */
-const VARIANTS: Record<AudioButtonVariant, { face: string; edge: string; ink: string; border?: string }> =
-  {
-    sand: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
-    sky: { face: colors.secondaryFixed, edge: colors.secondaryFixedDim, ink: colors.secondary },
-    bordered: {
-      face: colors.card,
-      edge: colors.cardEdge,
-      ink: colors.secondary,
-      border: colors.cardEdge,
-    },
-  };
+const VARIANTS: Record<
+  AudioButtonVariant,
+  { face: string; edge: string; ink: string; border?: string }
+> = {
+  sand: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
+  sky: { face: colors.secondaryFixed, edge: colors.secondaryFixedDim, ink: colors.secondary },
+  bordered: {
+    face: colors.card,
+    edge: colors.cardEdge,
+    ink: colors.secondary,
+    border: colors.cardEdge,
+  },
+};
 
 /**
  * The always-recognizable "listen" button. While audio plays, a ring widens
@@ -43,12 +46,14 @@ const VARIANTS: Record<AudioButtonVariant, { face: string; edge: string; ink: st
  */
 export function EcolnaAudioButton({
   onPress,
-  size = 72,
+  size: requestedSize = 72,
   variant = 'sand',
   playing = false,
   disabled = false,
-  accessibilityLabel = 'Écouter',
+  accessibilityLabel = fr.common.listen,
 }: EcolnaAudioButtonProps) {
+  // Jamais sous la cible tactile minimale, quelle que soit l'échelle demandée.
+  const size = Math.max(a11y.minTouchTarget, requestedSize);
   const palette = VARIANTS[variant];
   const reducedMotion = useReducedMotion();
   const [wave] = useState(() => new Animated.Value(0));
@@ -96,7 +101,7 @@ export function EcolnaAudioButton({
         onPress={onPress}
         disabled={disabled}
         accessibilityLabel={accessibilityLabel}
-        accessibilityHint="Fait écouter le son"
+        accessibilityHint={fr.common.listenHint}
         hitSlop={6}
         faceStyle={[styles.face, { width: size, height: size }]}
       >

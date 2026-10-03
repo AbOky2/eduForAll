@@ -129,8 +129,8 @@ export default function ChildProfileScreen() {
         avatarIds={AVATAR_IDS}
         selectedId={profile.avatarId}
         onSelect={chooseAvatar}
-        columns={isTablet && !splitPanes ? 6 : splitPanes ? 6 : 4}
-        avatarSize={scaled(isTablet ? 64 : 56, scale)}
+        minAvatar={56}
+        maxAvatar={72}
         labelFor={(avatarId, index) =>
           fr.avatars.tileLabel(index + 1, fr.avatars.descriptions[avatarId as AvatarId])
         }

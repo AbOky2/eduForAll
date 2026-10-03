@@ -4,6 +4,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { colors, spacing } from '../tokens';
+import { fr } from '@/localization/fr/strings';
 
 interface StarRowProps {
   earned: number;
@@ -32,7 +33,12 @@ function PoppingStar({
       return undefined;
     }
     const timer = setTimeout(() => {
-      Animated.spring(grow, { toValue: 1, useNativeDriver: true, speed: 14, bounciness: 12 }).start();
+      Animated.spring(grow, {
+        toValue: 1,
+        useNativeDriver: true,
+        speed: 14,
+        bounciness: 12,
+      }).start();
     }, delay);
     return () => clearTimeout(timer);
   }, [animate, delay, grow]);
@@ -59,7 +65,7 @@ export function StarRow({ earned, total = 3, size = 44, celebrate = false }: Sta
   return (
     <View
       accessibilityRole="image"
-      accessibilityLabel={`${earned} étoile${earned > 1 ? 's' : ''} sur ${total}`}
+      accessibilityLabel={fr.a11y.stars(earned, total)}
       style={styles.row}
     >
       {Array.from({ length: total }, (_, index) => (

@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { ACHIEVEMENT_IDS, type AchievementId } from '@/features/achievements/domain/achievements';
@@ -25,7 +25,10 @@ import { useFocusedData } from '@/shared/hooks/use-focused-data';
  */
 export default function LessonResultScreen() {
   const router = useRouter();
-  const { splitPanes, isTablet, scale, screenPadding } = useResponsive();
+  const { isLandscape, isTablet, scale, screenPadding, width, height } = useResponsive();
+  // Côte à côte dès qu'on est couché et qu'il y a la place : un téléphone en
+  // paysage n'a pas la hauteur d'empiler le héros au-dessus des boutons.
+  const sideBySide = isLandscape && width >= 640;
   const {
     stars: starsParam,
     lessonId,
@@ -52,20 +55,35 @@ export default function LessonResultScreen() {
     .split(',')
     .filter((id): id is AchievementId => (ACHIEVEMENT_IDS as readonly string[]).includes(id));
 
-  const avatar = scaled(isTablet ? 168 : 132, scale);
+  // Le héros se règle aussi sur la hauteur : un téléphone couché n'a que 400 dp.
+  const avatar = Math.min(
+    scaled(isTablet ? 168 : 132, scale),
+    Math.round(height * (sideBySide ? 0.32 : 0.2)),
+  );
   const burst = Math.round(avatar * 2.1);
   const check = scaled(isTablet ? 44 : 36, scale);
 
   const celebration = (
     <View style={[styles.celebration, { gap: scaled(spacing.md, scale) }]}>
       <StarRow earned={stars} size={scaled(isTablet ? 56 : 44, scale)} celebrate />
-      <View style={{ width: burst, height: burst * 0.78, alignItems: 'center', justifyContent: 'center' }}>
+      <View
+        style={{
+          width: burst,
+          height: burst * 0.78,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <View style={[styles.burst, { width: burst, height: burst, top: -burst * 0.11 }]}>
           <SunBurst size={burst} />
         </View>
         <View>
           <View style={[styles.avatarRing, { borderRadius: avatar }]}>
-            <EcolnaAvatar avatarId={profile?.avatarId ?? 'avatar-1'} size={avatar} expression="joy" />
+            <EcolnaAvatar
+              avatarId={profile?.avatarId ?? 'avatar-1'}
+              size={avatar}
+              expression="joy"
+            />
           </View>
           {/* La coche du palier M en mode couleur EST un disque vert : un liseré
               blanc la détache de l'avatar, sans second disque autour. */}
@@ -83,12 +101,21 @@ export default function LessonResultScreen() {
         {fr.result.title}
       </EcolnaText>
       <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
-        {stars === 3 ? fr.result.perfect : stars === 2 ? fr.result.oneMoreStar : fr.result.needsReview}
+        {stars === 3
+          ? fr.result.perfect
+          : stars === 2
+            ? fr.result.oneMoreStar
+            : fr.result.needsReview}
       </EcolnaText>
 
       {newBadges.length > 0 ? (
         <View style={[styles.badges, { gap: scaled(spacing.sm, scale) }]}>
-          <EcolnaPill tone="sun" variant="buttonSm" label={fr.achievements.unlocked} style={styles.center} />
+          <EcolnaPill
+            tone="sun"
+            variant="buttonSm"
+            label={fr.achievements.unlocked}
+            style={styles.center}
+          />
           <View style={styles.badgeRow}>
             {newBadges.map((id) => (
               <AchievementBadge key={id} id={id} earned size={scaled(80, scale)} />
@@ -105,7 +132,10 @@ export default function LessonResultScreen() {
             onPress={() => router.replace(`/(child)/lesson/${nextLessonId}`)}
           />
         ) : (
-          <EcolnaButton label={fr.common.continue} onPress={() => router.replace('/(child)/(tabs)')} />
+          <EcolnaButton
+            label={fr.common.continue}
+            onPress={() => router.replace('/(child)/(tabs)')}
+          />
         )}
         {lessonId ? (
           <EcolnaButton
@@ -128,22 +158,28 @@ export default function LessonResultScreen() {
 
   return (
     <EcolnaScreen background="default" fullWidth>
-      <View
-        style={[
+      {/* Centré quand tout tient, défilable sinon (badges, petite fenêtre). */}
+      <ScrollView
+        contentContainerStyle={[
           styles.container,
-          { paddingHorizontal: screenPadding, gap: scaled(spacing.xl, scale) },
-          splitPanes && styles.split,
+          {
+            paddingHorizontal: screenPadding,
+            paddingVertical: scaled(spacing.lg, scale),
+            gap: scaled(spacing.xl, scale),
+          },
+          sideBySide && styles.split,
         ]}
+        showsVerticalScrollIndicator={false}
       >
         {celebration}
         {words}
-      </View>
+      </ScrollView>
     </EcolnaScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  container: { flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
   split: { flexDirection: 'row', justifyContent: 'space-evenly' },
   celebration: { alignItems: 'center' },
   burst: { position: 'absolute' },

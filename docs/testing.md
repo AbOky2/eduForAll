@@ -11,7 +11,10 @@
 3. **Intégration** — import de contenu + migrations sur SQLite : nécessite un
    harnais natif (better-sqlite3 adaptateur dev ou device) — voir backlog.
 4. **E2E Maestro** — `maestro/` : parcours critiques sur build réelle
-   (`npm run test:e2e` avec un dev build installé).
+   (`npm run test:e2e` avec un dev build installé). Les sélecteurs de texte
+   sont des expressions régulières : l'espace insécable que l'interface met
+   avant « ! ? : ; » s'y écrit `.` (`'On y va.!'`), et « ? » ne s'écrit
+   jamais tel quel (quantificateur) — on termine alors par `.*`.
 
 ## Commandes
 

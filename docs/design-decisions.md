@@ -54,7 +54,10 @@ encore lettre à lettre ; le fond, lui, occupe tout l'écran.
 l'échelle typographique, glyphes pédagogiques compris. Une tablette se tient à
 bout de bras : il faut des lettres plus grandes, pas les mêmes lettres plus
 espacées. Les tailles sont arrondies au dp entier — les dalles bon marché sont
-souvent en 1x ou 1,5x et un demi-pixel s'y voit.
+souvent en 1x ou 1,5x et un demi-pixel s'y voit. L'échelle est **plafonnée
+par la hauteur** (×1 sous 520 dp, ×1,15 sous 720 dp) : la largeur seule
+donnait ×1,3 à un téléphone couché (915 × 412) et à une tablette 7" couchée
+(1024 × 600), dont les exercices débordaient.
 
 **3. Deux volets en paysage.** `EcolnaExerciseLayout` place le stimulus et les
 réponses côte à côte dès qu'on est en `expanded` + paysage. Empilés sur une
@@ -62,9 +65,12 @@ fenêtre large et basse, les cartes-réponses passent sous la ligne de flottaiso
 et l'enfant doit faire défiler pour répondre — l'exercice cesse d'être un
 exercice de lecture.
 
-**4. Surfaces de travail agrandies.** Les plans de tracé passent de 340 à
-460 dp (lettres) et de 260 à 360 dp (graphisme) : un tracé se fait avec tout
-l'avant-bras, pas du bout du doigt.
+**4. Surfaces de travail agrandies, mais jamais hors de l'écran.** L'ardoise
+des lettres monte jusqu'à 400 dp × l'échelle et le cahier de graphisme jusqu'à
+300 dp × l'échelle — un tracé se fait avec tout l'avant-bras — mais ils
+prennent la hauteur que la consigne et le bouton leur laissent (180 et 160 dp
+au moins). Le corps d'un exercice ne défile que s'il ne tient pas : sinon un
+geste de tracé ne doit jamais être pris pour un défilement.
 
 `app.config.ts` passe de `orientation: 'portrait'` à `'default'` : verrouiller
 le portrait sur un appareil dont c'est le mode le moins naturel n'avait pas de
@@ -118,10 +124,36 @@ pour la quantité zéro. `AvatarFace` et `avatarVariant` sont supprimés.
 
 **8. La création de profil est une cérémonie** (brief v2 § 12) : une scène
 persistante, une décision par étape, jamais de bouton grisé (un appui trop tôt
-rejoue la consigne par un anneau or), la bienvenue après l'enregistrement.
+allume un anneau ocre autour de ce qui manque et le dit au lecteur d'écran), la
+bienvenue après l'enregistrement — d'où l'on ne revient plus au formulaire : le
+retour mène à l'école, sans recréer le profil.
 
 **9. Banc de rendu web, local et non livré.** `ECOLNA_WEB_PREVIEW=1` ajoute la
 plateforme web à `app.config.ts` pour faire tourner l'app réelle dans Chromium
 et la capturer en iPad paysage / portrait / téléphone ; sans cette variable, la
 configuration livrée est inchangée (le test de configuration le vérifie).
 Mode d'emploi : `docs/visual-qa.md`.
+
+**10. Ce que la revue de la refonte a changé** (24 constats vérifiés).
+- *Android empile par élévation* avant l'ordre d'écriture : un galet ombré
+  donne à sa face l'élévation de sa tranche ; ce qui chevauche une carte
+  (bouton d'écoute, feuille d'indice) porte une élévation supérieure. Le banc
+  web ne le montre pas : à contrôler sur appareil (`docs/visual-qa.md`).
+- *Rien de grisé pour l'enfant* : « Vérifier » et les tuiles restent
+  actifs ; un appui trop tôt allume l'anneau d'aide (`NudgeRing`, ocre 6:1)
+  là où agir. Une révision sans leçon ciblée dit pourquoi au lieu d'offrir un
+  bouton mort.
+- *Relier* : chaque paire trouvée garde sa teinte (`pairTints`, sans le
+  pétrole du choix en cours) **et** son numéro des deux côtés ; le lecteur
+  d'écran dit « ba, paire 1 ».
+- *Fermé* se dit : un module ou un monde verrouillé explique pourquoi,
+  plus grand, à voix haute ; un monde terminé se rejoue. Le gris `locked`
+  reste aux icônes, les textes passent à 7,5:1.
+- *Typographie française* : espace insécable avant « ! ? : ; » et dans les
+  guillemets, partout dans `strings.ts` — un test l'impose.
+- *Grilles mesurées* : la grille d'avatars choisit ses colonnes (6, 4, 3)
+  d'après la largeur réelle ; les images d'un choix se rangent en rangées
+  explicites. Un test garantit qu'aucune rangée ne déborde.
+- *Paysage partout* : réussite et hors-connexion se mettent côte à côte dès
+  qu'un écran couché fait 640 dp de large, téléphone compris ; le banc capture
+  aussi les tablettes du pilote (`tab7-l`, `tab7-p`, `tab10-l`).

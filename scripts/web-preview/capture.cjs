@@ -1,13 +1,15 @@
 /* eslint-disable */
 // Banc de rendu web — captures d'écran de l'app RÉELLE (docs/visual-qa.md).
 //
-//   node scripts/web-preview/capture.cjs <route> <nom> [ipad-l ipad-p ipad13-l phone phone-l]
+//   node scripts/web-preview/capture.cjs <route> <nom> [ipad-l ipad-p ipad13-l phone phone-l tab7-l tab7-p tab10-l]
 //
 //   SEED=1        sème le profil de démonstration « Amina », CP1, 12 leçons
 //   FRESH=1       repart d'un navigateur vierge (premier lancement)
 //   STEP=leçon:n  ouvre une leçon à l'étape n (reprise de leçon)
 //   CLICK="a|b"   touche ces textes dans l'ordre ; préfixes : label:, fill:place=texte, wait:ms
 //   OUT=dossier   dossier des captures (défaut .cache/screens)
+//   REDUCED=1     préférence « mouvement réduit » du système
+//   WAIT=ms       attente avant chaque capture (défaut 1500)
 //
 // Playwright : `require('playwright')`, sinon PLAYWRIGHT_MODULE (chemin du
 // paquet). Chromium : celui de Playwright, ou CHROME_PATH.
@@ -29,6 +31,10 @@ const DEVICES = {
   'ipad13-l': { width: 1376, height: 1032 },
   phone: { width: 390, height: 844 },
   'phone-l': { width: 844, height: 390 },
+  // Les tablettes Android du pilote : 7" et 10" en paysage, 7" en portrait.
+  'tab7-l': { width: 1024, height: 600 },
+  'tab7-p': { width: 600, height: 1024 },
+  'tab10-l': { width: 1280, height: 800 },
 };
 const BASE = process.env.PREVIEW_URL ?? 'http://localhost:8081';
 const ROOT = path.join(__dirname, '../..');
@@ -116,6 +122,8 @@ async function seed(page) {
     ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}),
     args: process.getuid?.() === 0 ? ['--no-sandbox'] : [],
     viewport: DEVICES[list[0]],
+    // REDUCED=1 : mouvement réduit (les anneaux d'aide restent fixes 2 s).
+    reducedMotion: process.env.REDUCED ? 'reduce' : 'no-preference',
   });
   await ctx.addInitScript(() => {
     const fonts = ['Quicksand-Regular', 'Quicksand-Medium', 'Quicksand-SemiBold', 'Quicksand-Bold', 'PlusJakartaSans-SemiBold'];

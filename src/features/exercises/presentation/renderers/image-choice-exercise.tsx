@@ -43,29 +43,45 @@ export function ImageChoiceExercise({
     </EcolnaCard>
   ) : null;
 
+  // Deux ou trois images : une rangée ; quatre : deux par deux ; cinq ou six :
+  // rangées de trois. Des rangées explicites, pas un retour à la ligne : des
+  // pourcentages plus les gouttières finissaient par passer à la ligne.
+  const columns = step.choices.length === 4 ? 2 : Math.min(3, step.choices.length);
+  const rows: (typeof step.choices)[] = [];
+  for (let start = 0; start < step.choices.length; start += columns) {
+    rows.push(step.choices.slice(start, start + columns));
+  }
+
   const answers = (
-    <View style={[styles.grid, { gap: metrics.gap }]}>
-      {step.choices.map((choice) => (
-        <EcolnaAnswerCard
-          key={choice.id}
-          accessibilityLabel={choice.label ?? choice.id}
-          state={
-            !interactive && pressedId !== choice.id
-              ? 'disabled'
-              : pressedId === choice.id
-                ? 'selected'
-                : 'default'
-          }
-          onPress={() => {
-            setPressedId(choice.id);
-            onSubmit({ kind: 'choice', choiceId: choice.id });
-          }}
-          // Trois images : trois colonnes égales ; quatre : deux par deux.
-          style={{ width: step.choices.length === 3 ? '30%' : '46%', flexGrow: 1 }}
-          contentStyle={{ minHeight: metrics.objectSize * 1.5 }}
-        >
-          <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.15)} />
-        </EcolnaAnswerCard>
+    <View style={{ gap: metrics.gap }}>
+      {rows.map((row, rowIndex) => (
+        <View key={rowIndex} style={[styles.row, { gap: metrics.gap }]}>
+          {row.map((choice) => (
+            <EcolnaAnswerCard
+              key={choice.id}
+              accessibilityLabel={choice.label ?? choice.id}
+              state={
+                !interactive && pressedId !== choice.id
+                  ? 'disabled'
+                  : pressedId === choice.id
+                    ? 'selected'
+                    : 'default'
+              }
+              onPress={() => {
+                setPressedId(choice.id);
+                onSubmit({ kind: 'choice', choiceId: choice.id });
+              }}
+              style={styles.cell}
+              contentStyle={{ minHeight: metrics.objectSize * 1.5 }}
+            >
+              <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.15)} />
+            </EcolnaAnswerCard>
+          ))}
+          {/* Une rangée incomplète garde des cases de même largeur. */}
+          {Array.from({ length: columns - row.length }, (_, index) => (
+            <View key={`empty-${index}`} style={styles.cell} />
+          ))}
+        </View>
       ))}
     </View>
   );
@@ -75,5 +91,6 @@ export function ImageChoiceExercise({
 
 const styles = StyleSheet.create({
   stage: { alignItems: 'center', justifyContent: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  row: { flexDirection: 'row' },
+  cell: { flex: 1 },
 });

@@ -182,5 +182,10 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   cell: { flexBasis: '42%', flexGrow: 1, maxWidth: 300 },
   cellFace: { alignItems: 'center', justifyContent: 'center', gap: spacing.xs },
-  shapeRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' },
+  shapeRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

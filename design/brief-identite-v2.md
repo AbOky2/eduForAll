@@ -64,7 +64,10 @@ Constaté sur les captures du 3 octobre 2026 et sur la planche « avant »
    **sauf l'écran « Crée ton profil »** (§ 12), refait entièrement, et la
    **barre d'onglets** (§ 6.6).
 2. **Palette UI** (`src/design-system/tokens/colors.ts`), typographies
-   (Quicksand + Plus Jakarta Sans), espacements, rayons : inchangés. Les
+   (Quicksand + Plus Jakarta Sans), espacements, rayons : inchangés.
+   *(Amendé par `design/direction-ecrans-v3.md` : neutres ivoire au lieu de
+   lavande, rôles des galets et des disciplines ajoutés ; teintes de marque et
+   typographies toujours inchangées.)* Les
    dessins ont leurs propres jetons (`src/design-system/tokens/illustration.ts`,
    § 5). **Aucune couleur en dur** ailleurs que dans les fichiers de jetons.
 3. **Hors ligne** : tout est dessiné en SVG dans le code (react-native-svg).

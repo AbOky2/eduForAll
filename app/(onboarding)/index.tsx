@@ -16,6 +16,11 @@ import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
+// Le titre de la page 1, coupé autour du mot mis en couleur.
+const [welcomeBefore = '', welcomeAfter = ''] = fr.onboarding.welcomeTitle.split(
+  fr.onboarding.welcomeTitleHighlight,
+);
+
 const SUBJECTS: { id: SubjectArtId; label: string }[] = [
   { id: 'language', label: fr.subjects.language },
   { id: 'reading', label: fr.subjects.reading },
@@ -81,7 +86,13 @@ export default function OnboardingScreen() {
       ]}
     >
       <View style={splitPanes ? styles.artPane : undefined}>{art}</View>
-      <View style={[styles.words, splitPanes ? styles.wordsSplit : styles.wordsStack, { gap: scaled(spacing.sm, scale) }]}>
+      <View
+        style={[
+          styles.words,
+          splitPanes ? styles.wordsSplit : styles.wordsStack,
+          { gap: scaled(spacing.sm, scale) },
+        ]}
+      >
         {words}
       </View>
     </View>
@@ -98,9 +109,7 @@ export default function OnboardingScreen() {
         <EcolnaText variant="headlineMd" color={colors.primary} style={styles.brand}>
           {fr.common.appName}
         </EcolnaText>
-        {page < 2 ? (
-          <EcolnaButton label={fr.common.skip} variant="ghost" onPress={finish} />
-        ) : null}
+        {page < 2 ? <EcolnaButton label={fr.common.skip} variant="ghost" onPress={finish} /> : null}
       </View>
 
       <View style={styles.pager} onLayout={onLayout}>
@@ -119,17 +128,22 @@ export default function OnboardingScreen() {
                 <ReadingChildScene width={artWidth} height={artHeight} />
               </EcolnaCard>,
               <EcolnaText variant={titleVariant} align={align}>
-                Ton école{' '}
+                {welcomeBefore}
                 <EcolnaText variant={titleVariant} color={colors.secondary}>
-                  t’accompagne
-                </EcolnaText>{' '}
-                partout.
+                  {fr.onboarding.welcomeTitleHighlight}
+                </EcolnaText>
+                {welcomeAfter}
               </EcolnaText>,
             )}
 
             {/* Page 2 — Les quatre disciplines du programme (S03) */}
             {pageOf(
-              <View style={[styles.subjectGrid, { width: tile * 2 + scaled(spacing.md, scale), gap: scaled(spacing.md, scale) }]}>
+              <View
+                style={[
+                  styles.subjectGrid,
+                  { width: tile * 2 + scaled(spacing.md, scale), gap: scaled(spacing.md, scale) },
+                ]}
+              >
                 {SUBJECTS.map((subject) => (
                   <View
                     key={subject.id}
@@ -178,8 +192,13 @@ export default function OnboardingScreen() {
         ) : null}
       </View>
 
-      <View style={[styles.footer, { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) }]}>
-        <View style={styles.dots} accessible accessibilityLabel={`Page ${page + 1} sur 3`}>
+      <View
+        style={[
+          styles.footer,
+          { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) },
+        ]}
+      >
+        <View style={styles.dots} accessible accessibilityLabel={fr.a11y.page(page + 1, 3)}>
           {[0, 1, 2].map((index) => (
             <View
               key={index}
@@ -187,7 +206,10 @@ export default function OnboardingScreen() {
                 styles.dot,
                 index === page
                   ? { backgroundColor: colors.secondary, width: 32 }
-                  : { backgroundColor: index < page ? colors.secondaryFixedDim : colors.surfaceContainerHighest },
+                  : {
+                      backgroundColor:
+                        index < page ? colors.secondaryFixedDim : colors.surfaceContainerHighest,
+                    },
               ]}
             />
           ))}

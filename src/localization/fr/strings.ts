@@ -25,12 +25,23 @@ export const fr = {
     back: 'Retour',
     understood: 'C’est compris',
     listen: 'Écouter',
+    listenHint: 'Fait écouter le son',
     cancel: 'Annuler',
     confirm: 'Confirmer',
     retry: 'Réessayer',
   },
+  /** Ce que lit le lecteur d'écran, sans jamais l'afficher. */
+  a11y: {
+    locked: 'verrouillé',
+    progress: (label: string, done: number, total: number) => `${label} : ${done} sur ${total}`,
+    stars: (earned: number, total: number) =>
+      `${earned} étoile${earned > 1 ? 's' : ''} sur ${total}`,
+    page: (page: number, total: number) => `Page ${page} sur ${total}`,
+  },
   onboarding: {
     welcomeTitle: 'Ton école t’accompagne partout.',
+    /** Le mot du titre mis en couleur (il doit figurer dans `welcomeTitle`). */
+    welcomeTitleHighlight: 't’accompagne',
     subjectsTitle: 'Langage, lecture, écriture et calcul.',
     subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
     offlineTitle: 'Fonctionne sans connexion.',
@@ -45,9 +56,10 @@ export const fr = {
     firstNameLabel: 'Prénom (ou surnom)',
     firstNamePlaceholder: 'Écris ton prénom ici',
     levelLabel: 'Ton niveau',
-    go: 'C’est parti !',
-    privacyNote: 'Le prénom reste sur cet appareil. Pas de compte, pas d’e-mail, rien n’est envoyé.',
-    whoLearns: 'Qui apprend aujourd’hui ?',
+    go: 'C’est parti !',
+    privacyNote:
+      'Le prénom reste sur cet appareil. Pas de compte, pas d’e-mail, rien n’est envoyé.',
+    whoLearns: 'Qui apprend aujourd’hui ?',
     addProfile: 'Nouveau profil',
     /** La cérémonie d'entrée (brief v2 § 12) : une décision par étape. */
     stepCount: (step: number, total: number) => `Étape ${step} sur ${total}`,
@@ -56,45 +68,44 @@ export const fr = {
     // seul à la ligne dans un grand titre.
     stepName: 'Comment tu t’appelles\u00a0?',
     stepLevel: 'Tu es dans quelle classe\u00a0?',
-    itsMe: 'C’est moi !',
-    itsMyName: 'C’est mon prénom !',
-    adultNameHelp: 'Parent ou enseignant : écrivez le prénom de l’enfant (ou un surnom).',
+    itsMe: 'C’est moi !',
+    itsMyName: 'C’est mon prénom !',
+    adultNameHelp: 'Parent ou enseignant : écrivez le prénom de l’enfant (ou un surnom).',
     clearName: 'Effacer le prénom',
     slateIntro: 'Je m’appelle',
     levelGloss: { CP1: '1re année', CP2: '2e année' },
     levelLabelA11y: { CP1: 'CP1, première année', CP2: 'CP2, deuxième année' },
     levelAdultNote: 'Vous pourrez changer la classe plus tard dans l’espace parents.',
     helpAvatar: 'Touche le personnage qui te ressemble.',
-    helpName: 'Il manque ton prénom : demande à un adulte de t’aider.',
+    helpName: 'Il manque ton prénom : demande à un adulte de t’aider.',
     helpLevel: 'Touche ta classe.',
     welcome: (firstName: string) => `Bienvenue, ${firstName}\u00a0!`,
-    letsGo: 'On y va !',
+    letsGo: 'On y va !',
     stageLabel: (firstName: string, level: string) =>
       [firstName, level].filter(Boolean).length > 0
-        ? `Ta carte : ${[firstName, level].filter(Boolean).join(', ')}`
+        ? `Ta carte : ${[firstName, level].filter(Boolean).join(', ')}`
         : 'Ta carte',
   },
   home: {
-    greeting: (firstName: string) => `Bonjour ${firstName} !`,
+    greeting: (firstName: string) => `Bonjour ${firstName} !`,
     inProgress: 'EN COURS',
     newTag: 'NOUVEAU',
     continueLesson: 'Continuer ma leçon',
     startLesson: 'Ma prochaine leçon',
     activities: 'Tes activités',
-    newBadge: 'Nouveau !',
+    newBadge: 'Nouveau !',
     lessonsDone: (count: number) =>
       count > 1 ? `${count} leçons terminées` : `${count} leçon terminée`,
     today: (count: number) =>
       count === 0
-        ? 'On commence la journée ?'
+        ? 'On commence la journée ?'
         : count === 1
-          ? 'Une leçon faite aujourd’hui. Bravo !'
-          : `${count} leçons faites aujourd’hui. Quelle énergie !`,
+          ? 'Une leçon faite aujourd’hui. Bravo !'
+          : `${count} leçons faites aujourd’hui. Quelle énergie !`,
     streak: (days: number) => (days > 1 ? `${days} jours de suite` : 'Premier jour'),
     lockedExplain: 'Termine d’abord les leçons d’avant, et ça s’ouvrira.',
-    reviseTitle: 'On revoit ensemble ?',
-    reviseCount: (count: number) =>
-      count > 1 ? `${count} notions à revoir` : '1 notion à revoir',
+    reviseTitle: 'On revoit ensemble ?',
+    reviseCount: (count: number) => (count > 1 ? `${count} notions à revoir` : '1 notion à revoir'),
   },
   subjects: {
     language: 'Langage',
@@ -109,12 +120,14 @@ export const fr = {
   },
   learn: {
     chooseModule: 'Choisis ton module',
-    readyToday: 'Prêt à apprendre aujourd’hui ?',
+    readyToday: 'Prêt à apprendre aujourd’hui ?',
     levelTitle: (level: string) => `Niveau ${level}`,
-    cp1Motto: 'Continue ton aventure !',
-    cp2Motto: 'En route vers l’oasis des savoirs !',
-    locked: 'Encore un peu de patience !',
+    cp1Motto: 'Continue ton aventure !',
+    cp2Motto: 'En route vers l’oasis des savoirs !',
+    locked: 'Encore un peu de patience !',
     lockedHint: 'Termine d’abord le monde précédent.',
+    /** Ce que fait un appui sur une porte ou un monde fermé. */
+    lockedA11yHint: 'Explique pourquoi c’est fermé.',
     /** Ce qu'on fait dans chaque discipline, pour l'adulte qui lit l'écran. */
     subjectHints: {
       language: 'Parler, écouter, raconter',
@@ -125,11 +138,11 @@ export const fr = {
   },
   lesson: {
     exerciseCount: (current: number, total: number) => `Exercice ${current} sur ${total}`,
-    quit: 'Quitter la leçon ?',
+    quit: 'Quitter la leçon ?',
     quitMessage: 'Ta progression est gardée. Tu pourras reprendre ici.',
     quitConfirm: 'Oui, je m’arrête',
     quitCancel: 'Je continue',
-    resumeTitle: 'Bon retour !',
+    resumeTitle: 'Bon retour !',
     resumeMessage: 'On reprend ta leçon là où tu t’étais arrêté.',
     hint: 'Un indice',
     replayInstruction: 'Réécouter la consigne',
@@ -137,21 +150,28 @@ export const fr = {
     traceLetterHint: 'Pars du gros point et suis le chemin.',
     traceGraphismHint: 'Pars du gros point et va vers la droite.',
     traceLetterLabel: (letter: string) => `Trace la lettre ${letter}`,
+    traceGraphismLabel: (pattern: string) => `Trace ${pattern}`,
+    /** Un appui trop tôt : ce que dit l'anneau d'aide (jamais un bouton grisé). */
+    nudgeTiles: 'Touche une tuile pour la poser.',
+    nudgeWords: 'Touche les mots dans l’ordre de la phrase.',
+    nudgeVerify: 'Tout est posé : touche « Vérifier ».',
+    /** Une carte reliée, lue par le lecteur d'écran : « ba, paire 1 ». */
+    pairLabel: (label: string, pair: number) => `${label}, paire ${pair}`,
     soundPositions: { debut: 'au début', milieu: 'au milieu', fin: 'à la fin' },
     maskedWord: 'Mot à compléter',
-    feedbackCorrect: ['Bien joué !', 'Bravo !', 'Tu progresses !', 'Super !', 'C’est ça !'],
+    feedbackCorrect: ['Bien joué !', 'Bravo !', 'Tu progresses !', 'Super !', 'C’est ça !'],
     feedbackIncorrect: [
-      'Presque ! Essayons ensemble.',
+      'Presque ! Essayons ensemble.',
       'Écoute encore une fois.',
       'Regarde bien, tu vas y arriver.',
       'On réessaie, tout doucement.',
     ],
     listenAndRepeat: 'Écoute, puis répète à voix haute.',
-    repeatDone: 'J’ai répété !',
+    repeatDone: 'J’ai répété !',
   },
   result: {
-    title: 'Bravo ! Tu as terminé la leçon.',
-    perfect: 'Trois étoiles ! C’est parfait.',
+    title: 'Bravo ! Tu as terminé la leçon.',
+    perfect: 'Trois étoiles ! C’est parfait.',
     oneMoreStar: 'Tu peux rejouer pour gagner plus d’étoiles.',
     needsReview: 'On reverra certaines notions ensemble, tout va bien.',
     nextLesson: 'Leçon suivante',
@@ -160,12 +180,13 @@ export const fr = {
   achievements: {
     title: 'Tes badges',
     subtitle: 'Chaque badge récompense un vrai progrès.',
-    unlocked: 'Nouveau badge !',
+    unlocked: 'Nouveau badge !',
     lockedHint: 'Continue pour le découvrir.',
-    countEarned: (earned: number, total: number) => `${earned} badge${earned > 1 ? 's' : ''} sur ${total}`,
+    countEarned: (earned: number, total: number) =>
+      `${earned} badge${earned > 1 ? 's' : ''} sur ${total}`,
     labels: {
       'first-lesson': 'Premiers pas',
-      'five-lessons': 'On continue !',
+      'five-lessons': 'On continue !',
       'twenty-lessons': 'Élève appliqué',
       'fifty-lessons': 'Grand travailleur',
       'first-perfect': 'Sans faute',
@@ -212,11 +233,12 @@ export const fr = {
       repeated_errors: 'Cette notion a posé plusieurs difficultés récemment.',
       needed_hints: 'Cette notion a souvent eu besoin d’un coup de pouce.',
       not_practiced_recently: 'Cette notion n’a pas été pratiquée depuis un moment.',
-      confusion_pair: 'Deux sons proches sont parfois confondus : on les compare ensemble.',
+      confusion_pair: 'Deux sons proches sont parfois confondus : on les compare ensemble.',
     },
     subtitle: 'Pas de stress, on prend notre temps pour bien comprendre.',
     start: 'Commencer la révision',
-    empty: 'Rien à revoir pour l’instant. Continue comme ça !',
+    inLessons: 'Ces notions reviendront dans tes prochaines leçons.',
+    empty: 'Rien à revoir pour l’instant. Continue comme ça !',
   },
   offline: {
     badge: 'Mode hors-connexion actif',
@@ -226,7 +248,7 @@ export const fr = {
   parent: {
     gateTitle: 'Espace parents',
     gateSubtitle: 'Cet espace est réservé aux parents.',
-    gateQuestion: 'Pour entrer, écris le résultat de cette opération :',
+    gateQuestion: 'Pour entrer, écris le résultat de cette opération :',
     gatePlaceholder: 'Ta réponse',
     gateEnter: 'Entrer',
     gateWrong: 'Ce n’est pas la bonne réponse.',
@@ -241,7 +263,7 @@ export const fr = {
     recommendation: 'RECOMMANDATION',
     toReview: 'Notions à revoir',
     nothingToReview: 'Aucune notion en difficulté cette semaine.',
-    proudTitle: 'Fier des résultats ?',
+    proudTitle: 'Fier des résultats ?',
     share: 'Partager la progression',
     switchProfile: 'Changer de profil',
   },
@@ -258,11 +280,11 @@ export const fr = {
     privacy: 'Confidentialité',
     diagnostics: 'Diagnostic',
     resetProgress: 'Réinitialiser progression',
-    resetTitle: 'Tout effacer ?',
+    resetTitle: 'Tout effacer ?',
     resetMessage:
       'La progression, les étoiles et les profils seront supprimés pour toujours. Cette action est irréversible.',
     resetConfirm: 'Oui, tout effacer',
-    resetLastCheck: 'Dernière vérification : cette action supprime tout, définitivement.',
+    resetLastCheck: 'Dernière vérification : cette action supprime tout, définitivement.',
     /** Engagements de confidentialité, en français simple pour les parents. */
     privacyCommitments: [
       'Toutes les données restent sur cet appareil. Rien n’est envoyé sur internet.',
@@ -277,7 +299,8 @@ export const fr = {
     diagnosticsProfiles: 'Profils sur cet appareil',
     diagnosticsAttempts: 'Réponses enregistrées',
     diagnosticsExport: 'Exporter le diagnostic',
-    diagnosticsNote: 'L’export ne contient ni prénom, ni voix, ni position. Vous choisissez à qui l’envoyer.',
+    diagnosticsNote:
+      'L’export ne contient ni prénom, ni voix, ni position. Vous choisissez à qui l’envoyer.',
     diagnosticsUnknown: 'inconnue',
   },
   errors: {
@@ -296,7 +319,7 @@ export const fr = {
   avatars: {
     /** « Avatar 3 : garçon en jalabiya verte » — le préfixe reste pour Maestro. */
     tileLabel: (index: number, description: string) =>
-      `Avatar ${index} : ${description.charAt(0).toLowerCase()}${description.slice(1)}`,
+      `Avatar ${index} : ${description.charAt(0).toLowerCase()}${description.slice(1)}`,
     descriptions: {
       'avatar-1': 'Garçon à la raie de côté, chemise bleue',
       'avatar-2': 'Fille aux deux boules afro, robe en pagne',

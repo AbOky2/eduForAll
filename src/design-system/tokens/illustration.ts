@@ -236,11 +236,12 @@ export const illustration = {
   /**
    * Francs CFA d'Afrique centrale (XAF), la monnaie du Tchad : petites
    * valeurs en laiton, grandes en nickel, comme les vraies pièces — l'enfant
-   * les trie à l'œil avant de lire le nombre. `ink` à ≥ 7:1 sur `face`.
+   * les trie à l'œil avant de lire le nombre. `ink` à ≥ 7:1 sur `face`
+   * (laiton 7,1 et 7,6:1 ; nickel 9,5 et 10,8:1).
    */
   coins: {
-    brass: { face: '#e0b877', rim: '#b58c48', ring: '#cfa35f', ink: '#4a3410' },
-    brassDeep: { face: '#dcb26a', rim: '#ad8340', ring: '#c99b56', ink: '#4a3410' },
+    brass: { face: '#e0b877', rim: '#b58c48', ring: '#cfa35f', ink: '#3a2808' },
+    brassDeep: { face: '#dcb26a', rim: '#ad8340', ring: '#c99b56', ink: '#3a2808' },
     nickel: { face: '#d9dbe2', rim: '#a9adbe', ring: '#c2c5d1', ink: '#2c3040' },
     nickelBright: { face: '#e8e9ee', rim: '#a9adbe', ring: '#cfd1da', ink: '#2c3040' },
   },

@@ -125,13 +125,18 @@ export function TraceLetterExercise({
   // Ce qui est déjà écrit : chaque trait fini, puis le début du trait en cours.
   const written = scaledStrokes
     .map((stroke, sIndex) =>
-      sIndex < strokeIndex ? stroke : sIndex === strokeIndex ? stroke.slice(0, checkpointIndex) : [],
+      sIndex < strokeIndex
+        ? stroke
+        : sIndex === strokeIndex
+          ? stroke.slice(0, checkpointIndex)
+          : [],
     )
     .filter((stroke) => stroke.length > 1);
 
   return (
     <View style={[styles.container, { gap: metrics.gap }]}>
-      <SlateBoard style={[styles.board, { height: scaled(isTablet ? 400 : 340, scale) }]}>
+      {/* L'ardoise prend la hauteur que la consigne et le bouton lui laissent, sans dépasser sa taille de cahier. */}
+      <SlateBoard style={[styles.board, { maxHeight: scaled(isTablet ? 400 : 340, scale) }]}>
         <View style={styles.ghost} pointerEvents="none">
           {box.side > 0 ? (
             <EcolnaText
@@ -223,8 +228,14 @@ export function TraceLetterExercise({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 760, alignSelf: 'center' },
-  board: { alignSelf: 'stretch' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 760,
+    alignSelf: 'center',
+  },
+  board: { alignSelf: 'stretch', flexGrow: 1, flexShrink: 1, minHeight: 180 },
   ghost: {
     position: 'absolute',
     top: 0,

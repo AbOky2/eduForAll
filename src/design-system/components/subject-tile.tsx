@@ -5,6 +5,7 @@ import { SubjectArt, type SubjectArtId } from '../icons/subject-art';
 import { EcolnaGalet, EcolnaProgressBar, EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
 import { colors, radius, spacing, subjectColors } from '../tokens';
+import { fr } from '@/localization/fr/strings';
 
 interface SubjectTileProps {
   subject: SubjectArtId;
@@ -41,7 +42,8 @@ export function SubjectTile({
   const family = subjectColors[subject];
   const face = locked ? colors.lockedContainer : family.face;
   const edge = locked ? colors.lockedEdge : family.edge;
-  const ink = locked ? colors.locked : family.ink;
+  // Le gris « fermé » reste aux icônes : un texte doit se lire (4,5:1).
+  const ink = locked ? colors.textSecondary : family.ink;
   const progress = total === 0 ? 0 : completed / total;
 
   return (
@@ -51,9 +53,17 @@ export function SubjectTile({
       radius={radius.xl}
       depth="lg"
       onPress={onPress}
-      accessibilityLabel={`${label}${locked ? ', verrouillé' : ''}, ${completed} sur ${total}`}
+      accessibilityLabel={fr.a11y.progress(
+        locked ? `${label}, ${fr.a11y.locked}` : label,
+        completed,
+        total,
+      )}
+      accessibilityHint={locked ? fr.learn.lockedA11yHint : undefined}
       style={styles.fill}
-      faceStyle={[styles.face, { padding: scaled(spacing.md, scale), gap: scaled(spacing.xs, scale) }]}
+      faceStyle={[
+        styles.face,
+        { padding: scaled(spacing.md, scale), gap: scaled(spacing.xs, scale) },
+      ]}
     >
       <View style={styles.artRow}>
         <SubjectArt subject={subject} size={scaled(artSize, scale)} muted={locked} />
@@ -73,7 +83,7 @@ export function SubjectTile({
             fill={locked ? colors.locked : family.deep}
             track={colors.card}
             height={10}
-            accessibilityLabel={`${label} : ${completed} sur ${total}`}
+            accessibilityLabel={fr.a11y.progress(label, completed, total)}
           />
         </View>
         <EcolnaText variant="labelSm" color={ink}>
@@ -81,7 +91,12 @@ export function SubjectTile({
         </EcolnaText>
       </View>
       {explanation ? (
-        <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
+        <EcolnaText
+          variant="bodyMd"
+          color={colors.textPrimary}
+          align="center"
+          accessibilityLiveRegion="polite"
+        >
           {explanation}
         </EcolnaText>
       ) : null}
@@ -94,6 +109,11 @@ const styles = StyleSheet.create({
   face: { alignItems: 'center', justifyContent: 'center' },
   artRow: { alignItems: 'center', justifyContent: 'center' },
   lock: { position: 'absolute', right: -6, bottom: -4 },
-  progressRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, alignSelf: 'stretch' },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    alignSelf: 'stretch',
+  },
   bar: { flex: 1 },
 });

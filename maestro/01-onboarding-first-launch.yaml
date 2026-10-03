@@ -24,10 +24,10 @@ appId: td.ecolna.app.dev
 # Création du profil — la cérémonie en trois étapes (brief v2 § 12) :
 # personnage, prénom, classe ; jamais de bouton grisé, une aide douce à la place.
 - assertVisible: 'Choisis ton personnage'
-- tapOn: 'C’est moi !'
+- tapOn: 'C’est moi.!'
 - assertVisible: 'Touche le personnage qui te ressemble.'
 - tapOn: 'Avatar 2.*'
-- tapOn: 'C’est moi !'
+- tapOn: 'C’est moi.!'
 
 # Le prénom : écrit par un adulte, il ne quitte jamais l'appareil
 - assertVisible: 'Comment tu t’appelles.*'
@@ -35,19 +35,19 @@ appId: td.ecolna.app.dev
 - tapOn: 'Écris ton prénom ici'
 - inputText: 'Amina'
 - hideKeyboard
-- tapOn: 'C’est mon prénom !'
+- tapOn: 'C’est mon prénom.!'
 
 # La classe
 - assertVisible: 'Tu es dans quelle classe.*'
 - tapOn: 'CP1.*'
-- tapOn: 'C’est parti !'
+- tapOn: 'C’est parti.!'
 
 # La bienvenue, puis l'accueil
 - assertVisible: 'Bienvenue, Amina.*'
-- tapOn: 'On y va !'
+- tapOn: 'On y va.!'
 
 # Accueil enfant : les quatre disciplines sont ouvertes dès le premier jour
-- assertVisible: 'Bonjour Amina !'
+- assertVisible: 'Bonjour Amina.!'
 - assertVisible: 'Tes activités'
 - assertVisible: 'Langage.*'
 - assertVisible: 'Calcul.*'

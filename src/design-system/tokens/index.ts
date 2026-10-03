@@ -1,4 +1,4 @@
-export { colors, palette, subjectColors } from './colors';
+export { colors, pairTints, palette, subjectColors } from './colors';
 export type { ColorToken } from './colors';
 export { fontFamilies, typography } from './typography';
 export type { TypographyVariant } from './typography';

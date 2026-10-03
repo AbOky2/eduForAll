@@ -48,7 +48,11 @@ export default function RevisionScreen() {
         profile
           ? getDatabase()
               .then((db) =>
-                createRevisionRepository(db).findOpen(profile.id, REVISION_BATCH, new Date().toISOString()),
+                createRevisionRepository(db).findOpen(
+                  profile.id,
+                  REVISION_BATCH,
+                  new Date().toISOString(),
+                ),
               )
               // Each struggled skill maps back to the first lesson that trains it.
               .then((open) =>
@@ -109,12 +113,18 @@ export default function RevisionScreen() {
             );
           })}
         </View>
-        <EcolnaButton
-          label={fr.revision.start}
-          icon={<EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onSun} />}
-          disabled={!firstLesson}
-          onPress={() => firstLesson && router.push(`/(child)/lesson/${firstLesson}`)}
-        />
+        {firstLesson ? (
+          <EcolnaButton
+            label={fr.revision.start}
+            icon={<EcolnaIcon name="play" size={scaled(20, scale)} color={colors.onSun} />}
+            onPress={() => router.push(`/(child)/lesson/${firstLesson}`)}
+          />
+        ) : (
+          // Aucune leçon ne cible encore ces notions : pas de bouton mort, une phrase.
+          <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
+            {fr.revision.inLessons}
+          </EcolnaText>
+        )}
       </View>
     );
 
@@ -124,13 +134,21 @@ export default function RevisionScreen() {
         <EcolnaIconButton icon="arrow-back" accessibilityLabel={fr.common.back} onPress={goBack} />
       </View>
       {splitPanes ? (
-        <View style={[styles.split, { paddingHorizontal: screenPadding, gap: scaled(spacing.xxl, scale) }]}>
+        <View
+          style={[
+            styles.split,
+            { paddingHorizontal: screenPadding, gap: scaled(spacing.xxl, scale) },
+          ]}
+        >
           <View style={styles.pane}>{intro}</View>
           <View style={styles.pane}>{work}</View>
         </View>
       ) : (
         <ScrollView
-          contentContainerStyle={[styles.scroll, { paddingHorizontal: screenPadding, gap: scaled(spacing.xl, scale) }]}
+          contentContainerStyle={[
+            styles.scroll,
+            { paddingHorizontal: screenPadding, gap: scaled(spacing.xl, scale) },
+          ]}
           showsVerticalScrollIndicator={false}
         >
           {intro}

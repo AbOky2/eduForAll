@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   AccessibilityInfo,
@@ -6,7 +6,6 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   TextInput,
@@ -25,11 +24,12 @@ import {
   type AvatarId,
 } from '@/features/child-profile/domain/child-profile';
 import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
-import { LevelCard, NudgeRing, StepDots } from '@/features/onboarding/presentation/ceremony-parts';
+import { LevelCard, StepDots } from '@/features/onboarding/presentation/ceremony-parts';
 import { ProfileStage } from '@/features/onboarding/presentation/profile-stage';
 import { createSettingsRepository } from '@/features/settings/infrastructure/settings-repository';
 import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { AvatarGrid } from '@/design-system/components/avatar-grid';
+import { NudgeRing } from '@/design-system/components/nudge-ring';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { EcolnaButton, EcolnaIconButton, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
@@ -78,6 +78,9 @@ export default function CreateProfileScreen() {
   const [goVisible, setGoVisible] = useState(false);
   const titleRef = useRef<Text>(null);
   const inputRef = useRef<TextInput>(null);
+  // Un double appui sur « C'est parti » ne doit jamais créer deux profils :
+  // l'état `saving` n'est relu qu'au rendu suivant, le ref tout de suite.
+  const savingRef = useRef(false);
 
   const stepNumber = ORDER.indexOf(step) + 1;
   const compact = keyboard || height - insets.top - insets.bottom < 480;
@@ -86,9 +89,16 @@ export default function CreateProfileScreen() {
     setNudge(0);
     setStep(next);
   };
+  const enterSchool = () => router.replace('/(child)/(tabs)');
   const previous = () => {
+    // Le profil est enregistré : revenir en arrière le recréerait. Le retour
+    // mène alors à l'école, comme « On y va ! ».
+    if (step === 'welcome') {
+      enterSchool();
+      return true;
+    }
     const index = ORDER.indexOf(step);
-    if (index <= 0 || step === 'welcome') {
+    if (index <= 0) {
       return false;
     }
     goTo(ORDER[index - 1] ?? 'avatar');
@@ -139,9 +149,10 @@ export default function CreateProfileScreen() {
   }, [step]);
 
   const save = async () => {
-    if (!avatarId || !level || !isValidFirstName(firstName) || saving) {
+    if (!avatarId || !level || !isValidFirstName(firstName) || savingRef.current) {
       return;
     }
+    savingRef.current = true;
     setSaving(true);
     try {
       const db = await getDatabase();
@@ -155,6 +166,10 @@ export default function CreateProfileScreen() {
       await settings.set('onboarding_done', 'true');
       setActiveProfile(profile);
       goTo('welcome');
+    } catch (error) {
+      // Rien n'est enregistré : l'enfant peut réessayer.
+      savingRef.current = false;
+      throw error;
     } finally {
       setSaving(false);
     }
@@ -171,7 +186,7 @@ export default function CreateProfileScreen() {
     if (step === 'level') {
       return level ? void save() : setNudge((n) => n + 1);
     }
-    router.replace('/(child)/(tabs)');
+    enterSchool();
   };
 
   // ── Mise en page (§ 12.4) ────────────────────────────────────────────
@@ -180,7 +195,7 @@ export default function CreateProfileScreen() {
   const stageHeight = splitPanes
     ? usableHeight
     : isTablet
-      ? Math.round(usableHeight * (compact ? 0.26 : 0.42))
+      ? Math.round(usableHeight * (compact ? 0.26 : 0.36))
       : compact
         ? 150
         : 210;
@@ -191,13 +206,10 @@ export default function CreateProfileScreen() {
   const panelInner = Math.min(panelWidth - screenPadding * 2, 760);
   const gap = scaled(spacing.lg, scale);
 
-  const avatarColumns = splitPanes ? 4 : isTablet ? 6 : 3;
-  const tileExtra = 2 * (scaled(4, scale) * 2 + 2);
-  const avatarSize = Math.floor(
-    (panelInner - (avatarColumns - 1) * scaled(spacing.md, scale)) / avatarColumns - tileExtra,
+  const levelWidth = Math.min(
+    Math.floor((panelInner - gap) / 2),
+    scaled(splitPanes ? 240 : 220, scale),
   );
-
-  const levelWidth = Math.min(Math.floor((panelInner - gap) / 2), scaled(splitPanes ? 240 : 220, scale));
   const levelHeight = Math.round(levelWidth * (isTablet ? 1.05 : 1.15));
 
   const title =
@@ -229,7 +241,7 @@ export default function CreateProfileScreen() {
 
   const body =
     step === 'avatar' ? (
-      <NudgeRing key={`a-${nudge}`} active={nudge > 0}>
+      <NudgeRing key={`a-${nudge}`} active={nudge > 0} announcement={help}>
         <AvatarGrid
           avatarIds={AVATAR_IDS}
           selectedId={avatarId}
@@ -237,8 +249,8 @@ export default function CreateProfileScreen() {
             setAvatarId(id as AvatarId);
             setNudge(0);
           }}
-          columns={avatarColumns}
-          avatarSize={avatarSize}
+          minAvatar={80}
+          maxAvatar={104}
           labelFor={(id, index) =>
             fr.avatars.tileLabel(index + 1, fr.avatars.descriptions[id as AvatarId])
           }
@@ -258,7 +270,7 @@ export default function CreateProfileScreen() {
         <EcolnaText variant="labelLg" color={colors.textPrimary}>
           {fr.profile.firstNameLabel}
         </EcolnaText>
-        <NudgeRing key={`n-${nudge}`} active={nudge > 0}>
+        <NudgeRing key={`n-${nudge}`} active={nudge > 0} announcement={help}>
           <View style={styles.inputRow}>
             <TextInput
               ref={inputRef}
@@ -307,7 +319,7 @@ export default function CreateProfileScreen() {
       </View>
     ) : step === 'level' ? (
       <View style={{ gap: scaled(spacing.md, scale) }}>
-        <NudgeRing key={`l-${nudge}`} active={nudge > 0}>
+        <NudgeRing key={`l-${nudge}`} active={nudge > 0} announcement={help}>
           <View accessibilityRole="radiogroup" style={[styles.levelRow, { gap }]}>
             {(['CP1', 'CP2'] as const).map((option) => (
               <LevelCard
@@ -399,22 +411,23 @@ export default function CreateProfileScreen() {
 
   return (
     <View style={[styles.root, { paddingTop: splitPanes ? 0 : insets.top }]}>
+      {/* Une fois le profil enregistré, plus de geste de retour vers le formulaire. */}
+      <Stack.Screen options={{ gestureEnabled: step !== 'welcome' }} />
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={[styles.flex, splitPanes && styles.row]}>
-          {step === 'welcome' ? (
-            // La bienvenue se passe d'un appui n'importe où : une surface sous
-            // le contenu, pas un bouton qui en contiendrait un autre (le
-            // lecteur d'écran ne verrait plus « On y va ! »).
-            <Pressable
-              accessible={false}
-              importantForAccessibility="no"
-              onPress={advance}
-              style={StyleSheet.absoluteFill}
-            />
-          ) : null}
+        {/* La bienvenue se passe d'un appui n'importe où. Le conteneur est
+            l'ancêtre de tout ce qui est à l'écran : un appui sur la scène ou le
+            panneau remonte jusqu'à lui (« On y va ! », plus profond, garde le
+            sien). Pas un bouton : aucun rôle ni état pour le lecteur d'écran,
+            qui continue de voir « On y va ! ». Hors de la bienvenue, il ne
+            réclame aucun appui. */}
+        <View
+          style={[styles.flex, splitPanes && styles.row]}
+          onStartShouldSetResponder={() => step === 'welcome'}
+          onResponderRelease={advance}
+        >
           {stage}
           {panel}
         </View>

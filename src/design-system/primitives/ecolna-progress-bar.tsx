@@ -50,7 +50,10 @@ export function EcolnaProgressBar({
       accessibilityRole="progressbar"
       accessibilityLabel={accessibilityLabel}
       accessibilityValue={{ min: 0, max: 100, now: Math.round(clamped * 100) }}
-      style={[styles.track, { height: thickness, borderRadius: thickness / 2, backgroundColor: track }]}
+      style={[
+        styles.track,
+        { height: thickness, borderRadius: thickness / 2, backgroundColor: track },
+      ]}
     >
       {clamped > 0 ? (
         <View

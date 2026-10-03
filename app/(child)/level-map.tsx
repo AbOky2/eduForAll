@@ -1,6 +1,12 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
+import {
+  AccessibilityInfo,
+  ScrollView,
+  StyleSheet,
+  View,
+  type LayoutChangeEvent,
+} from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
@@ -120,6 +126,8 @@ export default function LevelMapScreen() {
         });
         if (!cancelled) {
           setNodes(built);
+          // Une explication d'hier n'a plus lieu d'être au retour sur la carte.
+          setExplained(null);
         }
       })();
       return () => {
@@ -132,7 +140,8 @@ export default function LevelMapScreen() {
   const node = scaled(isTablet ? 104 : 88, scale);
   const currentNode = Math.round(node * 1.18);
   const step = scaled(isTablet ? 190 : 170, scale);
-  const top = scaled(isTablet ? 96 : 80, scale);
+  // Assez de ciel au-dessus de la première étape pour sa bulle « Commencer ».
+  const top = Math.round(currentNode / 2 + scaled(58, scale) + scaled(spacing.md, scale));
   const amplitude = isTablet ? Math.min(width * 0.24, scaled(220, scale)) : width * 0.25;
   // Tablette : gauche, centre, droite, centre ; téléphone : gauche, droite.
   const pattern = isTablet ? [-1, 0, 1, 0] : [-1, 1];
@@ -159,7 +168,10 @@ export default function LevelMapScreen() {
     scrolledFor.current = key;
     // L'étape du jour au tiers haut, l'étape d'avant entière au-dessus :
     // l'enfant voit d'où il vient avant de voir où il va.
-    scrollRef.current?.scrollTo({ y: Math.max(0, target.y - step - scaled(110, scale)), animated: false });
+    scrollRef.current?.scrollTo({
+      y: Math.max(0, target.y - step - scaled(110, scale)),
+      animated: false,
+    });
   }, [points, currentIndex, subjectId, width, scale, step]);
 
   if (!profile) {
@@ -174,21 +186,34 @@ export default function LevelMapScreen() {
   };
 
   const open = (entry: WorldNode) => {
-    if (entry.state === 'locked' || !entry.nextLessonId) {
+    if (entry.state === 'locked') {
       setExplained(entry.world.id);
+      AccessibilityInfo.announceForAccessibility(fr.learn.lockedHint);
       return;
     }
-    router.push(`/(child)/lesson/${entry.nextLessonId}`);
+    // Un monde terminé se rejoue depuis sa première leçon.
+    const lessonId = entry.nextLessonId ?? entry.world.lessons[0]?.id;
+    if (lessonId) {
+      router.push(`/(child)/lesson/${lessonId}`);
+    }
   };
 
   const labelWidth = Math.min(scaled(isTablet ? 300 : 220, scale), width / 2 - node / 2 - 24);
 
   return (
     <EcolnaScreen background="default">
-      <View style={[styles.header, { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) }]}>
+      <View
+        style={[
+          styles.header,
+          { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) },
+        ]}
+      >
         <EcolnaIconButton icon="arrow-back" accessibilityLabel={fr.common.back} onPress={goBack} />
         <View style={styles.headerText}>
-          <EcolnaText variant={isTablet ? 'headlineLg' : 'headlineMd'} color={subjectId ? family.ink : colors.textPrimary}>
+          <EcolnaText
+            variant={isTablet ? 'headlineLg' : 'headlineMd'}
+            color={subjectId ? family.ink : colors.textPrimary}
+          >
             {subjectId
               ? `${SUBJECT_LABELS[subjectId]} · ${profile.level}`
               : fr.learn.levelTitle(profile.level)}
@@ -197,7 +222,9 @@ export default function LevelMapScreen() {
             {profile.level === 'CP1' ? fr.learn.cp1Motto : fr.learn.cp2Motto}
           </EcolnaText>
         </View>
-        {subjectId ? <SubjectArt subject={subjectId} size={scaled(isTablet ? 64 : 52, scale)} /> : null}
+        {subjectId ? (
+          <SubjectArt subject={subjectId} size={scaled(isTablet ? 64 : 52, scale)} />
+        ) : null}
       </View>
 
       <ScrollView
@@ -247,7 +274,13 @@ export default function LevelMapScreen() {
                         label={entry.completedLessons > 0 ? fr.common.continue : fr.common.start}
                         onPress={() => open(entry)}
                         accessibilityLabel={`${entry.completedLessons > 0 ? fr.common.continue : fr.common.start} : ${entry.world.title}`}
-                        icon={<EcolnaIcon name="play" size={scaled(16, scale)} color={colors.onTertiaryContainer} />}
+                        icon={
+                          <EcolnaIcon
+                            name="play"
+                            size={scaled(16, scale)}
+                            color={colors.onTertiaryContainer}
+                          />
+                        }
                         style={styles.bubble}
                       />
                     </View>
@@ -256,7 +289,11 @@ export default function LevelMapScreen() {
                     entry={entry}
                     subject={subjectId ?? entry.world.subject}
                     size={size}
-                    style={{ position: 'absolute', left: point.x - size / 2, top: point.y - size / 2 }}
+                    style={{
+                      position: 'absolute',
+                      left: point.x - size / 2,
+                      top: point.y - size / 2,
+                    }}
                     onPress={() => open(entry)}
                   />
                   <View
@@ -273,27 +310,50 @@ export default function LevelMapScreen() {
                     <EcolnaText
                       variant="headlineSm"
                       align={labelOnRight ? 'left' : 'right'}
-                      color={entry.state === 'locked' ? colors.locked : colors.textPrimary}
+                      color={entry.state === 'locked' ? colors.textSecondary : colors.textPrimary}
                       numberOfLines={2}
                     >
                       {entry.world.title}
                     </EcolnaText>
-                    <EcolnaText
-                      variant="bodySm"
-                      color={colors.textSecondary}
-                      align={labelOnRight ? 'left' : 'right'}
-                      numberOfLines={2}
-                    >
-                      {explained === entry.world.id ? fr.learn.lockedHint : entry.world.subtitle}
-                    </EcolnaText>
+                    {explained === entry.world.id ? (
+                      <EcolnaText
+                        variant="bodyLg"
+                        color={colors.textPrimary}
+                        align={labelOnRight ? 'left' : 'right'}
+                        numberOfLines={3}
+                        accessibilityLiveRegion="polite"
+                      >
+                        {fr.learn.lockedHint}
+                      </EcolnaText>
+                    ) : (
+                      <EcolnaText
+                        variant="bodySm"
+                        color={colors.textSecondary}
+                        align={labelOnRight ? 'left' : 'right'}
+                        numberOfLines={2}
+                      >
+                        {entry.world.subtitle}
+                      </EcolnaText>
+                    )}
                     {entry.state !== 'locked' ? (
-                      <View style={[styles.labelProgress, { width: Math.min(labelWidth, scaled(160, scale)) }]}>
+                      <View
+                        style={[
+                          styles.labelProgress,
+                          { width: Math.min(labelWidth, scaled(160, scale)) },
+                        ]}
+                      >
                         <View style={styles.flex}>
                           <EcolnaProgressBar
                             progress={entry.completedLessons / Math.max(1, entry.totalLessons)}
-                            fill={entry.state === 'completed' ? colors.feedbackCorrect : family.deep}
+                            fill={
+                              entry.state === 'completed' ? colors.feedbackCorrect : family.deep
+                            }
                             height={8}
-                            accessibilityLabel={`${entry.world.title} : ${entry.completedLessons} sur ${entry.totalLessons}`}
+                            accessibilityLabel={fr.a11y.progress(
+                              entry.world.title,
+                              entry.completedLessons,
+                              entry.totalLessons,
+                            )}
                           />
                         </View>
                         <EcolnaText variant="labelSm" color={colors.textSecondary}>
@@ -349,6 +409,7 @@ function JourneyNode({
         depth="lg"
         onPress={onPress}
         accessibilityLabel={`${entry.world.title} : ${entry.world.subtitle}${entry.state === 'locked' ? `. ${fr.learn.lockedHint}` : ''}`}
+        accessibilityHint={entry.state === 'locked' ? fr.learn.lockedA11yHint : undefined}
         faceStyle={[styles.nodeFace, { width: size, height: size }]}
       >
         {entry.state === 'completed' ? (
@@ -360,7 +421,10 @@ function JourneyNode({
         )}
       </EcolnaGalet>
       {entry.state === 'completed' ? (
-        <View style={[styles.stars, { marginTop: -scaled(10, scale) }]} accessibilityLabel={`${stars} étoiles sur 3`}>
+        <View
+          style={[styles.stars, { marginTop: -scaled(10, scale) }]}
+          accessibilityLabel={fr.a11y.stars(stars, 3)}
+        >
           {[0, 1, 2].map((index) => (
             <EcolnaIcon
               key={index}
@@ -382,7 +446,12 @@ const styles = StyleSheet.create({
   bubbleWrap: { position: 'absolute', width: 200, alignItems: 'center' },
   bubble: { alignSelf: 'center' },
   label: { position: 'absolute', gap: 2 },
-  labelProgress: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.xxs },
+  labelProgress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.xxs,
+  },
   flex: { flex: 1 },
   nodeFace: { alignItems: 'center', justifyContent: 'center' },
   stars: { flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' },

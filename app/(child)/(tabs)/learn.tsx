@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import {
@@ -29,7 +29,10 @@ const LABELS: Record<Subject, string> = {
  */
 export default function ModuleSelectionScreen() {
   const router = useRouter();
-  const { splitPanes, isTablet, scale, screenPadding } = useResponsive();
+  const { splitPanes, isTablet, scale, screenPadding, height } = useResponsive();
+  // Une tablette 7" couchée n'a que 600 dp : l'objet rapetisse avant que les
+  // portes ne passent sous la barre d'onglets.
+  const portalArt = splitPanes ? (height < 720 ? 84 : 112) : 136;
   const profile = useActiveProfile((state) => state.profile);
   const [explained, setExplained] = useState<Subject | null>(null);
   const subjects: SubjectProgress[] =
@@ -49,10 +52,14 @@ export default function ModuleSelectionScreen() {
     <EcolnaScreen background="default" withBottomInset={false}>
       <ScrollView
         contentContainerStyle={[
-          styles.scroll,
           // En paysage, les quatre portes occupent toute la hauteur libre.
           splitPanes && styles.fill,
-          { paddingHorizontal: screenPadding, gap, paddingTop: scaled(spacing.lg, scale) },
+          {
+            paddingHorizontal: screenPadding,
+            gap,
+            paddingTop: scaled(spacing.lg, scale),
+            paddingBottom: splitPanes ? scaled(spacing.lg, scale) : spacing.xxl,
+          },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -61,14 +68,19 @@ export default function ModuleSelectionScreen() {
             {fr.learn.chooseModule}
           </EcolnaText>
           <EcolnaText variant="bodyLg" color={colors.textSecondary}>
-            {explained ? fr.learn.lockedHint : fr.learn.readyToday}
+            {fr.learn.readyToday}
           </EcolnaText>
         </View>
 
         {rows.map((row, index) => (
           <View
             key={index}
-            style={[styles.row, { gap }, columns > 1 && styles.rowStretch, splitPanes && styles.fill]}
+            style={[
+              styles.row,
+              { gap },
+              columns > 1 && styles.rowStretch,
+              splitPanes && styles.fill,
+            ]}
           >
             {row.map((subject) => (
               <SubjectPortal
@@ -77,17 +89,22 @@ export default function ModuleSelectionScreen() {
                 label={LABELS[subject.subject]}
                 hint={fr.learn.subjectHints[subject.subject]}
                 status={subject.completed > 0 ? null : fr.home.newBadge}
-                artSize={splitPanes ? 112 : 136}
+                artSize={portalArt}
                 completed={subject.completed}
                 total={subject.total}
                 locked={subject.locked}
                 layout={columns > 1 ? 'portal' : 'row'}
+                explanation={explained === subject.subject ? fr.home.lockedExplain : null}
                 accessibilityLabel={`${LABELS[subject.subject]}${subject.locked ? `, ${fr.learn.locked}` : ''}`}
-                onPress={() =>
-                  subject.locked
-                    ? setExplained(subject.subject)
-                    : router.push(`/(child)/level-map?subject=${subject.subject}`)
-                }
+                accessibilityHint={subject.locked ? fr.learn.lockedA11yHint : undefined}
+                onPress={() => {
+                  if (subject.locked) {
+                    setExplained(subject.subject);
+                    AccessibilityInfo.announceForAccessibility(fr.home.lockedExplain);
+                    return;
+                  }
+                  router.push(`/(child)/level-map?subject=${subject.subject}`);
+                }}
               />
             ))}
           </View>
@@ -98,7 +115,6 @@ export default function ModuleSelectionScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: spacing.xxl },
   titles: { gap: spacing.xxs },
   row: {},
   fill: { flexGrow: 1 },

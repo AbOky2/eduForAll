@@ -4,9 +4,9 @@ appId: td.ecolna.app.dev
 - launchApp
 - tapOn: 'Parents'
 - assertVisible: 'Espace parents'
-- assertVisible: 'Pour entrer, écris le résultat de cette opération :'
+- assertVisible: 'Pour entrer, écris le résultat de cette opération.:'
 # 7 × 6 : la réponse se saisit, elle ne se choisit plus
-- tapOn: 'Pour entrer, écris le résultat de cette opération :'
+- tapOn: 'Pour entrer, écris le résultat de cette opération.:'
 - inputText: '36'
 - tapOn: 'Entrer'
 - assertVisible: 'Ce n’est pas la bonne réponse.'

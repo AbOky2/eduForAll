@@ -6,6 +6,7 @@ import { EcolnaGalet, EcolnaProgressBar, EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
 import { colors, radius, spacing, subjectColors } from '../tokens';
 import { EcolnaPill } from './ecolna-pill';
+import { fr } from '@/localization/fr/strings';
 
 interface SubjectPortalProps {
   subject: SubjectArtId;
@@ -21,8 +22,14 @@ interface SubjectPortalProps {
   layout: 'portal' | 'row';
   /** Taille de l'objet avant mise à l'échelle (porte : défaut 136). */
   artSize?: number;
+  /**
+   * Réponse à un appui sur une porte fermée : elle remplace la description,
+   * plus grande, et le lecteur d'écran l'annonce.
+   */
+  explanation?: string | null | undefined;
   onPress: () => void;
   accessibilityLabel: string;
+  accessibilityHint?: string | undefined;
 }
 
 /**
@@ -41,14 +48,17 @@ export function SubjectPortal({
   locked,
   layout,
   artSize = 136,
+  explanation = null,
   onPress,
   accessibilityLabel,
+  accessibilityHint,
 }: SubjectPortalProps) {
   const { scale } = useResponsive();
   const family = subjectColors[subject];
   const face = locked ? colors.lockedContainer : family.face;
   const edge = locked ? colors.lockedEdge : family.edge;
-  const ink = locked ? colors.locked : family.ink;
+  // Le gris « fermé » reste aux icônes : un texte doit se lire (4,5:1).
+  const ink = locked ? colors.textSecondary : family.ink;
   const progress = total === 0 ? 0 : completed / total;
   const portal = layout === 'portal';
 
@@ -60,7 +70,7 @@ export function SubjectPortal({
           fill={locked ? colors.locked : family.deep}
           track={colors.card}
           height={12}
-          accessibilityLabel={`${label} : ${completed} sur ${total}`}
+          accessibilityLabel={fr.a11y.progress(label, completed, total)}
         />
       </View>
       <EcolnaText variant="labelMd" color={ink}>
@@ -77,6 +87,7 @@ export function SubjectPortal({
       depth="lg"
       onPress={onPress}
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       style={portal ? styles.portalOuter : undefined}
       faceStyle={[
         portal ? styles.portalFace : styles.rowFace,
@@ -98,9 +109,24 @@ export function SubjectPortal({
         <EcolnaText variant="headlineMd" color={ink} align={portal ? 'center' : 'left'}>
           {label}
         </EcolnaText>
-        <EcolnaText variant="bodyMd" color={colors.textSecondary} align={portal ? 'center' : 'left'}>
-          {hint}
-        </EcolnaText>
+        {explanation ? (
+          <EcolnaText
+            variant="headlineSm"
+            color={colors.textPrimary}
+            align={portal ? 'center' : 'left'}
+            accessibilityLiveRegion="polite"
+          >
+            {explanation}
+          </EcolnaText>
+        ) : (
+          <EcolnaText
+            variant="bodyMd"
+            color={colors.textSecondary}
+            align={portal ? 'center' : 'left'}
+          >
+            {hint}
+          </EcolnaText>
+        )}
         {status ? (
           <EcolnaPill
             label={status}

@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { findWorld } from '@/features/curriculum/application/curriculum-catalog';
@@ -72,7 +72,13 @@ export default function ChildHomeScreen() {
 
   const greeting = (
     <View style={styles.greeting}>
-      <EcolnaText variant={isTablet ? 'displayHero' : 'headlineLg'} numberOfLines={1}>
+      {/* Un prénom long (30 caractères permis) passe sur deux lignes, puis rapetisse : jamais tronqué. */}
+      <EcolnaText
+        variant={isTablet ? 'displayHero' : 'headlineLg'}
+        numberOfLines={2}
+        adjustsFontSizeToFit
+        minimumFontScale={0.7}
+      >
         {fr.home.greeting(profile.firstName)}
       </EcolnaText>
       <EcolnaText variant="bodyLg" color={colors.textSecondary}>
@@ -81,11 +87,15 @@ export default function ChildHomeScreen() {
     </View>
   );
 
-  const openSubject = (subject: SubjectProgress) =>
-    subject.locked
-      ? // Un appui sans effet n'apprend rien : on explique, sur place.
-        setExplained(subject.subject)
-      : router.push(`/(child)/level-map?subject=${subject.subject}`);
+  const openSubject = (subject: SubjectProgress) => {
+    if (subject.locked) {
+      // Un appui sans effet n'apprend rien : on explique, sur place et à voix haute.
+      setExplained(subject.subject);
+      AccessibilityInfo.announceForAccessibility(fr.home.lockedExplain);
+      return;
+    }
+    router.push(`/(child)/level-map?subject=${subject.subject}`);
+  };
 
   const revision =
     revisionCount > 0 ? (
@@ -163,7 +173,9 @@ export default function ChildHomeScreen() {
               label=""
               accessibilityLabel={fr.offline.badge}
               onPress={() => router.push('/(child)/offline-info')}
-              icon={<EcolnaIcon name="offline-ok" size={scaled(24, scale)} color={colors.secondary} />}
+              icon={
+                <EcolnaIcon name="offline-ok" size={scaled(24, scale)} color={colors.secondary} />
+              }
             />
           </View>
         </View>

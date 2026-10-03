@@ -4,7 +4,11 @@
 > les **objets** (icônes, avatars, médailles, scènes). Ce document dessine les
 > **écrans** : matière, profondeur, composition, mouvement. Il remplace la
 > garde « on ne redessine pas les écrans » du brief v2 § 3.1, à la demande du
-> propriétaire (« une vraie app AAA, pas un gabarit »).
+> propriétaire (« une vraie app AAA, pas un gabarit »), et **amende § 3.2** :
+> les teintes de marque (terre, pétrole, ocre) et les typographies ne changent
+> pas ; les neutres passent de la lavande à l'ivoire (§ 3) et la palette gagne
+> les rôles des galets (§ 2), des disciplines (§ 4) et des paires à relier.
+> `src/design-system/tokens/colors.ts` fait foi.
 
 ## 1. Diagnostic (captures du 3 octobre 2026, banc web)
 
@@ -37,7 +41,13 @@ tranche) : l'enfant sent qu'il a agi, sans son ni vibration.
 | Action principale (« soleil ») | `sun` `#F6B73C` | `sunShade` `#CF8B17` | `onSun` `#47290A` (7,4:1) |
 | Action pétrole | `secondary` `#2B6485` | `secondaryShade` `#1D4A64` | blanc (6,4:1) |
 | Carte / bouton blanc | `card` `#FFFFFF` | `cardEdge` `#EADCC6` | encre |
-| Verrouillé | `lockedContainer` | `lockedEdge` | `locked` |
+| Verrouillé | `lockedContainer` | `lockedEdge` | `textSecondary` (7,5:1) — `locked` pour l'icône seule |
+
+Android empile les vues par `elevation` avant l'ordre d'écriture : un galet
+ombré donne à sa face l'élévation de sa tranche (sans ombre propre), et ce qui
+chevauche une carte ombrée (bouton d'écoute, feuille d'indice) porte une
+élévation supérieure. Le banc web ne montre pas ce défaut : le vérifier sur
+appareil.
 
 ## 3. La lumière et les fonds
 

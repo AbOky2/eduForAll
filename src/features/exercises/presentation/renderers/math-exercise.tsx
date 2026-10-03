@@ -136,11 +136,21 @@ const QuantityScene = memo(function QuantityScene({
 
   return (
     <View style={styles.quantities}>
-      <QuantityCard count={a} illustrationId={illustrationId} size={size} accessibilityLabel={of(a)} />
+      <QuantityCard
+        count={a}
+        illustrationId={illustrationId}
+        size={size}
+        accessibilityLabel={of(a)}
+      />
       <EcolnaText variant="displayGlyphSmall" color={colors.primary}>
         +
       </EcolnaText>
-      <QuantityCard count={b} illustrationId={illustrationId} size={size} accessibilityLabel={of(b)} />
+      <QuantityCard
+        count={b}
+        illustrationId={illustrationId}
+        size={size}
+        accessibilityLabel={of(b)}
+      />
     </View>
   );
 });
@@ -176,78 +186,78 @@ export function MathExercise({
 
   // « Compare » n'a pas d'énoncé à montrer : la consigne de l'en-tête suffit,
   // les deux nombres sont les réponses.
-  const prompt = step.type === 'compare_numbers' ? null : (
-    <EcolnaCard rounded="xl" style={[styles.board, { gap: metrics.gap }]}>
-      {isOperation(step) ? (
-        <>
-          {step.showQuantities ? (
-            <QuantityScene
-              kind={SCENE_OF_OPERATION[step.type]}
-              a={step.a}
-              b={step.b}
-              illustrationId={step.illustrationId}
-              objectName={step.objectName}
-              size={iconSize}
-            />
-          ) : null}
-          <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
-            {step.a} {OPERATOR[step.type]} {step.b} = ?
-          </EcolnaText>
-        </>
-      ) : null}
+  const prompt =
+    step.type === 'compare_numbers' ? null : (
+      <EcolnaCard rounded="xl" style={[styles.board, { gap: metrics.gap }]}>
+        {isOperation(step) ? (
+          <>
+            {step.showQuantities ? (
+              <QuantityScene
+                kind={SCENE_OF_OPERATION[step.type]}
+                a={step.a}
+                b={step.b}
+                illustrationId={step.illustrationId}
+                objectName={step.objectName}
+                size={iconSize}
+              />
+            ) : null}
+            <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
+              {step.a} {OPERATOR[step.type]} {step.b} = ?
+            </EcolnaText>
+          </>
+        ) : null}
 
-      {step.type === 'number_sequence' ? (
-        <View style={styles.sequence}>
-          {step.sequence.map((value, index) => (
-            <View
-              key={index}
-              style={[
-                styles.sequenceCell,
-                { minWidth: cell, height: cell },
-                value === null && styles.sequenceGap,
-              ]}
-            >
-              <EcolnaText
-                variant="displayGlyphSmall"
-                color={value === null ? colors.outline : colors.textPrimary}
+        {step.type === 'number_sequence' ? (
+          <View style={styles.sequence}>
+            {step.sequence.map((value, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.sequenceCell,
+                  { minWidth: cell, height: cell },
+                  value === null && styles.sequenceGap,
+                ]}
               >
-                {value === null ? '?' : String(value)}
-              </EcolnaText>
-            </View>
-          ))}
-        </View>
-      ) : null}
+                <EcolnaText
+                  variant="displayGlyphSmall"
+                  color={value === null ? colors.outline : colors.textPrimary}
+                >
+                  {value === null ? '?' : String(value)}
+                </EcolnaText>
+              </View>
+            ))}
+          </View>
+        ) : null}
 
-
-      {step.type === 'visual_word_problem' ? (
-        <View style={styles.problem}>
-          {step.visual && step.illustrationId ? (
-            <QuantityScene
-              kind={step.visual.mode}
-              a={step.visual.first}
-              b={step.visual.second}
-              illustrationId={step.illustrationId}
-              objectName={undefined}
-              size={iconSize}
-            />
-          ) : step.illustrationId ? (
-            <ObjectIcon id={step.illustrationId} size={64} />
-          ) : null}
-          <EcolnaText variant="headlineSm" align="center">
-            {step.statement}
-          </EcolnaText>
-          {step.statementAudioId ? (
-            <EcolnaAudioButton
-              variant="sky"
-              size={scaled(52, scale)}
-              playing={playingAudioId === step.statementAudioId}
-              onPress={() => step.statementAudioId && playAudio(step.statementAudioId)}
-            />
-          ) : null}
-        </View>
-      ) : null}
-    </EcolnaCard>
-  );
+        {step.type === 'visual_word_problem' ? (
+          <View style={styles.problem}>
+            {step.visual && step.illustrationId ? (
+              <QuantityScene
+                kind={step.visual.mode}
+                a={step.visual.first}
+                b={step.visual.second}
+                illustrationId={step.illustrationId}
+                objectName={undefined}
+                size={iconSize}
+              />
+            ) : step.illustrationId ? (
+              <ObjectIcon id={step.illustrationId} size={64} />
+            ) : null}
+            <EcolnaText variant="headlineSm" align="center">
+              {step.statement}
+            </EcolnaText>
+            {step.statementAudioId ? (
+              <EcolnaAudioButton
+                variant="sky"
+                size={scaled(52, scale)}
+                playing={playingAudioId === step.statementAudioId}
+                onPress={() => step.statementAudioId && playAudio(step.statementAudioId)}
+              />
+            ) : null}
+          </View>
+        ) : null}
+      </EcolnaCard>
+    );
 
   const answers = (
     <View style={[styles.options, { gap: metrics.gap }]}>
@@ -308,4 +318,3 @@ const styles = StyleSheet.create({
   options: { flexDirection: 'row', justifyContent: 'center' },
   numberCard: { flex: 1 },
 });
-

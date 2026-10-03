@@ -14,14 +14,21 @@ valeurs exactes de couleurs/spacing). Matrice écran↔route :
 2. Capturer chaque écran de la matrice (`adb exec-out screencap` /
    simulateur iOS `xcrun simctl io booted screenshot`).
 3. Poser côte à côte avec le PNG Stitch ; vérifier dans l'ordre :
-   composition → espacements → couleurs (pipette vs HTML Stitch) →
-   typographie → états.
+   composition → espacements → couleurs (pipette vs jetons de
+   `src/design-system/tokens/colors.ts` : depuis la direction v3, les neutres
+   ivoire et les rôles des galets s'écartent volontairement du HTML Stitch) →
+   typographie → états. Sur Android, vérifier aussi l'empilement : rien de ce
+   qui chevauche une carte ombrée ne doit passer dessous.
 4. Consigner chaque écart : conforme / écart accepté (lien vers
    `design-decisions.md`) / à corriger.
 
 ## Matrice d'appareils minimale
 
-- Android compact (≤ 5,5", 720p) — cible prioritaire
+- Tablette Android 7" (1024 × 600 dp), paysage **et** portrait — le matériel
+  du pilote, cible prioritaire
+- Tablette Android 10" (1280 × 800 dp), paysage et portrait
+- iPad (paysage et portrait)
+- Android compact (≤ 5,5", 720p)
 - Android standard (6,1–6,7")
 - iPhone SE (compact)
 - iPhone récent (6,1")
@@ -36,8 +43,9 @@ sera stabilisée sur appareil).
 
 ## Banc de rendu web (sans simulateur)
 
-Pour regarder l'app **réelle** écran par écran sur trois formats — iPad
-paysage, iPad portrait, téléphone — sans Xcode ni émulateur. C'est le banc qui
+Pour regarder l'app **réelle** écran par écran — iPad paysage et portrait,
+tablettes Android du pilote (`tab7-l`, `tab7-p`, `tab10-l`), téléphone droit et
+couché (`phone`, `phone-l`) — sans Xcode ni émulateur. C'est le banc qui
 a servi à la refonte v3 (`design/direction-ecrans-v3.md`). Il ne remplace pas
 la relecture sur appareil (audio, clavier, gestes réels), il la prépare.
 
@@ -62,8 +70,10 @@ FRESH=1 node scripts/web-preview/capture.cjs /create-profile profil ipad-l
 
 `SEED=1` sème le profil de démonstration « Amina » (le même que
 `scripts/tools/seed-demo-profile.mjs`) ; `STEP=leçon:n` ouvre une leçon à
-l'étape n ; `CLICK="texte|label:Avatar 2 :|fill:Écris ton prénom ici=Amina"`
-joue un parcours avant la capture. Les images vont dans `.cache/screens/`.
+l'étape n ; `CLICK="texte|label:Avatar 2|fill:Écris ton prénom ici=Amina"`
+joue un parcours avant la capture (un texte avec « ! » ou « : » s'écrit avec
+l'espace insécable) ; `REDUCED=1` capture en mouvement réduit (l'anneau
+d'aide reste alors fixe deux secondes). Les images vont dans `.cache/screens/`.
 
 Deux cales, web seulement : `expo-sqlite` web n'a pas de transaction
 exclusive (`scripts/web-preview/expo-sqlite-web.js`), et le banc navigue par

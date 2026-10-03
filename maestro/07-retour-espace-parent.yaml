@@ -9,7 +9,7 @@ appId: td.ecolna.app.dev
 - tapOn: 'Parents'
 - assertVisible: 'Espace parents'
 # 7 × 6 = 42
-- tapOn: 'Pour entrer, écris le résultat de cette opération :'
+- tapOn: 'Pour entrer, écris le résultat de cette opération.:'
 - inputText: '42'
 - hideKeyboard
 - tapOn: 'Entrer'

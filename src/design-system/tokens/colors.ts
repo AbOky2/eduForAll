@@ -1,9 +1,11 @@
 /**
- * ECOLNA color tokens — extracted verbatim from the Stitch project, which is
- * still named « ALIFA : L'École du Désert » (design system "Premium
- * Sahelian") : c'est une citation d'un artefact externe, pas le nom de l'app.
- * Light mode only for V1. See docs/design-audit.md §1 and, for the v3
- * surfaces and the « galet » roles, design/direction-ecrans-v3.md.
+ * ECOLNA color tokens. The brand hues (earth, petrol, ochre) come verbatim
+ * from the Stitch project, which is still named « ALIFA : L'École du Désert »
+ * (design system "Premium Sahelian") : c'est une citation d'un artefact
+ * externe, pas le nom de l'app. The neutrals (ivory instead of Stitch's
+ * lavender) and the « galet », subject and pair roles are the v3 screen
+ * direction's, by decision — design/direction-ecrans-v3.md. This file, not
+ * the Stitch HTML, is the reference. Light mode only for V1.
  */
 export const palette = {
   // Primary — earth brown / sand
@@ -91,12 +93,12 @@ export const colors = {
   primaryShade: '#5b3912',
   /**
    * Dunes ton sur ton dans la carte héros terre (1,12 et 1,23:1 avec
-   * `primary`) ; le texte blanc y garde 5:1, il peut passer dessus.
+   * `primary`) ; le texte blanc y garde 5,3:1, il peut passer dessus. Un
+   * blanc « adouci » n'y tiendrait plus 4,5:1 : la hiérarchie du texte de la
+   * carte passe par la taille et la graisse, pas par une encre plus pâle.
    */
   primaryDuneFar: '#845e37',
   primaryDuneNear: '#8a643d',
-  /** Texte clair secondaire sur la carte héros terre (5:1 sur `primary`). */
-  onPrimaryMuted: '#ffdcbd',
 
   /** Child feedback — never rely on color alone (icon + audio + shape too). */
   feedbackCorrect: '#3e6837',
@@ -135,5 +137,33 @@ export const subjectColors = {
   writing: { face: '#fff0c2', edge: '#f0d17c', deep: '#d9a21b', ink: '#5c4300' },
   math: { face: '#ddf0d2', edge: '#b4d69f', deep: '#4a9440', ink: '#2f5a26' },
 } as const;
+
+/**
+ * Les teintes des paires trouvées (relier) : chaque paire garde la sienne des
+ * deux côtés, avec son numéro — la couleur n'est jamais le seul indice. Le
+ * pétrole en est exclu : c'est la couleur du choix en cours. Le prune est la
+ * seule teinte hors disciplines ; son encre fait 7,8:1 sur sa face.
+ */
+export const pairTints = [
+  {
+    face: subjectColors.writing.face,
+    edge: subjectColors.writing.edge,
+    border: subjectColors.writing.deep,
+    ink: subjectColors.writing.ink,
+  },
+  {
+    face: subjectColors.reading.face,
+    edge: subjectColors.reading.edge,
+    border: subjectColors.reading.deep,
+    ink: subjectColors.reading.ink,
+  },
+  {
+    face: subjectColors.math.face,
+    edge: subjectColors.math.edge,
+    border: subjectColors.math.deep,
+    ink: subjectColors.math.ink,
+  },
+  { face: '#f1e4f4', edge: '#d9bfe0', border: '#8f5ea8', ink: '#5a3670' },
+] as const;
 
 export type ColorToken = keyof typeof colors;

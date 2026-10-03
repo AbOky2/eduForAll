@@ -4,7 +4,7 @@ appId: td.ecolna.app.dev
 - launchApp
 - tapOn: 'Parents'
 # 7 × 6 = 42
-- tapOn: 'Pour entrer, écris le résultat de cette opération :'
+- tapOn: 'Pour entrer, écris le résultat de cette opération.:'
 - inputText: '42'
 - hideKeyboard
 - tapOn: 'Entrer'
@@ -15,7 +15,7 @@ appId: td.ecolna.app.dev
 - stopApp
 - launchApp
 - tapOn: 'Parents'
-- tapOn: 'Pour entrer, écris le résultat de cette opération :'
+- tapOn: 'Pour entrer, écris le résultat de cette opération.:'
 - inputText: '42'
 - hideKeyboard
 - tapOn: 'Entrer'

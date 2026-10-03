@@ -81,7 +81,7 @@ export function LessonHeroCard({
         </EcolnaText>
         <EcolnaText
           variant={isTablet ? 'bodyLg' : 'bodyMd'}
-          color={colors.onPrimaryMuted}
+          color={colors.onPrimary}
           numberOfLines={2}
         >
           {detail}

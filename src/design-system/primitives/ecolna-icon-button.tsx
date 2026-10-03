@@ -21,13 +21,23 @@ interface EcolnaIconButtonProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const TONES: Record<IconButtonTone, { face: string; edge: string; ink: string; border?: string }> = {
-  white: { face: colors.card, edge: colors.cardEdge, ink: colors.onSurfaceVariant, border: colors.cardEdge },
-  sun: { face: colors.sun, edge: colors.sunShade, ink: colors.onSun },
-  petrol: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
-  // Sur une surface déjà colorée : un galet ton sur ton.
-  quiet: { face: colors.surfaceContainer, edge: colors.surfaceContainerHighest, ink: colors.onSurfaceVariant },
-};
+const TONES: Record<IconButtonTone, { face: string; edge: string; ink: string; border?: string }> =
+  {
+    white: {
+      face: colors.card,
+      edge: colors.cardEdge,
+      ink: colors.onSurfaceVariant,
+      border: colors.cardEdge,
+    },
+    sun: { face: colors.sun, edge: colors.sunShade, ink: colors.onSun },
+    petrol: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
+    // Sur une surface déjà colorée : un galet ton sur ton.
+    quiet: {
+      face: colors.surfaceContainer,
+      edge: colors.surfaceContainerHighest,
+      ink: colors.onSurfaceVariant,
+    },
+  };
 
 /**
  * Un galet rond qui porte une seule icône : fermer, retour, indice, écouter.

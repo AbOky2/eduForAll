@@ -1,8 +1,6 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { LevelId } from '@/content/schemas/curriculum-schema';
-import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { ClassLevelArt } from '@/design-system/illustrations/scenes';
 import { EcolnaText } from '@/design-system/primitives';
@@ -13,11 +11,7 @@ import { fr } from '@/localization/fr/strings';
 /** Trois points de 12 dp, l'actif en pilule de 32 × 12 ; « Étape 2 sur 3 ». */
 export function StepDots({ step, total }: { step: number; total: number }) {
   return (
-    <View
-      style={styles.dots}
-      accessible
-      accessibilityLabel={fr.profile.stepCount(step, total)}
-    >
+    <View style={styles.dots} accessible accessibilityLabel={fr.profile.stepCount(step, total)}>
       {Array.from({ length: total }, (_, index) => (
         <View
           key={index}
@@ -25,51 +19,13 @@ export function StepDots({ step, total }: { step: number; total: number }) {
             styles.dot,
             index + 1 === step
               ? { width: 32, backgroundColor: colors.secondary }
-              : { backgroundColor: index + 1 < step ? colors.secondaryFixedDim : colors.surfaceContainerHighest },
+              : {
+                  backgroundColor:
+                    index + 1 < step ? colors.secondaryFixedDim : colors.surfaceContainerHighest,
+                },
           ]}
         />
       ))}
-    </View>
-  );
-}
-
-/**
- * L'élément qui manque s'entoure d'un anneau or qui pulse deux fois
- * (2 × 600 ms) — ou reste fixe deux secondes en mouvement réduit. Aucun rouge,
- * aucune erreur : la consigne visuelle se rejoue (brief v2 § 12.3). Remonté
- * par `key` à chaque nouvel appui trop tôt.
- */
-export function NudgeRing({ active, children }: { active: boolean; children: ReactNode }) {
-  const reducedMotion = useReducedMotion();
-  const [glow] = useState(() => new Animated.Value(0));
-  useEffect(() => {
-    if (!active) {
-      return;
-    }
-    const pulse = reducedMotion
-      ? Animated.sequence([
-          Animated.timing(glow, { toValue: 1, duration: 0, useNativeDriver: true }),
-          Animated.delay(2000),
-          Animated.timing(glow, { toValue: 0, duration: 0, useNativeDriver: true }),
-        ])
-      : Animated.sequence(
-          [0, 1].flatMap(() => [
-            Animated.timing(glow, { toValue: 1, duration: 300, useNativeDriver: true }),
-            Animated.timing(glow, { toValue: 0, duration: 300, useNativeDriver: true }),
-          ]),
-        );
-    pulse.start();
-    return () => pulse.stop();
-  }, [active, glow, reducedMotion]);
-  return (
-    <View>
-      {children}
-      {active ? (
-        <Animated.View
-          pointerEvents="none"
-          style={[styles.nudge, { opacity: glow, borderRadius: radius.xl + 6 }]}
-        />
-      ) : null}
     </View>
   );
 }
@@ -130,7 +86,10 @@ export function LevelCard({ level, selected, onSelect, width, height }: LevelCar
             {level === 'CP1' ? '1' : '2'}
           </EcolnaText>
           <ClassLevelArt level={level} size={art} selected={selected} />
-          <EcolnaText variant="headlineMd" color={selected ? colors.onSecondaryContainer : colors.textPrimary}>
+          <EcolnaText
+            variant="headlineMd"
+            color={selected ? colors.onSecondaryContainer : colors.textPrimary}
+          >
             {level}
           </EcolnaText>
           <EcolnaText variant="labelMd" color={colors.textSecondary}>
@@ -150,15 +109,6 @@ export function LevelCard({ level, selected, onSelect, width, height }: LevelCar
 const styles = StyleSheet.create({
   dots: { flexDirection: 'row', gap: spacing.xs, alignItems: 'center' },
   dot: { width: 12, height: 12, borderRadius: 6 },
-  nudge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    bottom: -8,
-    left: -8,
-    borderWidth: 4,
-    borderColor: colors.sun,
-  },
   levelEdge: { position: 'absolute', left: 0, right: 0, bottom: 0 },
   levelFace: { alignItems: 'center', justifyContent: 'center', gap: 2, padding: spacing.md },
   check: { position: 'absolute', top: -10, right: -10, backgroundColor: colors.card, padding: 2 },

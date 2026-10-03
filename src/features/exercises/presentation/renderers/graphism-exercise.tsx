@@ -4,7 +4,12 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaButton, EcolnaCard, EcolnaText, useExerciseMetrics } from '@/design-system/primitives';
+import {
+  EcolnaButton,
+  EcolnaCard,
+  EcolnaText,
+  useExerciseMetrics,
+} from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, illustration } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -99,7 +104,11 @@ export function GraphismExercise({
   const ink = scaled(isTablet ? 11 : 9, scale);
   const written = scaledStrokes
     .map((stroke, sIndex) =>
-      sIndex < strokeIndex ? stroke : sIndex === strokeIndex ? stroke.slice(0, checkpointIndex) : [],
+      sIndex < strokeIndex
+        ? stroke
+        : sIndex === strokeIndex
+          ? stroke.slice(0, checkpointIndex)
+          : [],
     )
     .filter((stroke) => stroke.length > 1);
 
@@ -108,14 +117,14 @@ export function GraphismExercise({
       <EcolnaCard
         rounded="xl"
         padded={false}
-        style={[styles.board, { height: scaled(isTablet ? 300 : 260, scale) }]}
+        style={[styles.board, { maxHeight: scaled(isTablet ? 300 : 260, scale) }]}
         backgroundColor={paper.base}
       >
         <GestureDetector gesture={pan}>
           <View
             style={styles.canvas}
             onLayout={onLayout}
-            accessibilityLabel={`Trace ${PATTERN_LABELS[step.pattern]}`}
+            accessibilityLabel={fr.lesson.traceGraphismLabel(PATTERN_LABELS[step.pattern])}
           >
             <Svg width="100%" height="100%">
               {boardSize.height > 0 ? (
@@ -207,8 +216,15 @@ export function GraphismExercise({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 900, alignSelf: 'center' },
-  board: { overflow: 'hidden', alignSelf: 'stretch' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 900,
+    alignSelf: 'center',
+  },
+  // La feuille prend la hauteur qui reste, sans dépasser sa taille de cahier.
+  board: { overflow: 'hidden', alignSelf: 'stretch', flexGrow: 1, flexShrink: 1, minHeight: 160 },
   canvas: { flex: 1 },
   verify: { alignSelf: 'center', minWidth: 260 },
 });

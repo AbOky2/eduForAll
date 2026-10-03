@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { LetterTile } from '@/design-system/components/letter-tile';
+import { NudgeRing } from '@/design-system/components/nudge-ring';
 import { EcolnaAudioButton, EcolnaButton, useExerciseMetrics } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing } from '@/design-system/tokens';
@@ -53,7 +54,7 @@ export function ComposeExercise({
   playAudio,
   playingAudioId,
 }: ExerciseRendererProps<ComposeStep>) {
-  const { scale, isTablet } = useResponsive();
+  const { scale, isTablet, isLandscape } = useResponsive();
   const metrics = useExerciseMetrics();
   const allTiles = useMemo<Tile[]>(
     () => step.tiles.map((value, index) => ({ key: `${value}-${index}`, value })),
@@ -63,6 +64,9 @@ export function ComposeExercise({
   const neededSlots = useMemo(() => spellLength(step.target, step.tiles), [step]);
 
   const [placed, setPlaced] = useState<Tile[]>([]);
+  // Un appui trop tôt allume l'anneau d'aide là où agir ; rien n'est grisé.
+  const [slotsNudge, setSlotsNudge] = useState(0);
+  const [verifyNudge, setVerifyNudge] = useState(0);
 
   useEffect(() => {
     if (step.audioId) {
@@ -76,10 +80,28 @@ export function ComposeExercise({
   const tileSize = scaled(isTablet ? 88 : 64, scale);
 
   const place = (tile: Tile) => {
-    if (!interactive || full) {
+    if (!interactive) {
+      return;
+    }
+    if (full) {
+      setVerifyNudge((count) => count + 1);
       return;
     }
     setPlaced((current) => [...current, tile]);
+  };
+
+  const verify = () => {
+    if (!interactive) {
+      return;
+    }
+    if (placed.length === 0) {
+      setSlotsNudge((count) => count + 1);
+      if (step.audioId) {
+        playAudio(step.audioId);
+      }
+      return;
+    }
+    onSubmit({ kind: 'sequence', values: placed.map((tile) => tile.value) });
   };
 
   const remove = (tile: Tile) => {
@@ -92,40 +114,53 @@ export function ComposeExercise({
   return (
     <View style={[styles.container, { gap: metrics.gap }]}>
       {/* La planche : le mot entendu, et ses emplacements en creux. */}
-      <View style={[styles.board, { padding: metrics.gap, gap: metrics.gap }]}>
-        {step.audioId ? (
-          <EcolnaAudioButton
-            size={scaled(isTablet ? 72 : 60, scale)}
-            playing={playingAudioId === step.audioId}
-            onPress={() => step.audioId && playAudio(step.audioId)}
-          />
-        ) : null}
-        <View style={[styles.slots, { gap: scaled(spacing.sm, scale) }]}>
-          {Array.from({ length: neededSlots }, (_, index) => {
-            const tile = placed[index];
-            return tile ? (
-              <LetterTile
-                key={tile.key}
-                tone="placed"
-                label={tile.value}
-                accessibilityLabel={fr.lesson.removeTile(tile.value)}
-                onPress={() => remove(tile)}
-                variant={metrics.answerGlyph}
-                minWidth={tileSize}
-                height={tileSize}
-              />
-            ) : (
-              <View
-                key={`empty-${index}`}
-                style={[
-                  styles.hollow,
-                  { minWidth: tileSize, height: tileSize, marginBottom: scaled(5, scale) },
-                ]}
-              />
-            );
-          })}
+      <NudgeRing
+        key={`s-${slotsNudge}`}
+        active={slotsNudge > 0}
+        announcement={fr.lesson.nudgeTiles}
+      >
+        {/* Couché, l'écoute se pose à gauche des creux : la hauteur manque, pas la largeur. */}
+        <View
+          style={[
+            styles.board,
+            isLandscape && styles.boardRow,
+            { padding: metrics.gap, gap: metrics.gap },
+          ]}
+        >
+          {step.audioId ? (
+            <EcolnaAudioButton
+              size={scaled(isTablet ? 72 : 60, scale)}
+              playing={playingAudioId === step.audioId}
+              onPress={() => step.audioId && playAudio(step.audioId)}
+            />
+          ) : null}
+          <View style={[styles.slots, { gap: scaled(spacing.sm, scale) }]}>
+            {Array.from({ length: neededSlots }, (_, index) => {
+              const tile = placed[index];
+              return tile ? (
+                <LetterTile
+                  key={tile.key}
+                  tone="placed"
+                  label={tile.value}
+                  accessibilityLabel={fr.lesson.removeTile(tile.value)}
+                  onPress={() => remove(tile)}
+                  variant={metrics.answerGlyph}
+                  minWidth={tileSize}
+                  height={tileSize}
+                />
+              ) : (
+                <View
+                  key={`empty-${index}`}
+                  style={[
+                    styles.hollow,
+                    { minWidth: tileSize, height: tileSize, marginBottom: scaled(5, scale) },
+                  ]}
+                />
+              );
+            })}
+          </View>
         </View>
-      </View>
+      </NudgeRing>
 
       {/* La réserve de tuiles. */}
       <View style={[styles.tray, { gap: scaled(spacing.md, scale) }]}>
@@ -134,7 +169,6 @@ export function ComposeExercise({
             key={tile.key}
             tone="tray"
             label={tile.value}
-            disabled={!interactive || full}
             onPress={() => place(tile)}
             variant={metrics.answerGlyph}
             minWidth={tileSize}
@@ -143,18 +177,27 @@ export function ComposeExercise({
         ))}
       </View>
 
-      <EcolnaButton
-        label={fr.common.verify}
-        disabled={!interactive || placed.length === 0}
-        onPress={() => onSubmit({ kind: 'sequence', values: placed.map((tile) => tile.value) })}
+      <NudgeRing
+        key={`v-${verifyNudge}`}
+        active={verifyNudge > 0}
+        radius={radius.pill}
+        announcement={fr.lesson.nudgeVerify}
         style={styles.verify}
-      />
+      >
+        <EcolnaButton label={fr.common.verify} onPress={verify} style={styles.verifyButton} />
+      </NudgeRing>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 820, alignSelf: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 820,
+    alignSelf: 'center',
+  },
   board: {
     alignItems: 'center',
     borderRadius: radius.xl,
@@ -162,7 +205,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.surfaceContainerHighest,
   },
-  slots: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap' },
+  boardRow: { flexDirection: 'row', justifyContent: 'center' },
+  slots: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', flexShrink: 1 },
   hollow: {
     borderRadius: radius.lg,
     backgroundColor: colors.surfaceContainerHigh,
@@ -171,5 +215,6 @@ const styles = StyleSheet.create({
     borderColor: colors.outlineVariant,
   },
   tray: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-  verify: { alignSelf: 'center', minWidth: 260 },
+  verify: { alignSelf: 'center' },
+  verifyButton: { minWidth: 260 },
 });

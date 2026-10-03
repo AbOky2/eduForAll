@@ -77,17 +77,18 @@ export function EcolnaGalet({
 }: EcolnaGaletProps) {
   const { scale } = useResponsive();
   const lift = scaled(typeof depth === 'number' ? depth : depthTokens[depth], scale);
+  // Android empile par `elevation` avant l'ordre des enfants : une tranche
+  // ombrée passerait devant sa face. La face reçoit la même élévation, sans
+  // ombre propre, et reste dessus.
+  const elevation = shadow?.elevation ?? 0;
+  const faceLayer = elevation > 0 ? { elevation, shadowColor: 'transparent' } : null;
 
   const layers = (pressed: boolean) => {
     const sunk = pressedLook || (pressed && !disabled);
     return (
       <>
         <View
-          style={[
-            styles.edge,
-            { top: lift, borderRadius: radius, backgroundColor: edge },
-            shadow,
-          ]}
+          style={[styles.edge, { top: lift, borderRadius: radius, backgroundColor: edge }, shadow]}
         />
         <View
           style={[
@@ -99,6 +100,7 @@ export function EcolnaGalet({
               borderWidth: border ? borderWidth : 0,
               transform: [{ translateY: sunk ? lift : 0 }],
             },
+            faceLayer,
             faceStyle,
           ]}
         >

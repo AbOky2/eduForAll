@@ -75,6 +75,22 @@ describe('useResponsive', () => {
     expect(value.splitPanes).toBe(true);
   });
 
+  it.each([
+    // A phone held sideways is "expanded" by its width, not by its height.
+    [915, 412, 1],
+    // A 7" tablet in landscape: the exercises have to fit in 600 dp.
+    [1024, 600, 1.15],
+    // A 10" tablet in landscape keeps the full scale.
+    [1280, 800, 1.3],
+  ])(
+    'caps the scale of a %i × %i window at what its height can carry',
+    (width, height, expected) => {
+      setWindow(width, height);
+      render(<Probe />);
+      expect(probeValue().scale).toBe(expected);
+    },
+  );
+
   it('never lets the readable column grow with the screen', () => {
     setWindow(1920, 1200);
     render(<Probe />);

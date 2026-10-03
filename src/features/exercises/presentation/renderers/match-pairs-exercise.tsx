@@ -3,19 +3,14 @@ import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { EcolnaAnswerCard, useExerciseMetrics } from '@/design-system/primitives';
-import { colors, subjectColors } from '@/design-system/tokens';
+import { colors, pairTints } from '@/design-system/tokens';
+import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type MatchStep = Extract<ExerciseStep, { type: 'match_pairs' }>;
 
-/** Une couleur par paire trouvée, la même des deux côtés. */
-const PAIR_TINTS = (['language', 'writing', 'math', 'reading'] as const).map((family) => ({
-  face: subjectColors[family].face,
-  edge: subjectColors[family].edge,
-  border: subjectColors[family].deep,
-  ink: subjectColors[family].ink,
-}));
+/** Le choix en cours, à gauche : pétrole, comme toute réponse choisie. */
 const SELECTING = {
   face: colors.secondaryFixed,
   edge: colors.secondaryFixedDim,
@@ -24,8 +19,10 @@ const SELECTING = {
 };
 
 /**
- * Two-column matching: tap a left card then its right partner. Matched pairs
- * lock in green; a wrong pairing shakes back to neutral (state only, kind).
+ * Two-column matching: tap a left card then its right partner. Each pair
+ * found keeps its own tint and number on both sides (« ba, paire 1 »), so
+ * what goes with what reads without colour; a wrong pairing is only revealed
+ * at the end, and a tap then clears the board for a fresh try.
  */
 export function MatchPairsExercise({
   step,
@@ -46,13 +43,17 @@ export function MatchPairsExercise({
   const [matches, setMatches] = useState<{ pairId: string; matchedPairId: string }[]>([]);
 
   const metrics = useExerciseMetrics();
-  const tintOfLeft = new Map(matches.map((match, index) => [match.pairId, PAIR_TINTS[index % 4]]));
-  const tintOfRight = new Map(
-    matches.map((match, index) => [match.matchedPairId, PAIR_TINTS[index % 4]]),
-  );
+  // Numéro (à partir de 1) de la paire où figure chaque carte.
+  const pairOfLeft = new Map(matches.map((match, index) => [match.pairId, index + 1]));
+  const pairOfRight = new Map(matches.map((match, index) => [match.matchedPairId, index + 1]));
+  const tintOf = (pair: number | undefined) =>
+    pair === undefined ? undefined : pairTints[(pair - 1) % pairTints.length];
+  const labelOf = (label: string, pair: number | undefined) =>
+    pair === undefined ? label : fr.lesson.pairLabel(label, pair);
 
   const chooseRight = (rightId: string) => {
-    if (!selectedLeft) {
+    // Une carte déjà reliée garde sa paire.
+    if (!selectedLeft || pairOfRight.has(rightId)) {
       return;
     }
     const nextMatches = [...matches, { pairId: selectedLeft, matchedPairId: rightId }];
@@ -73,10 +74,12 @@ export function MatchPairsExercise({
               label={pair.left}
               glyph={pair.left.length <= 6}
               glyphVariant={metrics.answerGlyph}
-              tint={tintOfLeft.get(pair.id) ?? SELECTING}
+              tint={tintOf(pairOfLeft.get(pair.id)) ?? SELECTING}
+              mark={pairOfLeft.get(pair.id)?.toString()}
+              accessibilityLabel={labelOf(pair.left, pairOfLeft.get(pair.id))}
               contentStyle={{ minHeight: metrics.answerHeight }}
               state={
-                tintOfLeft.has(pair.id) || selectedLeft === pair.id
+                pairOfLeft.has(pair.id) || selectedLeft === pair.id
                   ? 'selected'
                   : interactive
                     ? 'default'
@@ -86,6 +89,8 @@ export function MatchPairsExercise({
                 // A tap after a wrong attempt clears the board for a fresh try.
                 if (matches.length === step.pairs.length) {
                   setMatches([]);
+                } else if (pairOfLeft.has(pair.id)) {
+                  return;
                 }
                 setSelectedLeft(pair.id);
               }}
@@ -99,11 +104,13 @@ export function MatchPairsExercise({
               label={pair.right}
               glyph={pair.right.length <= 6}
               glyphVariant={metrics.answerGlyph}
-              tint={tintOfRight.get(pair.id)}
+              tint={tintOf(pairOfRight.get(pair.id))}
+              mark={pairOfRight.get(pair.id)?.toString()}
+              accessibilityLabel={labelOf(pair.right, pairOfRight.get(pair.id))}
               contentStyle={{ minHeight: metrics.answerHeight }}
               // Jamais grisée : la colonne de droite attend simplement qu'on ait
               // choisi à gauche (un appui avant ne fait rien).
-              state={tintOfRight.has(pair.id) ? 'selected' : interactive ? 'default' : 'disabled'}
+              state={pairOfRight.has(pair.id) ? 'selected' : interactive ? 'default' : 'disabled'}
               onPress={() => chooseRight(pair.id)}
             />
           ))}
@@ -114,8 +121,13 @@ export function MatchPairsExercise({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 820, alignSelf: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 820,
+    alignSelf: 'center',
+  },
   columns: { flexDirection: 'row' },
   column: { flex: 1 },
 });
-

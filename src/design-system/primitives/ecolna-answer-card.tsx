@@ -27,10 +27,20 @@ interface EcolnaAnswerCardProps {
    * couleur à gauche et à droite, pour qu'on voie ce qui va avec quoi.
    */
   tint?: { face: string; edge: string; border: string; ink: string } | undefined;
+  /**
+   * Repère posé dans le coin (le numéro d'une paire) : il double la teinte,
+   * pour qui ne distingue pas les couleurs.
+   */
+  mark?: string | undefined;
 }
 
 const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string; ink: string }> = {
-  default: { face: colors.card, edge: colors.cardEdge, border: colors.cardEdge, ink: colors.textPrimary },
+  default: {
+    face: colors.card,
+    edge: colors.cardEdge,
+    border: colors.cardEdge,
+    ink: colors.textPrimary,
+  },
   selected: {
     face: colors.secondaryFixed,
     edge: colors.secondaryFixedDim,
@@ -54,7 +64,7 @@ const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string
     face: colors.lockedContainer,
     edge: colors.lockedEdge,
     border: colors.lockedEdge,
-    ink: colors.locked,
+    ink: colors.textSecondary,
   },
 };
 
@@ -74,6 +84,7 @@ export function EcolnaAnswerCard({
   style,
   contentStyle,
   tint,
+  mark,
 }: EcolnaAnswerCardProps) {
   const { scale } = useResponsive();
   const look = state === 'selected' && tint ? tint : LOOK[state];
@@ -103,11 +114,7 @@ export function EcolnaAnswerCard({
     >
       {children ??
         (label !== undefined ? (
-          <EcolnaText
-            variant={glyph ? glyphVariant : 'headlineSm'}
-            align="center"
-            color={look.ink}
-          >
+          <EcolnaText variant={glyph ? glyphVariant : 'headlineSm'} align="center" color={look.ink}>
             {label}
           </EcolnaText>
         ) : null)}
@@ -130,6 +137,18 @@ export function EcolnaAnswerCard({
           />
         </View>
       ) : null}
+      {mark ? (
+        <View
+          style={[
+            styles.mark,
+            { minWidth: badge, height: badge, borderRadius: badge / 2, backgroundColor: look.ink },
+          ]}
+        >
+          <EcolnaText variant="labelLg" color={colors.onPrimary}>
+            {mark}
+          </EcolnaText>
+        </View>
+      ) : null}
     </EcolnaGalet>
   );
 }
@@ -140,6 +159,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
+  },
+  mark: {
+    position: 'absolute',
+    top: spacing.xs,
+    left: spacing.xs,
+    paddingHorizontal: spacing.xxs,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   badge: {
     position: 'absolute',

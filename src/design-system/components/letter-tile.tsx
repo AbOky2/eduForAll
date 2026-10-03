@@ -46,7 +46,7 @@ export function LetterTile({
     >
       <EcolnaText
         variant={variant}
-        color={disabled ? colors.locked : placed ? colors.onSecondaryContainer : colors.textPrimary}
+        color={disabled ? colors.textSecondary : placed ? colors.onSecondaryContainer : colors.textPrimary}
       >
         {label}
       </EcolnaText>

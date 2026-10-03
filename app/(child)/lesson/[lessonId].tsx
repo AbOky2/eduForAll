@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { createElement, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 
 import { resolveAudioSource } from '@/content/audio-registry.generated';
 import { asId } from '@/core/ids/ids';
@@ -105,6 +105,10 @@ function SessionBody({
     createLessonMachine(lesson, initialStepIndex),
   );
   const [quitVisible, setQuitVisible] = useState(false);
+  // Le corps défile seulement s'il ne tient pas : sinon un geste de tracé ou
+  // de glisser ne doit jamais être pris pour un défilement.
+  const [bodyHeight, setBodyHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
   const startedAtRef = useRef(new Date().toISOString());
   const completionHandled = useRef(false);
@@ -245,16 +249,19 @@ function SessionBody({
         </View>
       ) : null}
 
-      {/* Exercise body */}
-      <View
-        style={[
-          styles.body,
-          {
-            paddingHorizontal: screenPadding,
-            paddingBottom: scaled(spacing.lg, scale),
-            maxWidth: isTablet ? contentMaxWidth + screenPadding * 2 : undefined,
-          },
+      {/* Exercise body — centré quand il tient, défilable sinon (petite
+          fenêtre couchée) : un contenu centré trop haut déborderait sur la consigne. */}
+      <ScrollView
+        style={[styles.body, { maxWidth: isTablet ? contentMaxWidth + screenPadding * 2 : undefined }]}
+        contentContainerStyle={[
+          styles.bodyContent,
+          { paddingHorizontal: screenPadding, paddingBottom: scaled(spacing.lg, scale) },
         ]}
+        scrollEnabled={contentHeight > bodyHeight + 1}
+        onLayout={(event) => setBodyHeight(event.nativeEvent.layout.height)}
+        onContentSizeChange={(_, height) => setContentHeight(height)}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
         {step && renderer ? (
           // key remounts the renderer per step: fresh local state, no reset effects.
@@ -281,7 +288,7 @@ function SessionBody({
             />
           </View>
         ) : null}
-      </View>
+      </ScrollView>
 
       {/* Feedback */}
       {state.phase === 'showing_feedback' && state.lastFeedback ? (
@@ -365,7 +372,8 @@ const styles = StyleSheet.create({
   progressWrap: { flex: 1 },
   instruction: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.xs },
   instructionText: { flex: 1 },
-  body: { flex: 1, width: '100%', alignSelf: 'center', paddingTop: spacing.sm },
+  body: { flex: 1, width: '100%', alignSelf: 'center' },
+  bodyContent: { flexGrow: 1, paddingTop: spacing.sm },
   missing: {
     flex: 1,
     alignItems: 'center',
@@ -383,7 +391,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.scrim,
     alignItems: 'center',
   },
-  overlayBottom: { justifyContent: 'flex-end' },
+  // Au-dessus des cartes de l'exercice, qui portent une élévation Android.
+  overlayBottom: { justifyContent: 'flex-end', zIndex: 20, elevation: 20 },
   overlayCenter: { justifyContent: 'center', flex: 1, position: 'relative' },
   sheetCard: { gap: spacing.md, width: '100%' },
   hintHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },

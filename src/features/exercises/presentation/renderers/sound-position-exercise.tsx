@@ -102,14 +102,21 @@ export function SoundPositionExercise({
               onSubmit({ kind: 'value', value: position });
             }}
             style={!isTablet ? styles.optionCard : undefined}
-            contentStyle={[styles.optionFace, { minHeight: metrics.answerHeight, gap: scaled(spacing.xs, scale) }]}
+            contentStyle={[
+              styles.optionFace,
+              { minHeight: metrics.answerHeight, gap: scaled(spacing.xs, scale) },
+            ]}
           >
             <PositionBars
               lit={index}
               width={scaled(isTablet ? 40 : 26, scale)}
               color={state === 'disabled' ? colors.locked : colors.secondary}
             />
-            <EcolnaText variant="headlineSm" align="center" color={state === 'disabled' ? colors.locked : colors.textPrimary}>
+            <EcolnaText
+              variant="headlineSm"
+              align="center"
+              color={state === 'disabled' ? colors.textSecondary : colors.textPrimary}
+            >
               {fr.lesson.soundPositions[position]}
             </EcolnaText>
           </EcolnaAnswerCard>

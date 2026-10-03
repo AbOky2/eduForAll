@@ -10,6 +10,7 @@ import {
   EcolnaText,
   useExerciseMetrics,
 } from '@/design-system/primitives';
+import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -44,13 +45,19 @@ export function TapValueExercise({
         style={[styles.stage, { minHeight: metrics.listenSize * 1.8, gap: metrics.gap }]}
       >
         {step.type === 'fill_missing_letter' ? (
-          <EcolnaText variant="displayGlyph" align="center" accessibilityLabel="Mot à compléter">
+          <EcolnaText
+            variant="displayGlyph"
+            align="center"
+            accessibilityLabel={fr.lesson.maskedWord}
+          >
             {step.maskedWord.replace('_', ' _ ')}
           </EcolnaText>
         ) : null}
         {audioId ? (
           <EcolnaAudioButton
-            size={step.type === 'fill_missing_letter' ? metrics.listenSize * 0.6 : metrics.listenSize}
+            size={
+              step.type === 'fill_missing_letter' ? metrics.listenSize * 0.6 : metrics.listenSize
+            }
             variant={step.type === 'fill_missing_letter' ? 'sky' : 'sand'}
             playing={playingAudioId === audioId}
             onPress={() => playAudio(audioId)}

@@ -54,8 +54,12 @@ function WelcomeStars({ size }: { size: number }) {
                 transform: reducedMotion
                   ? [{ translateX: x }, { translateY: y }]
                   : [
-                      { translateX: burst.interpolate({ inputRange: [0, 1], outputRange: [0, x] }) },
-                      { translateY: burst.interpolate({ inputRange: [0, 1], outputRange: [0, y] }) },
+                      {
+                        translateX: burst.interpolate({ inputRange: [0, 1], outputRange: [0, x] }),
+                      },
+                      {
+                        translateY: burst.interpolate({ inputRange: [0, 1], outputRange: [0, y] }),
+                      },
                       { scale: burst.interpolate({ inputRange: [0, 1], outputRange: [0.3, 1] }) },
                     ],
               },
@@ -73,7 +77,15 @@ function WelcomeStars({ size }: { size: number }) {
  * Le personnage saute quand on le choisit : 0,85 → 1 en ~300 ms (instantané
  * en mouvement réduit). Remonté par `key` à chaque nouveau choix.
  */
-function Character({ avatarId, size, joy }: { avatarId: string | null; size: number; joy: boolean }) {
+function Character({
+  avatarId,
+  size,
+  joy,
+}: {
+  avatarId: string | null;
+  size: number;
+  joy: boolean;
+}) {
   const reducedMotion = useReducedMotion();
   const [grow] = useState(() => new Animated.Value(reducedMotion || !avatarId ? 1 : 0.85));
   useEffect(() => {
@@ -84,9 +96,7 @@ function Character({ avatarId, size, joy }: { avatarId: string | null; size: num
     Animated.spring(grow, { toValue: 1, useNativeDriver: true, speed: 16, bounciness: 12 }).start();
   }, [avatarId, grow, reducedMotion]);
   return (
-    <Animated.View
-      style={[styles.ring, { borderRadius: size, transform: [{ scale: grow }] }]}
-    >
+    <Animated.View style={[styles.ring, { borderRadius: size, transform: [{ scale: grow }] }]}>
       {avatarId ? (
         <EcolnaAvatar avatarId={avatarId} size={size} expression={joy ? 'joy' : 'calm'} />
       ) : (
@@ -140,7 +150,7 @@ export function ProfileStage({
             <View style={[styles.face, { borderRadius: radius.md, minHeight: nameSize * 2.1 }]}>
               {name ? (
                 <>
-                  <EcolnaText variant="labelMd" color={chalkDim} align="center">
+                  <EcolnaText variant="labelMd" color={chalk} align="center">
                     {fr.profile.slateIntro}
                   </EcolnaText>
                   <EcolnaText
@@ -156,7 +166,11 @@ export function ProfileStage({
                     }}
                   >
                     <EcolnaText
-                      style={{ fontFamily: fontFamilies.bold, fontSize: nameSize, color: illustration.metal.gold.base }}
+                      style={{
+                        fontFamily: fontFamilies.bold,
+                        fontSize: nameSize,
+                        color: illustration.metal.gold.base,
+                      }}
                     >
                       {name.charAt(0)}
                     </EcolnaText>
