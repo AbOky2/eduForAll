@@ -97,7 +97,6 @@ export const PORTRAIT_FABRICS = {
   leaf: { base: '#2fbf71', shade: '#21a05d', light: '#d3f5e2' },
   teal: { base: '#12a3a0', shade: '#0c8582', light: '#c9f1ef' },
   navy: { base: '#1f2a5c', shade: '#151d45', light: '#d7dcf2' },
-  gingham: { base: '#fff3ec', shade: '#f2643f', light: '#fbf7f0' },
 } as const;
 export type PortraitFabric = keyof typeof PORTRAIT_FABRICS;
 
@@ -134,9 +133,6 @@ const BUSTS = {
   scoop: 'M-4 124C-4 105 16 95 45 93C49 102 71 102 75 93C104 95 124 105 124 124Z',
 } as const;
 type NeckKind = keyof typeof NECKS;
-
-/** Silhouette neutre (avant tout choix) : tête, oreilles, cou, buste. */
-export const PORTRAIT_SILHOUETTE_D = `${HEAD_D}${EARS_D}${NECKS.crew}${BUSTS.crew}`;
 
 /**
  * Un bord festonné le long d'un arc d'ellipse (angles en degrés, y vers le
@@ -579,10 +575,12 @@ export const PORTRAIT_GARMENTS: Record<PortraitGarment, GarmentSpec> = {
     ),
   },
   'school-dress': { fabric: 'sky', neck: 'crew' },
+  // Une marinière inversée : fond marine, rayures crème. Posé sur la toile
+  // claire, un vêtement de teinte moyenne garde le bord bas du disque.
   'striped-tshirt': {
-    fabric: 'cream',
+    fabric: 'navy',
     neck: 'crew',
-    detail: () => <Path d="M-4 105H124V110H-4ZM-4 115.5H124V120.5H-4Z" fill={FAB.navy.base} />,
+    detail: () => <Path d="M-4 105H124V110H-4ZM-4 115.5H124V120.5H-4Z" fill={FAB.cream.base} />,
   },
   'embroidered-dress': {
     fabric: 'rose',
@@ -596,16 +594,17 @@ export const PORTRAIT_GARMENTS: Record<PortraitGarment, GarmentSpec> = {
       ) : null,
   },
   'checked-shirt': {
-    fabric: 'gingham',
+    fabric: 'sky',
     neck: 'vee',
-    // Un vrai vichy : deux jeux de bandes corail à 40 % — les croisements foncent.
+    // Un vichy bleu : deux jeux de bandes blanches à 35 % sur le bleu — les
+    // croisements s'éclaircissent. Teinte moyenne : le bord du disque tient.
     detail: () => (
       <>
-        <Path d="M-4 99H124V103.5H-4ZM-4 108H124V112.5H-4ZM-4 117H124V121.5H-4Z" fill={FAB.terracotta.base} opacity={0.4} />
+        <Path d="M-4 99H124V103.5H-4ZM-4 108H124V112.5H-4ZM-4 117H124V121.5H-4Z" fill={WHITE} opacity={0.35} />
         <Path
           d="M25 90H29.5V124H25ZM34 90H38.5V124H34ZM43 90H47.5V124H43ZM72.5 90H77V124H72.5ZM81.5 90H86V124H81.5ZM90.5 90H95V124H90.5Z"
-          fill={FAB.terracotta.base}
-          opacity={0.4}
+          fill={WHITE}
+          opacity={0.35}
         />
         <Path d={COLLAR_D} fill={FAB.cream.base} />
       </>

@@ -5,7 +5,7 @@ import { colors, shadows } from '../tokens';
 import { scaled, useResponsive } from '../responsive';
 import { EcolnaGalet } from './ecolna-galet';
 
-type IconButtonTone = 'white' | 'sun' | 'petrol' | 'quiet';
+type IconButtonTone = 'white' | 'sun' | 'petrol' | 'quiet' | 'glass';
 
 interface EcolnaIconButtonProps {
   icon: IconName;
@@ -28,6 +28,9 @@ const TONES: Record<IconButtonTone, { face: string; ink: string; border?: string
   petrol: { face: colors.brand, ink: colors.white },
   // Sur une surface déjà claire : un disque neutre, sans ombre.
   quiet: { face: colors.fill, ink: colors.ink },
+  // Sur la nuit (célébration) : un disque de verre au pictogramme blanc, qui
+  // ne rivalise ni avec le soleil ni avec l'enfant.
+  glass: { face: colors.onColorGlass, ink: colors.white },
 };
 
 /**

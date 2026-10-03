@@ -9,10 +9,12 @@ import {
   View,
 } from 'react-native';
 
+import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, fontFamilies, radius, spacing } from '@/design-system/tokens';
+import { typography } from '@/design-system/tokens/typography';
 import { fr } from '@/localization/fr/strings';
 import { useKeyboardVisible } from '@/shared/hooks/use-keyboard-visible';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
@@ -50,6 +52,7 @@ export default function ParentGateScreen() {
   const [attempt, setAttempt] = useState(0);
   const [wrong, setWrong] = useState(false);
   const [saisie, setSaisie] = useState('');
+  const [focused, setFocused] = useState(false);
   const { scale, screenPadding } = useResponsive();
   const keyboard = useKeyboardVisible();
   const challenge = useMemo(() => CHALLENGES[attempt % CHALLENGES.length]!, [attempt]);
@@ -70,8 +73,16 @@ export default function ParentGateScreen() {
     setAttempt((current) => current + 1);
   };
 
+  // Le texte indicatif est une invitation, en romain gris ; la réponse saisie
+  // est une valeur, en gras et grande. Les confondre, c'est croire le champ
+  // déjà rempli.
+  const typing = saisie.length > 0;
+  const inputType = typing ? typography.headlineLg : typography.bodyLg;
+
   return (
     <EcolnaScreen background="plain">
+      {/* Retour : le bouton de toujours, en haut à gauche, comme partout ailleurs. */}
+      <EcolnaScreenHeader onBack={goBack} />
       {/* Le clavier numérique ne doit jamais couvrir le champ ni « Entrer » :
           la page remonte (iOS), défile (partout), et l'écusson s'efface. */}
       <KeyboardAvoidingView
@@ -119,6 +130,8 @@ export default function ParentGateScreen() {
                 setWrong(false);
               }}
               onSubmitEditing={valider}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
               placeholder={fr.parent.gatePlaceholder}
               placeholderTextColor={colors.inkTertiary}
               keyboardType="number-pad"
@@ -126,8 +139,12 @@ export default function ParentGateScreen() {
               maxLength={4}
               style={[
                 styles.input,
-                { minHeight: scaled(60, scale), fontSize: scaled(26, Math.min(scale, 1.15)) },
-                wrong && styles.inputWrong,
+                {
+                  minHeight: scaled(60, scale),
+                  fontFamily: typing ? fontFamilies.bold : fontFamilies.regular,
+                  fontSize: scaled(inputType.fontSize, scale),
+                },
+                (focused || wrong) && styles.inputFocused,
               ]}
             />
             {wrong ? (
@@ -141,8 +158,6 @@ export default function ParentGateScreen() {
               onPress={valider}
             />
           </EcolnaCard>
-
-          <EcolnaButton label={fr.common.back} variant="ghost" onPress={goBack} />
         </ScrollView>
       </KeyboardAvoidingView>
     </EcolnaScreen>
@@ -160,15 +175,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: { width: '100%', maxWidth: 480 },
+  // Au repos, un puits sans filet ; au focus (ou après une erreur), le filet bleu de 2 dp.
   input: {
     borderRadius: radius.lg,
     borderWidth: 2,
-    borderColor: colors.border,
-    backgroundColor: colors.surfaceContainerLow,
+    borderColor: colors.fill,
+    backgroundColor: colors.fill,
     textAlign: 'center',
-    fontFamily: fontFamilies.bold,
     color: colors.textPrimary,
     paddingHorizontal: spacing.md,
+    // Le filet bleu dit le focus ; aucun contour de navigateur par-dessus.
+    outlineWidth: 0,
   },
-  inputWrong: { borderColor: colors.brand },
+  inputFocused: { borderColor: colors.brand, backgroundColor: colors.white },
 });

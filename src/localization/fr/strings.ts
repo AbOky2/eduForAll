@@ -43,7 +43,8 @@ export const fr = {
     /** Le mot du titre mis en couleur (il doit figurer dans `welcomeTitle`). */
     welcomeTitleHighlight: 't’accompagne',
     subjectsTitle: 'Langage, lecture, écriture et calcul.',
-    subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
+    // Espace insécable : « t’amusant. » ne part jamais seul à la ligne.
+    subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
     offlineTitle: 'Tout marche sans internet.',
     offlineSubtitle: 'Apprends partout, tout le temps.',
     createProfile: 'Créer mon profil',
@@ -119,6 +120,8 @@ export const fr = {
       `${steps} activité${steps > 1 ? 's' : ''} · ${minutes} min`,
     reviseTitle: 'On revoit ensemble ?',
     reviseCount: (count: number) => (count > 1 ? `${count} notions à revoir` : '1 notion à revoir'),
+    /** La pilule de la carte « On revoit ensemble ? ». */
+    reviseAction: 'Revoir',
   },
   subjects: {
     language: 'Langage',
@@ -139,6 +142,8 @@ export const fr = {
     cp2Motto: 'En route vers l’oasis des savoirs !',
     locked: 'Encore un peu de patience !',
     lockedHint: 'Termine d’abord le monde précédent.',
+    /** Un appui sur une leçon à venir du volet : la pilule du jour se balance. */
+    lessonLockedHint: 'Commence d’abord la leçon du jour.',
     /** Le second volet du parcours, couché. */
     worldLessons: 'LES LEÇONS DE CE MONDE',
     /** Ce que fait un appui sur une porte ou un monde fermé. */
@@ -172,6 +177,8 @@ export const fr = {
     nudgeVerify: 'Tout est posé : touche « Vérifier ».',
     /** Une carte reliée, lue par le lecteur d'écran : « ba, paire 1 ». */
     pairLabel: (label: string, pair: number) => `${label}, paire ${pair}`,
+    /** Une carte d'une paire fausse, pendant « à revoir » : « lune, à revoir ». */
+    pairToReview: (label: string) => `${label}, à revoir`,
     soundPositions: { debut: 'au début', milieu: 'au milieu', fin: 'à la fin' },
     maskedWord: 'Mot à compléter',
     feedbackCorrect: ['Bien joué !', 'Bravo !', 'Oui, c’est ça !', 'Super !', 'Exactement !'],
@@ -199,7 +206,8 @@ export const fr = {
     lessonDone: 'Tu as terminé la leçon.',
     perfect: 'Trois étoiles ! C’est parfait.',
     oneMoreStar: 'Tu peux rejouer pour gagner plus d’étoiles.',
-    needsReview: 'On reverra certaines notions ensemble, tout va bien.',
+    // Espaces insécables : « tout va bien. » reste d'un seul tenant.
+    needsReview: 'On reverra certaines notions ensemble, tout\u00a0va\u00a0bien.',
     nextLesson: 'Leçon suivante',
     backHome: 'Retour à l’accueil',
   },
@@ -270,11 +278,9 @@ export const fr = {
     empty: 'Rien à revoir pour l’instant. Continue comme ça !',
   },
   offline: {
-    badge: 'Tout marche sans internet',
-    /** La puce de l'accueil : une promesse, pas une alerte. */
-    chip: 'Sans internet',
-    title: 'Tout est déjà dans ta tablette.',
-    subtitle: 'Tes leçons, les sons et les images marchent partout.',
+    // Espaces insécables : ni « ta » en fin de ligne, ni « partout. » seul.
+    title: 'Tout est déjà dans ta tablette.',
+    subtitle: 'Tes leçons, les sons et les images marchent partout.',
   },
   parent: {
     gateTitle: 'Espace parents',
@@ -298,8 +304,17 @@ export const fr = {
     recommendation: 'RECOMMANDATION',
     toReview: 'Notions à revoir',
     nothingToReview: 'Aucune notion en difficulté cette semaine.',
-    proudTitle: 'Envie de partager ses progrès ?',
+    /** La semaine en cours : sept colonnes, du lundi au dimanche. */
+    weekTitle: 'Cette semaine',
+    weekTotal: (count: number) => `${count} min au total`,
+    weekDaysShort: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
+    /** Ce que lit le lecteur d'écran pour chaque colonne. */
+    weekDays: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
+    weekDayLabel: (day: string, count: number) => `${day}\u00a0: ${count} min`,
     share: 'Partager',
+    /** Le résumé que le parent partage (feuille de partage du système, rien n'est envoyé par l'app). */
+    shareMessage: (firstName: string, done: number, total: number, level: string) =>
+      `${firstName} apprend avec ECOLNA\u00a0!\nLeçons terminées\u00a0: ${done}/${total} (${level}).\nApprendre partout, même sans internet.`,
     switchProfile: 'Changer de profil',
   },
   settings: {

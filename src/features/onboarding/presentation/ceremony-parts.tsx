@@ -1,12 +1,27 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type TextStyle } from 'react-native';
 
 import type { LevelId } from '@/content/schemas/curriculum-schema';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { ClassLevelArt } from '@/design-system/illustrations/school-art';
 import { EcolnaGalet, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, radius, shadows, spacing } from '@/design-system/tokens';
+import { colors, fontFamilies, radius, shadows, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
+
+/**
+ * Le grand titre de l'entrée à l'école (onboarding, bienvenue) : ≈ 1,4 ×
+ * `displayHero` sur tablette (62 dp sur une grande tablette), serré ;
+ * `displayHero` au téléphone.
+ */
+export function heroTitleStyle(isTablet: boolean, scale: number): TextStyle {
+  const base = isTablet ? 48 : 34;
+  return {
+    fontFamily: fontFamilies.extraBold,
+    fontSize: scaled(base, scale),
+    lineHeight: scaled(Math.round(base * 1.1), scale),
+    letterSpacing: -(isTablet ? 1.1 : 0.7) * scale,
+  };
+}
 
 /** Trois points de 10 dp, l'actif en pilule de 28 × 10 ; « Étape 2 sur 3 ». */
 export function StepDots({ step, total }: { step: number; total: number }) {

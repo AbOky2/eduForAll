@@ -10,14 +10,11 @@
  * disque par le haut ; le buste reste découpé par le bas.
  */
 import { memo, useId } from 'react';
-import Svg, { Circle, ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
-
-import { colors } from '@/design-system/tokens';
+import Svg, { Circle, ClipPath, Defs, G, Rect } from 'react-native-svg';
 
 import { avatarArt } from './avatar-cast';
 import {
   PORTRAIT_BACKDROPS,
-  PORTRAIT_SILHOUETTE_D,
   PortraitArt,
   PortraitHead,
   type PortraitExpression,
@@ -107,28 +104,3 @@ function AvatarHeadArtImpl({
 }
 
 export const AvatarHeadArt = memo(AvatarHeadArtImpl);
-
-/**
- * La place vide du profil, avant tout choix : une forme de tête et d'épaules
- * douce, jamais un « ? ».
- */
-function AvatarSilhouetteImpl({ size }: { size: number }) {
-  const clipId = useClipId('silhouette');
-  return (
-    <Svg width={size} height={size} viewBox="0 0 120 120">
-      <Defs>
-        <ClipPath id={clipId}>
-          <Circle cx={60} cy={60} r={60} />
-        </ClipPath>
-      </Defs>
-      <G clipPath={`url(#${clipId})`}>
-        <Circle cx={60} cy={60} r={60} fill={colors.fill} />
-        <G transform="translate(60 66) scale(1.06) translate(-60 -66)">
-          <Path d={PORTRAIT_SILHOUETTE_D} fill={colors.fillStrong} />
-        </G>
-      </G>
-    </Svg>
-  );
-}
-
-export const AvatarSilhouette = memo(AvatarSilhouetteImpl);

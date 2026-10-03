@@ -14,12 +14,18 @@ interface EcolnaStatCardProps {
   tint: string;
   /** Complément sous la valeur — barre de progression, sous-titre. */
   children?: ReactNode;
+  /**
+   * Sans complément, la hauteur (dp, déjà mise à l'échelle) qu'il occuperait :
+   * les cartes d'une même grille gardent toutes la même hauteur, qu'une seule
+   * porte une barre ou non.
+   */
+  footerReserve?: number | undefined;
   style?: StyleProp<ViewStyle>;
 }
 
 /**
- * Un chiffre de l'espace parent : un glyphe du palier S dans un disque teinté,
- * l'intitulé, la valeur. Sobre — l'adulte lit, il ne joue pas.
+ * Un chiffre de l'espace parent : un glyphe dans un disque teinté, l'intitulé,
+ * la valeur. Sobre — l'adulte lit, il ne joue pas.
  */
 export function EcolnaStatCard({
   icon,
@@ -28,6 +34,7 @@ export function EcolnaStatCard({
   container,
   tint,
   children,
+  footerReserve,
   style,
 }: EcolnaStatCardProps) {
   const { scale } = useResponsive();
@@ -35,14 +42,14 @@ export function EcolnaStatCard({
   return (
     <EcolnaCard style={[styles.card, style]} accessibilityLabel={`${label} : ${value}`}>
       <View style={[styles.disc, { width: disc, height: disc, backgroundColor: container }]}>
-        <EcolnaIcon name={icon} size={24} color={tint} />
+        <EcolnaIcon name={icon} size={scaled(24, scale)} color={tint} />
       </View>
       <View style={styles.text}>
         <EcolnaText variant="labelMd" color={colors.textSecondary}>
           {label}
         </EcolnaText>
         <EcolnaText variant="headlineLg">{value}</EcolnaText>
-        {children}
+        {children ?? (footerReserve ? <View style={{ height: footerReserve }} /> : null)}
       </View>
     </EcolnaCard>
   );

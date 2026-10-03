@@ -14,7 +14,7 @@ appId: td.ecolna.app.dev
 # Les badges sont tous listés, gagnés ou non — jamais de boîte mystère
 - assertVisible: 'Tes badges'
 - assertVisible: 'Premiers pas'
-- assertVisible: 'Roi du calcul'
+- assertVisible: 'As du calcul'
 
 # Changer d'avatar est un geste d'enfant : un appui, pas de confirmation
 # Libellé complet : « Avatar 3 : garçon en jalabiya verte ».

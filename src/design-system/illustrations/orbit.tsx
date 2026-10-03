@@ -1,5 +1,5 @@
-import { memo, type ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { memo, useState, type ReactNode } from 'react';
+import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 import { EcolnaIcon, type IconName } from '../icons/ecolna-icon';
@@ -34,6 +34,87 @@ interface OrbitProps {
   ringColor?: string;
   /** Rayon du cercle intérieur, en part du rayon extérieur (défaut 0,66). */
   inner?: number;
+  /**
+   * Diamètre du sujet central (dp). L'anneau intérieur s'en écarte : ses
+   * satellites ne mordent jamais le sujet. Absent, le sujet est mesuré au
+   * premier rendu (les satellites attendent la mesure pour paraître).
+   */
+  centerSize?: number;
+}
+
+/** L'air minimal entre le sujet central et un satellite de l'anneau intérieur (dp). */
+export const ORBIT_CENTER_CLEARANCE = 8;
+
+/**
+ * Les rayons des deux cercles. L'anneau intérieur vaut `inner` × l'extérieur,
+ * mais jamais moins que le rayon du sujet + le demi-satellite + 8 dp : un
+ * satellite posé dessus ne touche pas le sujet. Il ne dépasse pas l'anneau
+ * extérieur.
+ */
+export function orbitRadii({
+  size,
+  satellites,
+  inner,
+  centerSize,
+}: {
+  size: number;
+  satellites: readonly Pick<OrbitSatellite, 'size' | 'ring'>[];
+  inner: number;
+  centerSize: number;
+}): readonly [number, number] {
+  // Les satellites restent dans le carré, quel que soit leur angle.
+  const margin = Math.max(0, ...satellites.map((satellite) => satellite.size)) / 2 + 2;
+  const outerR = size / 2 - margin;
+  const innerSatellite = Math.max(
+    0,
+    ...satellites.filter((satellite) => satellite.ring === 0).map((satellite) => satellite.size),
+  );
+  const clearance =
+    innerSatellite > 0 ? centerSize / 2 + innerSatellite / 2 + ORBIT_CENTER_CLEARANCE : 0;
+  return [Math.min(outerR, Math.max(outerR * inner, clearance)), outerR] as const;
+}
+
+/**
+ * L'air entre chaque bord du carré de l'orbite et ce qui y est peint
+ * (satellites, sujet, cercle extérieur). Une mise en page s'en sert pour poser
+ * le bord VISIBLE de l'image sur la gouttière, ou pour la centrer à l'œil.
+ */
+export function orbitInsets({
+  size,
+  satellites,
+  inner = 0.66,
+  centerSize,
+}: {
+  size: number;
+  satellites: readonly Pick<OrbitSatellite, 'size' | 'ring' | 'angle'>[];
+  inner?: number;
+  centerSize: number;
+}): { left: number; right: number; top: number; bottom: number } {
+  const radii = orbitRadii({ size, satellites, inner, centerSize });
+  const half = size / 2;
+  // Jusqu'où l'image s'étend depuis son centre, de chaque côté : d'abord le
+  // sujet et le cercle extérieur, puis chaque satellite.
+  const disc = Math.max(centerSize / 2, radii[1]);
+  let reach = { left: disc, right: disc, top: disc, bottom: disc };
+  for (const satellite of satellites) {
+    const radian = (satellite.angle * Math.PI) / 180;
+    const r = radii[satellite.ring];
+    const x = r * Math.cos(radian);
+    const y = r * Math.sin(radian);
+    const s = satellite.size / 2;
+    reach = {
+      left: Math.max(reach.left, s - x),
+      right: Math.max(reach.right, x + s),
+      top: Math.max(reach.top, s - y),
+      bottom: Math.max(reach.bottom, y + s),
+    };
+  }
+  return {
+    left: Math.max(0, half - reach.left),
+    right: Math.max(0, half - reach.right),
+    top: Math.max(0, half - reach.top),
+    bottom: Math.max(0, half - reach.bottom),
+  };
 }
 
 export const Orbit = memo(function Orbit({
@@ -42,18 +123,29 @@ export const Orbit = memo(function Orbit({
   satellites = [],
   ringColor = colors.fillStrong,
   inner = 0.66,
+  centerSize,
 }: OrbitProps) {
-  // Les satellites restent dans le carré, quel que soit leur angle.
-  const margin = Math.max(0, ...satellites.map((satellite) => satellite.size)) / 2 + 2;
-  const outerR = size / 2 - margin;
-  const radii = [outerR * inner, outerR] as const;
+  const [measured, setMeasured] = useState(0);
+  const onCenterLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+    const next = Math.round(Math.max(width, height));
+    if (next !== measured) {
+      setMeasured(next);
+    }
+  };
+  const subject = centerSize ?? measured;
+  // Sans diamètre donné, rien n'est posé sur l'anneau intérieur avant la mesure.
+  const ready = centerSize !== undefined || measured > 0 || !satellites.some((satellite) => satellite.ring === 0);
+  const radii = orbitRadii({ size, satellites, inner, centerSize: subject });
   return (
     <View style={{ width: size, height: size }} aria-hidden importantForAccessibility="no-hide-descendants">
       <Svg width={size} height={size} style={StyleSheet.absoluteFill}>
         <Circle cx={size / 2} cy={size / 2} r={radii[1]} stroke={ringColor} strokeWidth={1.5} fill="none" />
         <Circle cx={size / 2} cy={size / 2} r={radii[0]} stroke={ringColor} strokeWidth={1.5} fill="none" />
       </Svg>
-      <View style={[StyleSheet.absoluteFill, styles.center]}>{center}</View>
+      <View style={[StyleSheet.absoluteFill, styles.center]}>
+        {centerSize === undefined ? <View onLayout={onCenterLayout}>{center}</View> : center}
+      </View>
       {satellites.map((satellite, index) => {
         const radian = (satellite.angle * Math.PI) / 180;
         const r = radii[satellite.ring];
@@ -64,6 +156,7 @@ export const Orbit = memo(function Orbit({
               position: 'absolute',
               left: size / 2 + r * Math.cos(radian) - satellite.size / 2,
               top: size / 2 + r * Math.sin(radian) - satellite.size / 2,
+              opacity: ready ? 1 : 0,
             }}
           >
             {satellite.node}

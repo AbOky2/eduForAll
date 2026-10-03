@@ -23,16 +23,20 @@ const LABELS: Record<Subject, string> = {
 };
 
 /**
- * « Choisis ton module » (direction v3). Quatre portes, une par discipline
- * du programme : côte à côte en paysage, deux par deux en portrait, une par
+ * « Que veux-tu apprendre ? » Quatre portes, une par discipline du
+ * programme : côte à côte en paysage, deux par deux en portrait, une par
  * ligne au téléphone. Une porte encore fermée répond quand on la touche.
+ *
+ * Même rythme que l'accueil : ancré en haut, à la même marge, et les portes
+ * prennent la hauteur qui reste jusqu'à la barre d'onglets.
  */
 export default function ModuleSelectionScreen() {
   const router = useRouter();
   const { splitPanes, isTablet, scale, screenPadding, height } = useResponsive();
   // Une tablette 7" couchée n'a que 600 dp : l'objet rapetisse avant que les
   // portes ne passent sous la barre d'onglets.
-  const portalArt = splitPanes ? (height < 720 ? 64 : 96) : 96;
+  const short = height < 700;
+  const portalArt = height >= 780 ? 120 : splitPanes && height < 720 ? 64 : 96;
   const profile = useActiveProfile((state) => state.profile);
   const [explained, setExplained] = useState<Subject | null>(null);
   const subjects: SubjectProgress[] =
@@ -41,7 +45,9 @@ export default function ModuleSelectionScreen() {
       profile?.id ?? null,
     ) ?? [];
 
-  const gap = scaled(isTablet ? spacing.lg : spacing.md, scale);
+  const gap = scaled(isTablet && !short ? spacing.lg : spacing.md, scale);
+  // Le même écart que l'accueil entre le titre et ce qui suit.
+  const sectionGap = scaled(isTablet && !short ? spacing.xl : short ? spacing.md : spacing.lg, scale);
   const columns = splitPanes ? 4 : isTablet ? 2 : 1;
   const rows: SubjectProgress[][] = [];
   for (let start = 0; start < subjects.length; start += columns) {
@@ -55,9 +61,10 @@ export default function ModuleSelectionScreen() {
           styles.grow,
           {
             paddingHorizontal: screenPadding,
-            gap,
-            paddingTop: scaled(spacing.lg, scale),
-            paddingBottom: splitPanes ? scaled(spacing.lg, scale) : spacing.xxl,
+            gap: sectionGap,
+            paddingTop: scaled(short ? spacing.sm : spacing.md, scale),
+            // L'ombre des portes s'éteint avant le bord : jamais tranchée net.
+            paddingBottom: isTablet ? scaled(spacing.xl, scale) : spacing.xxl,
           },
         ]}
         showsVerticalScrollIndicator={false}
@@ -71,10 +78,10 @@ export default function ModuleSelectionScreen() {
           </EcolnaText>
         </View>
 
-        {/* Les portes gardent leur hauteur naturelle et se centrent sous le titre. */}
-        <View style={[styles.fill, { gap }]}>
+        {/* Les portes partent du titre et prennent la hauteur qui reste. */}
+        <View style={[columns > 1 && styles.grow, { gap }]}>
           {rows.map((row, index) => (
-            <View key={index} style={[styles.row, { gap }, columns > 1 && styles.rowStretch]}>
+            <View key={index} style={[{ gap }, columns > 1 && styles.rowStretch]}>
               {row.map((subject) => (
                 <SubjectPortal
                   key={subject.subject}
@@ -110,8 +117,6 @@ export default function ModuleSelectionScreen() {
 
 const styles = StyleSheet.create({
   titles: { gap: spacing.xxs },
-  row: {},
   grow: { flexGrow: 1 },
-  fill: { flexGrow: 1, justifyContent: 'center' },
-  rowStretch: { flexDirection: 'row', alignItems: 'stretch' },
+  rowStretch: { flexGrow: 1, flexDirection: 'row', alignItems: 'stretch' },
 });

@@ -18,6 +18,8 @@ interface EcolnaScreenHeaderProps {
   titleColor?: string | undefined;
   /** Titre aligné à gauche, contre le bouton retour (espace parent). */
   alignTitle?: 'center' | 'left';
+  /** Posé entre le bouton retour et le titre (l'avatar de l'enfant, espace parent). */
+  leading?: ReactNode;
 }
 
 /**
@@ -33,12 +35,14 @@ export function EcolnaScreenHeader({
   right,
   titleColor = colors.textPrimary,
   alignTitle = 'center',
+  leading,
 }: EcolnaScreenHeaderProps) {
   const { screenPadding, scale } = useResponsive();
   const slot = Math.max(a11y.minTouchTarget, scaled(52, scale));
   return (
     <View style={[styles.header, { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) }]}>
       <EcolnaIconButton icon="arrow-back" accessibilityLabel={fr.common.back} onPress={onBack} />
+      {leading}
       <View style={[styles.titles, alignTitle === 'left' && styles.titlesLeft]}>
         {title ? (
           <EcolnaText variant={titleVariant} color={titleColor} align={alignTitle}>
@@ -51,7 +55,9 @@ export function EcolnaScreenHeader({
           </EcolnaText>
         ) : null}
       </View>
-      <View style={[styles.slot, { minWidth: alignTitle === 'center' ? slot : 0 }]}>{right}</View>
+      <View style={[styles.slot, { minWidth: alignTitle === 'center' ? slot : 0, gap: scaled(spacing.sm, scale) }]}>
+        {right}
+      </View>
     </View>
   );
 }
@@ -60,5 +66,6 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   titles: { flex: 1, alignItems: 'center' },
   titlesLeft: { alignItems: 'flex-start' },
-  slot: { alignItems: 'flex-end', justifyContent: 'center' },
+  // Plusieurs actions à droite (partager, paramètres) : côte à côte.
+  slot: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' },
 });

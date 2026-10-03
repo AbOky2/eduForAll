@@ -183,3 +183,13 @@ en est la référence.
   paysage — portraits redessinés, médailles plates, compositions « orbite ».
 - Retirés : scènes et décors v3, glyphes M/S, jeton `depth`, polices
   Quicksand et Plus Jakarta Sans.
+- **Trois rondes de critique indépendante** (direction artistique, enfant et
+  pédagogie, finition adaptative) sur les captures réelles de l'app, notes
+  de 6/5,5/6,5 à 7/7/7,5 ; chaque constat partagé a été corrigé. Ronde 3 :
+  rien ne déborde de sa carte (image mesurée), cartes-nombres aux
+  proportions d'une carte, verdict par paire dans « relier », ardoise à la
+  craie avec la bille qui montre le sens du geste, invitation à la place de
+  la silhouette grise, cadenas à trou de serrure, étoiles à gagner en
+  contour, médailles à gagner dans leur famille en pâle, « Cette semaine »
+  pour le parent, et le son de l'exercice n'est plus coupé par la consigne
+  (`justStarted` connu avant toute attente).

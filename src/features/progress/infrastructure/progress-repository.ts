@@ -40,6 +40,12 @@ export interface LessonRecommendation {
   readonly reason: 'resume' | 'next_in_world' | 'first_lesson';
 }
 
+/** Le temps passé à apprendre un jour calendaire LOCAL (YYYY-MM-DD). */
+export interface DayMinutes {
+  readonly day: string;
+  readonly minutes: number;
+}
+
 export interface ProgressRepository {
   findLessonProgress(
     childProfileId: ChildProfileId,
@@ -59,6 +65,12 @@ export interface ProgressRepository {
   countCompletedToday(childProfileId: ChildProfileId): Promise<number>;
   /** Jours calendaires LOCAUX (YYYY-MM-DD) avec au moins une leçon terminée. */
   findCompletedDays(childProfileId: ChildProfileId): Promise<string[]>;
+  /**
+   * Minutes passées à apprendre, par jour calendaire LOCAL, depuis `fromDay`
+   * (YYYY-MM-DD, inclus) : les séances déjà enregistrées, rien de plus. Les
+   * jours sans séance n'y figurent pas.
+   */
+  findMinutesByDay(childProfileId: ChildProfileId, fromDay: string): Promise<DayMinutes[]>;
 }
 
 interface ProgressRow {
@@ -246,6 +258,30 @@ export function createProgressRepository(db: SQLiteDatabase): ProgressRepository
         childProfileId,
       );
       return rows.map((row) => row.day);
+    },
+
+    async findMinutesByDay(childProfileId, fromDay) {
+      // Même découpe que « Temps aujourd'hui » : le jour de l'enfant (heure
+      // locale), la durée de chaque séance, arrondie une fois par jour.
+      const rows = await db.getAllAsync<{
+        day: string;
+        started_at: string;
+        ended_at: string | null;
+      }>(
+        `SELECT date(started_at, 'localtime') AS day, started_at, ended_at
+         FROM learning_sessions
+         WHERE child_profile_id = ? AND date(started_at, 'localtime') >= ?
+         ORDER BY started_at`,
+        childProfileId,
+        fromDay,
+      );
+      const byDay = new Map<string, number>();
+      for (const row of rows) {
+        const start = Date.parse(row.started_at);
+        const end = row.ended_at ? Date.parse(row.ended_at) : start;
+        byDay.set(row.day, (byDay.get(row.day) ?? 0) + Math.max(0, end - start));
+      }
+      return [...byDay].map(([day, ms]) => ({ day, minutes: Math.round(ms / 60000) }));
     },
   };
 }

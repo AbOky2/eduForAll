@@ -108,10 +108,18 @@ trait blanc, partout la même.
   disque vert, coche blanche, ses étoiles sous son nom. Monde du jour : disque
   à la couleur de la discipline, emblème blanc, cerclé de l'anneau de ses
   leçons faites, et le bouton soleil « Commencer » sous son nom. Fermé :
-  disque blanc cerclé de gris, cadenas.
+  disque blanc, anneau pâle de sa discipline, grand cadenas à trou de serrure
+  (0,40 × le disque) à l'encre de la discipline — la même grammaire pour les
+  leçons à venir du volet, qui répondent à l'appui (la leçon du jour se
+  balance). Couché, le chemin est resserré (noms à droite, sans sous-titre)
+  pour montrer quatre à cinq mondes ; toute liste qui défile finit dans un
+  fondu, jamais sur une rangée tranchée.
+- **Étoiles** : gagnées pleines au liseré ambre, à gagner en contour — la
+  forme sépare 1 étoile de 3, même au soleil.
 - **Aucune fraction sous les yeux de l'enfant** : les nombres restent à
   l'espace parent (qui gagne une ligne par discipline).
-- Plus de reflet, plus de piste invisible : la piste neutre `fill` (#EEF0F3).
+- Plus de reflet, plus de piste invisible : la piste neutre `track`
+  (#CDD3DD), lisible sur blanc comme sur la toile (`fill` y était invisible).
 
 ## 8. Les douze enfants
 
@@ -133,16 +141,24 @@ servi que de références de proportions : aucun tracé n'en provient.
 
 - **Médailles** (`illustrations/badge-art.tsx`) : un médaillon plat en deux
   disques — couronne claire, cœur plein — cerclé d'un filet blanc, et un
-  pictogramme Phosphor ; les jalons de leçons portent 1 à 4 points. À
-  gagner : la même forme en gris, avec une pastille cadenas.
+  pictogramme Phosphor ; les jalons de leçons portent 1 à 4 points, liserés
+  de blanc. À gagner : la même forme dans la version pâle de sa famille
+  (couronne tint, cœur tintStrong, pictogramme atténué) avec une pastille
+  cadenas — jamais une grille grise ; les gagnées d'abord sur l'étagère.
 - **Illustrations « orbite »** (`illustrations/orbit.tsx`) : deux cercles
   concentriques (la vannerie de la carte du jour et de la célébration), un
   sujet au centre, des satellites — les personnages de l'app, ou des
-  pastilles de pictogrammes. Elles remplacent les scènes de paysage
-  (onboarding, hors connexion, création de profil).
-- **Célébration** : la nuit, l'enfant en joie cerclé de la vannerie, trois
-  étoiles plates qui éclosent, une pluie de confettis unique (aucune en
-  mouvement réduit).
+  pastilles de pictogrammes. Réservées à l'onboarding : les satellites de
+  l'anneau intérieur ne mordent jamais le sujet (rayon ≥ sujet + demi-
+  satellite + 8 dp). Ailleurs, une composition propre : la carte du jour
+  montre l'image de la leçon seule sur son disque blanc ; la création de
+  profil s'ouvre sur une invitation (disque cerclé d'un pointillé bleu, une
+  main qui salue) que le personnage choisi remplace ; l'écran hors connexion
+  montre la tablette, ses quatre disciplines à l'écran.
+- **Célébration** : la nuit, l'enfant en joie cerclé de la vannerie, ses
+  trois étoiles qui éclosent au-dessus de lui, une pluie de confettis unique
+  (aucune en mouvement réduit) ; à droite, sur le même axe, la discipline et
+  le titre de la leçon, « Bravo ! », les médailles gagnées, la suite.
 - **Marque** : le livre ouvert de l'icône passe aux couleurs v4 — fond bleu
   marque, page blanche, page soleil (`assets/icons/*.svg`, `npm run
   brand:assets`) ; `brand/ecolna-mark.tsx` en est la même géométrie dans
@@ -154,7 +170,11 @@ servi que de références de proportions : aucun tracé n'en provient.
 - **Regarder ≠ toucher** : le stimulus (ce qu'on regarde ou écoute) est une
   surface plate dans la teinte de la discipline, sans filet ni ombre
   (`EcolnaStimulus`) ; les réponses sont blanches, filetées, ombrées. Côte à
-  côte, le stimulus prend la hauteur du bloc de réponses : bords communs.
+  côte, le stimulus prend la hauteur du bloc de réponses : bords communs —
+  sauf quand les réponses sont des glyphes courts (compter) : on aligne alors
+  les axes, et les cartes gardent les proportions d'une carte (≈ 1,2).
+- **Rien ne déborde** : une image tient dans 76 % de l'intérieur de sa carte,
+  mesurée (`illustration-fit.ts`).
 - **Le verdict sur la carte** : pendant la feuille de retour, la carte choisie
   devient verte et cochée (juste) ou bleue avec la flèche de reprise (à
   revoir) ; les autres restent blanches, inertes — jamais grisées
@@ -162,10 +182,17 @@ servi que de références de proportions : aucun tracé n'en provient.
 - **La consigne est dite d'elle-même** à chaque exercice, puis le son de
   l'exercice (`playSequence`) ; le bouton de consigne porte une bulle de
   parole, le haut-parleur est réservé au son à trouver.
-- **Tracer** : l'ardoise est de nuit ; le modèle se dessine depuis le chemin
-  lui-même (bande de craie pâle), les jalons dessus, le suivant au soleil.
-- **Relier** : un point d'accroche au bord de chaque carte (bleu au choix,
-  teinte de la paire une fois reliée), un trait de cette teinte entre les deux.
+- **Tracer** : l'ardoise est de nuit ; la lettre modèle dans une pastille en
+  haut à gauche ; le modèle à la craie (`slateChalk`, bouts francs posés sur
+  les lignes) porte une ligne médiane tiretée ; une bille soleil court le
+  long du trait à écrire (flèche fixe en mouvement réduit) ; les traits sont
+  numérotés ; seul le prochain jalon est gros. La lettre se dit à
+  l'ouverture et à la fin, où elle passe au soleil (1,4 s, une vibration).
+- **Relier** : un point d'accroche à cheval sur le filet de chaque carte
+  (blanc au repos, bleu au choix, teinte de la paire une fois reliée) ; on
+  commence d'un côté ou de l'autre ; chaque carte dit son son ou son mot
+  quand il existe ; à « à revoir », seules les paires fausses le montrent et
+  seules elles s'effacent.
 - **Le personnage réagit** : dans la feuille de retour, l'enfant (joie si
   c'est juste, calme sinon) porte la pastille du verdict.
 - **L'aide monte d'elle-même** : au deuxième essai manqué, l'indice s'ouvre et
@@ -188,8 +215,14 @@ servi que de références de proportions : aucun tracé n'en provient.
 - Couché, deux volets : le parcours montre à droite les leçons du monde du
   jour ; le profil, son identité à gauche et sa collection à droite.
 - Une couleur par rôle, tenue partout : la révision (« on revoit ») est
-  bleue, la série de jours est un soleil, le statut « sans internet » est une
-  puce blanche à pictogramme vert.
+  bleue, la série de jours est un soleil. « Sans internet » n'est plus une
+  puce sur l'accueil de l'enfant (un adulte y lisait une alerte) : la
+  promesse vit dans l'onboarding, l'écran hors connexion et les réglages.
+- L'accueil remplit sa hauteur : la carte du jour grandit sur grand écran et
+  les tuiles des matières prennent la place jusqu'à la barre d'onglets
+  (mesurée, `fitSubjectTile`) ; « Apprendre » s'ancre en haut au même rythme.
+- L'espace parent : un en-tête sur une rangée, des chiffres de même hauteur,
+  « Cette semaine » (minutes par jour, du lundi au dimanche).
 
 ## 9. Mouvement
 

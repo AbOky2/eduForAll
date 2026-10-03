@@ -1,7 +1,6 @@
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { ObjectIcon } from '../illustrations/object-icons';
-import { Orbit } from '../illustrations/orbit';
 import { SubjectArt, type SubjectArtId } from '../icons/subject-art';
 import { EcolnaGalet, EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
@@ -26,12 +25,35 @@ interface LessonHeroCardProps {
 }
 
 /**
+ * Taille de l'image de la leçon (avant mise à l'échelle). Elle est la plus
+ * grande chose de l'accueil : grande tablette debout 160, couchée 132 ;
+ * tablette 7" couchée (600 dp de haut) 76, pour que tout tienne au-dessus de
+ * la barre d'onglets ; téléphone 96.
+ */
+export function heroArtSize({
+  isTablet,
+  isLandscape,
+  height,
+}: {
+  isTablet: boolean;
+  isLandscape: boolean;
+  height: number;
+}): number {
+  if (!isTablet) {
+    return 96;
+  }
+  if (isLandscape) {
+    return height < 700 ? 76 : height < 780 ? 112 : 132;
+  }
+  return height < 1000 ? 136 : 160;
+}
+
+/**
  * « Aujourd'hui » — la carte du jour (direction v4) : la plus grande chose de
  * l'accueil, sur la nuit du Sahel, où l'or du bouton chante. Le titre est le
  * vrai nom de la leçon, le contexte passe au-dessus en petit. À droite,
- * l'image du thème de la leçon sur un disque blanc, l'emblème de la
- * discipline en satellite, posés sur des cercles concentriques à peine
- * visibles — une vannerie vue de dessus. Deux leçons ne se ressemblent plus.
+ * l'image du thème de la leçon, seule et grande sur son disque blanc, avec
+ * l'emblème de la discipline en pastille. Deux leçons ne se ressemblent plus.
  * Toute la carte se touche.
  */
 export function LessonHeroCard({
@@ -46,18 +68,21 @@ export function LessonHeroCard({
   cover = null,
 }: LessonHeroCardProps) {
   const { scale, isTablet, isLandscape, height } = useResponsive();
-  // Couchée, la carte se fait plus basse : la hauteur manque, pas la largeur.
-  const compact = !isTablet || isLandscape;
   // Une tablette 7" couchée (600 dp) : titre et bouton resserrés.
   const short = height < 700;
-  const art = scaled(isTablet ? (isLandscape ? (height < 700 ? 62 : 92) : 112) : 76, scale);
+  // Une grande tablette (iPad 11", 10" Android) : la carte prend de la hauteur.
+  const tall = isTablet && height >= 780;
+  const art = scaled(heroArtSize({ isTablet, isLandscape, height }), scale);
   const pad = scaled(
     isTablet && !isLandscape ? spacing.xl : short ? spacing.md : spacing.lg,
     scale,
   );
-  // Deux cercles autour de l'image, qui tiennent dans la carte sans rognage.
-  const badge = Math.round(art * 0.4);
-  const ringBox = Math.round(art + pad * 1.6 + badge * 0.5);
+  const badge = Math.round(art * 0.3);
+  const badgeRim = scaled(3, scale);
+  const minHeight = scaled(
+    !isTablet ? 168 : isLandscape ? (short ? 128 : tall ? 204 : 176) : tall ? 230 : 200,
+    scale,
+  );
 
   return (
     <EcolnaGalet
@@ -70,10 +95,10 @@ export function LessonHeroCard({
       style={style}
       faceStyle={[
         styles.face,
-        { padding: pad, gap: pad, minHeight: scaled(compact ? (short ? 128 : 168) : 200, scale) },
+        { padding: pad, gap: pad, minHeight },
       ]}
     >
-      <View style={styles.text}>
+      <View style={[styles.text, { gap: scaled(spacing.xxs, scale) }]}>
         <EcolnaText variant="labelMd" color={colors.onColorSoft} numberOfLines={1}>
           {eyebrow}
         </EcolnaText>
@@ -95,7 +120,7 @@ export function LessonHeroCard({
             {
               height: scaled(isTablet && !short ? 56 : 48, scale),
               paddingHorizontal: scaled(spacing.xl, scale),
-              marginTop: scaled(short ? spacing.xs : spacing.sm, scale),
+              marginTop: scaled(short ? spacing.xs : tall ? spacing.md : spacing.sm, scale),
             },
           ]}
         >
@@ -106,14 +131,11 @@ export function LessonHeroCard({
         </View>
       </View>
       {subject ? (
-        // La vannerie : le thème de la leçon au centre, l'emblème de la
-        // discipline en satellite ; sans image, l'emblème seul au centre.
-        <Orbit
-          size={ringBox}
-          ringColor={colors.onColorTrack}
-          inner={0.78}
-          center={
-            cover ? (
+        // L'image du thème, seule et grande ; l'emblème de la discipline en
+        // pastille, détourée de nuit. Sans image, l'emblème seul.
+        <View style={{ width: art, height: art }}>
+          {cover ? (
+            <>
               <View
                 style={[
                   styles.coverDisc,
@@ -121,27 +143,29 @@ export function LessonHeroCard({
                   { width: art, height: art, borderRadius: art / 2 },
                 ]}
               >
-                <ObjectIcon id={cover} size={Math.round(art * 0.66)} />
+                <ObjectIcon id={cover} size={Math.round(art * 0.68)} />
               </View>
-            ) : (
-              <View style={[shadows.floating, { borderRadius: art / 2 }]}>
-                <SubjectArt subject={subject} size={art} />
-              </View>
-            )
-          }
-          satellites={
-            cover
-              ? [
+              <View
+                style={[
+                  styles.badge,
                   {
-                    node: <SubjectArt subject={subject} size={badge} />,
-                    size: badge,
-                    angle: -42,
-                    ring: 1,
+                    padding: badgeRim,
+                    borderRadius: badge / 2 + badgeRim,
+                    // Sur le bord du disque, en haut à droite (à 45°).
+                    right: Math.round(art * 0.146 - badge / 2 - badgeRim),
+                    top: Math.round(art * 0.146 - badge / 2 - badgeRim),
                   },
-                ]
-              : []
-          }
-        />
+                ]}
+              >
+                <SubjectArt subject={subject} size={badge} />
+              </View>
+            </>
+          ) : (
+            <View style={[shadows.floating, { borderRadius: art / 2 }]}>
+              <SubjectArt subject={subject} size={art} />
+            </View>
+          )}
+        </View>
       ) : null}
     </EcolnaGalet>
   );
@@ -150,7 +174,8 @@ export function LessonHeroCard({
 const styles = StyleSheet.create({
   face: { flexDirection: 'row', alignItems: 'center' },
   coverDisc: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.white },
-  text: { flex: 1, gap: spacing.xxs, alignItems: 'flex-start' },
+  badge: { position: 'absolute', backgroundColor: colors.night },
+  text: { flex: 1, alignItems: 'flex-start', justifyContent: 'center' },
   cta: {
     flexDirection: 'row',
     alignItems: 'center',

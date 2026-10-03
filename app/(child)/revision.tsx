@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
@@ -35,9 +35,10 @@ interface RevisionItem {
 
 /**
  * L'atelier de révision (direction v4). On ne dit pas « tu as échoué » : on
- * fait pousser ce qui est encore fragile — la pousse en est le signe. Les
- * notions à revoir, une par ligne avec l'emblème de leur discipline, et un
- * seul grand bouton.
+ * revoit ensemble ce qui est encore fragile. Les notions à revoir, une par
+ * ligne avec l'emblème de leur discipline — un aperçu, qu'on ne touche pas —
+ * et une seule action : le bouton soleil. Deux cibles qui ouvrent la même
+ * leçon laisseraient l'enfant hésiter entre elles.
  */
 export default function RevisionScreen() {
   const router = useRouter();
@@ -106,24 +107,19 @@ export default function RevisionScreen() {
     ) : (
       <View style={{ gap }}>
         {/* Une liste, comme une page de cahier : chaque notion sur sa ligne,
-            l'emblème de sa discipline devant. */}
-        <EcolnaCard rounded="xl" padded={false}>
+            l'emblème de sa discipline devant. Un aperçu, pas un bouton : une
+            surface plate dans le bleu de la révision, sans filet ni ombre (ce
+            qu'on regarde), et une seule action, le bouton soleil. */}
+        <EcolnaCard rounded="xl" padded={false} backgroundColor={colors.brandTint}>
           {items.map((item, index) => (
-            // Chaque notion s'ouvre sur sa leçon : ce qui ressemble à une ligne de liste se touche.
-            <Pressable
+            <View
               key={item.skillId}
-              accessibilityRole="button"
+              accessible
               accessibilityLabel={item.label}
-              disabled={!item.lessonId}
-              onPress={() => item.lessonId && router.push(`/(child)/lesson/${item.lessonId}`)}
-              style={({ pressed }) => [
+              style={[
                 styles.row,
                 index > 0 && styles.rowRule,
-                {
-                  gap: scaled(spacing.md, scale),
-                  padding: scaled(spacing.md, scale),
-                  opacity: pressed ? 0.7 : 1,
-                },
+                { gap: scaled(spacing.md, scale), padding: scaled(spacing.md, scale) },
               ]}
             >
               {item.subject ? (
@@ -143,10 +139,7 @@ export default function RevisionScreen() {
               <EcolnaText variant="headlineSm" style={styles.flex}>
                 {item.label.charAt(0).toUpperCase() + item.label.slice(1)}
               </EcolnaText>
-              {item.lessonId ? (
-                <EcolnaIcon name="chevron-right" size={scaled(22, scale)} color={colors.brand} />
-              ) : null}
-            </Pressable>
+            </View>
           ))}
         </EcolnaCard>
         {firstLesson ? (
@@ -214,7 +207,7 @@ const styles = StyleSheet.create({
   },
   emptyCard: { alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xl },
   row: { flexDirection: 'row', alignItems: 'center' },
-  rowRule: { borderTopWidth: 1, borderTopColor: colors.border },
+  rowRule: { borderTopWidth: 1, borderTopColor: colors.brandTintStrong },
   leaf: {
     alignItems: 'center',
     justifyContent: 'center',

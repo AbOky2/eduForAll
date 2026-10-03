@@ -1,18 +1,32 @@
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
-import Svg, { Circle, G, Line } from 'react-native-svg';
+import Svg, { Circle, Line } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAnswerCard, useExerciseMetrics } from '@/design-system/primitives';
+import {
+  AnswerVerdictContext,
+  EcolnaAnswerCard,
+  useExerciseMetrics,
+  type AnswerCardState,
+} from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, pairTints } from '@/design-system/tokens';
+import { colors, pairTints, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { cardSound } from './card-sound';
 
 type MatchStep = Extract<ExerciseStep, { type: 'match_pairs' }>;
+type Side = 'left' | 'right';
 
-/** Le choix en cours, à gauche : le bleu du choix, comme toute réponse choisie. */
+/** Un lien tiré par l'enfant ; `slot` numérote la paire et choisit sa teinte. */
+export interface PairLink {
+  pairId: string;
+  matchedPairId: string;
+  slot: number;
+}
+
+/** Le choix en cours : le bleu du choix, comme toute réponse choisie. */
 const SELECTING = {
   face: colors.brandTint,
   edge: colors.brandTintStrong,
@@ -20,18 +34,52 @@ const SELECTING = {
   ink: colors.brandInk,
 };
 
+/** Le critère de l'évaluateur (`evaluateAnswer`, match_pairs), lien par lien. */
+export function isRightLink(link: Pick<PairLink, 'pairId' | 'matchedPairId'>): boolean {
+  return link.pairId === link.matchedPairId;
+}
+
 /**
- * Two-column matching: tap a left card then its right partner. Each pair
- * found keeps its own tint and number on both sides (« ba, paire 1 »), so
- * what goes with what reads without colour; a wrong pairing is only revealed
- * at the end, and a tap then clears the board for a fresh try. Between the
- * columns, a hook dot faces each card and a pair found is joined by a stroke
- * in its own tint — the gesture « relier » made visible.
+ * Ce qui reste sur le plateau. Tant que le verdict est affiché, tout ; une fois
+ * la feuille « à revoir » fermée (plateau complet, plus de verdict), seules les
+ * paires justes restent — l'enfant ne refait que ce qui était faux, et chaque
+ * nouvel essai est soumis et compté par la machine de leçon comme le premier.
+ */
+export function boardAfterVerdict(
+  links: readonly PairLink[],
+  total: number,
+  verdict: 'correct' | 'incorrect' | null,
+): readonly PairLink[] {
+  return links.length === total && verdict === null ? links.filter(isRightLink) : links;
+}
+
+/** Le plus petit numéro de paire libre : une paire juste garde le sien d'un essai à l'autre. */
+export function nextSlot(links: readonly PairLink[]): number {
+  const taken = new Set(links.map((link) => link.slot));
+  let slot = 1;
+  while (taken.has(slot)) {
+    slot += 1;
+  }
+  return slot;
+}
+
+/**
+ * Relier, en deux colonnes. On touche une carte d'un côté puis sa partenaire
+ * de l'autre — dans un sens ou dans l'autre. Chaque paire posée garde sa
+ * teinte et son numéro des deux côtés (« ba, paire 1 ») : ce qui va avec quoi
+ * se lit sans la couleur. Entre les colonnes, un point d'accroche est posé à
+ * cheval sur le filet de chaque carte, et un trait de la teinte de la paire
+ * les relie — le geste « relier » rendu visible.
+ *
+ * Le verdict arrive plateau complet. « À revoir » ne vise que les paires
+ * fausses (bleues, flèche de reprise, trait tireté — jamais de rouge) ; au
+ * nouvel essai, elles seules s'effacent, les paires justes restent.
  */
 export function MatchPairsExercise({
   step,
   interactive,
   onSubmit,
+  playAudio,
 }: ExerciseRendererProps<MatchStep>) {
   const rightShuffled = useMemo(
     () =>
@@ -43,14 +91,30 @@ export function MatchPairsExercise({
     [step],
   );
 
-  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
-  const [matches, setMatches] = useState<{ pairId: string; matchedPairId: string }[]>([]);
+  const verdict = useContext(AnswerVerdictContext);
+  const [selected, setSelected] = useState<{ side: Side; id: string } | null>(null);
+  const [links, setLinks] = useState<PairLink[]>([]);
+
+  const total = step.pairs.length;
+  const board = boardAfterVerdict(links, total, verdict);
+  // La feuille « à revoir » est ouverte : les paires fausses le montrent.
+  const reviewing = links.length === total && verdict === 'incorrect';
+  const byLeft = new Map(board.map((link) => [link.pairId, link]));
+  const byRight = new Map(board.map((link) => [link.matchedPairId, link]));
 
   const metrics = useExerciseMetrics();
-  const { splitPanes, scale, contentMaxWidth } = useResponsive();
+  const { splitPanes, isTablet, scale, contentMaxWidth } = useResponsive();
   // La gouttière où se tirent les traits : assez large pour qu'un trait se lise comme un geste.
-  const link = Math.round(metrics.gap * (splitPanes ? 5 : 2.5));
+  const link = Math.round(metrics.gap * (splitPanes ? 7 : isTablet ? 5 : 3));
   const dot = scaled(8, scale);
+  const ring = 2;
+  // Le calque des traits déborde d'un point de chaque côté : les points
+  // d'accroche sont à cheval sur le filet des cartes.
+  const reach = dot + ring;
+  const stroke = Math.max(4, scaled(5, scale));
+  // Couchée, trois rangées tiennent au-dessus de la feuille de retour : le
+  // verdict de chaque paire reste visible pendant qu'elle est ouverte.
+  const cardHeight = splitPanes ? Math.round(metrics.answerHeight * 0.78) : metrics.answerHeight;
   // Le centre vertical de chaque carte (dans sa colonne), pour tirer les traits.
   const [centers, setCenters] = useState<Record<string, number>>({});
   const [columnWidth, setColumnWidth] = useState(0);
@@ -59,161 +123,185 @@ export function MatchPairsExercise({
     const center = Math.round(y + height / 2);
     setCenters((current) => (current[key] === center ? current : { ...current, [key]: center }));
   };
-  // Numéro (à partir de 1) de la paire où figure chaque carte.
-  const pairOfLeft = new Map(matches.map((match, index) => [match.pairId, index + 1]));
-  const pairOfRight = new Map(matches.map((match, index) => [match.matchedPairId, index + 1]));
-  const tintOf = (pair: number | undefined) =>
-    pair === undefined ? undefined : pairTints[(pair - 1) % pairTints.length];
-  const labelOf = (label: string, pair: number | undefined) =>
-    pair === undefined ? label : fr.lesson.pairLabel(label, pair);
 
-  const chooseRight = (rightId: string) => {
-    // Une carte déjà reliée garde sa paire.
-    if (!selectedLeft || pairOfRight.has(rightId)) {
-      return;
-    }
-    const nextMatches = [...matches, { pairId: selectedLeft, matchedPairId: rightId }];
-    setMatches(nextMatches);
-    setSelectedLeft(null);
-    if (nextMatches.length === step.pairs.length) {
-      onSubmit({ kind: 'pairs', matches: nextMatches });
+  const tintOf = (slot: number) => pairTints[(slot - 1) % pairTints.length] ?? SELECTING;
+  const isWrong = (pairLink: PairLink | undefined) =>
+    reviewing && pairLink !== undefined && !isRightLink(pairLink);
+
+  const say = (side: Side, text: string) => {
+    const audioId = cardSound(side === 'left' ? 'son' : 'mot', text);
+    if (audioId) {
+      playAudio(audioId);
     }
   };
 
+  const press = (side: Side, id: string, text: string) => {
+    if (!interactive) {
+      return;
+    }
+    say(side, text);
+    // Une carte déjà reliée garde sa paire.
+    if ((side === 'left' ? byLeft : byRight).has(id)) {
+      return;
+    }
+    // Premier appui, ou un autre choix du même côté : la carte est choisie.
+    if (!selected || selected.side === side) {
+      setSelected({ side, id });
+      return;
+    }
+    const drawn =
+      side === 'left'
+        ? { pairId: id, matchedPairId: selected.id }
+        : { pairId: selected.id, matchedPairId: id };
+    const next = [...board, { ...drawn, slot: nextSlot(board) }];
+    setLinks(next);
+    setSelected(null);
+    if (next.length === total) {
+      onSubmit({
+        kind: 'pairs',
+        matches: next.map(({ pairId, matchedPairId }) => ({ pairId, matchedPairId })),
+      });
+    }
+  };
+
+  const cardProps = (side: Side, id: string, text: string) => {
+    const pairLink = (side === 'left' ? byLeft : byRight).get(id);
+    const choosing = selected?.side === side && selected.id === id;
+    const wrong = isWrong(pairLink);
+    const state: AnswerCardState = wrong
+      ? 'incorrect'
+      : pairLink || choosing
+        ? 'selected'
+        : interactive
+          ? 'default'
+          : 'disabled';
+    return {
+      label: text,
+      glyph: text.length <= 6,
+      glyphVariant: metrics.answerGlyph,
+      state,
+      tint: wrong ? undefined : pairLink ? tintOf(pairLink.slot) : SELECTING,
+      mark: pairLink?.slot.toString(),
+      accessibilityLabel: wrong
+        ? fr.lesson.pairToReview(text)
+        : pairLink
+          ? fr.lesson.pairLabel(text, pairLink.slot)
+          : text,
+      contentStyle: { minHeight: cardHeight, paddingVertical: scaled(spacing.xs, scale) },
+      onPress: () => press(side, id, text),
+    };
+  };
+
+  // Le point d'accroche : blanc et fileté au repos (le filet de la carte),
+  // bleu au choix et à revoir, teinte de la paire une fois relié.
+  const dotLook = (pairLink: PairLink | undefined, choosing: boolean) =>
+    isWrong(pairLink) || (choosing && !pairLink)
+      ? { fill: colors.brand, ring: colors.white }
+      : pairLink
+        ? { fill: tintOf(pairLink.slot).border, ring: colors.white }
+        : { fill: colors.white, ring: colors.borderStrong };
+
+  // Abscisses, dans le calque : le milieu du filet de 2 dp de chaque carte.
+  const leftX = reach - 1;
+  const rightX = reach + link + 1;
+
   return (
+    // Ancré sous la consigne comme tout exercice : un tiers de l'air au-dessus,
+    // deux tiers au-dessous (EcolnaExerciseLayout).
     <View style={[styles.container, { maxWidth: contentMaxWidth }]}>
+      <View style={styles.above} />
       <View style={[styles.columns, { gap: link }]}>
-        {/* Les traits et les points d'accroche, dans la gouttière entre les colonnes. */}
-        {columnWidth > 0 ? (
-          <View pointerEvents="none" style={[styles.links, { left: columnWidth, width: link }]}>
-            <Svg width="100%" height="100%">
-              {matches.map((match, index) => {
-                const from = centers[`l-${match.pairId}`];
-                const to = centers[`r-${match.matchedPairId}`];
-                const tint = pairTints[index % pairTints.length];
-                return from !== undefined && to !== undefined && tint ? (
-                  <Line
-                    key={match.pairId}
-                    x1={dot + 2}
-                    y1={from}
-                    x2={link - dot - 2}
-                    y2={to}
-                    stroke={tint.border}
-                    strokeWidth={6}
-                    strokeLinecap="round"
-                  />
-                ) : null;
-              })}
-              {step.pairs.map((pair) => {
-                const left = centers[`l-${pair.id}`];
-                const right = centers[`r-${pair.id}`];
-                const leftPair = pairOfLeft.get(pair.id);
-                const rightPair = pairOfRight.get(pair.id);
-                // Le point se remplit : bleu au choix, teinte de la paire une fois reliée.
-                const fillOf = (paired: number | undefined, choosing: boolean) =>
-                  paired !== undefined
-                    ? (tintOf(paired)?.border ?? colors.brand)
-                    : choosing
-                      ? colors.brand
-                      : colors.white;
-                return (
-                  <G key={`dots-${pair.id}`}>
-                    {left !== undefined ? (
-                      <Circle
-                        cx={dot + 2}
-                        cy={left}
-                        r={dot}
-                        fill={fillOf(leftPair, selectedLeft === pair.id)}
-                        stroke={
-                          leftPair !== undefined || selectedLeft === pair.id
-                            ? colors.white
-                            : colors.inkTertiary
-                        }
-                        strokeWidth={3}
-                      />
-                    ) : null}
-                    {right !== undefined ? (
-                      <Circle
-                        cx={link - dot - 2}
-                        cy={right}
-                        r={dot}
-                        fill={fillOf(rightPair, false)}
-                        stroke={rightPair !== undefined ? colors.white : colors.inkTertiary}
-                        strokeWidth={3}
-                      />
-                    ) : null}
-                  </G>
-                );
-              })}
-            </Svg>
-          </View>
-        ) : null}
         <View
           style={[styles.column, { gap: metrics.gap }]}
           onLayout={(event) => setColumnWidth(Math.round(event.nativeEvent.layout.width))}
         >
           {step.pairs.map((pair) => (
             <View key={pair.id} onLayout={measure(`l-${pair.id}`)}>
-              <EcolnaAnswerCard
-                label={pair.left}
-                glyph={pair.left.length <= 6}
-                glyphVariant={metrics.answerGlyph}
-                tint={tintOf(pairOfLeft.get(pair.id)) ?? SELECTING}
-                mark={pairOfLeft.get(pair.id)?.toString()}
-                accessibilityLabel={labelOf(pair.left, pairOfLeft.get(pair.id))}
-                contentStyle={{ minHeight: metrics.answerHeight }}
-                state={
-                  pairOfLeft.has(pair.id) || selectedLeft === pair.id
-                    ? 'selected'
-                    : interactive
-                      ? 'default'
-                      : 'disabled'
-                }
-                onPress={() => {
-                  // A tap after a wrong attempt clears the board for a fresh try.
-                  if (matches.length === step.pairs.length) {
-                    setMatches([]);
-                  } else if (pairOfLeft.has(pair.id)) {
-                    return;
-                  }
-                  setSelectedLeft(pair.id);
-                }}
-              />
+              <EcolnaAnswerCard {...cardProps('left', pair.id, pair.left)} />
             </View>
           ))}
         </View>
         <View style={[styles.column, { gap: metrics.gap }]}>
           {rightShuffled.map((pair) => (
             <View key={pair.id} onLayout={measure(`r-${pair.id}`)}>
-              <EcolnaAnswerCard
-                label={pair.right}
-                glyph={pair.right.length <= 6}
-                glyphVariant={metrics.answerGlyph}
-                tint={tintOf(pairOfRight.get(pair.id))}
-                mark={pairOfRight.get(pair.id)?.toString()}
-                accessibilityLabel={labelOf(pair.right, pairOfRight.get(pair.id))}
-                contentStyle={{ minHeight: metrics.answerHeight }}
-                // Jamais grisée : la colonne de droite attend simplement qu'on ait
-                // choisi à gauche (un appui avant ne fait rien).
-                state={pairOfRight.has(pair.id) ? 'selected' : interactive ? 'default' : 'disabled'}
-                onPress={() => chooseRight(pair.id)}
-              />
+              <EcolnaAnswerCard {...cardProps('right', pair.id, pair.right)} />
             </View>
           ))}
         </View>
+        {/* Les traits et les points d'accroche, par-dessus le bord des cartes. */}
+        {columnWidth > 0 ? (
+          <View
+            pointerEvents="none"
+            style={[styles.links, { left: columnWidth - reach, width: link + 2 * reach }]}
+          >
+            <Svg width="100%" height="100%">
+              {board.map((pairLink) => {
+                const from = centers[`l-${pairLink.pairId}`];
+                const to = centers[`r-${pairLink.matchedPairId}`];
+                const wrong = isWrong(pairLink);
+                return from !== undefined && to !== undefined ? (
+                  <Line
+                    key={pairLink.pairId}
+                    x1={leftX}
+                    y1={from}
+                    x2={rightX}
+                    y2={to}
+                    stroke={wrong ? colors.brand : tintOf(pairLink.slot).border}
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                    {...(wrong ? { strokeDasharray: [stroke * 1.6, stroke * 1.8] } : {})}
+                  />
+                ) : null;
+              })}
+              {step.pairs.flatMap((pair) => {
+                const left = centers[`l-${pair.id}`];
+                const right = centers[`r-${pair.id}`];
+                const leftLook = dotLook(
+                  byLeft.get(pair.id),
+                  selected?.side === 'left' && selected.id === pair.id,
+                );
+                const rightLook = dotLook(
+                  byRight.get(pair.id),
+                  selected?.side === 'right' && selected.id === pair.id,
+                );
+                return [
+                  left !== undefined ? (
+                    <Circle
+                      key={`l-${pair.id}`}
+                      cx={leftX}
+                      cy={left}
+                      r={dot}
+                      fill={leftLook.fill}
+                      stroke={leftLook.ring}
+                      strokeWidth={ring}
+                    />
+                  ) : null,
+                  right !== undefined ? (
+                    <Circle
+                      key={`r-${pair.id}`}
+                      cx={rightX}
+                      cy={right}
+                      r={dot}
+                      fill={rightLook.fill}
+                      stroke={rightLook.ring}
+                      strokeWidth={ring}
+                    />
+                  ) : null,
+                ];
+              })}
+            </Svg>
+          </View>
+        ) : null}
       </View>
+      <View style={styles.below} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    width: '100%',
-
-    alignSelf: 'center',
-  },
+  container: { flex: 1, width: '100%', alignSelf: 'center' },
+  above: { flex: 1 },
+  below: { flex: 2 },
   columns: { flexDirection: 'row' },
   links: { position: 'absolute', top: 0, bottom: 0 },
   column: { flex: 1 },

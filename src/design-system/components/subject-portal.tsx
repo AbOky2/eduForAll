@@ -90,51 +90,56 @@ export function SubjectPortal({
     >
       {portal ? (
         <>
-          {/* L'emblème au cœur de l'anneau de la discipline : plein, il passe au soleil. */}
-          <View style={styles.center}>
-            {locked ? (
-              <View>
-                <SubjectArt subject={subject} size={scaled(artSize, scale)} muted />
-                <View style={styles.lockBadge}>
-                  <EcolnaIcon name="lock" size={scaled(22, scale)} color={colors.inkDisabled} filled />
+          {/* L'emblème et les mots, centrés dans la hauteur de la porte ; la puce au pied. */}
+          <View style={[styles.portalBody, { gap: scaled(spacing.md, scale) }]}>
+            {/* L'emblème au cœur de l'anneau de la discipline : plein, il passe au soleil. */}
+            <View style={styles.center}>
+              {locked ? (
+                <View>
+                  <SubjectArt subject={subject} size={scaled(artSize, scale)} muted />
+                  <View style={styles.lockBadge}>
+                    <EcolnaIcon name="lock" size={scaled(22, scale)} color={colors.inkDisabled} filled />
+                  </View>
                 </View>
-              </View>
-            ) : (
-              <EcolnaProgressRing
-                progress={progress}
-                size={scaled(artSize + 36, scale)}
-                stroke={scaled(7, scale)}
-                color={colors.white}
-                track={colors.onColorTrack}
-                accessibilityLabel={fr.a11y.progress(label, completed, total)}
+              ) : (
+                <EcolnaProgressRing
+                  progress={progress}
+                  size={scaled(artSize + 36, scale)}
+                  stroke={scaled(7, scale)}
+                  color={colors.white}
+                  track={colors.onColorTrack}
+                  accessibilityLabel={fr.a11y.progress(label, completed, total)}
+                >
+                  <SubjectArt subject={subject} size={scaled(artSize, scale)} variant="glyph" />
+                </EcolnaProgressRing>
+              )}
+            </View>
+            <View style={[styles.portalText, { gap: scaled(spacing.xxs, scale) }]}>
+              <EcolnaText variant="headlineLg" color={ink} align="center">
+                {label}
+              </EcolnaText>
+              <EcolnaText
+                variant={explanation ? 'bodyLg' : 'bodyMd'}
+                color={explanation ? ink : soft}
+                align="center"
+                numberOfLines={explanation ? 4 : 2}
+                accessibilityLiveRegion={explanation ? 'polite' : undefined}
               >
-                <SubjectArt subject={subject} size={scaled(artSize, scale)} variant="glyph" />
-              </EcolnaProgressRing>
-            )}
+                {explanation ?? hint}
+              </EcolnaText>
+            </View>
           </View>
-          <View style={[styles.portalText, { gap: scaled(spacing.xxs, scale) }]}>
-            <EcolnaText variant="headlineLg" color={ink} align="center">
-              {label}
-            </EcolnaText>
-            <EcolnaText
-              variant={explanation ? 'bodyLg' : 'bodyMd'}
-              color={explanation ? ink : soft}
-              align="center"
-              numberOfLines={explanation ? 4 : 2}
-              // Deux lignes réservées : titres et puces des quatre portes alignés.
-              style={{ minHeight: scaled(44, scale) }}
-              accessibilityLiveRegion={explanation ? 'polite' : undefined}
-            >
-              {explanation ?? hint}
-            </EcolnaText>
-          </View>
+          {/* La puce d'état : blanche, le mot à l'encre de la discipline (≥ 6:1). */}
           <View
             style={[
               styles.stateChip,
-              { backgroundColor: locked ? colors.white : colors.onColorGlass, paddingHorizontal: scaled(spacing.sm, scale) },
+              {
+                paddingHorizontal: scaled(spacing.sm, scale),
+                paddingVertical: scaled(spacing.xxs, scale),
+              },
             ]}
           >
-            <EcolnaText variant="labelMd" color={soft}>
+            <EcolnaText variant="labelMd" color={locked ? colors.inkSecondary : family.ink}>
               {status ?? state}
             </EcolnaText>
           </View>
@@ -184,11 +189,12 @@ export function SubjectPortal({
 
 const styles = StyleSheet.create({
   portalOuter: { flex: 1 },
-  portalFace: { alignItems: 'center', justifyContent: 'flex-start' },
+  portalFace: { alignItems: 'center', justifyContent: 'space-between' },
+  portalBody: { flexGrow: 1, alignItems: 'center', justifyContent: 'center' },
   center: { alignItems: 'center', justifyContent: 'center' },
   lockBadge: { position: 'absolute', right: -6, bottom: -6 },
   portalText: { alignItems: 'center' },
-  stateChip: { borderRadius: radius.pill, paddingVertical: 4, marginTop: 'auto' },
+  stateChip: { borderRadius: radius.pill, backgroundColor: colors.white },
   rowFace: { flexDirection: 'row', alignItems: 'center' },
   rowText: { flex: 1, gap: spacing.xxs },
   footer: { gap: spacing.xs },

@@ -87,8 +87,12 @@ export const colors = {
   /** Sur une surface colorée : un blanc qui s'efface (second ton, piste). */
   onColorSoft: 'rgba(255,255,255,0.55)',
   onColorTrack: 'rgba(255,255,255,0.28)',
-  /** Le modèle à tracer sur l'ardoise de nuit : lisible au soleil (3,5:1), sous la craie blanche. */
-  onColorGuide: 'rgba(255,255,255,0.4)',
+  /**
+   * La craie du modèle sur l'ardoise : du blanc à 22 % posé sur `night`,
+   * rendu opaque — deux traits qui se croisent (b, k, x, 4) ne doublent pas
+   * leur voile.
+   */
+  slateChalk: '#4e557a',
   /** Une surface de verre sur la nuit : bouton second, puce. */
   onColorGlass: 'rgba(255,255,255,0.12)',
   /** Texte second sur la nuit (7:1). */

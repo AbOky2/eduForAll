@@ -196,7 +196,8 @@ function SessionBody({
         attemptIndex: state.attemptsOnCurrentStep,
       }),
     );
-    if (state.lastFeedback === 'correct') {
+    // L'ardoise vibre elle-même quand la lettre passe au soleil : pas deux fois.
+    if (state.lastFeedback === 'correct' && step.type !== 'trace_letter') {
       void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
         () => undefined,
       );

@@ -24,7 +24,11 @@ import {
   type AvatarId,
 } from '@/features/child-profile/domain/child-profile';
 import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
-import { LevelCard, StepDots } from '@/features/onboarding/presentation/ceremony-parts';
+import {
+  LevelCard,
+  StepDots,
+  heroTitleStyle,
+} from '@/features/onboarding/presentation/ceremony-parts';
 import { ProfileStage } from '@/features/onboarding/presentation/profile-stage';
 import { createSettingsRepository } from '@/features/settings/infrastructure/settings-repository';
 import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
@@ -33,7 +37,7 @@ import { NudgeRing } from '@/design-system/components/nudge-ring';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { EcolnaButton, EcolnaIconButton, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, fontFamilies, radius, spacing } from '@/design-system/tokens';
+import { a11y, colors, fontFamilies, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useKeyboardVisible } from '@/shared/hooks/use-keyboard-visible';
 
@@ -199,14 +203,37 @@ export default function CreateProfileScreen() {
       : compact
         ? 150
         : 210;
+  // Le médaillon de l'enfant : la plus grande chose de la scène, l'ardoise
+  // tenue devant lui comprise.
   const characterSize = splitPanes
     ? Math.min(scaled(240, scale), Math.round(stageHeight * 0.4), Math.round(stageWidth * 0.62))
-    : Math.round(Math.min(stageHeight * (isTablet ? 0.48 : 0.44), isTablet ? 240 : 96));
+    : Math.round(Math.min(stageHeight * (isTablet ? 0.52 : 0.44), isTablet ? 260 : 96));
+  // Le bouton retour : même place et même taille que sur tous les écrans
+  // (EcolnaScreenHeader) — la gouttière, en haut à gauche de l'écran.
+  const backSize = Math.max(a11y.minTouchTarget, scaled(52, scale));
+  const backTop = (splitPanes ? insets.top : 0) + spacing.sm;
   const panelWidth = splitPanes ? width - stageWidth : width;
   // Un demi-écran : sa propre marge, pas la gouttière de tout l'écran.
   const panelPadding = splitPanes ? scaled(spacing.xl, scale) : screenPadding;
   const panelInner = Math.min(panelWidth - panelPadding * 2, 760);
   const gap = scaled(spacing.lg, scale);
+
+  // Les douze personnages tiennent sans défiler, de la 7" couchée au
+  // téléphone : la grille (trois rangées de quatre sur tablette, quatre de
+  // trois au téléphone) prend la hauteur que laissent la scène ou le haut du
+  // volet, le titre et le bouton — et pas davantage que sa colonne.
+  const gridRows = isTablet ? 3 : 4;
+  const topRoom = splitPanes ? backTop + backSize : stageHeight + spacing.md + 10;
+  const titleRoom = scaled(isTablet ? 40 : 34, scale);
+  const footerRoom =
+    spacing.sm + scaled(60, scale) + Math.max(insets.bottom, spacing.md) + spacing.xs;
+  const gridRoom = usableHeight - topRoom - spacing.lg * 2 - titleRoom - gap - footerRoom;
+  const tileExtra = 2 * (2 * scaled(4, scale) + 2);
+  const fitAvatar = Math.floor(
+    (gridRoom - (gridRows - 1) * scaled(spacing.md, scale)) / gridRows - tileExtra,
+  );
+  const [minAvatar, capAvatar] = splitPanes ? [56, 92] : isTablet ? [80, 124] : [64, 104];
+  const maxAvatar = Math.max(minAvatar, Math.min(capAvatar, Math.floor(fitAvatar / scale)));
 
   const levelWidth = Math.min(
     Math.floor((panelInner - gap) / 2),
@@ -251,9 +278,9 @@ export default function CreateProfileScreen() {
             setAvatarId(id as AvatarId);
             setNudge(0);
           }}
-          // Couché, quatre colonnes de trois : les douze tiennent sans défiler.
-          minAvatar={splitPanes ? 56 : 80}
-          maxAvatar={splitPanes ? 92 : 104}
+          // Les douze tiennent sans défiler (voir `maxAvatar`).
+          minAvatar={minAvatar}
+          maxAvatar={maxAvatar}
           labelFor={(id, index) =>
             fr.avatars.tileLabel(index + 1, fr.avatars.descriptions[id as AvatarId])
           }
@@ -350,20 +377,15 @@ export default function CreateProfileScreen() {
     ) : null;
 
   const panel = (
-    <View style={[styles.panel, { paddingHorizontal: panelPadding }]} pointerEvents="box-none">
-      <View style={[styles.topRow, { gap: scaled(spacing.md, scale) }]}>
-        {step !== 'welcome' ? (
-          <EcolnaIconButton
-            icon="arrow-back"
-            accessibilityLabel={fr.common.back}
-            onPress={() => {
-              if (!previous()) {
-                router.back();
-              }
-            }}
-            size={56}
-          />
-        ) : null}
+    <View
+      style={[
+        styles.panel,
+        { paddingHorizontal: panelPadding, paddingTop: splitPanes ? backTop : spacing.md },
+      ]}
+      pointerEvents="box-none"
+    >
+      {/* Les points d'étape, à la hauteur du bouton retour en deux volets. */}
+      <View style={[styles.topRow, { width: panelInner, minHeight: splitPanes ? backSize : 0 }]}>
         {!compact && step !== 'welcome' ? <StepDots step={stepNumber} total={3} /> : null}
       </View>
       <ScrollView
@@ -378,6 +400,8 @@ export default function CreateProfileScreen() {
               accessibilityRole="header"
               variant={isTablet ? 'displayHero' : 'headlineLg'}
               align={step === 'welcome' ? 'center' : 'left'}
+              // La bienvenue parle aussi fort que la première page de l'app.
+              style={step === 'welcome' ? heroTitleStyle(isTablet, scale) : undefined}
             >
               {title}
             </EcolnaText>
@@ -414,9 +438,24 @@ export default function CreateProfileScreen() {
         characterSize={characterSize}
         joy={step === 'welcome' || avatarId !== null}
         celebrate={step === 'welcome'}
+        inviteKey={step === 'avatar' ? nudge : 0}
       />
     </View>
   );
+
+  const back =
+    step !== 'welcome' ? (
+      <EcolnaIconButton
+        icon="arrow-back"
+        accessibilityLabel={fr.common.back}
+        onPress={() => {
+          if (!previous()) {
+            router.back();
+          }
+        }}
+        style={[styles.back, { top: backTop, left: screenPadding }]}
+      />
+    ) : null;
 
   return (
     <View style={[styles.root, { paddingTop: splitPanes ? 0 : insets.top }]}>
@@ -437,6 +476,8 @@ export default function CreateProfileScreen() {
           onStartShouldSetResponder={() => step === 'welcome'}
           onResponderRelease={advance}
         >
+          {/* Le retour vient en premier pour le lecteur d'écran ; posé au-dessus de la scène. */}
+          {back}
           {stage}
           {panel}
         </View>
@@ -449,8 +490,9 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
   row: { flexDirection: 'row' },
-  panel: { flex: 1, paddingTop: spacing.md },
-  topRow: { flexDirection: 'row', alignItems: 'center', minHeight: 56 },
+  panel: { flex: 1 },
+  topRow: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center' },
+  back: { position: 'absolute', zIndex: 2 },
   panelScroll: { flexGrow: 1, justifyContent: 'center', paddingVertical: spacing.lg },
   stepColumn: { alignSelf: 'center' },
   adultRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },

@@ -13,7 +13,7 @@ import type { Subject } from '@/content/schemas/curriculum-schema';
 import { EcolnaAvatar } from '@/design-system/avatars';
 import { EcolnaPill } from '@/design-system/components/ecolna-pill';
 import { LessonHeroCard } from '@/design-system/components/lesson-hero-card';
-import { SubjectTile } from '@/design-system/components/subject-tile';
+import { SubjectTile, fitSubjectTile } from '@/design-system/components/subject-tile';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { EcolnaGalet, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
@@ -42,10 +42,15 @@ function chunk<T>(items: readonly T[], size: number): T[][] {
  * soleils) ; aujourd'hui (la carte du jour, sur la nuit du Sahel, et la
  * révision à côté quand il y en a) ; mes matières. Une seule chose est
  * colorée en grand : ce qu'on fait maintenant.
+ *
+ * L'écran occupe toute la hauteur utile : sur une tablette qui a la place,
+ * les tuiles des matières grandissent jusqu'à la barre d'onglets, à la taille
+ * mesurée de ce qui reste (`fitSubjectTile`) ; une tablette 7" couchée et un
+ * téléphone gardent des tuiles compactes.
  */
 export default function ChildHomeScreen() {
   const router = useRouter();
-  const { isTablet, splitPanes, scale, screenPadding, height } = useResponsive();
+  const { isTablet, splitPanes, scale, screenPadding, width, height } = useResponsive();
   // Une tablette 7" couchée n'a que 600 dp : on resserre plutôt que de faire défiler.
   const short = height < 700;
   const profile = useActiveProfile((state) => state.profile);
@@ -55,6 +60,21 @@ export default function ChildHomeScreen() {
   );
   // Discipline verrouillée dont l'enfant vient de demander pourquoi.
   const [explained, setExplained] = useState<Subject | null>(null);
+  // Ce qui reste pour les matières : la hauteur visible de l'écran, le haut de
+  // leur grille et sa largeur. Aucune de ces mesures ne dépend des tuiles
+  // elles-mêmes : les agrandir ne les change pas. Chaque mesure porte la
+  // fenêtre où elle a été prise : juste après une rotation, celles de l'autre
+  // orientation ne servent jamais.
+  const windowKey = `${width}x${height}`;
+  const [room, setRoom] = useState({ window: '', viewport: 0, section: 0, grid: 0, width: 0 });
+  const measure = (key: 'viewport' | 'section' | 'grid' | 'width', value: number) => {
+    const rounded = Math.round(value);
+    setRoom((previous) =>
+      previous[key] === rounded && previous.window === windowKey
+        ? previous
+        : { ...previous, [key]: rounded, window: windowKey },
+    );
+  };
 
   if (!profile) {
     return null;
@@ -69,12 +89,32 @@ export default function ChildHomeScreen() {
   const gap = scaled(isTablet && !short ? spacing.lg : spacing.md, scale);
   const sectionGap = scaled(isTablet && !short ? spacing.xl : short ? spacing.md : spacing.lg, scale);
   const avatarSize = scaled(isTablet && !short ? 64 : short ? 44 : 52, scale);
+  const bottomPad = scaled(short ? spacing.xs : spacing.sm, scale);
+  const subjects = summary?.subjects ?? [];
+  const rows = chunk(subjects, columns);
+  // Grande tuile : l'emblème devient la plus grande chose de la tuile —
+  // l'enfant qui ne lit pas encore choisit sa matière à son dessin.
+  const fit =
+    isTablet && room.window === windowKey && room.viewport > 0 && room.width > 0 && rows.length > 0
+      ? fitSubjectTile(
+          {
+            width: (room.width - (columns - 1) * gap) / columns,
+            // Deux dp de marge : les arrondis des mesures ne font jamais défiler l'écran.
+            height: Math.floor(
+              (room.viewport - room.section - room.grid - bottomPad - (rows.length - 1) * gap) /
+                rows.length -
+                2,
+            ),
+          },
+          scale,
+        )
+      : null;
 
   const greeting = (
     <View style={styles.greeting}>
       {/* Un prénom long (30 caractères permis) passe sur deux lignes, puis rapetisse : jamais tronqué. */}
       <EcolnaText
-        // Le grand titre seulement couché : debout, les pastilles lui prennent
+        // Le grand titre seulement couché : debout, la pastille lui prend
         // la place et « Bonjour Amina ! » se couperait en deux.
         variant={splitPanes && !short ? 'displayHero' : 'headlineLg'}
         numberOfLines={2}
@@ -99,6 +139,25 @@ export default function ChildHomeScreen() {
     router.push(`/(child)/level-map?subject=${subject.subject}`);
   };
 
+  // La révision : son titre, son compte, et une pilule bleue « Revoir » —
+  // le bleu dit « on revoit », la pilule dit qu'on la touche.
+  const reviseAction = (
+    <View
+      style={[
+        styles.revisePill,
+        {
+          height: scaled(short ? 36 : 40, scale),
+          paddingHorizontal: scaled(spacing.md, scale),
+          gap: scaled(spacing.xxs, scale),
+        },
+      ]}
+    >
+      <EcolnaIcon name="replay" size={scaled(18, scale)} color={colors.brandInk} />
+      <EcolnaText variant="buttonSm" color={colors.brandInk}>
+        {fr.home.reviseAction}
+      </EcolnaText>
+    </View>
+  );
   const revision =
     revisionCount > 0 ? (
       <EcolnaGalet
@@ -112,30 +171,36 @@ export default function ChildHomeScreen() {
         style={splitPanes ? styles.revisionSide : undefined}
         faceStyle={[
           splitPanes ? styles.revisionColumn : styles.revisionRow,
-          { padding: scaled(spacing.lg, scale), gap: scaled(spacing.md, scale) },
+          {
+            padding: scaled(short ? spacing.md : spacing.lg, scale),
+            gap: scaled(splitPanes ? spacing.sm : spacing.md, scale),
+          },
         ]}
       >
-        <View style={[styles.revisionIcon, { width: scaled(52, scale), height: scaled(52, scale), borderRadius: scaled(26, scale) }]}>
-          <EcolnaIcon name="replay" size={scaled(28, scale)} color={colors.brand} />
-        </View>
-        <View style={styles.revisionText}>
-          <EcolnaText variant="headlineSm">{fr.home.reviseTitle}</EcolnaText>
+        <View style={[styles.revisionText, !splitPanes && styles.grow]}>
+          <EcolnaText variant={splitPanes && !short ? 'headlineMd' : 'headlineSm'}>
+            {fr.home.reviseTitle}
+          </EcolnaText>
           <EcolnaText variant="bodyMd" color={colors.textSecondary}>
             {fr.home.reviseCount(revisionCount)}
           </EcolnaText>
         </View>
-        <View style={splitPanes ? styles.revisionGo : undefined}>
-          <EcolnaIcon name="chevron-right" size={scaled(22, scale)} color={colors.brand} />
-        </View>
+        {reviseAction}
       </EcolnaGalet>
     ) : null;
 
   return (
     <EcolnaScreen background="default" withBottomInset={false}>
       <ScrollView
+        onLayout={(event) => measure('viewport', event.nativeEvent.layout.height)}
         contentContainerStyle={[
           styles.scroll,
-          { paddingHorizontal: screenPadding, gap: sectionGap, paddingTop: scaled(short ? spacing.sm : spacing.md, scale) },
+          {
+            paddingHorizontal: screenPadding,
+            gap: sectionGap,
+            paddingTop: scaled(short ? spacing.sm : spacing.md, scale),
+            paddingBottom: bottomPad,
+          },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -151,25 +216,17 @@ export default function ChildHomeScreen() {
             <EcolnaAvatar avatarId={profile.avatarId} size={avatarSize} />
           </Pressable>
           {isTablet ? greeting : <View style={styles.greeting} />}
-          <View style={styles.pills}>
-            {streakDays > 0 ? (
-              <EcolnaPill
-                tone="sun"
-                variant="labelLg"
-                label={fr.home.streakShort(streakDays)}
-                accessibilityLabel={fr.home.streak(streakDays)}
-                icon={<EcolnaIcon name="sun" size={scaled(22, scale)} mode="color" />}
-              />
-            ) : null}
+          {/* À droite, la série de soleils seule (rien avant le premier jour). */}
+          {streakDays > 0 ? (
             <EcolnaPill
-              tone="white"
-              variant="labelMd"
-              label={isTablet ? fr.offline.chip : ''}
-              accessibilityLabel={fr.offline.badge}
-              onPress={() => router.push('/(child)/offline-info')}
-              icon={<EcolnaIcon name="offline-ok" size={scaled(20, scale)} mode="color" />}
+              tone="sun"
+              variant="labelLg"
+              label={fr.home.streakShort(streakDays)}
+              accessibilityLabel={fr.home.streak(streakDays)}
+              icon={<EcolnaIcon name="sun" size={scaled(22, scale)} mode="color" />}
+              style={styles.streak}
             />
-          </View>
+          ) : null}
         </View>
         {isTablet ? null : greeting}
 
@@ -190,7 +247,7 @@ export default function ChildHomeScreen() {
                   recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson
                 } : ${recommendation.title}`}
                 onPress={() => router.push(`/(child)/lesson/${recommendation.lessonId}`)}
-                style={splitPanes ? styles.fill : undefined}
+                style={splitPanes ? styles.grow : undefined}
                 cover={lessonOrWorldCover(recommendation.lessonId)}
               />
             </View>
@@ -201,14 +258,24 @@ export default function ChildHomeScreen() {
         )}
 
         {/* Mes matières */}
-        <View style={{ gap: scaled(short ? spacing.sm : spacing.md, scale) }}>
-          {/* 7" couchée : un titre discret, la place va aux tuiles. */}
-          <EcolnaText variant={short && splitPanes ? 'labelLg' : short ? 'headlineSm' : 'headlineMd'}>
+        <View
+          onLayout={(event) => measure('section', event.nativeEvent.layout.y)}
+          // Tablette : la section descend jusqu'à la barre d'onglets.
+          style={[isTablet && styles.grow, { gap: scaled(isTablet ? spacing.sm : spacing.md, scale) }]}
+        >
+          {/* Jamais plus petit que les noms des tuiles qu'il annonce. */}
+          <EcolnaText variant={short && isTablet ? 'headlineSm' : 'headlineMd'}>
             {fr.home.activities}
           </EcolnaText>
-          <View style={{ gap }}>
-            {chunk(summary?.subjects ?? [], columns).map((row, rowIndex) => (
-              <View key={rowIndex} style={[styles.gridRow, { gap }]}>
+          <View
+            onLayout={(event) => {
+              measure('grid', event.nativeEvent.layout.y);
+              measure('width', event.nativeEvent.layout.width);
+            }}
+            style={[isTablet && styles.grow, { gap }]}
+          >
+            {rows.map((row, rowIndex) => (
+              <View key={rowIndex} style={[styles.gridRow, isTablet && styles.grow, { gap }]}>
                 {row.map((subject) => (
                   <SubjectTile
                     key={subject.subject}
@@ -219,9 +286,10 @@ export default function ChildHomeScreen() {
                     locked={subject.locked}
                     explanation={explained === subject.subject ? fr.home.lockedExplain : null}
                     artSize={splitPanes ? 40 : isTablet ? 44 : 48}
-                    // Tablette : en ligne (quatre couché, deux par deux debout),
-                    // pour que les quatre disciplines tiennent sans défiler.
-                    layout={isTablet ? 'row' : 'stack'}
+                    // Tablette qui a la place : de grandes tuiles qui remplissent
+                    // la hauteur ; 7" couchée : en ligne, pour tenir sans défiler.
+                    layout={fit ? fit.layout : isTablet ? 'row' : 'stack'}
+                    emblem={fit?.emblem}
                     onPress={() => openSubject(subject)}
                   />
                 ))}
@@ -235,18 +303,22 @@ export default function ChildHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: spacing.lg },
+  scroll: { flexGrow: 1 },
   header: { flexDirection: 'row', alignItems: 'center' },
   greeting: { flex: 1, gap: 2 },
-  pills: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  streak: { alignSelf: 'center' },
   heroRow: { flexDirection: 'row', alignItems: 'stretch' },
   heroMain: { flex: 2.4 },
-  fill: { flexGrow: 1 },
+  grow: { flexGrow: 1 },
   revisionSide: { flex: 1 },
   revisionRow: { flexDirection: 'row', alignItems: 'center' },
-  revisionColumn: { justifyContent: 'space-between' },
-  revisionText: { flex: 1, gap: 2 },
-  revisionGo: { alignSelf: 'flex-end' },
-  revisionIcon: { backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center' },
+  revisionColumn: { justifyContent: 'center', alignItems: 'flex-start' },
+  revisionText: { flexShrink: 1, gap: 2 },
+  revisePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: radius.pill,
+    backgroundColor: colors.brandTint,
+  },
   gridRow: { flexDirection: 'row', alignItems: 'stretch' },
 });

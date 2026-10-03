@@ -39,6 +39,8 @@ export function createLearningAudioService(
   let player: AudioPlayer | null = null;
   let currentAudioId: string | null = null;
   let startedAt = 0;
+  // Chaque départ porte un numéro : seul le plus récent joue.
+  let starts = 0;
   // Chaque séquence porte un jeton : un nouveau son l'invalide.
   let sequence = 0;
   let rate: PlaybackRate = 1;
@@ -61,19 +63,28 @@ export function createLearningAudioService(
     }
   }
 
-  async function start(audioId: string): Promise<void> {
-    await ensureAudioMode();
+  async function start(audioId: string): Promise<boolean> {
     const source = resolveSource(audioId);
     if (source === null) {
       throw new AudioAssetNotFoundError(audioId);
+    }
+    // Noté avant la moindre attente : un écran qui demande, dans le même
+    // rendu, « quel son vient de partir ? » (justStarted) doit le savoir.
+    starts += 1;
+    const ticket = starts;
+    currentAudioId = audioId;
+    startedAt = Date.now();
+    await ensureAudioMode();
+    if (ticket !== starts) {
+      // Un son plus récent a été demandé pendant l'attente : celui-ci ne part pas.
+      return false;
     }
     // Replace instead of overlapping: a second tap restarts the sound.
     releasePlayer();
     player = createAudioPlayer(source);
     player.setPlaybackRate(rate);
-    currentAudioId = audioId;
-    startedAt = Date.now();
     player.play();
+    return true;
   }
 
   return {
@@ -100,7 +111,9 @@ export function createLearningAudioService(
         if (audioId === undefined || token !== sequence) {
           return;
         }
-        await start(audioId);
+        if (!(await start(audioId)) || token !== sequence) {
+          return;
+        }
         onStart?.(audioId);
         const current = player;
         current?.addListener('playbackStatusUpdate', (status) => {
