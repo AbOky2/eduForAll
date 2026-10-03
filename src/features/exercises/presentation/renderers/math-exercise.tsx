@@ -8,6 +8,7 @@ import {
   EcolnaCard,
   EcolnaExerciseLayout,
   EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
 import { QuantityCard, QuantityGroup } from '@/design-system/components/quantity-group';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
@@ -152,9 +153,11 @@ export function MathExercise({
   playingAudioId,
 }: ExerciseRendererProps<MathStep>) {
   const [pressed, setPressed] = useState<number | null>(null);
-  const { scale } = useResponsive();
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
   // Objets à compter : suivent la classe de fenêtre comme la typographie.
-  const iconSize = scaled(36, scale);
+  const iconSize = scaled(isTablet ? 52 : 38, scale);
+  const cell = scaled(isTablet ? 72 : 56, scale);
 
   useEffect(() => {
     if (step.type === 'visual_word_problem' && step.statementAudioId) {
@@ -171,8 +174,10 @@ export function MathExercise({
     onSubmit({ kind: 'number', value });
   };
 
-  const prompt = (
-    <EcolnaCard rounded="xl" style={styles.board}>
+  // « Compare » n'a pas d'énoncé à montrer : la consigne de l'en-tête suffit,
+  // les deux nombres sont les réponses.
+  const prompt = step.type === 'compare_numbers' ? null : (
+    <EcolnaCard rounded="xl" style={[styles.board, { gap: metrics.gap }]}>
       {isOperation(step) ? (
         <>
           {step.showQuantities ? (
@@ -194,7 +199,14 @@ export function MathExercise({
       {step.type === 'number_sequence' ? (
         <View style={styles.sequence}>
           {step.sequence.map((value, index) => (
-            <View key={index} style={[styles.sequenceCell, value === null && styles.sequenceGap]}>
+            <View
+              key={index}
+              style={[
+                styles.sequenceCell,
+                { minWidth: cell, height: cell },
+                value === null && styles.sequenceGap,
+              ]}
+            >
               <EcolnaText
                 variant="displayGlyphSmall"
                 color={value === null ? colors.outline : colors.textPrimary}
@@ -206,11 +218,6 @@ export function MathExercise({
         </View>
       ) : null}
 
-      {step.type === 'compare_numbers' ? (
-        <EcolnaText variant="headlineMd" align="center">
-          {step.instruction.text}
-        </EcolnaText>
-      ) : null}
 
       {step.type === 'visual_word_problem' ? (
         <View style={styles.problem}>
@@ -226,13 +233,13 @@ export function MathExercise({
           ) : step.illustrationId ? (
             <ObjectIcon id={step.illustrationId} size={64} />
           ) : null}
-          <EcolnaText variant="bodyLg" align="center">
+          <EcolnaText variant="headlineSm" align="center">
             {step.statement}
           </EcolnaText>
           {step.statementAudioId ? (
             <EcolnaAudioButton
               variant="sky"
-              size={48}
+              size={scaled(52, scale)}
               playing={playingAudioId === step.statementAudioId}
               onPress={() => step.statementAudioId && playAudio(step.statementAudioId)}
             />
@@ -243,11 +250,12 @@ export function MathExercise({
   );
 
   const answers = (
-    <View style={styles.options}>
+    <View style={[styles.options, { gap: metrics.gap }]}>
       {options.map((option, index) => (
         <EcolnaAnswerCard
           key={`${option}-${index}`}
           label={String(option)}
+          glyphVariant={metrics.answerGlyph}
           state={
             !interactive && pressed !== option
               ? 'disabled'
@@ -256,17 +264,18 @@ export function MathExercise({
                 : 'default'
           }
           onPress={() => submit(option)}
-          style={styles.numberCard}
+          style={[styles.numberCard, { maxWidth: metrics.tileWidth * 1.3 }]}
+          contentStyle={{ minHeight: metrics.answerHeight }}
         />
       ))}
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.3} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.2} />;
 }
 
 const styles = StyleSheet.create({
-  board: { gap: spacing.lg, alignItems: 'center', paddingVertical: spacing.xl },
+  board: { alignItems: 'center', justifyContent: 'center', paddingVertical: spacing.xl },
   quantities: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -276,8 +285,6 @@ const styles = StyleSheet.create({
   },
   sequence: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap', justifyContent: 'center' },
   sequenceCell: {
-    minWidth: 58,
-    height: 58,
     borderRadius: radius.md,
     backgroundColor: colors.surfaceContainerLow,
     alignItems: 'center',
@@ -298,7 +305,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
   },
   problem: { alignItems: 'center', gap: spacing.md },
-  options: { flexDirection: 'row', gap: spacing.md, justifyContent: 'center' },
-  numberCard: { flex: 1, maxWidth: 110 },
+  options: { flexDirection: 'row', justifyContent: 'center' },
+  numberCard: { flex: 1 },
 });
 

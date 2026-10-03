@@ -63,11 +63,12 @@ const LANGUAGE = {
   bubble: 'M4 20A16 12 0 1 1 36 20A16 12 0 1 1 4 20ZM12 28L17.5 31L12.8 34A2 2 0 0 1 10 31.2Z',
   /** Croissant d’ombre en bas à droite (de −33° à 101°, 1,8 u au plus épais). */
   shade: 'M33.5 13.6A16 12 0 0 1 17.1 31.8A17.2 13.2 0 0 0 33.5 13.6Z',
-  /** Bouche en D ; le blanc s’arrête sous la langue (aucun liseré au bord). */
-  mouth:
-    'M19 19H27A2 2 0 0 1 29 21A6 6 0 0 1 26.8 25.6C25.3 24.6 20.7 24.6 19.2 25.6A6 6 0 0 1 17 21A2 2 0 0 1 19 19Z',
-  /** Langue : dessine seule l’arc bas de la bouche. */
-  tongue: 'M19.2 25.6C20.7 24 25.3 24 26.8 25.6A6 6 0 0 1 19.2 25.6Z',
+  /**
+   * La bouche qui sourit : un seul arc de craie, trait 4 u. La bouche ouverte
+   * (en D, langue rose) de la première version se lisait comme un visage qui
+   * crie dès 48 dp ; un sourire dit « on se parle, gentiment ».
+   */
+  smile: 'M18 20.5Q23 26.5 28 20.5',
   /** Reflet : arc rentré de 6 u, de 9 h à 10 h 30. */
   sheen: 'M10.1 19.4A10 6 0 0 1 14.1 15.1',
   /** Réserve autour de la petite bulle (trait de 6 u couleur du disque). */
@@ -82,7 +83,6 @@ interface LanguageTones {
   bubble: string;
   shade: string | null;
   mouth: string;
-  tongue: string;
   reply: string;
   sheen: string | null;
 }
@@ -91,7 +91,6 @@ const LANGUAGE_COLOR: LanguageTones = {
   bubble: illustration.fabric.indigo.base,
   shade: illustration.fabric.indigo.shade,
   mouth: white,
-  tongue: illustration.face.tongue,
   reply: illustration.fabric.indigo.light,
   sheen: white,
 };
@@ -100,7 +99,6 @@ const LANGUAGE_MUTED: LanguageTones = {
   bubble: colors.locked,
   shade: null,
   mouth: colors.lockedContainer,
-  tongue: colors.locked,
   reply: colors.locked,
   sheen: null,
 };
@@ -111,8 +109,7 @@ function LanguageArt({ tones: t }: { tones: LanguageTones }) {
       <Circle cx={24} cy={24} r={24} fill={t.disc} />
       <Path d={LANGUAGE.bubble} fill={t.bubble} />
       {t.shade ? <Path d={LANGUAGE.shade} fill={t.shade} /> : null}
-      <Path d={LANGUAGE.mouth} fill={t.mouth} />
-      <Path d={LANGUAGE.tongue} fill={t.tongue} />
+      <Path {...LINE} d={LANGUAGE.smile} stroke={t.mouth} strokeWidth={4} />
       {t.sheen ? <Path {...LINE} d={LANGUAGE.sheen} stroke={t.sheen} strokeWidth={4} /> : null}
       <Path d={LANGUAGE.replyGap} fill={t.disc} stroke={t.disc} strokeWidth={6} />
       <Path d={LANGUAGE.reply} fill={t.reply} />
@@ -345,7 +342,7 @@ export const SubjectArt = memo(function SubjectArt({
   muted = false,
 }: SubjectArtProps) {
   return (
-    <Svg width={size} height={size} viewBox="0 0 48 48" accessible={false}>
+    <Svg width={size} height={size} viewBox="0 0 48 48">
       {subject === 'language' ? (
         <LanguageArt tones={muted ? LANGUAGE_MUTED : LANGUAGE_COLOR} />
       ) : null}

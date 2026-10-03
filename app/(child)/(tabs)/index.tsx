@@ -3,56 +3,49 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { avatarVariant } from '@/features/child-profile/domain/child-profile';
+import { findWorld } from '@/features/curriculum/application/curriculum-catalog';
 import {
   loadHomeSummary,
   type HomeSummary,
+  type SubjectProgress,
 } from '@/features/learning-path/application/home-summary';
 import type { Subject } from '@/content/schemas/curriculum-schema';
-import { EcolnaCard, EcolnaProgressBar, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
-import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
-import { AvatarFace } from '@/design-system/illustrations/scenes';
-import { colors, radius, shadows, spacing } from '@/design-system/tokens';
+import { EcolnaAvatar } from '@/design-system/avatars';
+import { EcolnaPill } from '@/design-system/components/ecolna-pill';
+import { LessonHeroCard } from '@/design-system/components/lesson-hero-card';
+import { SubjectTile } from '@/design-system/components/subject-tile';
+import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
+import { EcolnaGalet, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
 
-const SUBJECT_META: Record<
-  Subject,
-  { label: string; icon: IconName; tile: string; tint: string; bar: 'sand' | 'brown' | 'blue' }
-> = {
-  language: {
-    label: fr.subjects.language,
-    icon: 'speech',
-    tile: colors.secondary,
-    tint: colors.onSecondary,
-    bar: 'blue',
-  },
-  reading: {
-    label: fr.subjects.reading,
-    icon: 'book',
-    tile: colors.primaryFixedDim,
-    tint: colors.onPrimaryContainer,
-    bar: 'brown',
-  },
-  writing: {
-    label: fr.subjects.writing,
-    icon: 'pencil',
-    tile: colors.tertiaryFixed,
-    tint: colors.onTertiaryContainer,
-    bar: 'sand',
-  },
-  math: {
-    label: fr.subjects.math,
-    icon: 'calculator',
-    tile: colors.secondaryContainer,
-    tint: colors.onSecondaryContainer,
-    bar: 'blue',
-  },
+const SUBJECT_LABELS: Record<Subject, string> = {
+  language: fr.subjects.language,
+  reading: fr.subjects.reading,
+  writing: fr.subjects.writing,
+  math: fr.subjects.math,
 };
 
-/** Child home — mockup S06. */
+function chunk<T>(items: readonly T[], size: number): T[][] {
+  const rows: T[][] = [];
+  for (let start = 0; start < items.length; start += size) {
+    rows.push(items.slice(start, start + size));
+  }
+  return rows;
+}
+
+/**
+ * Accueil de l'enfant (direction v3). Trois étages, du plus important au
+ * plus large : qui je suis (avatar, salutation, ma série de soleils), ce que
+ * je fais maintenant (la carte héros, et la révision à côté quand il y en a),
+ * tout ce que je peux faire (les quatre disciplines, chacune de sa couleur).
+ * Sur tablette en paysage, tout tient sans défiler.
+ */
 export default function ChildHomeScreen() {
   const router = useRouter();
+  const { isTablet, splitPanes, scale, screenPadding } = useResponsive();
   const profile = useActiveProfile((state) => state.profile);
   const summary = useFocusedData<HomeSummary>(
     () => (profile ? loadHomeSummary(profile.id, profile.level) : null),
@@ -65,169 +58,162 @@ export default function ChildHomeScreen() {
     return null;
   }
   const recommendation = summary?.recommendation ?? null;
-  const lessonsToday = summary?.lessonsToday ?? 0;
   const streakDays = summary?.streakDays ?? 0;
   const revisionCount = summary?.revisionCount ?? 0;
-  const todayLine = fr.home.today(lessonsToday);
+  const world = recommendation ? findWorld(recommendation.worldId) : null;
+  // Paysage : quatre colonnes, tout tient sans défiler. Portrait et
+  // téléphone : deux par deux, des tuiles plus grandes qui remplissent l'écran.
+  const columns = splitPanes ? 4 : 2;
+  const tileArt = splitPanes ? 72 : isTablet ? 120 : 72;
+  // En paysage l'écran est court : des écarts plus serrés pour que les quatre
+  // disciplines tiennent sans défiler sous la barre d'onglets.
+  const gap = scaled(splitPanes ? spacing.md : isTablet ? spacing.lg : spacing.md, scale);
+  const avatarSize = scaled(isTablet ? 72 : 60, scale);
+
+  const greeting = (
+    <View style={styles.greeting}>
+      <EcolnaText variant={isTablet ? 'displayHero' : 'headlineLg'} numberOfLines={1}>
+        {fr.home.greeting(profile.firstName)}
+      </EcolnaText>
+      <EcolnaText variant="bodyLg" color={colors.textSecondary}>
+        {fr.home.today(summary?.lessonsToday ?? 0)}
+      </EcolnaText>
+    </View>
+  );
+
+  const openSubject = (subject: SubjectProgress) =>
+    subject.locked
+      ? // Un appui sans effet n'apprend rien : on explique, sur place.
+        setExplained(subject.subject)
+      : router.push(`/(child)/level-map?subject=${subject.subject}`);
+
+  const revision =
+    revisionCount > 0 ? (
+      <EcolnaGalet
+        face={colors.card}
+        edge={colors.cardEdge}
+        border={colors.cardEdge}
+        radius={radius.xl}
+        depth="lg"
+        onPress={() => router.push('/(child)/revision')}
+        accessibilityLabel={`${fr.home.reviseTitle} ${fr.home.reviseCount(revisionCount)}`}
+        style={splitPanes ? styles.revisionSide : undefined}
+        faceStyle={[
+          splitPanes ? styles.revisionColumn : styles.revisionRow,
+          { padding: scaled(spacing.lg, scale), gap: scaled(spacing.sm, scale) },
+        ]}
+      >
+        <View style={[styles.sproutDisc, { width: scaled(56, scale), height: scaled(56, scale) }]}>
+          <EcolnaIcon name="sprout" size={scaled(40, scale)} mode="color" />
+        </View>
+        <View style={splitPanes ? styles.revisionTextColumn : styles.revisionText}>
+          <EcolnaText variant="headlineSm" align={splitPanes ? 'center' : 'left'}>
+            {fr.home.reviseTitle}
+          </EcolnaText>
+          <EcolnaText
+            variant="bodyMd"
+            color={colors.textSecondary}
+            align={splitPanes ? 'center' : 'left'}
+          >
+            {fr.home.reviseCount(revisionCount)}
+          </EcolnaText>
+        </View>
+        {splitPanes ? null : (
+          <EcolnaIcon name="chevron-right" size={24} color={colors.onSurfaceVariant} />
+        )}
+      </EcolnaGalet>
+    ) : null;
 
   return (
     <EcolnaScreen background="default" withBottomInset={false}>
-      {/* Header: avatar — ECOLNA — offline badge */}
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.childProfile.title}
-          onPress={() => router.push('/(child)/profile')}
-          hitSlop={8}
-        >
-          <AvatarFace variant={avatarVariant(profile.avatarId)} size={40} />
-        </Pressable>
-        <EcolnaText variant="headlineSm" color={colors.primary}>
-          {fr.common.appName}
-        </EcolnaText>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.offline.badge}
-          onPress={() => router.push('/(child)/offline-info')}
-          hitSlop={8}
-        >
-          <EcolnaIcon name="cloud-off" size={24} color={colors.onSurfaceVariant} />
-        </Pressable>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <View style={styles.greetingRow}>
-          <View style={styles.greetingText}>
-            <EcolnaText variant="headlineLg">{fr.home.greeting(profile.firstName)}</EcolnaText>
-            <EcolnaText variant="bodyLg" color={colors.textSecondary}>
-              {todayLine}
-            </EcolnaText>
-          </View>
-          {streakDays > 0 ? (
-            <View
-              style={styles.streak}
-              accessibilityRole="text"
-              accessibilityLabel={fr.home.streak(streakDays)}
-            >
-              <EcolnaIcon name="flame" size={18} color={colors.onPrimaryContainer} filled />
-              <EcolnaText variant="labelMd" color={colors.onPrimaryContainer}>
-                {String(streakDays)}
-              </EcolnaText>
-            </View>
-          ) : null}
-        </View>
-
-        {/* Continue lesson hero card */}
-        {recommendation ? (
+      <ScrollView
+        contentContainerStyle={[
+          styles.scroll,
+          { paddingHorizontal: screenPadding, gap, paddingTop: scaled(spacing.md, scale) },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Qui je suis */}
+        <View style={[styles.header, { gap: scaled(spacing.md, scale) }]}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`${fr.home.continueLesson} : ${recommendation.title}`}
-            onPress={() => router.push(`/(child)/lesson/${recommendation.lessonId}`)}
+            accessibilityLabel={fr.childProfile.title}
+            onPress={() => router.push('/(child)/profile')}
+            hitSlop={8}
             style={({ pressed }) => [
-              styles.hero,
-              shadows.raised,
-              pressed && { transform: [{ scale: 0.98 }] },
+              styles.avatarRing,
+              { borderRadius: avatarSize, transform: [{ scale: pressed ? 0.95 : 1 }] },
             ]}
           >
-            <View style={styles.heroBadge}>
-              <EcolnaText variant="labelSm" color={colors.primaryFixed}>
-                {recommendation.reason === 'resume' ? fr.home.inProgress : fr.home.newBadge}
-              </EcolnaText>
-            </View>
-            <EcolnaText variant="headlineMd" color={colors.onPrimary}>
-              {recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson}
-            </EcolnaText>
-            <EcolnaText variant="bodyMd" color={colors.primaryFixed}>
-              {recommendation.title}
-            </EcolnaText>
-            <View style={styles.heroPlay}>
-              <EcolnaIcon name="play" size={26} color={colors.primary} />
-            </View>
+            <EcolnaAvatar avatarId={profile.avatarId} size={avatarSize} />
           </Pressable>
-        ) : null}
-
-        {/* Revision workshop — only when something is actually waiting */}
-        {revisionCount > 0 ? (
-          <EcolnaCard
-            rounded="xl"
-            onPress={() => router.push('/(child)/revision')}
-            accessibilityLabel={`${fr.home.reviseTitle} ${fr.home.reviseCount(revisionCount)}`}
-            style={styles.revision}
-          >
-            <View style={styles.revisionBadge}>
-              <EcolnaIcon name="leaf" size={22} color={colors.onTertiaryContainer} />
-            </View>
-            <View style={styles.revisionText}>
-              <EcolnaText variant="labelLg">{fr.home.reviseTitle}</EcolnaText>
-              <EcolnaText variant="bodyMd" color={colors.textSecondary}>
-                {fr.home.reviseCount(revisionCount)}
-              </EcolnaText>
-            </View>
-            <EcolnaIcon name="chevron-right" size={22} color={colors.onSurfaceVariant} />
-          </EcolnaCard>
-        ) : null}
-
-        {/* Activities grid */}
-        <View style={styles.sectionTitle}>
-          <EcolnaIcon name="star-outline" size={18} color={colors.primary} />
-          <EcolnaText variant="headlineSm">{fr.home.activities}</EcolnaText>
+          {isTablet ? greeting : <View style={styles.greeting} />}
+          <View style={styles.pills}>
+            {streakDays > 0 ? (
+              <EcolnaPill
+                tone="white"
+                variant="headlineSm"
+                label={String(streakDays)}
+                accessibilityLabel={fr.home.streak(streakDays)}
+                icon={<EcolnaIcon name="sun" size={scaled(30, scale)} mode="color" />}
+              />
+            ) : null}
+            <EcolnaPill
+              tone="white"
+              label=""
+              accessibilityLabel={fr.offline.badge}
+              onPress={() => router.push('/(child)/offline-info')}
+              icon={<EcolnaIcon name="offline-ok" size={scaled(24, scale)} color={colors.secondary} />}
+            />
+          </View>
         </View>
-        <View style={styles.grid}>
-          {(summary?.subjects ?? []).map((subject) => {
-            const meta = SUBJECT_META[subject.subject];
-            const progress = subject.total === 0 ? 0 : subject.completed / subject.total;
-            return (
-              <EcolnaCard
-                key={subject.subject}
-                onPress={
-                  subject.locked
-                    ? // A dead tap tells a six-year-old nothing: explain, in place.
-                      () => setExplained(subject.subject)
-                    : () => router.push(`/(child)/level-map?subject=${subject.subject}`)
+        {isTablet ? null : greeting}
+
+        {/* Ce que je fais maintenant */}
+        {recommendation ? (
+          <View style={splitPanes ? [styles.heroRow, { gap }] : { gap }}>
+            <View style={splitPanes ? styles.heroMain : undefined}>
+              <LessonHeroCard
+                subject={world?.subject ?? null}
+                tag={recommendation.reason === 'resume' ? fr.home.inProgress : fr.home.newTag}
+                title={
+                  recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson
                 }
-                accessibilityLabel={`${meta.label}${subject.locked ? ', verrouillé' : ''}`}
-                style={StyleSheet.flatten([
-                  styles.activityCard,
-                  subject.locked && styles.lockedCard,
-                ])}
-              >
-                <View style={styles.activityHeader}>
-                  <View
-                    style={[
-                      styles.activityTile,
-                      { backgroundColor: subject.locked ? colors.lockedContainer : meta.tile },
-                    ]}
-                  >
-                    <EcolnaIcon
-                      name={meta.icon}
-                      size={22}
-                      color={subject.locked ? colors.locked : meta.tint}
-                    />
-                  </View>
-                  {subject.locked ? (
-                    <EcolnaIcon name="lock" size={16} color={colors.locked} />
-                  ) : null}
-                </View>
-                <EcolnaText
-                  variant="labelLg"
-                  color={subject.locked ? colors.locked : colors.textPrimary}
-                >
-                  {meta.label}
-                </EcolnaText>
-                <EcolnaProgressBar
-                  progress={progress}
-                  tone={meta.bar}
-                  height={8}
-                  accessibilityLabel={`${meta.label} : ${subject.completed} sur ${subject.total}`}
+                detail={world ? `${world.title} · ${recommendation.title}` : recommendation.title}
+                // Le libellé lu commence par le titre affiché (« Ma prochaine leçon »
+                // ou « Continuer ma leçon ») : ce qu'on voit est ce qu'on entend.
+                accessibilityLabel={`${
+                  recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson
+                } : ${recommendation.title}`}
+                onPress={() => router.push(`/(child)/lesson/${recommendation.lessonId}`)}
+              />
+            </View>
+            {revision}
+          </View>
+        ) : (
+          revision
+        )}
+
+        {/* Tout ce que je peux faire */}
+        <EcolnaText variant="headlineMd">{fr.home.activities}</EcolnaText>
+        <View style={{ gap }}>
+          {chunk(summary?.subjects ?? [], columns).map((row, rowIndex) => (
+            <View key={rowIndex} style={[styles.gridRow, { gap }]}>
+              {row.map((subject) => (
+                <SubjectTile
+                  key={subject.subject}
+                  subject={subject.subject}
+                  label={SUBJECT_LABELS[subject.subject]}
+                  completed={subject.completed}
+                  total={subject.total}
+                  locked={subject.locked}
+                  explanation={explained === subject.subject ? fr.home.lockedExplain : null}
+                  artSize={tileArt}
+                  onPress={() => openSubject(subject)}
                 />
-                {explained === subject.subject ? (
-                  <EcolnaText variant="bodySm" color={colors.textSecondary}>
-                    {fr.home.lockedExplain}
-                  </EcolnaText>
-                ) : null}
-              </EcolnaCard>
-            );
-          })}
+              ))}
+            </View>
+          ))}
         </View>
       </ScrollView>
     </EcolnaScreen>
@@ -235,89 +221,23 @@ export default function ChildHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.screenMargin,
-    paddingVertical: spacing.sm,
-  },
-  scroll: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingBottom: spacing.xxl,
-    gap: spacing.lg,
-  },
-  greetingRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  streak: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xxs,
-    backgroundColor: colors.primaryContainer,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 6,
-  },
-  revision: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  revisionBadge: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.md,
-    backgroundColor: colors.tertiaryFixed,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  scroll: { paddingBottom: spacing.xxl },
+  header: { flexDirection: 'row', alignItems: 'center' },
+  avatarRing: { borderWidth: 4, borderColor: colors.card, backgroundColor: colors.card },
+  greeting: { flex: 1, gap: 2 },
+  pills: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  heroRow: { flexDirection: 'row', alignItems: 'stretch' },
+  heroMain: { flex: 2 },
+  revisionSide: { flex: 1 },
+  revisionRow: { flexDirection: 'row', alignItems: 'center' },
+  revisionColumn: { alignItems: 'center', justifyContent: 'center' },
   revisionText: { flex: 1, gap: 2 },
-  greetingText: { flex: 1, gap: spacing.xxs },
-  hero: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.xl,
-    padding: spacing.lg,
-    gap: spacing.xs,
-  },
-  heroBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
-  },
-  heroPlay: {
-    position: 'absolute',
-    right: spacing.lg,
-    top: '50%',
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.card,
+  revisionTextColumn: { gap: 2 },
+  sproutDisc: {
+    borderRadius: 999,
+    backgroundColor: colors.feedbackCorrectContainer,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sectionTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-  },
-  activityCard: {
-    width: '47%',
-    flexGrow: 1,
-    gap: spacing.sm,
-  },
-  lockedCard: { opacity: 0.75 },
-  activityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  activityTile: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  gridRow: { flexDirection: 'row', alignItems: 'stretch' },
 });

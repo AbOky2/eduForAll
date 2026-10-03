@@ -2,7 +2,7 @@
 appId: td.ecolna.app.dev
 ---
 - launchApp
-- tapOn: 'Ma prochaine leçon'
+- tapOn: 'Ma prochaine leçon.*'
 - assertVisible: 'Exercice 1 sur 6'
 - tapOn:
     index: 0
@@ -12,7 +12,7 @@ appId: td.ecolna.app.dev
 
 - launchApp
 # La leçon entamée est proposée en reprise, pas en démarrage
-- assertVisible: 'Continuer ma leçon'
-- tapOn: 'Continuer ma leçon'
+- assertVisible: 'Continuer ma leçon.*'
+- tapOn: 'Continuer ma leçon.*'
 # On reprend où l'on s'était arrêté, pas au début
 - assertNotVisible: 'Exercice 1 sur 6'

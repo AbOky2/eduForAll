@@ -7,7 +7,7 @@ appId: td.ecolna.app.dev
 - assertVisible: 'Bonjour'
 - assertVisible: 'Tes activités'
 
-- tapOn: 'Ma prochaine leçon'
+- tapOn: 'Ma prochaine leçon.*'
 - assertVisible: 'Exercice 1 sur 6'
 # En paysage sur tablette, consigne et réponses sont côte à côte
 - assertVisible: 'Touche l’image du mot que tu entends.'

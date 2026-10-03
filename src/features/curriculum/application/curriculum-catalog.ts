@@ -55,6 +55,7 @@ interface Index {
   readonly worldById: Map<string, WorldSummary>;
   readonly rawLessonById: Map<string, unknown>;
   readonly lessonIdBySkill: Map<string, string>;
+  readonly worldIdByLesson: Map<string, string>;
 }
 
 let index: Index | null = null;
@@ -69,6 +70,7 @@ function buildIndex(): Index {
   const worldById = new Map<string, WorldSummary>();
   const rawLessonById = new Map<string, unknown>();
   const lessonIdBySkill = new Map<string, string>();
+  const worldIdByLesson = new Map<string, string>();
 
   for (const level of rawManifest.levels) {
     const worlds: WorldSummary[] = level.worlds.map((world) => ({
@@ -78,6 +80,7 @@ function buildIndex(): Index {
       subject: world.subject,
       lessons: world.lessons.map((lesson) => {
         rawLessonById.set(lesson.id, lesson);
+        worldIdByLesson.set(lesson.id, world.id);
         for (const skill of lesson.skills) {
           if (!lessonIdBySkill.has(skill)) {
             lessonIdBySkill.set(skill, lesson.id);
@@ -103,7 +106,7 @@ function buildIndex(): Index {
     worldsByLevel.set(level.id, worlds);
   }
 
-  return { worldsByLevel, worldById, rawLessonById, lessonIdBySkill };
+  return { worldsByLevel, worldById, rawLessonById, lessonIdBySkill, worldIdByLesson };
 }
 
 function getIndex(): Index {
@@ -157,6 +160,12 @@ export function findLesson(lessonId: string): Lesson | null {
 
 export function findWorld(worldId: string): WorldSummary | null {
   return getIndex().worldById.get(worldId) ?? null;
+}
+
+/** Le monde (et donc la discipline) d'une leçon — colore l'écran de leçon. */
+export function worldOfLesson(lessonId: string): WorldSummary | null {
+  const worldId = getIndex().worldIdByLesson.get(lessonId);
+  return worldId ? findWorld(worldId) : null;
 }
 
 export function worldsForLevel(level: LevelId): WorldSummary[] {

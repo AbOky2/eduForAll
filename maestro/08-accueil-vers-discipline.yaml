@@ -7,6 +7,7 @@ appId: td.ecolna.app.dev
 
 # Toucher « Langage » doit ouvrir la carte de progression du langage,
 # pas la liste des modules
-- tapOn: 'Langage'
+# La tuile se lit « Langage, 12 sur 45 » : on vise son début.
+- tapOn: 'Langage.*'
 - assertNotVisible: 'Choisis ton module'
 - assertVisible: 'Retour'

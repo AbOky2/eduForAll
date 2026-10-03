@@ -21,17 +21,33 @@ appId: td.ecolna.app.dev
 - assertVisible: 'Fonctionne sans connexion.'
 - tapOn: 'Créer mon profil'
 
-# Création du profil : aucun email, aucun mot de passe
-- assertVisible: 'Crée ton profil'
-- assertVisible: 'Pas d’email, pas de mot de passe. Tes données restent sur ce téléphone.'
+# Création du profil — la cérémonie en trois étapes (brief v2 § 12) :
+# personnage, prénom, classe ; jamais de bouton grisé, une aide douce à la place.
+- assertVisible: 'Choisis ton personnage'
+- tapOn: 'C’est moi !'
+- assertVisible: 'Touche le personnage qui te ressemble.'
+- tapOn: 'Avatar 2.*'
+- tapOn: 'C’est moi !'
+
+# Le prénom : écrit par un adulte, il ne quitte jamais l'appareil
+- assertVisible: 'Comment tu t’appelles.*'
+- assertVisible: 'Le prénom reste sur cet appareil. Pas de compte, pas d’e-mail, rien n’est envoyé.'
 - tapOn: 'Écris ton prénom ici'
 - inputText: 'Amina'
 - hideKeyboard
-- tapOn: 'CP1'
+- tapOn: 'C’est mon prénom !'
+
+# La classe
+- assertVisible: 'Tu es dans quelle classe.*'
+- tapOn: 'CP1.*'
 - tapOn: 'C’est parti !'
+
+# La bienvenue, puis l'accueil
+- assertVisible: 'Bienvenue, Amina.*'
+- tapOn: 'On y va !'
 
 # Accueil enfant : les quatre disciplines sont ouvertes dès le premier jour
 - assertVisible: 'Bonjour Amina !'
 - assertVisible: 'Tes activités'
-- assertVisible: 'Langage'
-- assertVisible: 'Calcul'
+- assertVisible: 'Langage.*'
+- assertVisible: 'Calcul.*'

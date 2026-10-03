@@ -4,9 +4,10 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
-import { useResponsive } from '@/design-system/responsive';
-import { colors, spacing } from '@/design-system/tokens';
+import { SlateBoard } from '@/design-system/components/slate-board';
+import { EcolnaButton, EcolnaText, useExerciseMetrics } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, fontFamilies, illustration } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -14,13 +15,18 @@ import { strokesForLetter } from './letter-paths';
 
 type TraceStep = Extract<ExerciseStep, { type: 'trace_letter' }>;
 
+const { chalk, chalkDim, chalkGhost } = illustration.school;
+
 /** Generous checkpoint radius: little fingers, small screens, no false failures. */
 const TOLERANCE = 42;
 
 /**
- * Guided letter tracing (trace_letter). The child follows numbered dots
- * stroke by stroke; passing near each checkpoint in order lights it up.
- * Completing every stroke enables success — precision is never punished.
+ * Guided letter tracing (trace_letter), on the pupil's slate. The model
+ * letter is a ghost of old chalk; the path is a line of faint chalk dots; the
+ * next dot is a sun; what the child has traced stays written in fresh chalk.
+ * Passing near each checkpoint in order is enough — precision is never
+ * punished. The letter is drawn in a square box: a letter stretched across a
+ * landscape tablet would not be the letter of the notebook any more.
  */
 export function TraceLetterExercise({
   step,
@@ -29,24 +35,33 @@ export function TraceLetterExercise({
 }: ExerciseRendererProps<TraceStep>) {
   const strokes = useMemo(() => strokesForLetter(step.letter), [step.letter]);
   const { isTablet, scale } = useResponsive();
+  const metrics = useExerciseMetrics();
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
   const [strokeIndex, setStrokeIndex] = useState(0);
   const [checkpointIndex, setCheckpointIndex] = useState(0);
   const [trail, setTrail] = useState<string[]>([]);
 
-  const scaled = useMemo(() => {
-    if (!strokes || boardSize.width === 0) {
+  // La boîte carrée de la lettre, centrée sur l'ardoise.
+  const box = useMemo(() => {
+    const inset = 28;
+    const side = Math.max(0, Math.min(boardSize.width, boardSize.height) - inset * 2);
+    return {
+      side,
+      left: (boardSize.width - side) / 2,
+      top: (boardSize.height - side) / 2,
+    };
+  }, [boardSize]);
+
+  const scaledStrokes = useMemo(() => {
+    if (!strokes || box.side === 0) {
       return [];
     }
-    const inset = 30;
-    const width = boardSize.width - inset * 2;
-    const height = boardSize.height - inset * 2;
     return strokes.map((stroke) =>
-      stroke.map(([x, y]) => [inset + x * width, inset + y * height] as const),
+      stroke.map(([x, y]) => [box.left + x * box.side, box.top + y * box.side] as const),
     );
-  }, [strokes, boardSize]);
+  }, [strokes, box]);
 
-  const currentStroke = scaled[strokeIndex] ?? null;
+  const currentStroke = scaledStrokes[strokeIndex] ?? null;
   const done = strokes !== null && strokeIndex >= (strokes?.length ?? 0);
 
   const advance = (x: number, y: number) => {
@@ -90,7 +105,7 @@ export function TraceLetterExercise({
   if (!strokes) {
     // Explicit content fallback: unknown letter → acknowledge step, no dead end.
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { gap: metrics.gap }]}>
         <EcolnaText variant="displayGlyph" align="center">
           {step.letter}
         </EcolnaText>
@@ -105,51 +120,68 @@ export function TraceLetterExercise({
     );
   }
 
+  const strokeWidth = scaled(isTablet ? 14 : 12, scale);
+  const ghostSize = Math.round(box.side * 0.95);
+  // Ce qui est déjà écrit : chaque trait fini, puis le début du trait en cours.
+  const written = scaledStrokes
+    .map((stroke, sIndex) =>
+      sIndex < strokeIndex ? stroke : sIndex === strokeIndex ? stroke.slice(0, checkpointIndex) : [],
+    )
+    .filter((stroke) => stroke.length > 1);
+
   return (
-    <View style={styles.container}>
-      <EcolnaCard
-        rounded="xl"
-        padded={false}
-        // A tracing board has to be big enough for a whole hand movement —
-        // on a tablet that means noticeably more than a phone's 340 dp.
-        style={[styles.board, { height: isTablet ? 460 : 340 }]}
-        backgroundColor="#faf7ec"
-      >
-        <View style={styles.letterUnderlay} pointerEvents="none">
-          <EcolnaText
-            variant="displayGlyph"
-            color={colors.surfaceContainerHighest}
-            style={[styles.letterGlyph, { fontSize: 240 * scale, lineHeight: 300 * scale }]}
-          >
-            {step.letter}
-          </EcolnaText>
+    <View style={[styles.container, { gap: metrics.gap }]}>
+      <SlateBoard style={[styles.board, { height: scaled(isTablet ? 400 : 340, scale) }]}>
+        <View style={styles.ghost} pointerEvents="none">
+          {box.side > 0 ? (
+            <EcolnaText
+              variant="displayGlyph"
+              color={chalkGhost}
+              style={{
+                fontFamily: fontFamilies.bold,
+                fontSize: ghostSize,
+                lineHeight: Math.round(ghostSize * 1.15),
+              }}
+            >
+              {step.letter}
+            </EcolnaText>
+          ) : null}
         </View>
         <GestureDetector gesture={pan}>
           <View
             style={styles.canvas}
             onLayout={onLayout}
-            accessibilityLabel={`Trace la lettre ${step.letter}`}
+            accessibilityLabel={fr.lesson.traceLetterLabel(step.letter)}
           >
             <Svg width="100%" height="100%">
-              {scaled.map((stroke, sIndex) =>
+              {written.map((stroke, index) => (
+                <Polyline
+                  key={`w-${index}`}
+                  points={stroke.map(([x, y]) => `${x},${y}`).join(' ')}
+                  fill="none"
+                  stroke={chalk}
+                  strokeWidth={strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              ))}
+              {scaledStrokes.map((stroke, sIndex) =>
                 stroke.map(([x, y], cIndex) => {
                   const isDone =
                     sIndex < strokeIndex || (sIndex === strokeIndex && cIndex < checkpointIndex);
                   const isNext = sIndex === strokeIndex && cIndex === checkpointIndex;
+                  if (isDone) {
+                    return null;
+                  }
                   return (
                     <Circle
                       key={`${sIndex}-${cIndex}`}
                       cx={x}
                       cy={y}
-                      r={isNext ? 14 : 9}
-                      fill={
-                        isDone
-                          ? colors.feedbackCorrect
-                          : isNext
-                            ? colors.primaryContainer
-                            : colors.outlineVariant
-                      }
-                      opacity={sIndex > strokeIndex ? 0.4 : 1}
+                      r={isNext ? scaled(16, scale) : scaled(7, scale)}
+                      fill={isNext ? colors.sun : chalkDim}
+                      stroke={isNext ? colors.sunShade : chalkDim}
+                      strokeWidth={isNext ? 3 : 0}
                     />
                   );
                 }),
@@ -158,35 +190,42 @@ export function TraceLetterExercise({
                 <Polyline
                   points={trail.join(' ')}
                   fill="none"
-                  stroke={colors.secondary}
-                  strokeWidth={10}
+                  stroke={chalk}
+                  strokeWidth={strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  opacity={0.5}
                 />
               ) : null}
             </Svg>
           </View>
         </GestureDetector>
-      </EcolnaCard>
+      </SlateBoard>
 
-      <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
-        {done ? '' : 'Pars du gros point et suis le chemin.'}
-      </EcolnaText>
-
-      <EcolnaButton
-        label={fr.common.verify}
-        disabled={!interactive || !done}
-        onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
-      />
+      {done ? (
+        <EcolnaButton
+          label={fr.common.verify}
+          disabled={!interactive}
+          onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
+          style={styles.verify}
+        />
+      ) : (
+        <EcolnaText
+          variant="headlineSm"
+          color={colors.textSecondary}
+          align="center"
+          style={{ minHeight: scaled(60, scale) }}
+        >
+          {fr.lesson.traceLetterHint}
+        </EcolnaText>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.md, justifyContent: 'center' },
-  board: { overflow: 'hidden' },
-  letterUnderlay: {
+  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 760, alignSelf: 'center' },
+  board: { alignSelf: 'stretch' },
+  ghost: {
     position: 'absolute',
     top: 0,
     right: 0,
@@ -195,6 +234,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  letterGlyph: { fontSize: 240, lineHeight: 300 },
   canvas: { flex: 1 },
+  verify: { alignSelf: 'center', minWidth: 260 },
 });

@@ -8,24 +8,45 @@ import {
   EcolnaCard,
   EcolnaExerciseLayout,
   EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing } from '@/design-system/tokens';
+import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type SoundPositionStep = Extract<ExerciseStep, { type: 'sound_position' }>;
 
-const POSITIONS = [
-  { value: 'debut', label: 'au début' },
-  { value: 'milieu', label: 'au milieu' },
-  { value: 'fin', label: 'à la fin' },
-] as const;
+const POSITIONS = ['debut', 'milieu', 'fin'] as const;
+
+/** Trois cases ; celle de la position est pleine. Se lit avant de savoir lire. */
+function PositionBars({ lit, width, color }: { lit: number | null; width: number; color: string }) {
+  return (
+    <View style={[styles.bars, { gap: Math.round(width * 0.18) }]}>
+      {POSITIONS.map((position, index) => (
+        <View
+          key={position}
+          style={[
+            styles.bar,
+            {
+              width,
+              height: Math.round(width * 0.32),
+              backgroundColor: index === lit ? color : colors.surfaceContainerHighest,
+            },
+          ]}
+        />
+      ))}
+    </View>
+  );
+}
 
 /**
  * Locating a sound inside a word — the backbone of « connaître les éléments
  * composant un mot (sons, syllabes) » (p. 18) and « maîtriser la
- * combinatoire » (p. 23). The word is shown in three slots so the position
- * is visible, not only audible.
+ * combinatoire » (p. 23). The word is shown over three slots, and every
+ * answer draws its own slot lit: the position is visible, not only audible
+ * nor only written.
  */
 export function SoundPositionExercise({
   step,
@@ -35,6 +56,8 @@ export function SoundPositionExercise({
   playingAudioId,
 }: ExerciseRendererProps<SoundPositionStep>) {
   const [picked, setPicked] = useState<string | null>(null);
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
 
   useEffect(() => {
     playAudio(step.audioId);
@@ -42,58 +65,56 @@ export function SoundPositionExercise({
   }, [step.id]);
 
   const prompt = (
-    <>
-      <EcolnaCard rounded="xl" style={styles.prompt}>
-        <EcolnaText variant="headlineMd" align="center">
-          {step.instruction.text}
+    <EcolnaCard rounded="xl" style={[styles.wordCard, { gap: metrics.gap }]}>
+      <View style={styles.soundBadge}>
+        <EcolnaText variant="displayGlyphSmall" color={colors.onPrimaryContainer}>
+          {step.sound}
         </EcolnaText>
-        <View style={styles.soundBadge}>
-          <EcolnaText variant="displayGlyphSmall" color={colors.onPrimaryContainer}>
-            {step.sound}
-          </EcolnaText>
-        </View>
-      </EcolnaCard>
-
-      <EcolnaCard rounded="xl" style={styles.wordCard}>
-        <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
-          {step.word}
-        </EcolnaText>
-        <View style={styles.slots}>
-          {POSITIONS.map((position) => (
-            <View key={position.value} style={styles.slot} />
-          ))}
-        </View>
-        <EcolnaAudioButton
-          variant="sky"
-          size={64}
-          playing={playingAudioId === step.audioId}
-          onPress={() => playAudio(step.audioId)}
-        />
-      </EcolnaCard>
-    </>
+      </View>
+      <EcolnaText variant="displayGlyph" align="center" color={colors.primary}>
+        {step.word}
+      </EcolnaText>
+      <PositionBars lit={null} width={scaled(isTablet ? 56 : 46, scale)} color={colors.primary} />
+      <EcolnaAudioButton
+        size={scaled(isTablet ? 72 : 60, scale)}
+        playing={playingAudioId === step.audioId}
+        onPress={() => playAudio(step.audioId)}
+      />
+    </EcolnaCard>
   );
 
   const answers = (
-    <View style={styles.options}>
-      {POSITIONS.map((position) => (
-        <EcolnaAnswerCard
-          key={position.value}
-          label={position.label}
-          glyph={false}
-          state={
-            !interactive && picked !== position.value
-              ? 'disabled'
-              : picked === position.value
-                ? 'selected'
-                : 'default'
-          }
-          onPress={() => {
-            setPicked(position.value);
-            onSubmit({ kind: 'value', value: position.value });
-          }}
-          style={styles.optionCard}
-        />
-      ))}
+    <View style={[styles.options, { gap: metrics.gap }, !isTablet && styles.optionsRow]}>
+      {POSITIONS.map((position, index) => {
+        const state =
+          !interactive && picked !== position
+            ? 'disabled'
+            : picked === position
+              ? 'selected'
+              : 'default';
+        return (
+          <EcolnaAnswerCard
+            key={position}
+            accessibilityLabel={fr.lesson.soundPositions[position]}
+            state={state}
+            onPress={() => {
+              setPicked(position);
+              onSubmit({ kind: 'value', value: position });
+            }}
+            style={!isTablet ? styles.optionCard : undefined}
+            contentStyle={[styles.optionFace, { minHeight: metrics.answerHeight, gap: scaled(spacing.xs, scale) }]}
+          >
+            <PositionBars
+              lit={index}
+              width={scaled(isTablet ? 40 : 26, scale)}
+              color={state === 'disabled' ? colors.locked : colors.secondary}
+            />
+            <EcolnaText variant="headlineSm" align="center" color={state === 'disabled' ? colors.locked : colors.textPrimary}>
+              {fr.lesson.soundPositions[position]}
+            </EcolnaText>
+          </EcolnaAnswerCard>
+        );
+      })}
     </View>
   );
 
@@ -101,21 +122,17 @@ export function SoundPositionExercise({
 }
 
 const styles = StyleSheet.create({
-  prompt: { alignItems: 'center', gap: spacing.sm },
+  wordCard: { alignItems: 'center', paddingVertical: spacing.xl },
   soundBadge: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xxs,
     borderRadius: radius.pill,
     backgroundColor: colors.primaryFixed,
   },
-  wordCard: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.lg },
-  slots: { flexDirection: 'row', gap: spacing.sm },
-  slot: {
-    width: 46,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.outlineVariant,
-  },
-  options: { flexDirection: 'row', gap: spacing.sm, justifyContent: 'center' },
+  bars: { flexDirection: 'row' },
+  bar: { borderRadius: radius.pill },
+  options: {},
+  optionsRow: { flexDirection: 'row' },
   optionCard: { flex: 1 },
+  optionFace: { alignItems: 'center', justifyContent: 'center' },
 });

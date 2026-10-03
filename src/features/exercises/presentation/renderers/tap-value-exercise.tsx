@@ -2,8 +2,14 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAnswerCard, EcolnaAudioButton, EcolnaText } from '@/design-system/primitives';
-import { spacing } from '@/design-system/tokens';
+import {
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  EcolnaText,
+  useExerciseMetrics,
+} from '@/design-system/primitives';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -21,6 +27,7 @@ export function TapValueExercise({
   playingAudioId,
 }: ExerciseRendererProps<TapStep>) {
   const [pressed, setPressed] = useState<string | null>(null);
+  const metrics = useExerciseMetrics();
   const audioId = step.audioId ?? null;
 
   useEffect(() => {
@@ -30,57 +37,58 @@ export function TapValueExercise({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
 
-  const options = step.type === 'fill_missing_letter' ? step.options : step.options;
-
-  return (
-    <View style={styles.container}>
-      {step.type === 'fill_missing_letter' ? (
-        <EcolnaText variant="displayGlyph" align="center" accessibilityLabel={`Mot à compléter`}>
-          {step.maskedWord.replace('_', ' _ ')}
-        </EcolnaText>
-      ) : audioId ? (
-        <View style={styles.audioWrap}>
+  const prompt =
+    step.type === 'fill_missing_letter' || audioId ? (
+      <EcolnaCard
+        rounded="xl"
+        style={[styles.stage, { minHeight: metrics.listenSize * 1.8, gap: metrics.gap }]}
+      >
+        {step.type === 'fill_missing_letter' ? (
+          <EcolnaText variant="displayGlyph" align="center" accessibilityLabel="Mot à compléter">
+            {step.maskedWord.replace('_', ' _ ')}
+          </EcolnaText>
+        ) : null}
+        {audioId ? (
           <EcolnaAudioButton
-            size={92}
+            size={step.type === 'fill_missing_letter' ? metrics.listenSize * 0.6 : metrics.listenSize}
+            variant={step.type === 'fill_missing_letter' ? 'sky' : 'sand'}
             playing={playingAudioId === audioId}
             onPress={() => playAudio(audioId)}
           />
-        </View>
-      ) : null}
+        ) : null}
+      </EcolnaCard>
+    ) : null;
 
-      <View style={styles.grid}>
-        {options.map((option) => (
-          <EcolnaAnswerCard
-            key={option}
-            label={option}
-            state={
-              !interactive && pressed !== option
-                ? 'disabled'
-                : pressed === option
-                  ? 'selected'
-                  : 'default'
-            }
-            onPress={() => {
-              setPressed(option);
-              onSubmit({ kind: 'value', value: option });
-            }}
-            style={styles.tile}
-          />
-        ))}
-      </View>
+  const answers = (
+    <View style={[styles.grid, { gap: metrics.gap }]}>
+      {step.options.map((option) => (
+        <EcolnaAnswerCard
+          key={option}
+          label={option}
+          glyphVariant={metrics.answerGlyph}
+          state={
+            !interactive && pressed !== option
+              ? 'disabled'
+              : pressed === option
+                ? 'selected'
+                : 'default'
+          }
+          onPress={() => {
+            setPressed(option);
+            onSubmit({ kind: 'value', value: option });
+          }}
+          style={[styles.tile, { minWidth: metrics.tileWidth }]}
+          contentStyle={{ minHeight: metrics.answerHeight }}
+        />
+      ))}
     </View>
   );
+
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.xl, justifyContent: 'center' },
-  audioWrap: { alignItems: 'center' },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-    justifyContent: 'center',
-  },
-  tile: { minWidth: 96, flexGrow: 1, maxWidth: '46%' },
+  stage: { alignItems: 'center', justifyContent: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  tile: { flexGrow: 1, maxWidth: '46%' },
 });
-

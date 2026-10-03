@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { createElement, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 
 import { resolveAudioSource } from '@/content/audio-registry.generated';
 import { asId } from '@/core/ids/ids';
@@ -9,7 +9,7 @@ import { createLogger } from '@/core/logging/logger';
 import { getDatabase } from '@/database/connection/database';
 import { createLearningAudioService } from '@/features/audio/application/learning-audio-service';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { findLesson } from '@/features/curriculum/application/curriculum-catalog';
+import { findLesson, worldOfLesson } from '@/features/curriculum/application/curriculum-catalog';
 import { rendererFor } from '@/features/exercises/presentation/exercise-registry';
 import {
   createLessonMachine,
@@ -19,16 +19,20 @@ import {
 import { recordLessonCompletion } from '@/features/progress/application/record-lesson-completion';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import { useSettings } from '@/features/settings/application/settings-store';
+import { EcolnaAvatar } from '@/design-system/avatars';
 import { FeedbackBanner } from '@/design-system/components/feedback-banner';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import {
+  EcolnaAudioButton,
   EcolnaButton,
   EcolnaCard,
+  EcolnaIconButton,
   EcolnaProgressBar,
   EcolnaScreen,
   EcolnaText,
 } from '@/design-system/primitives';
-import { a11y, colors, spacing } from '@/design-system/tokens';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, spacing, subjectColors } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
 
 const log = createLogger('lesson-session');
@@ -94,6 +98,9 @@ function SessionBody({
 }) {
   const router = useRouter();
   const soundEnabled = useSettings((state) => state.soundEnabled);
+  const avatarId = useActiveProfile((state) => state.profile?.avatarId ?? 'avatar-1');
+  const { isTablet, scale, screenPadding, contentMaxWidth } = useResponsive();
+  const subject = useMemo(() => worldOfLesson(lesson.id)?.subject ?? null, [lesson.id]);
   const [state, dispatch] = useReducer(lessonReducer, undefined, () =>
     createLessonMachine(lesson, initialStepIndex),
   );
@@ -189,46 +196,66 @@ function SessionBody({
   const progress = state.stepIndex / lesson.steps.length;
 
   return (
-    <EcolnaScreen background="exercise">
-      {/* Header: close — progress — hint */}
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
+    <EcolnaScreen background="exercise" fullWidth>
+      {/* En-tête : fermer — progression — indice. */}
+      <View style={[styles.header, { paddingHorizontal: screenPadding, gap: scaled(spacing.md, scale) }]}>
+        <EcolnaIconButton
+          icon="close"
           accessibilityLabel={fr.lesson.quit}
           onPress={() => setQuitVisible(true)}
-          style={styles.headerButton}
-        >
-          <EcolnaIcon name="close" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
+        />
         <View style={styles.progressWrap}>
           <EcolnaProgressBar
             progress={progress}
+            fill={subject ? subjectColors[subject].deep : undefined}
+            height={isTablet ? 16 : 14}
             accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
           />
         </View>
         {step?.hint ? (
-          <Pressable
-            accessibilityRole="button"
+          <EcolnaIconButton
+            icon="lightbulb"
+            iconMode="color"
             accessibilityLabel={fr.lesson.hint}
             onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
-            style={styles.headerButton}
-          >
-            <EcolnaIcon name="lightbulb" size={22} color={colors.tertiary} />
-          </Pressable>
+          />
         ) : (
-          <View style={styles.headerButton} />
+          <View style={{ width: Math.max(48, scaled(52, scale)) }} />
         )}
       </View>
 
-      {/* Instruction */}
-      {step && step.type !== 'compose_syllable' && step.type !== 'compose_word' ? (
-        <EcolnaText variant="headlineMd" align="center" style={styles.instruction}>
-          {step.instruction.text}
-        </EcolnaText>
+      {/* La consigne, une seule fois, et toujours réécoutable. */}
+      {step ? (
+        <View
+          style={[
+            styles.instruction,
+            { paddingHorizontal: screenPadding, gap: scaled(spacing.sm, scale) },
+          ]}
+        >
+          <EcolnaAudioButton
+            variant="bordered"
+            size={scaled(isTablet ? 48 : 44, scale)}
+            accessibilityLabel={fr.lesson.replayInstruction}
+            playing={playingAudioId === step.instruction.audioId}
+            onPress={() => playAudio(step.instruction.audioId)}
+          />
+          <EcolnaText variant={isTablet ? 'headlineLg' : 'headlineMd'} style={styles.instructionText}>
+            {step.instruction.text}
+          </EcolnaText>
+        </View>
       ) : null}
 
       {/* Exercise body */}
-      <View style={styles.body}>
+      <View
+        style={[
+          styles.body,
+          {
+            paddingHorizontal: screenPadding,
+            paddingBottom: scaled(spacing.lg, scale),
+            maxWidth: isTablet ? contentMaxWidth + screenPadding * 2 : undefined,
+          },
+        ]}
+      >
         {step && renderer ? (
           // key remounts the renderer per step: fresh local state, no reset effects.
           // playAudio only touches the audio ref inside event handlers, never during render.
@@ -271,13 +298,23 @@ function SessionBody({
         />
       ) : null}
 
-      {/* Hint sheet */}
+      {/* Indice : une feuille posée en bas, l'exercice reste visible derrière. */}
       {state.phase === 'showing_hint' && step?.hint ? (
-        <View style={styles.hintOverlay}>
-          <EcolnaCard rounded="xl" style={styles.hintCard}>
+        <View style={[styles.overlay, styles.overlayBottom, { padding: screenPadding }]}>
+          <EcolnaCard rounded="xl" style={[styles.sheetCard, { maxWidth: contentMaxWidth }]}>
             <View style={styles.hintHeader}>
-              <EcolnaIcon name="lightbulb" size={26} color={colors.tertiary} />
-              <EcolnaText variant="headlineSm">{fr.lesson.hint}</EcolnaText>
+              <EcolnaIcon name="lightbulb" size={scaled(48, scale)} mode="color" />
+              <EcolnaText variant="headlineMd" style={styles.flex}>
+                {fr.lesson.hint}
+              </EcolnaText>
+              {step.hint.audioId ? (
+                <EcolnaAudioButton
+                  variant="sky"
+                  size={scaled(48, scale)}
+                  playing={playingAudioId === step.hint.audioId}
+                  onPress={() => step.hint?.audioId && playAudio(step.hint.audioId)}
+                />
+              ) : null}
             </View>
             <EcolnaText variant="bodyLg">{step.hint.text}</EcolnaText>
             <EcolnaButton
@@ -295,24 +332,27 @@ function SessionBody({
         animationType="fade"
         onRequestClose={() => setQuitVisible(false)}
       >
-        <View style={styles.modalBackdrop}>
-          <EcolnaCard rounded="xl" style={styles.modalCard}>
-            <EcolnaText variant="headlineSm" align="center">
+        <View style={[styles.overlay, styles.overlayCenter, { padding: screenPadding }]}>
+          <EcolnaCard rounded="xl" style={[styles.sheetCard, styles.quitCard]}>
+            <EcolnaAvatar avatarId={avatarId} size={scaled(88, scale)} />
+            <EcolnaText variant="headlineMd" align="center">
               {fr.lesson.quit}
             </EcolnaText>
-            <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
+            <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
               {fr.lesson.quitMessage}
             </EcolnaText>
-            <EcolnaButton label={fr.lesson.quitCancel} onPress={() => setQuitVisible(false)} />
-            <EcolnaButton
-              label={fr.lesson.quitConfirm}
-              variant="secondary"
-              onPress={() => {
-                audio.current.stop();
-                setQuitVisible(false);
-                router.back();
-              }}
-            />
+            <View style={styles.quitButtons}>
+              <EcolnaButton label={fr.lesson.quitCancel} onPress={() => setQuitVisible(false)} />
+              <EcolnaButton
+                label={fr.lesson.quitConfirm}
+                variant="secondary"
+                onPress={() => {
+                  audio.current.stop();
+                  setQuitVisible(false);
+                  router.back();
+                }}
+              />
+            </View>
           </EcolnaCard>
         </View>
       </Modal>
@@ -321,22 +361,11 @@ function SessionBody({
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  headerButton: {
-    width: a11y.minTouchTarget,
-    height: a11y.minTouchTarget,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   progressWrap: { flex: 1 },
-  instruction: { paddingHorizontal: spacing.screenMargin, paddingTop: spacing.xs },
-  body: { flex: 1, paddingHorizontal: spacing.screenMargin, paddingBottom: spacing.md },
+  instruction: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.xs },
+  instructionText: { flex: 1 },
+  body: { flex: 1, width: '100%', alignSelf: 'center', paddingTop: spacing.sm },
   missing: {
     flex: 1,
     alignItems: 'center',
@@ -344,23 +373,20 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
     padding: spacing.xl,
   },
-  hintOverlay: {
+  flex: { flex: 1 },
+  overlay: {
     position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: 'rgba(22,26,50,0.35)',
-    justifyContent: 'flex-end',
-    padding: spacing.md,
+    backgroundColor: colors.scrim,
+    alignItems: 'center',
   },
-  hintCard: { gap: spacing.md },
+  overlayBottom: { justifyContent: 'flex-end' },
+  overlayCenter: { justifyContent: 'center', flex: 1, position: 'relative' },
+  sheetCard: { gap: spacing.md, width: '100%' },
   hintHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(22,26,50,0.35)',
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
-  modalCard: { gap: spacing.md },
+  quitCard: { maxWidth: 480, alignItems: 'center' },
+  quitButtons: { alignSelf: 'stretch', gap: spacing.sm },
 });

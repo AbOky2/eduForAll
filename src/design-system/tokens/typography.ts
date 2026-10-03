@@ -12,6 +12,7 @@ export const fontFamilies = {
 } as const;
 
 export type TypographyVariant =
+  | 'displayHero'
   | 'displayGlyph'
   | 'displayGlyphSmall'
   | 'headlineLg'
@@ -22,7 +23,10 @@ export type TypographyVariant =
   | 'bodySm'
   | 'labelLg'
   | 'labelMd'
-  | 'labelSm';
+  | 'labelSm'
+  | 'button'
+  | 'buttonSm'
+  | 'tag';
 
 interface TypographyStyle {
   fontFamily: string;
@@ -32,6 +36,8 @@ interface TypographyStyle {
 }
 
 export const typography: Record<TypographyVariant, TypographyStyle> = {
+  /** La voix principale d'un écran d'enfant : salutation, « Bravo ! ». */
+  displayHero: { fontFamily: fontFamilies.bold, fontSize: 36, lineHeight: 44 },
   /** Huge letters/syllables/numbers the child learns from ("ba", "12 + 5"). */
   displayGlyph: { fontFamily: fontFamilies.bold, fontSize: 56, lineHeight: 64 },
   displayGlyphSmall: { fontFamily: fontFamilies.bold, fontSize: 34, lineHeight: 42 },
@@ -47,4 +53,13 @@ export const typography: Record<TypographyVariant, TypographyStyle> = {
   labelLg: { fontFamily: fontFamilies.label, fontSize: 16, lineHeight: 22, letterSpacing: 0.2 },
   labelMd: { fontFamily: fontFamilies.label, fontSize: 14, lineHeight: 20, letterSpacing: 0.2 },
   labelSm: { fontFamily: fontFamilies.label, fontSize: 12, lineHeight: 16, letterSpacing: 0.4 },
+
+  /**
+   * Boutons de l'enfant : Quicksand Bold, dont la rondeur répond à celle des
+   * galets (direction v3 § 5). Plus Jakarta reste aux étiquettes d'info.
+   */
+  button: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 24, letterSpacing: 0.2 },
+  buttonSm: { fontFamily: fontFamilies.bold, fontSize: 15, lineHeight: 20, letterSpacing: 0.2 },
+  /** Pastilles « Nouveau », « En cours » : courtes, en capitales. */
+  tag: { fontFamily: fontFamilies.label, fontSize: 11, lineHeight: 14, letterSpacing: 0.9 },
 };

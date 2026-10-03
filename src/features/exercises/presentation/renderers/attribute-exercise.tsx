@@ -1,44 +1,39 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Polygon, Rect } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
+  EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
   EcolnaExerciseLayout,
   EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
-import { colors, radius, shadows, spacing } from '@/design-system/tokens';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, illustration, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type AttributeStep = Extract<ExerciseStep, { type: 'attribute_choice' }>;
 
 /** The six colours named by the programme (p. 58), and nothing else. */
-const OFFICIAL_COLORS: Record<AttributeStep['choices'][number]['color'], string> = {
-  rouge: '#c0392b',
-  bleu: colors.secondary,
-  jaune: colors.tertiaryContainer,
-  vert: colors.feedbackCorrect,
-  blanc: '#ffffff',
-  noir: colors.onSurface,
-};
-
-const CELL = 92;
+const OFFICIAL_COLORS: Record<AttributeStep['choices'][number]['color'], string> =
+  illustration.officialColors;
 
 /** Draws one of the four official shapes: rond, carré, rectangulaire, triangulaire. */
 function AttributeShape({
   shape,
   color,
   scale,
+  size,
 }: {
   shape: AttributeStep['choices'][number]['shape'];
   color: string;
   scale: number;
+  size: number;
 }) {
-  const stroke = color === '#ffffff' ? colors.outline : 'none';
-  const size = CELL;
+  const stroke = color === illustration.officialColors.blanc ? colors.outline : 'none';
   const s = Math.max(0.3, Math.min(1, scale));
   const cx = size / 2;
   const cy = size / 2;
@@ -116,6 +111,9 @@ export function AttributeExercise({
   playingAudioId,
 }: ExerciseRendererProps<AttributeStep>) {
   const [picked, setPicked] = useState<string | null>(null);
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
+  const cell = scaled(isTablet ? 104 : 84, scale);
 
   useEffect(() => {
     if (step.audioId) {
@@ -129,45 +127,37 @@ export function AttributeExercise({
     onSubmit({ kind: 'choice', choiceId });
   };
 
-  const prompt = (
-    <EcolnaCard rounded="xl" style={styles.prompt}>
-      <EcolnaText variant="headlineMd" align="center">
-        {step.instruction.text}
-      </EcolnaText>
-      {step.audioId ? (
-        <EcolnaAudioButton
-          variant="sky"
-          size={56}
-          playing={playingAudioId === step.audioId}
-          onPress={() => step.audioId && playAudio(step.audioId)}
-        />
-      ) : null}
-    </EcolnaCard>
-  );
+  // La consigne est dite par l'en-tête de leçon ; ici, seulement la réécoute.
+  const prompt = step.audioId ? (
+    <View style={styles.prompt}>
+      <EcolnaAudioButton
+        size={metrics.listenSize}
+        playing={playingAudioId === step.audioId}
+        onPress={() => step.audioId && playAudio(step.audioId)}
+      />
+    </View>
+  ) : null;
 
   const answers = (
-    <View style={styles.grid}>
+    <View style={[styles.grid, { gap: metrics.gap }]}>
       {step.choices.map((choice) => {
         const selected = picked === choice.id;
         return (
-          <Pressable
+          <EcolnaAnswerCard
             key={choice.id}
-            disabled={!interactive}
             onPress={() => submit(choice.id)}
-            accessibilityRole="button"
             accessibilityLabel={choice.label ?? `${choice.shape} ${choice.color}`}
-            style={[
-              styles.cell,
-              selected && styles.cellSelected,
-              !interactive && !selected && styles.cellDisabled,
-            ]}
+            state={!interactive && !selected ? 'disabled' : selected ? 'selected' : 'default'}
+            style={styles.cell}
+            contentStyle={[styles.cellFace, { minHeight: cell * 1.4 }]}
           >
-            <View style={styles.shapeRow}>
+            <View style={[styles.shapeRow, { maxWidth: cell * 1.6 }]}>
               {Array.from({ length: Math.max(1, choice.count) }, (_, index) => (
                 <AttributeShape
                   key={index}
                   shape={choice.shape}
                   color={OFFICIAL_COLORS[choice.color]}
+                  size={cell}
                   // A repeated quantity is drawn smaller so the group still fits.
                   scale={choice.count > 1 ? choice.scale * 0.34 : choice.scale}
                 />
@@ -178,46 +168,19 @@ export function AttributeExercise({
                 {choice.label}
               </EcolnaText>
             ) : null}
-          </Pressable>
+          </EcolnaAnswerCard>
         );
       })}
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.6} />;
 }
 
 const styles = StyleSheet.create({
-  prompt: { alignItems: 'center', gap: spacing.md },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-    justifyContent: 'center',
-  },
-  cell: {
-    minWidth: 148,
-    minHeight: 148,
-    flexGrow: 1,
-    flexBasis: '42%',
-    maxWidth: 220,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.xs,
-    padding: spacing.sm,
-    borderRadius: radius.lg,
-    backgroundColor: colors.card,
-    borderWidth: 3,
-    borderColor: 'transparent',
-    ...shadows.card,
-  },
-  cellSelected: { borderColor: colors.primaryContainer },
-  cellDisabled: { opacity: 0.5 },
-  shapeRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    maxWidth: 150,
-  },
+  prompt: { alignItems: 'center', justifyContent: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  cell: { flexBasis: '42%', flexGrow: 1, maxWidth: 300 },
+  cellFace: { alignItems: 'center', justifyContent: 'center', gap: spacing.xs },
+  shapeRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' },
 });

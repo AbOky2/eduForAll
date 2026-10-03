@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Animated, Pressable, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
-import { colors, shadows } from '../tokens';
+import { colors } from '../tokens';
 import { EcolnaIcon } from '../icons/ecolna-icon';
+import { EcolnaGalet } from './ecolna-galet';
 
 type AudioButtonVariant = 'sand' | 'sky' | 'bordered';
 
@@ -16,19 +17,29 @@ interface EcolnaAudioButtonProps {
   accessibilityLabel?: string;
 }
 
-const VARIANTS: Record<AudioButtonVariant, { background: string; icon: string; border?: string }> =
+/**
+ * « Écouter » a une seule apparence dans toute l'app : un galet pétrole et
+ * son haut-parleur. Les variantes ne changent que l'insistance :
+ * - `sand`     le grand bouton d'un exercice (nom historique des maquettes) ;
+ * - `sky`      un petit bouton posé à côté d'un mot ;
+ * - `bordered` un galet blanc, pour une consigne qu'on peut réentendre.
+ */
+const VARIANTS: Record<AudioButtonVariant, { face: string; edge: string; ink: string; border?: string }> =
   {
-    // Big sand circle of the exercise screens (mockups S11, S12, S14).
-    sand: { background: colors.primaryContainer, icon: colors.onPrimaryContainer },
-    // Small sky-blue circle next to the greeting (mockup S06).
-    sky: { background: colors.secondaryContainer, icon: colors.onSecondaryContainer },
-    // White circle with a blue ring (mockup S10).
-    bordered: { background: colors.card, icon: colors.secondary, border: colors.secondary },
+    sand: { face: colors.secondary, edge: colors.secondaryShade, ink: colors.onSecondary },
+    sky: { face: colors.secondaryFixed, edge: colors.secondaryFixedDim, ink: colors.secondary },
+    bordered: {
+      face: colors.card,
+      edge: colors.cardEdge,
+      ink: colors.secondary,
+      border: colors.cardEdge,
+    },
   };
 
 /**
- * The always-recognizable "listen" button. Pulses gently while audio plays
- * (unless the OS asks for reduced motion). Replays on every tap.
+ * The always-recognizable "listen" button. While audio plays, a ring widens
+ * and fades behind it — the one looping motion the app allows, and only
+ * while the sound lasts (none at all under reduced motion). Replays on tap.
  */
 export function EcolnaAudioButton({
   onPress,
@@ -40,53 +51,63 @@ export function EcolnaAudioButton({
 }: EcolnaAudioButtonProps) {
   const palette = VARIANTS[variant];
   const reducedMotion = useReducedMotion();
-  const [pulse] = useState(() => new Animated.Value(1));
+  const [wave] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     if (playing && !reducedMotion) {
+      wave.setValue(0);
       const loop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulse, { toValue: 1.08, duration: 420, useNativeDriver: true }),
-          Animated.timing(pulse, { toValue: 1, duration: 420, useNativeDriver: true }),
-        ]),
+        Animated.timing(wave, { toValue: 1, duration: 1100, useNativeDriver: true }),
       );
       loop.start();
       return () => loop.stop();
     }
-    pulse.setValue(1);
+    wave.setValue(0);
     return undefined;
-  }, [playing, pulse, reducedMotion]);
+  }, [playing, wave, reducedMotion]);
+
+  const ringScale = wave.interpolate({ inputRange: [0, 1], outputRange: [1, 1.45] });
+  const ringOpacity = wave.interpolate({ inputRange: [0, 0.15, 1], outputRange: [0, 0.55, 0] });
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint="Fait écouter le son"
-      disabled={disabled}
-      onPress={onPress}
-      style={({ pressed }) => ({ opacity: disabled ? 0.4 : pressed ? 0.85 : 1 })}
-    >
-      <Animated.View
-        style={[
-          styles.circle,
-          shadows.card,
-          {
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-            backgroundColor: palette.background,
-            borderWidth: palette.border ? 2.5 : 0,
-            borderColor: palette.border,
-            transform: [{ scale: pulse }],
-          },
-        ]}
+    <View style={styles.wrap}>
+      {playing && !reducedMotion ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.ring,
+            {
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+              borderColor: colors.secondaryFixedDim,
+              opacity: ringOpacity,
+              transform: [{ scale: ringScale }],
+            },
+          ]}
+        />
+      ) : null}
+      <EcolnaGalet
+        face={palette.face}
+        edge={palette.edge}
+        border={palette.border}
+        radius={size / 2}
+        depth={size >= 64 ? 'md' : 'sm'}
+        onPress={onPress}
+        disabled={disabled}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint="Fait écouter le son"
+        hitSlop={6}
+        faceStyle={[styles.face, { width: size, height: size }]}
       >
-        <EcolnaIcon name="speaker" size={size * 0.45} color={palette.icon} />
-      </Animated.View>
-    </Pressable>
+        <EcolnaIcon name="speaker" size={Math.round(size * 0.56)} color={palette.ink} mode="mono" />
+      </EcolnaGalet>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  circle: { alignItems: 'center', justifyContent: 'center' },
+  wrap: { alignItems: 'center', justifyContent: 'center', alignSelf: 'center' },
+  ring: { position: 'absolute', top: 0, borderWidth: 6 },
+  face: { alignItems: 'center', justifyContent: 'center' },
 });

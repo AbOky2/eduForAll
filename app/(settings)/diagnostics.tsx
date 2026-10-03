@@ -40,7 +40,7 @@ export default function DiagnosticsScreen() {
     );
     setInfo({
       migrations: migrations?.n ?? 0,
-      contentVersion: content?.content_version ?? 'inconnue',
+      contentVersion: content?.content_version ?? fr.settings.diagnosticsUnknown,
       profiles: profiles?.n ?? 0,
       attempts: attempts?.n ?? 0,
     });
@@ -66,18 +66,23 @@ export default function DiagnosticsScreen() {
   }
 
   return (
-    <EcolnaScreen background="default">
+    <EcolnaScreen background="plain">
       <EcolnaScreenHeader onBack={goBack} title={fr.settings.diagnostics} titleVariant="headlineMd" />
       <ScrollView contentContainerStyle={styles.scroll}>
         <EcolnaCard rounded="xl" style={styles.card}>
-          <Row label="Version du contenu" value={info?.contentVersion ?? '…'} />
-          <Row label="Migrations appliquées" value={String(info?.migrations ?? '…')} />
-          <Row label="Profils sur ce téléphone" value={String(info?.profiles ?? '…')} />
-          <Row label="Réponses enregistrées" value={String(info?.attempts ?? '…')} />
+          <Row label={fr.settings.diagnosticsContent} value={info?.contentVersion ?? '…'} />
+          <Row label={fr.settings.diagnosticsMigrations} value={String(info?.migrations ?? '…')} />
+          <Row label={fr.settings.diagnosticsProfiles} value={String(info?.profiles ?? '…')} />
+          <Row label={fr.settings.diagnosticsAttempts} value={String(info?.attempts ?? '…')} />
         </EcolnaCard>
-        <EcolnaButton label="Exporter le diagnostic" onPress={exportDiagnostics} />
+        <EcolnaButton
+          label={fr.settings.diagnosticsExport}
+          variant="accent"
+          size="md"
+          onPress={exportDiagnostics}
+        />
         <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
-          L’export ne contient ni prénom, ni voix, ni position. Vous choisissez à qui l’envoyer.
+          {fr.settings.diagnosticsNote}
         </EcolnaText>
       </ScrollView>
     </EcolnaScreen>
@@ -96,7 +101,13 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: spacing.screenMargin, gap: spacing.lg },
+  scroll: {
+    padding: spacing.screenMargin,
+    gap: spacing.lg,
+    width: '100%',
+    maxWidth: 760,
+    alignSelf: 'center',
+  },
   card: { gap: spacing.md },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 });

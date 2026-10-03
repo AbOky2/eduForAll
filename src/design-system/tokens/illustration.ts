@@ -208,14 +208,68 @@ export const illustration = {
     wood: { light: '#d9a874', base: '#b98350', shade: '#93622f' } satisfies Ramp,
     slate: { light: '#44545e', base: '#2f3d45', shade: '#222d33' } satisfies Ramp,
     chalk: '#f4f1e8',
+    /** Craie à peine posée : les points du chemin à suivre (3,2:1 sur l'ardoise). */
+    chalkDim: '#7d8b93',
+    /** Lettre-modèle effacée, devinée sous la craie (1,3:1 sur l'ardoise). */
+    chalkGhost: '#405059',
     paper: { light: '#ffffff', base: '#fdf6e9', shade: '#f0e2c8' } satisfies Ramp,
+    /** Réglure du cahier à double ligne : ligne de tête bleue, ligne de base rose. */
+    ruleBlue: '#a9cfea',
+    ruleRose: '#e8a6a0',
     clay: { light: '#e39a6c', base: '#c97a4a', shade: '#a65e33' } satisfies Ramp,
+  },
+
+  /**
+   * Les six couleurs que nomme le programme (p. 58), pour l'exercice des
+   * formes et couleurs : franches, sans nuance, reconnaissables au soleil.
+   * Le blanc porte un liseré `outline` pour exister sur une carte blanche.
+   */
+  officialColors: {
+    rouge: '#c0392b',
+    bleu: '#2b6485',
+    jaune: '#e9b829',
+    vert: '#3e8a3a',
+    blanc: '#ffffff',
+    noir: '#161a32',
+  },
+
+  /**
+   * Francs CFA d'Afrique centrale (XAF), la monnaie du Tchad : petites
+   * valeurs en laiton, grandes en nickel, comme les vraies pièces — l'enfant
+   * les trie à l'œil avant de lire le nombre. `ink` à ≥ 7:1 sur `face`.
+   */
+  coins: {
+    brass: { face: '#e0b877', rim: '#b58c48', ring: '#cfa35f', ink: '#4a3410' },
+    brassDeep: { face: '#dcb26a', rim: '#ad8340', ring: '#c99b56', ink: '#4a3410' },
+    nickel: { face: '#d9dbe2', rim: '#a9adbe', ring: '#c2c5d1', ink: '#2c3040' },
+    nickelBright: { face: '#e8e9ee', rim: '#a9adbe', ring: '#cfd1da', ink: '#2c3040' },
   },
 
   /** Médailles. */
   metal: {
     gold: { light: '#fff0b3', base: '#f2c40d', shade: '#c99a06' } satisfies Ramp,
     bronze: { light: '#f2bd91', base: '#cd8a57', shade: '#a0653a' } satisfies Ramp,
+  },
+
+  /**
+   * Ambiance des fonds d'écran (direction v3 § 3) : le paysage ton sur ton
+   * derrière l'interface. Chaque teinte est l'ivoire du fond (`colors.surface`
+   * #fcf8f1) prémélangé vers le sable, de 1,08:1 (ciel) à 1,23:1 (acacia) de
+   * contraste avec le fond : on devine un lieu, rien ne rivalise avec une
+   * carte, et l'encre garde plus de 13:1 sur la teinte la plus sombre.
+   */
+  ambient: {
+    skyTop: '#fbeedb',
+    sun: '#fbe7c4',
+    duneFar: '#f6ecdc',
+    duneNear: '#f1e2ca',
+    acacia: '#eee0c8',
+    /** Écrans d'exercice : un seul motif dans un coin, sur `exerciseBackground`. */
+    exerciseMotif: '#efe5d0',
+    /** Soleil de la réussite : rayons alternés et cœur, ton sur ton or pâle. */
+    burstRay: '#fde9bd',
+    burstRayAlt: '#fdf0d2',
+    burstCore: '#fde3a6',
   },
 
   /** Le reflet « grain de soleil » posé en haut à gauche des volumes ronds. */

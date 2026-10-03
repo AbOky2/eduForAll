@@ -4,9 +4,9 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
-import { useResponsive } from '@/design-system/responsive';
-import { colors, spacing } from '@/design-system/tokens';
+import { EcolnaButton, EcolnaCard, EcolnaText, useExerciseMetrics } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, illustration } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -14,14 +14,17 @@ import { PATTERN_LABELS, strokesForPattern } from './graphism-paths';
 
 type GraphismStep = Extract<ExerciseStep, { type: 'trace_graphism' }>;
 
+const { paper, ruleBlue, ruleRose } = illustration.school;
+
 /** Same generous tolerance as letter tracing — little fingers, never punished. */
 const TOLERANCE = 44;
 
 /**
  * Pre-writing graphism (trace_graphism) — the phase the programme places
- * before any letter (p. 26). The board reproduces the « cahier à double
- * lignes » the child uses in class, and the pattern is repeated across the
- * row, left to right, as on a real writing line.
+ * before any letter (p. 26). The board is a page of the « cahier à double
+ * lignes » the child uses in class — cream paper, a blue head line, a rose
+ * base line — and the pattern runs across the row, left to right. What the
+ * child has traced stays written in ink.
  */
 export function GraphismExercise({
   step,
@@ -29,16 +32,17 @@ export function GraphismExercise({
   onSubmit,
 }: ExerciseRendererProps<GraphismStep>) {
   const strokes = useMemo(() => strokesForPattern(step.pattern), [step.pattern]);
-  const { isTablet } = useResponsive();
+  const { isTablet, scale } = useResponsive();
+  const metrics = useExerciseMetrics();
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
   const [strokeIndex, setStrokeIndex] = useState(0);
   const [checkpointIndex, setCheckpointIndex] = useState(0);
   const [trail, setTrail] = useState<string[]>([]);
 
-  const insetX = 24;
-  const insetY = 26;
+  const insetX = 28;
+  const insetY = 30;
 
-  const scaled = useMemo(() => {
+  const scaledStrokes = useMemo(() => {
     if (boardSize.width === 0) {
       return [];
     }
@@ -49,7 +53,7 @@ export function GraphismExercise({
     );
   }, [strokes, boardSize]);
 
-  const currentStroke = scaled[strokeIndex] ?? null;
+  const currentStroke = scaledStrokes[strokeIndex] ?? null;
   const done = strokeIndex >= strokes.length;
 
   const advance = (x: number, y: number) => {
@@ -92,14 +96,20 @@ export function GraphismExercise({
   // The two guide lines of the school notebook the programme names (p. 26).
   const topLine = insetY + (boardSize.height - insetY * 2) * 0.12;
   const bottomLine = insetY + (boardSize.height - insetY * 2) * 0.9;
+  const ink = scaled(isTablet ? 11 : 9, scale);
+  const written = scaledStrokes
+    .map((stroke, sIndex) =>
+      sIndex < strokeIndex ? stroke : sIndex === strokeIndex ? stroke.slice(0, checkpointIndex) : [],
+    )
+    .filter((stroke) => stroke.length > 1);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { gap: metrics.gap }]}>
       <EcolnaCard
         rounded="xl"
         padded={false}
-        style={[styles.board, { height: isTablet ? 360 : 260 }]}
-        backgroundColor="#faf7ec"
+        style={[styles.board, { height: scaled(isTablet ? 300 : 260, scale) }]}
+        backgroundColor={paper.base}
       >
         <GestureDetector gesture={pan}>
           <View
@@ -111,42 +121,51 @@ export function GraphismExercise({
               {boardSize.height > 0 ? (
                 <>
                   <Line
-                    x1={insetX / 2}
+                    x1={0}
                     y1={topLine}
-                    x2={boardSize.width - insetX / 2}
+                    x2={boardSize.width}
                     y2={topLine}
-                    stroke={colors.outlineVariant}
-                    strokeWidth={1.5}
+                    stroke={ruleBlue}
+                    strokeWidth={2}
                   />
                   <Line
-                    x1={insetX / 2}
+                    x1={0}
                     y1={bottomLine}
-                    x2={boardSize.width - insetX / 2}
+                    x2={boardSize.width}
                     y2={bottomLine}
-                    stroke={colors.secondaryFixedDim}
-                    strokeWidth={2}
+                    stroke={ruleRose}
+                    strokeWidth={2.5}
                   />
                 </>
               ) : null}
-              {scaled.map((stroke, sIndex) =>
+              {written.map((stroke, index) => (
+                <Polyline
+                  key={`w-${index}`}
+                  points={stroke.map(([x, y]) => `${x},${y}`).join(' ')}
+                  fill="none"
+                  stroke={colors.secondary}
+                  strokeWidth={ink}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              ))}
+              {scaledStrokes.map((stroke, sIndex) =>
                 stroke.map(([x, y], cIndex) => {
                   const isDone =
                     sIndex < strokeIndex || (sIndex === strokeIndex && cIndex < checkpointIndex);
                   const isNext = sIndex === strokeIndex && cIndex === checkpointIndex;
+                  if (isDone && stroke.length > 1) {
+                    return null;
+                  }
                   return (
                     <Circle
                       key={`${sIndex}-${cIndex}`}
                       cx={x}
                       cy={y}
-                      r={isNext ? 13 : 7}
-                      fill={
-                        isDone
-                          ? colors.feedbackCorrect
-                          : isNext
-                            ? colors.primaryContainer
-                            : colors.outlineVariant
-                      }
-                      opacity={sIndex > strokeIndex ? 0.35 : 1}
+                      r={isNext ? scaled(14, scale) : scaled(6, scale)}
+                      fill={isDone ? colors.secondary : isNext ? colors.sun : colors.outlineVariant}
+                      stroke={isNext ? colors.sunShade : colors.outlineVariant}
+                      strokeWidth={isNext ? 3 : 0}
                     />
                   );
                 }),
@@ -156,10 +175,9 @@ export function GraphismExercise({
                   points={trail.join(' ')}
                   fill="none"
                   stroke={colors.secondary}
-                  strokeWidth={10}
+                  strokeWidth={ink}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  opacity={0.5}
                 />
               ) : null}
             </Svg>
@@ -167,21 +185,30 @@ export function GraphismExercise({
         </GestureDetector>
       </EcolnaCard>
 
-      <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
-        {done ? '' : 'Pars du gros point et va vers la droite.'}
-      </EcolnaText>
-
-      <EcolnaButton
-        label={fr.common.verify}
-        disabled={!interactive || !done}
-        onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
-      />
+      {done ? (
+        <EcolnaButton
+          label={fr.common.verify}
+          disabled={!interactive}
+          onPress={() => onSubmit({ kind: 'trace', reachedAllCheckpoints: true })}
+          style={styles.verify}
+        />
+      ) : (
+        <EcolnaText
+          variant="headlineSm"
+          color={colors.textSecondary}
+          align="center"
+          style={{ minHeight: scaled(60, scale) }}
+        >
+          {fr.lesson.traceGraphismHint}
+        </EcolnaText>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.md, justifyContent: 'center' },
-  board: { overflow: 'hidden' },
+  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 900, alignSelf: 'center' },
+  board: { overflow: 'hidden', alignSelf: 'stretch' },
   canvas: { flex: 1 },
+  verify: { alignSelf: 'center', minWidth: 260 },
 });

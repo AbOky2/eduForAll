@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAudioButton, EcolnaButton, EcolnaText } from '@/design-system/primitives';
-import { colors, radius, shadows, spacing } from '@/design-system/tokens';
+import { LetterTile } from '@/design-system/components/letter-tile';
+import { EcolnaAudioButton, EcolnaButton, useExerciseMetrics } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -40,7 +42,9 @@ function spellLength(target: string, tiles: readonly string[]): number {
  * Build a syllable/word from tiles (mockup S13). Tap a tile to place it in
  * the next free slot; tap a placed tile to send it back. Tap-to-place keeps
  * the interaction reliable for young children on small screens (documented
- * adaptation of the mockup's drag hint).
+ * adaptation of the mockup's drag hint). The slots are hollows pressed into
+ * a sand board, the tiles are pebbles: the target shape is visible before a
+ * single tile is placed.
  */
 export function ComposeExercise({
   step,
@@ -49,6 +53,8 @@ export function ComposeExercise({
   playAudio,
   playingAudioId,
 }: ExerciseRendererProps<ComposeStep>) {
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
   const allTiles = useMemo<Tile[]>(
     () => step.tiles.map((value, index) => ({ key: `${value}-${index}`, value })),
     [step],
@@ -67,6 +73,7 @@ export function ComposeExercise({
 
   const available = allTiles.filter((tile) => !placed.some((p) => p.key === tile.key));
   const full = placed.length >= neededSlots;
+  const tileSize = scaled(isTablet ? 88 : 64, scale);
 
   const place = (tile: Tile) => {
     if (!interactive || full) {
@@ -83,61 +90,56 @@ export function ComposeExercise({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.promptRow}>
-        <EcolnaAudioButton
-          variant="sky"
-          size={52}
-          playing={step.audioId !== undefined && playingAudioId === step.audioId}
-          onPress={() => step.audioId && playAudio(step.audioId)}
-        />
-        <EcolnaText variant="headlineMd" style={styles.promptText}>
-          {step.instruction.text}
-        </EcolnaText>
-      </View>
-
-      {/* Drop zone */}
-      <View style={styles.dropZone}>
-        <View style={styles.slots}>
+    <View style={[styles.container, { gap: metrics.gap }]}>
+      {/* La planche : le mot entendu, et ses emplacements en creux. */}
+      <View style={[styles.board, { padding: metrics.gap, gap: metrics.gap }]}>
+        {step.audioId ? (
+          <EcolnaAudioButton
+            size={scaled(isTablet ? 72 : 60, scale)}
+            playing={playingAudioId === step.audioId}
+            onPress={() => step.audioId && playAudio(step.audioId)}
+          />
+        ) : null}
+        <View style={[styles.slots, { gap: scaled(spacing.sm, scale) }]}>
           {Array.from({ length: neededSlots }, (_, index) => {
             const tile = placed[index];
             return tile ? (
-              <Pressable
+              <LetterTile
                 key={tile.key}
-                accessibilityRole="button"
-                accessibilityLabel={`Retirer ${tile.value}`}
+                tone="placed"
+                label={tile.value}
+                accessibilityLabel={fr.lesson.removeTile(tile.value)}
                 onPress={() => remove(tile)}
-                style={[styles.slot, styles.slotFilled, shadows.card]}
-              >
-                <EcolnaText variant="displayGlyphSmall">{tile.value}</EcolnaText>
-              </Pressable>
+                variant={metrics.answerGlyph}
+                minWidth={tileSize}
+                height={tileSize}
+              />
             ) : (
-              <View key={`empty-${index}`} style={[styles.slot, styles.slotEmpty]} />
+              <View
+                key={`empty-${index}`}
+                style={[
+                  styles.hollow,
+                  { minWidth: tileSize, height: tileSize, marginBottom: scaled(5, scale) },
+                ]}
+              />
             );
           })}
         </View>
-        <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
-          {fr.lesson.dragHere}
-        </EcolnaText>
       </View>
 
-      {/* Tile tray */}
-      <View style={styles.tray}>
+      {/* La réserve de tuiles. */}
+      <View style={[styles.tray, { gap: scaled(spacing.md, scale) }]}>
         {available.map((tile) => (
-          <Pressable
+          <LetterTile
             key={tile.key}
-            accessibilityRole="button"
-            accessibilityLabel={tile.value}
+            tone="tray"
+            label={tile.value}
             disabled={!interactive || full}
             onPress={() => place(tile)}
-            style={({ pressed }) => [
-              styles.tile,
-              shadows.card,
-              { opacity: !interactive ? 0.5 : 1, transform: [{ scale: pressed ? 0.94 : 1 }] },
-            ]}
-          >
-            <EcolnaText variant="displayGlyphSmall">{tile.value}</EcolnaText>
-          </Pressable>
+            variant={metrics.answerGlyph}
+            minWidth={tileSize}
+            height={tileSize}
+          />
         ))}
       </View>
 
@@ -145,52 +147,29 @@ export function ComposeExercise({
         label={fr.common.verify}
         disabled={!interactive || placed.length === 0}
         onPress={() => onSubmit({ kind: 'sequence', values: placed.map((tile) => tile.value) })}
+        style={styles.verify}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.lg, justifyContent: 'center' },
-  promptRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  promptText: { flex: 1 },
-  dropZone: {
+  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 820, alignSelf: 'center' },
+  board: {
+    alignItems: 'center',
+    borderRadius: radius.xl,
+    backgroundColor: colors.surfaceContainer,
+    borderWidth: 2,
+    borderColor: colors.surfaceContainerHighest,
+  },
+  slots: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap' },
+  hollow: {
+    borderRadius: radius.lg,
+    backgroundColor: colors.surfaceContainerHigh,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: colors.primaryContainer,
-    borderRadius: radius.lg,
-    paddingVertical: spacing.xl,
-    paddingHorizontal: spacing.md,
-    gap: spacing.md,
-    backgroundColor: 'rgba(212,163,115,0.06)',
+    borderColor: colors.outlineVariant,
   },
-  slots: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: spacing.md,
-  },
-  slot: {
-    width: 64,
-    height: 64,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  slotEmpty: { backgroundColor: colors.surfaceContainerHigh },
-  slotFilled: { backgroundColor: colors.card },
-  tray: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: spacing.md,
-  },
-  tile: {
-    minWidth: 64,
-    height: 64,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.md,
-    backgroundColor: colors.card,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  tray: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  verify: { alignSelf: 'center', minWidth: 260 },
 });

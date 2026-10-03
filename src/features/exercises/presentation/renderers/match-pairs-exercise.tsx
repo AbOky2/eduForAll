@@ -2,12 +2,26 @@ import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAnswerCard, EcolnaText } from '@/design-system/primitives';
-import { spacing } from '@/design-system/tokens';
+import { EcolnaAnswerCard, useExerciseMetrics } from '@/design-system/primitives';
+import { colors, subjectColors } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type MatchStep = Extract<ExerciseStep, { type: 'match_pairs' }>;
+
+/** Une couleur par paire trouvée, la même des deux côtés. */
+const PAIR_TINTS = (['language', 'writing', 'math', 'reading'] as const).map((family) => ({
+  face: subjectColors[family].face,
+  edge: subjectColors[family].edge,
+  border: subjectColors[family].deep,
+  ink: subjectColors[family].ink,
+}));
+const SELECTING = {
+  face: colors.secondaryFixed,
+  edge: colors.secondaryFixedDim,
+  border: colors.secondary,
+  ink: colors.onSecondaryContainer,
+};
 
 /**
  * Two-column matching: tap a left card then its right partner. Matched pairs
@@ -31,8 +45,11 @@ export function MatchPairsExercise({
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [matches, setMatches] = useState<{ pairId: string; matchedPairId: string }[]>([]);
 
-  const matchedLeft = new Set(matches.map((match) => match.pairId));
-  const matchedRight = new Set(matches.map((match) => match.matchedPairId));
+  const metrics = useExerciseMetrics();
+  const tintOfLeft = new Map(matches.map((match, index) => [match.pairId, PAIR_TINTS[index % 4]]));
+  const tintOfRight = new Map(
+    matches.map((match, index) => [match.matchedPairId, PAIR_TINTS[index % 4]]),
+  );
 
   const chooseRight = (rightId: string) => {
     if (!selectedLeft) {
@@ -48,18 +65,18 @@ export function MatchPairsExercise({
 
   return (
     <View style={styles.container}>
-      <EcolnaText variant="headlineMd" align="center">
-        {step.instruction.text}
-      </EcolnaText>
-      <View style={styles.columns}>
-        <View style={styles.column}>
+      <View style={[styles.columns, { gap: metrics.gap * 2.5 }]}>
+        <View style={[styles.column, { gap: metrics.gap }]}>
           {step.pairs.map((pair) => (
             <EcolnaAnswerCard
               key={pair.id}
               label={pair.left}
               glyph={pair.left.length <= 6}
+              glyphVariant={metrics.answerGlyph}
+              tint={tintOfLeft.get(pair.id) ?? SELECTING}
+              contentStyle={{ minHeight: metrics.answerHeight }}
               state={
-                matchedLeft.has(pair.id) || selectedLeft === pair.id
+                tintOfLeft.has(pair.id) || selectedLeft === pair.id
                   ? 'selected'
                   : interactive
                     ? 'default'
@@ -75,19 +92,18 @@ export function MatchPairsExercise({
             />
           ))}
         </View>
-        <View style={styles.column}>
+        <View style={[styles.column, { gap: metrics.gap }]}>
           {rightShuffled.map((pair) => (
             <EcolnaAnswerCard
               key={pair.id}
               label={pair.right}
               glyph={pair.right.length <= 6}
-              state={
-                matchedRight.has(pair.id)
-                  ? 'selected'
-                  : interactive && selectedLeft
-                    ? 'default'
-                    : 'disabled'
-              }
+              glyphVariant={metrics.answerGlyph}
+              tint={tintOfRight.get(pair.id)}
+              contentStyle={{ minHeight: metrics.answerHeight }}
+              // Jamais grisée : la colonne de droite attend simplement qu'on ait
+              // choisi à gauche (un appui avant ne fait rien).
+              state={tintOfRight.has(pair.id) ? 'selected' : interactive ? 'default' : 'disabled'}
               onPress={() => chooseRight(pair.id)}
             />
           ))}
@@ -98,8 +114,8 @@ export function MatchPairsExercise({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.xl, justifyContent: 'center' },
-  columns: { flexDirection: 'row', gap: spacing.md },
-  column: { flex: 1, gap: spacing.md },
+  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 820, alignSelf: 'center' },
+  columns: { flexDirection: 'row' },
+  column: { flex: 1 },
 });
 

@@ -1,7 +1,26 @@
 import { memo, useId, useMemo } from 'react';
 import Svg, { Circle, Defs, Ellipse, G, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 
-import { illustration } from '../tokens';
+import { AvatarHeadArt } from '../avatars/ecolna-avatar';
+import { illustration, skinTones } from '../tokens';
+import {
+  acacia,
+  arcD,
+  bandD,
+  bandExtrema,
+  capsuleD,
+  capsulesD,
+  disc,
+  frameFor,
+  pill,
+  q,
+  rad,
+  raysD,
+  slopeD,
+  towardLight,
+  type BandSpec,
+  type Pt,
+} from './scene-geometry';
 
 /**
  * Scènes et petites illustrations — direction « Galets & craie »
@@ -21,283 +40,13 @@ import { illustration } from '../tokens';
  * attendent les enfants de `src/design-system/avatars/`.
  */
 
-const SAND = '#d4a373';
-const SAND_LIGHT = '#f0d5b1';
-const SKY = '#f9e9ce';
-const SUN = '#ffd166';
-const TREE = '#7d562d';
-const LEAF = '#5b7a4a';
-const SKIN = '#8a5a3b';
-const CLOTH = '#2b6485';
-const INK = '#161a32';
-
 interface SceneProps {
   width?: number;
   height?: number;
 }
 
-/** Child reading under an acacia at sunset (splash / onboarding 1). */
-export function ReadingChildScene({ width = 280, height = 200 }: SceneProps) {
-  return (
-    <Svg width={width} height={height} viewBox="0 0 280 200">
-      <Rect width={280} height={200} rx={20} fill={SKY} />
-      <Circle cx={200} cy={92} r={40} fill={SUN} opacity={0.9} />
-      <Ellipse cx={140} cy={185} rx={170} ry={45} fill={SAND_LIGHT} />
-      <Ellipse cx={215} cy={175} rx={120} ry={32} fill={SAND} opacity={0.55} />
-      {/* Acacia */}
-      <Path
-        d="M78 155c-2-28 -6-48 -18-70"
-        stroke={TREE}
-        strokeWidth={7}
-        strokeLinecap="round"
-        fill="none"
-      />
-      <Path
-        d="M62 88c-14-6-26-4-38 3M62 88c2-12 10-20 22-24M62 88c12-4 26-2 36 6"
-        stroke={TREE}
-        strokeWidth={4}
-        strokeLinecap="round"
-        fill="none"
-      />
-      <Ellipse cx={30} cy={86} rx={22} ry={9} fill={LEAF} />
-      <Ellipse cx={84} cy={58} rx={26} ry={10} fill={LEAF} />
-      <Ellipse cx={104} cy={92} rx={22} ry={9} fill={LEAF} />
-      {/* Child sitting with book */}
-      <Circle cx={150} cy={128} r={13} fill={SKIN} />
-      <Path d="M138 138c-8 6-12 16-12 26h48c0-10-4-20-12-26z" fill={CLOTH} />
-      <Path d="M132 158l18-8 18 8-18 6z" fill="#fdf6e9" stroke={INK} strokeWidth={1.4} />
-      <Path d="M150 150v14" stroke={INK} strokeWidth={1.2} />
-    </Svg>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Géométrie partagée
-// ─────────────────────────────────────────────────────────────────────────────
-
-type Pt = readonly [number, number];
-
-/** Une décimale au plus : des chemins nets, sans bruit. */
-const q = (value: number) => Math.round(value * 10) / 10;
-const rad = (deg: number) => (deg * Math.PI) / 180;
-
-/**
- * La primitive des galets : un segment épaissi (pilule). Un disque est une
- * pilule de longueur nulle. Tracée dans le sens antihoraire, pour que
- * plusieurs pilules fusionnent en un seul chemin (règle de remplissage
- * `nonzero`).
- */
-interface Capsule {
-  readonly x1: number;
-  readonly y1: number;
-  readonly x2: number;
-  readonly y2: number;
-  readonly r: number;
-}
-
-const disc = (cx: number, cy: number, r: number): Capsule => ({ x1: cx, y1: cy, x2: cx, y2: cy, r });
-const pill = (x1: number, y1: number, x2: number, y2: number, r: number): Capsule => ({
-  x1,
-  y1,
-  x2,
-  y2,
-  r,
-});
-
-function capsuleD({ x1, y1, x2, y2, r }: Capsule): string {
-  const s = q(r);
-  const len = Math.hypot(x2 - x1, y2 - y1);
-  if (len < 0.05) {
-    return `M${q(x1 - r)} ${q(y1)}a${s} ${s} 0 1 0 ${q(2 * r)} 0a${s} ${s} 0 1 0 ${q(-2 * r)} 0Z`;
-  }
-  // Normale « vers le haut » du segment.
-  const nx = ((y2 - y1) / len) * r;
-  const ny = (-(x2 - x1) / len) * r;
-  return (
-    `M${q(x2 + nx)} ${q(y2 + ny)}L${q(x1 + nx)} ${q(y1 + ny)}` +
-    `A${s} ${s} 0 0 0 ${q(x1 - nx)} ${q(y1 - ny)}L${q(x2 - nx)} ${q(y2 - ny)}` +
-    `A${s} ${s} 0 0 0 ${q(x2 + nx)} ${q(y2 + ny)}Z`
-  );
-}
-
-const capsulesD = (shapes: readonly Capsule[]) => shapes.map(capsuleD).join('');
-
-/**
- * Ombre en croissant : la même forme, décalée de `a` vers la lumière et
- * amincie juste assez pour rester dedans. Posée sur la forme d'ombre, il n'en
- * reste qu'un croissant net en bas à droite, effilé jusqu'à zéro vers 10 h 30.
- */
-const towardLight = (c: Capsule, a: number): Capsule => ({
-  x1: c.x1 - a,
-  y1: c.y1 - a,
-  x2: c.x2 - a,
-  y2: c.y2 - a,
-  r: c.r - a * Math.SQRT2,
-});
-
-/** Arc horaire — sert au reflet signature, vers 10–11 h. */
-function arcD(cx: number, cy: number, r: number, fromDeg: number, toDeg: number): string {
-  const a0 = rad(fromDeg);
-  const a1 = rad(toDeg);
-  return `M${q(cx + r * Math.cos(a0))} ${q(cy + r * Math.sin(a0))}A${q(r)} ${q(r)} 0 0 1 ${q(cx + r * Math.cos(a1))} ${q(cy + r * Math.sin(a1))}`;
-}
-
-/** Rayons-pilules : segments droits aux extrémités entières. */
-function raysD(cx: number, cy: number, r0: number, r1: number, count: number, startDeg: number): string {
-  let d = '';
-  for (let i = 0; i < count; i += 1) {
-    const t = rad(startDeg + (360 / count) * i);
-    d += `M${Math.round(cx + r0 * Math.cos(t))} ${Math.round(cy + r0 * Math.sin(t))}L${Math.round(cx + r1 * Math.cos(t))} ${Math.round(cy + r1 * Math.sin(t))}`;
-  }
-  return d;
-}
-
-/** Courbe tendue passant par des extrêmes, tangente horizontale à chacun. */
-function through(points: readonly Pt[]): string {
-  let d = '';
-  for (let i = 1; i < points.length; i += 1) {
-    const p0 = points[i - 1];
-    const p1 = points[i];
-    if (!p0 || !p1) {
-      continue;
-    }
-    const k = (p1[0] - p0[0]) / 2;
-    d += `C${q(p0[0] + k)} ${q(p0[1])} ${q(p1[0] - k)} ${q(p1[1])} ${q(p1[0])} ${q(p1[1])}`;
-  }
-  return d;
-}
-
-/** Une bande de dune : crêtes arrondies, base horizontale (jamais une ellipse). */
-interface BandSpec {
-  /** Extrêmes alternés (crête, creux…) en coordonnées du cœur. */
-  readonly core: readonly Pt[];
-  /** Au-delà du cœur : demi-période et hauteurs des ondulations. */
-  readonly step: number;
-  readonly crest: number;
-  readonly trough: number;
-}
-
-/** Les extrêmes de la bande, prolongés jusqu'aux deux bords de la boîte. */
-function bandExtrema(spec: BandSpec, ox: number, oy: number, width: number): Pt[] {
-  const pts: Pt[] = spec.core.map(([x, y]) => [x + ox, y + oy] as const);
-  const second = pts[1];
-  const beforeLast = pts[pts.length - 2];
-  let first = pts[0];
-  let last = pts[pts.length - 1];
-  if (!first || !last || !second || !beforeLast) {
-    return pts;
-  }
-  let firstIsCrest = first[1] < second[1];
-  while (first[0] > 0) {
-    firstIsCrest = !firstIsCrest;
-    first = [first[0] - spec.step, (firstIsCrest ? spec.crest : spec.trough) + oy];
-    pts.unshift(first);
-  }
-  let lastIsCrest = last[1] < beforeLast[1];
-  while (last[0] < width) {
-    lastIsCrest = !lastIsCrest;
-    last = [last[0] + spec.step, (lastIsCrest ? spec.crest : spec.trough) + oy];
-    pts.push(last);
-  }
-  return pts;
-}
-
-function bandD(points: readonly Pt[], bottom: number): string {
-  const first = points[0];
-  if (!first) {
-    return '';
-  }
-  return `M${q(first[0])} ${q(bottom)}V${q(first[1])}${through(points)}V${q(bottom)}Z`;
-}
-
-/**
- * Modelé d'une bande : un croissant de lumière sur chaque pente qui monte vers
- * la droite (face au soleil), un croissant d'ombre sur chaque pente qui
- * descend. Les deux sont épais près de la crête et s'effilent vers le creux :
- * la crête devient une arête nette, comme sur une vraie dune. L'épaisseur est
- * proportionnelle à la hauteur de la pente (`ratio` × dénivelé) : une petite
- * ondulation au bord du cadre reste discrète, la grande dune garde son arête.
- */
-function slopeD(points: readonly Pt[], side: 'light' | 'shade', ratio: number): string {
-  let d = '';
-  for (let i = 1; i < points.length; i += 1) {
-    const a = points[i - 1];
-    const b = points[i];
-    if (!a || !b) {
-      continue;
-    }
-    const descending = b[1] > a[1];
-    if ((side === 'shade') !== descending) {
-      continue;
-    }
-    const dx = b[0] - a[0];
-    const k = dx / 2;
-    const depth = ratio * Math.abs(b[1] - a[1]);
-    const outer = `M${q(a[0])} ${q(a[1])}C${q(a[0] + k)} ${q(a[1])} ${q(b[0] - k)} ${q(b[1])} ${q(b[0])} ${q(b[1])}`;
-    const back = descending
-      ? // de la crête (a) au creux (b) : épais côté a
-        `C${q(b[0] - dx * 0.6)} ${q(b[1] + depth * 0.15)} ${q(a[0] + dx * 0.2)} ${q(a[1] + depth)} ${q(a[0])} ${q(a[1])}`
-      : // du creux (a) à la crête (b) : épais côté b
-        `C${q(b[0] - dx * 0.2)} ${q(b[1] + depth)} ${q(a[0] + dx * 0.6)} ${q(a[1] + depth * 0.15)} ${q(a[0])} ${q(a[1])}`;
-    d += `${outer}${back}Z`;
-  }
-  return d;
-}
-
-/** Cadre adaptatif : le cœur (coreW × coreH) reste entier, centré, posé en bas. */
-interface Frame {
-  readonly W: number;
-  readonly H: number;
-  readonly ox: number;
-  readonly oy: number;
-}
-
-function frameFor(width: number, height: number, coreW: number, coreH: number): Frame {
-  const ratio = width / Math.max(height, 1);
-  if (ratio >= coreW / coreH) {
-    const W = q(coreH * ratio);
-    return { W, H: coreH, ox: q((W - coreW) / 2), oy: 0 };
-  }
-  const H = q(coreW / ratio);
-  return { W: coreW, H, ox: 0, oy: q(H - coreH) };
-}
-
 const nature = illustration.nature;
 const white = illustration.white;
-
-/**
- * Lentille-galet : le profil d'un étage de couronne, bouts arrondis (rayon
- * `r`). `light` longe le haut, épais à gauche ; `shade` longe le bas, épais à
- * droite — la lumière vient d'en haut à gauche.
- */
-function lensD(cx: number, cy: number, w: number, t: number, r: number) {
-  const P = (x: number, y: number) => `${q(cx + x)} ${q(cy + y)}`;
-  const s = q(r);
-  const top = `M${P(-w, -r)}C${P(-0.62 * w, -1.15 * t)} ${P(0.62 * w, -1.15 * t)} ${P(w, -r)}`;
-  const bottom = `C${P(0.62 * w, 0.5 * t)} ${P(-0.62 * w, 0.5 * t)} ${P(-w, r)}`;
-  return {
-    full: `${top}A${s} ${s} 0 0 1 ${P(w, r)}${bottom}A${s} ${s} 0 0 1 ${P(-w, -r)}Z`,
-    light: `${top}C${P(0.62 * w, -0.85 * t)} ${P(-0.62 * w, -0.3 * t)} ${P(-w, -r)}Z`,
-    shade: `M${P(w, r)}${bottom}C${P(-0.62 * w, 0.4 * t)} ${P(0.62 * w, -0.25 * t)} ${P(w, r)}Z`,
-  };
-}
-
-/**
- * Acacia du Sahel (Acacia tortilis), pied en (x, y), échelle u (≈ 30 u de
- * haut) : tronc court qui fourche, trois branches en éventail, couronne plate
- * en deux étages minces — l'étage du fond plus court, décalé vers la lumière.
- */
-function acacia(x: number, y: number, u: number) {
-  const P = (px: number, py: number) => `${q(x + px * u)} ${q(y + py * u)}`;
-  return {
-    trunk: `M${P(-1.7, 0.6)}C${P(-1.1, -4)} ${P(-0.3, -7.6)} ${P(-0.1, -10)}L${P(2, -10)}C${P(1.9, -7)} ${P(1.6, -3.4)} ${P(1.9, 0.6)}Z`,
-    trunkShade: `M${P(0.6, 0.6)}C${P(0.8, -3.6)} ${P(1.1, -7.2)} ${P(1.1, -10)}L${P(2, -10)}C${P(1.9, -7)} ${P(1.6, -3.4)} ${P(1.9, 0.6)}Z`,
-    branches: `M${P(0.6, -9.2)}C${P(-1.2, -13.4)} ${P(-4.6, -16.6)} ${P(-8, -20.4)}M${P(1, -9.6)}C${P(1.3, -13.6)} ${P(1.5, -17.4)} ${P(1.6, -21)}M${P(1.4, -9.4)}C${P(3.8, -13.6)} ${P(6.8, -16.4)} ${P(10.5, -20.2)}`,
-    branchWidth: q(1.5 * u),
-    back: lensD(x - 3 * u, y - 25.2 * u, 12.5 * u, 4.2 * u, 0.7 * u),
-    front: lensD(x + 0.5 * u, y - 21.5 * u, 18.5 * u, 5.4 * u, 0.8 * u),
-  };
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SunCloudScene — écran « hors connexion »
@@ -768,35 +517,221 @@ export const EmptyQuantityScene = memo(function EmptyQuantityScene({ size }: { s
   );
 });
 
-/** Avatar portraits — four distinct children, flat and dignified (S05). */
-export function AvatarFace({ variant, size = 64 }: { variant: 1 | 2 | 3 | 4; size?: number }) {
-  const skins = ['#8a5a3b', '#6e452c', '#9c6b46', '#7a4f33'] as const;
-  const cloths = [CLOTH, '#c96f2f', '#5b7a4a', '#8c5fa8'] as const;
-  const skin = skins[variant - 1] ?? skins[0];
-  const cloth = cloths[variant - 1] ?? cloths[0];
+// ─────────────────────────────────────────────────────────────────────────────
+// ReadingChildScene — onboarding 1 « Ton école t'accompagne partout »
+// ─────────────────────────────────────────────────────────────────────────────
+
+const fabric = illustration.fabric;
+const paper = illustration.school.paper;
+const cream = fabric.cream;
+
+/**
+ * Un enfant assis en tailleur, vu de face, en (cx, 152) sur la natte : têtes
+ * de la distribution (3,5 têtes de haut debout, 2,5 assis — brief § 10),
+ * corps en galets, lumière en haut à gauche. `bookSide` : le côté de la main
+ * qui tient le livre partagé.
+ */
+function seatedChild(cx: number, bookSide: 1 | -1, bookX: number) {
+  // Tête un peu forte : des enfants de six ans, pas des adolescents.
+  const s = 0.41;
+  // Torse : galet 26 × 28 ; l'ombre est le même galet, la face rentrée de
+  // 2,5 u à droite et 1,5 u en bas.
+  const torso = `M${cx - 13} 125A9 9 0 0 1 ${cx - 4} 116H${cx + 4}A9 9 0 0 1 ${cx + 13} 125V137A7 7 0 0 1 ${cx + 6} 144H${cx - 6}A7 7 0 0 1 ${cx - 13} 137Z`;
+  const torsoLit = `M${cx - 13} 125A9 9 0 0 1 ${cx - 4} 116H${cx + 2}A9 9 0 0 1 ${cx + 10.5} 125V136A7 7 0 0 1 ${cx + 4} 142.5H${cx - 6}A7 7 0 0 1 ${cx - 13} 136Z`;
+  const shoulderBook = { x: cx + 11 * bookSide, y: 121 };
+  const elbowBook = { x: cx + 14 * bookSide, y: 134 };
+  const handBook = { x: bookX - 19 * bookSide, y: 133 };
+  const shoulderFree = { x: cx - 11 * bookSide, y: 121 };
+  const elbowFree = { x: cx - 14 * bookSide, y: 133 };
+  const handFree = { x: cx - 6 * bookSide, y: 142 };
+  return {
+    head: `translate(${q(cx - 60 * s)} ${q(97 - 53 * s)}) scale(${s})`,
+    neck: capsuleD(pill(cx, 106, cx, 117, 4)),
+    lap: capsuleD(pill(cx - 15, 147, cx + 15, 147, 7)),
+    lapLit: capsuleD(pill(cx - 15.5, 145.8, cx + 13.5, 145.8, 5.6)),
+    // Deux pieds devant les jambes croisées : c'est ce qui dit « en tailleur ».
+    feet: capsulesD([pill(cx - 9, 152.5, cx - 3, 152.5, 2.6), pill(cx + 3, 152.5, cx + 9, 152.5, 2.6)]),
+    torso,
+    torsoLit,
+    sleeves: capsulesD([
+      pill(shoulderBook.x, shoulderBook.y, elbowBook.x, elbowBook.y, 4.2),
+      pill(shoulderFree.x, shoulderFree.y, elbowFree.x, elbowFree.y, 4.2),
+    ]),
+    forearms: capsulesD([
+      pill(elbowBook.x, elbowBook.y, handBook.x, handBook.y, 3.2),
+      pill(elbowFree.x, elbowFree.y, handFree.x, handFree.y, 3.2),
+    ]),
+    hands: capsulesD([disc(handBook.x, handBook.y, 3.4), disc(handFree.x, handFree.y, 3.4)]),
+  };
+}
+
+const RC_GIRL = seatedChild(150, 1, 175);
+const RC_BOY = seatedChild(200, -1, 175);
+const RC_TREE = acacia(70, 151, 3.1);
+const RC_FAR: BandSpec = {
+  core: [
+    [20, 131],
+    [130, 125],
+    [250, 131],
+  ],
+  step: 120,
+  crest: 125,
+  trough: 131,
+};
+const RC_NEAR: BandSpec = {
+  core: [
+    [-30, 148],
+    [140, 145],
+    [310, 148],
+  ],
+  step: 170,
+  crest: 145,
+  trough: 148,
+};
+
+/** La chèvre qui dort à l'ombre, couchée, tête vers la gauche. */
+const GOAT = {
+  shadow: capsuleD(pill(44, 158.5, 80, 158.5, 2.2)),
+  bodyShade: capsuleD(pill(52, 149, 77, 149, 9.5)),
+  body: capsuleD(pill(51, 147.6, 75.5, 147.6, 8.2)),
+  patch: capsuleD(pill(62, 144, 68, 144, 4)),
+  legs: capsulesD([pill(55, 157, 61, 157, 2.6), pill(68, 157, 74, 157, 2.6)]),
+  tail: capsuleD(pill(83, 143, 85, 139.5, 2.2)),
+  ear: capsuleD(pill(46.5, 138.5, 52, 144, 2.4)),
+  head: capsuleD(disc(42, 143, 7)),
+  muzzle: capsuleD(pill(35, 146, 39, 146, 4.2)),
+  horn: 'M43.5 136.5C44 132.5 47.5 131 50.5 132.5',
+  eye: 'M39.3 141.6Q41.1 143.2 42.9 141.6',
+};
+
+/**
+ * Fin d'après-midi sous un acacia (onboarding 1, brief § 10) : une fille et
+ * un garçon de la distribution — deux peaux, deux régions — lisent le même
+ * livre, assis en tailleur sur une natte ; une chèvre dort à l'ombre. Les
+ * têtes viennent des avatars (`AvatarHeadArt`) : ce sont les enfants que
+ * l'enfant choisira à l'écran suivant.
+ */
+export const ReadingChildScene = memo(function ReadingChildScene({
+  width = 280,
+  height = 200,
+}: SceneProps) {
+  const skyId = useId();
+  const art = useMemo(() => {
+    const f = frameFor(width, height, 280, 200);
+    return {
+      f,
+      far: bandD(bandExtrema(RC_FAR, f.ox, f.oy, f.W), f.H),
+      near: bandD(bandExtrema(RC_NEAR, f.ox, f.oy, f.W), f.H),
+    };
+  }, [width, height]);
+  const { f } = art;
+  const girlSkin = skinTones.miel;
+  const boySkin = skinTones.cacao;
   return (
-    <Svg width={size} height={size} viewBox="0 0 64 64">
-      <Circle cx={32} cy={32} r={32} fill={SAND_LIGHT} />
-      {/* hair */}
-      <Circle cx={32} cy={26} r={16.5} fill={INK} />
-      {variant === 2 ? (
-        <G>
-          <Circle cx={18} cy={20} r={5} fill={INK} />
-          <Circle cx={46} cy={20} r={5} fill={INK} />
+    <Svg width={width} height={height} viewBox={`0 0 ${f.W} ${f.H}`}>
+      <Defs>
+        <LinearGradient id={skyId} x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0" stopColor={nature.sky} />
+          <Stop offset="1" stopColor={nature.skyHigh} />
+        </LinearGradient>
+      </Defs>
+      <Rect x={-1} y={-1} width={f.W + 2} height={f.H + 2} fill={`url(#${skyId})`} />
+      <G transform={`translate(${f.ox} ${f.oy})`}>
+        {/* Le soleil bas de la fin d'après-midi, posé sur les dunes */}
+        <Circle cx={244} cy={118} r={20} fill={nature.sunGlow} />
+        <Circle cx={244} cy={118} r={13} fill={nature.sun} />
+      </G>
+      <Path d={art.far} fill={nature.dune.light} />
+      <Path d={art.near} fill={nature.dune.base} />
+      <G transform={`translate(${f.ox} ${f.oy})`}>
+        {/* L'ombre de l'acacia, une pilule plate posée au sol */}
+        <Path d={capsuleD(pill(18, 155, 150, 155, 5))} fill={nature.dune.shade} />
+
+        {/* Acacia : tronc, branches en éventail, couronne plate en deux étages */}
+        <Path d={RC_TREE.trunk} fill={nature.bark.light} />
+        <Path d={RC_TREE.trunkShade} fill={nature.bark.base} />
+        <Path
+          d={RC_TREE.branches}
+          stroke={nature.bark.light}
+          strokeWidth={RC_TREE.branchWidth}
+          strokeLinecap="round"
+          fill="none"
+        />
+        <Path d={RC_TREE.back.full} fill={nature.acacia.base} />
+        <Path d={RC_TREE.back.light} fill={nature.acacia.light} />
+        <Path d={RC_TREE.front.full} fill={nature.acacia.base} />
+        <Path d={RC_TREE.front.light} fill={nature.acacia.light} />
+        <Path d={RC_TREE.front.shade} fill={nature.acacia.shade} />
+
+        {/* La chèvre endormie */}
+        <Path d={GOAT.shadow} fill={nature.duneDeep} />
+        <Path d={GOAT.legs} fill={cream.shade} />
+        <Path d={GOAT.tail} fill={cream.shade} />
+        <Path d={GOAT.bodyShade} fill={cream.shade} />
+        <Path d={GOAT.body} fill={cream.base} />
+        <Path d={GOAT.patch} fill={nature.bark.light} />
+        <Path d={GOAT.ear} fill={cream.shade} />
+        <Path d={GOAT.head} fill={cream.base} />
+        <Path d={GOAT.muzzle} fill={cream.base} />
+        <Path d={GOAT.horn} stroke={nature.bark.base} strokeWidth={2.4} strokeLinecap="round" fill="none" />
+        <Path d={GOAT.eye} stroke={illustration.ink} strokeWidth={1.3} strokeLinecap="round" fill="none" />
+
+        {/* Natte tressée : tranche, face, trame, bandes teintes */}
+        <Rect x={112} y={151} width={126} height={17} rx={4} fill={mat.shade} />
+        <Rect x={112} y={148} width={126} height={17} rx={4} fill={mat.light} />
+        <Path d="M118 154H232M118 160H232" stroke={mat.base} strokeWidth={1.6} strokeLinecap="round" />
+        <Path d="M121 148V165M128 148V165M222 148V165M229 148V165" stroke={illustration.school.clay.base} strokeWidth={3} />
+
+        {/* La fille (avatar 4) : haut prune */}
+        <Path d={RC_GIRL.feet} fill={girlSkin.shade} />
+        <Path d={RC_GIRL.lap} fill={fabric.plum.shade} />
+        <Path d={RC_GIRL.lapLit} fill={fabric.plum.base} />
+        <Path d={RC_GIRL.neck} fill={girlSkin.shade} />
+        <Path d={RC_GIRL.torso} fill={fabric.plum.shade} />
+        <Path d={RC_GIRL.torsoLit} fill={fabric.plum.base} />
+        <G transform={RC_GIRL.head}>
+          <AvatarHeadArt avatarId="avatar-4" expression="joy" />
         </G>
-      ) : null}
-      {variant === 4 ? <Rect x={16} y={8} width={32} height={10} rx={5} fill={cloth} /> : null}
-      <Circle cx={32} cy={30} r={13} fill={skin} />
-      <Circle cx={27} cy={28} r={1.8} fill={INK} />
-      <Circle cx={37} cy={28} r={1.8} fill={INK} />
-      <Path
-        d="M27 35c3 2.6 7 2.6 10 0"
-        stroke={INK}
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        fill="none"
-      />
-      <Path d="M17 58c3-10 8-15 15-15s12 5 15 15z" fill={cloth} />
+
+        {/* Le garçon (avatar 1) : chemise d'écolier pétrole, short kaki */}
+        <Path d={RC_BOY.feet} fill={boySkin.shade} />
+        <Path d={RC_BOY.lap} fill={fabric.khaki.shade} />
+        <Path d={RC_BOY.lapLit} fill={fabric.khaki.base} />
+        <Path d={RC_BOY.neck} fill={boySkin.shade} />
+        <Path d={RC_BOY.torso} fill={fabric.indigo.shade} />
+        <Path d={RC_BOY.torsoLit} fill={fabric.indigo.base} />
+        <G transform={RC_BOY.head}>
+          <AvatarHeadArt avatarId="avatar-1" />
+        </G>
+
+        {/* Le livre partagé, ouvert et levé entre eux : deux pages, la couverture, trois lignes */}
+        <Path d="M152 126Q163.5 121.5 175 126V144Q163.5 139.5 152 144Z" fill={paper.light} />
+        <Path d="M175 126Q186.5 121.5 198 126V144Q186.5 139.5 175 144Z" fill={paper.base} />
+        <Path d="M152 144Q163.5 139.5 175 144Q186.5 139.5 198 144V147Q186.5 142.5 175 147Q163.5 142.5 152 147Z" fill={illustration.school.clay.base} />
+        <Path d="M175 126V144" stroke={paper.shade} strokeWidth={1.5} />
+        <Path
+          d="M157 130.5H170M157 134.5H168M157 138.5H170M180 130.5H193M180 134.5H191M180 138.5H193"
+          stroke={paper.shade}
+          strokeWidth={1.6}
+          strokeLinecap="round"
+        />
+
+        {/* Les bras par-dessus le livre : manches, avant-bras, mains */}
+        <Path d={RC_GIRL.sleeves} fill={fabric.plum.base} />
+        <Path d={RC_GIRL.forearms} fill={girlSkin.base} />
+        <Path d={RC_GIRL.hands} fill={girlSkin.base} />
+        <Path d={RC_BOY.sleeves} fill={fabric.indigo.base} />
+        <Path d={RC_BOY.forearms} fill={boySkin.base} />
+        <Path d={RC_BOY.hands} fill={boySkin.base} />
+
+        {/* Touffes d'herbe au bord de la natte */}
+        <Path
+          d="M104 152L102 146M107 152L108 145M246 152L244 146M249 152L251 147"
+          stroke={nature.acacia.base}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+      </G>
     </Svg>
   );
-}
+});

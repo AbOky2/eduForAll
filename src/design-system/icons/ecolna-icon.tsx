@@ -22,7 +22,7 @@ export interface EcolnaIconProps {
   /** Mode de rendu du palier M (défaut : `filled` ? 'color' : 'mono'). */
   mode?: IconMode;
   /** Petit cadenas en bas à droite, détaché par un liseré de `modifierBackdrop`. */
-  modifier?: IconModifier;
+  modifier?: IconModifier | undefined;
   /** Couleur du fond sous l'icône, pour détacher le modificateur (défaut `colors.card`). */
   modifierBackdrop?: string;
 }

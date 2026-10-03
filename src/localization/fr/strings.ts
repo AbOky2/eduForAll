@@ -42,17 +42,42 @@ export const fr = {
     title: 'Crée ton profil',
     subtitle: 'Choisis ton avatar et ton niveau',
     avatarLabel: 'Ton avatar',
-    firstNameLabel: 'Ton prénom',
+    firstNameLabel: 'Prénom (ou surnom)',
     firstNamePlaceholder: 'Écris ton prénom ici',
     levelLabel: 'Ton niveau',
     go: 'C’est parti !',
-    privacyNote: 'Pas d’email, pas de mot de passe. Tes données restent sur ce téléphone.',
+    privacyNote: 'Le prénom reste sur cet appareil. Pas de compte, pas d’e-mail, rien n’est envoyé.',
     whoLearns: 'Qui apprend aujourd’hui ?',
     addProfile: 'Nouveau profil',
+    /** La cérémonie d'entrée (brief v2 § 12) : une décision par étape. */
+    stepCount: (step: number, total: number) => `Étape ${step} sur ${total}`,
+    stepAvatar: 'Choisis ton personnage',
+    // Espace insécable avant « ? » : le point d'interrogation ne part jamais
+    // seul à la ligne dans un grand titre.
+    stepName: 'Comment tu t’appelles\u00a0?',
+    stepLevel: 'Tu es dans quelle classe\u00a0?',
+    itsMe: 'C’est moi !',
+    itsMyName: 'C’est mon prénom !',
+    adultNameHelp: 'Parent ou enseignant : écrivez le prénom de l’enfant (ou un surnom).',
+    clearName: 'Effacer le prénom',
+    slateIntro: 'Je m’appelle',
+    levelGloss: { CP1: '1re année', CP2: '2e année' },
+    levelLabelA11y: { CP1: 'CP1, première année', CP2: 'CP2, deuxième année' },
+    levelAdultNote: 'Vous pourrez changer la classe plus tard dans l’espace parents.',
+    helpAvatar: 'Touche le personnage qui te ressemble.',
+    helpName: 'Il manque ton prénom : demande à un adulte de t’aider.',
+    helpLevel: 'Touche ta classe.',
+    welcome: (firstName: string) => `Bienvenue, ${firstName}\u00a0!`,
+    letsGo: 'On y va !',
+    stageLabel: (firstName: string, level: string) =>
+      [firstName, level].filter(Boolean).length > 0
+        ? `Ta carte : ${[firstName, level].filter(Boolean).join(', ')}`
+        : 'Ta carte',
   },
   home: {
     greeting: (firstName: string) => `Bonjour ${firstName} !`,
     inProgress: 'EN COURS',
+    newTag: 'NOUVEAU',
     continueLesson: 'Continuer ma leçon',
     startLesson: 'Ma prochaine leçon',
     activities: 'Tes activités',
@@ -90,6 +115,13 @@ export const fr = {
     cp2Motto: 'En route vers l’oasis des savoirs !',
     locked: 'Encore un peu de patience !',
     lockedHint: 'Termine d’abord le monde précédent.',
+    /** Ce qu'on fait dans chaque discipline, pour l'adulte qui lit l'écran. */
+    subjectHints: {
+      language: 'Parler, écouter, raconter',
+      reading: 'Les lettres et les sons',
+      writing: 'Tracer et écrire',
+      math: 'Compter et calculer',
+    },
   },
   lesson: {
     exerciseCount: (current: number, total: number) => `Exercice ${current} sur ${total}`,
@@ -100,7 +132,13 @@ export const fr = {
     resumeTitle: 'Bon retour !',
     resumeMessage: 'On reprend ta leçon là où tu t’étais arrêté.',
     hint: 'Un indice',
-    dragHere: 'Glisse les lettres ici',
+    replayInstruction: 'Réécouter la consigne',
+    removeTile: (value: string) => `Retirer ${value}`,
+    traceLetterHint: 'Pars du gros point et suis le chemin.',
+    traceGraphismHint: 'Pars du gros point et va vers la droite.',
+    traceLetterLabel: (letter: string) => `Trace la lettre ${letter}`,
+    soundPositions: { debut: 'au début', milieu: 'au milieu', fin: 'à la fin' },
+    maskedWord: 'Mot à compléter',
     feedbackCorrect: ['Bien joué !', 'Bravo !', 'Tu progresses !', 'Super !', 'C’est ça !'],
     feedbackIncorrect: [
       'Presque ! Essayons ensemble.',
@@ -224,6 +262,23 @@ export const fr = {
     resetMessage:
       'La progression, les étoiles et les profils seront supprimés pour toujours. Cette action est irréversible.',
     resetConfirm: 'Oui, tout effacer',
+    resetLastCheck: 'Dernière vérification : cette action supprime tout, définitivement.',
+    /** Engagements de confidentialité, en français simple pour les parents. */
+    privacyCommitments: [
+      'Toutes les données restent sur cet appareil. Rien n’est envoyé sur internet.',
+      'Aucun compte, aucun e-mail, aucun mot de passe n’est demandé.',
+      'Aucune publicité, aucun achat, aucun abonnement.',
+      'Aucune géolocalisation, aucun accès aux contacts ni aux photos.',
+      'Le prénom et l’avatar servent uniquement à accueillir l’enfant dans l’application.',
+      'Supprimer l’application supprime toutes les données.',
+    ],
+    diagnosticsContent: 'Version du contenu',
+    diagnosticsMigrations: 'Migrations appliquées',
+    diagnosticsProfiles: 'Profils sur cet appareil',
+    diagnosticsAttempts: 'Réponses enregistrées',
+    diagnosticsExport: 'Exporter le diagnostic',
+    diagnosticsNote: 'L’export ne contient ni prénom, ni voix, ni position. Vous choisissez à qui l’envoyer.',
+    diagnosticsUnknown: 'inconnue',
   },
   errors: {
     genericTitle: 'Oups, quelque chose s’est mal passé.',
@@ -239,6 +294,9 @@ export const fr = {
    * « Avatar 3 : garçon en jalabiya verte ».
    */
   avatars: {
+    /** « Avatar 3 : garçon en jalabiya verte » — le préfixe reste pour Maestro. */
+    tileLabel: (index: number, description: string) =>
+      `Avatar ${index} : ${description.charAt(0).toLowerCase()}${description.slice(1)}`,
     descriptions: {
       'avatar-1': 'Garçon à la raie de côté, chemise bleue',
       'avatar-2': 'Fille aux deux boules afro, robe en pagne',

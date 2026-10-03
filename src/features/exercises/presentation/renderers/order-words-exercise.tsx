@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAudioButton, EcolnaButton, EcolnaText } from '@/design-system/primitives';
-import { colors, radius, shadows, spacing } from '@/design-system/tokens';
+import { LetterTile } from '@/design-system/components/letter-tile';
+import { EcolnaAudioButton, EcolnaButton, useExerciseMetrics } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -33,7 +35,11 @@ function hash(value: string): number {
   return result;
 }
 
-/** Rebuild a sentence word by word (CP2 — order_words). */
+/**
+ * Rebuild a sentence word by word (CP2 — order_words). The sentence grows on
+ * a sand board, the words wait as pebbles; touching a placed word sends it
+ * back. The instruction is said once, by the lesson header.
+ */
 export function OrderWordsExercise({
   step,
   interactive,
@@ -41,6 +47,8 @@ export function OrderWordsExercise({
   playAudio,
   playingAudioId,
 }: ExerciseRendererProps<OrderStep>) {
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
   const tray = useMemo(() => shuffled([...step.sentence, ...step.distractors]), [step]);
   const [chosen, setChosen] = useState<Chip[]>([]);
 
@@ -52,67 +60,60 @@ export function OrderWordsExercise({
   }, [step.id]);
 
   const available = tray.filter((chip) => !chosen.some((c) => c.key === chip.key));
+  const chipHeight = scaled(isTablet ? 64 : 52, scale);
+  const chipWidth = scaled(isTablet ? 88 : 64, scale);
+  const variant = isTablet ? 'headlineLg' : 'headlineMd';
 
   return (
-    <View style={styles.container}>
-      <View style={styles.promptRow}>
+    <View style={[styles.container, { gap: metrics.gap }]}>
+      <View style={[styles.board, { padding: metrics.gap, gap: metrics.gap }]}>
         {step.audioId ? (
           <EcolnaAudioButton
-            variant="sky"
-            size={52}
+            size={scaled(isTablet ? 64 : 56, scale)}
             playing={playingAudioId === step.audioId}
             onPress={() => step.audioId && playAudio(step.audioId)}
           />
         ) : null}
-        <EcolnaText variant="headlineMd" style={styles.promptText}>
-          {step.instruction.text}
-        </EcolnaText>
-      </View>
-
-      {/* Sentence under construction */}
-      <View style={styles.sentenceZone}>
-        {chosen.length === 0 ? (
-          <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
-            Touche les mots dans l’ordre.
-          </EcolnaText>
-        ) : (
-          <View style={styles.chipsRow}>
-            {chosen.map((chip) => (
-              <Pressable
+        <View style={[styles.chipsRow, styles.sentence, { minHeight: chipHeight + 8, gap: scaled(spacing.sm, scale) }]}>
+          {chosen.length === 0 ? (
+            // La phrase à venir : un creux par mot, la forme avant le contenu.
+            step.sentence.map((word, index) => (
+              <View
+                key={`hollow-${index}`}
+                style={[styles.hollow, { minWidth: chipWidth, height: chipHeight }]}
+              />
+            ))
+          ) : (
+            chosen.map((chip) => (
+              <LetterTile
                 key={chip.key}
-                accessibilityRole="button"
-                accessibilityLabel={`Retirer ${chip.word}`}
+                tone="placed"
+                label={chip.word}
+                accessibilityLabel={fr.lesson.removeTile(chip.word)}
                 onPress={() =>
                   interactive && setChosen((current) => current.filter((c) => c.key !== chip.key))
                 }
-                style={[styles.chip, styles.chipChosen, shadows.card]}
-              >
-                <EcolnaText variant="headlineSm" color={colors.onPrimaryContainer}>
-                  {chip.word}
-                </EcolnaText>
-              </Pressable>
-            ))}
-          </View>
-        )}
+                variant={variant}
+                minWidth={chipWidth}
+                height={chipHeight}
+              />
+            ))
+          )}
+        </View>
       </View>
 
-      {/* Word tray */}
-      <View style={styles.chipsRow}>
+      <View style={[styles.chipsRow, { gap: scaled(spacing.sm, scale) }]}>
         {available.map((chip) => (
-          <Pressable
+          <LetterTile
             key={chip.key}
-            accessibilityRole="button"
-            accessibilityLabel={chip.word}
+            tone="tray"
+            label={chip.word}
             disabled={!interactive}
             onPress={() => setChosen((current) => [...current, chip])}
-            style={({ pressed }) => [
-              styles.chip,
-              shadows.card,
-              { opacity: interactive ? 1 : 0.5, transform: [{ scale: pressed ? 0.95 : 1 }] },
-            ]}
-          >
-            <EcolnaText variant="headlineSm">{chip.word}</EcolnaText>
-          </Pressable>
+            variant={variant}
+            minWidth={chipWidth}
+            height={chipHeight}
+          />
         ))}
       </View>
 
@@ -120,38 +121,29 @@ export function OrderWordsExercise({
         label={fr.common.verify}
         disabled={!interactive || chosen.length === 0}
         onPress={() => onSubmit({ kind: 'sequence', values: chosen.map((chip) => chip.word) })}
+        style={styles.verify}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.lg, justifyContent: 'center' },
-  promptRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  promptText: { flex: 1 },
-  sentenceZone: {
-    minHeight: 96,
+  container: { flex: 1, justifyContent: 'center', width: '100%', maxWidth: 900, alignSelf: 'center' },
+  board: {
+    alignItems: 'center',
+    borderRadius: radius.xl,
+    backgroundColor: colors.surfaceContainer,
+    borderWidth: 2,
+    borderColor: colors.surfaceContainerHighest,
+  },
+  sentence: { alignSelf: 'stretch', alignItems: 'center' },
+  hollow: {
+    borderRadius: radius.lg,
+    backgroundColor: colors.surfaceContainerHigh,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: colors.primaryContainer,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(212,163,115,0.06)',
+    borderColor: colors.outlineVariant,
   },
-  chipsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    justifyContent: 'center',
-  },
-  chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    backgroundColor: colors.card,
-    minHeight: 48,
-    justifyContent: 'center',
-  },
-  chipChosen: { backgroundColor: colors.primaryContainer },
+  chipsRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  verify: { alignSelf: 'center', minWidth: 260 },
 });

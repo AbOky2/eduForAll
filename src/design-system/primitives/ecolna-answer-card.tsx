@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { a11y, colors, radius, shadows, spacing } from '../tokens';
+import { a11y, colors, radius, spacing, type TypographyVariant } from '../tokens';
 import { EcolnaIcon } from '../icons/ecolna-icon';
+import { scaled, useResponsive } from '../responsive';
+import { EcolnaGalet } from './ecolna-galet';
 import { EcolnaText } from './ecolna-text';
 
 export type AnswerCardState = 'default' | 'selected' | 'correct' | 'incorrect' | 'disabled';
@@ -14,14 +16,52 @@ interface EcolnaAnswerCardProps {
   state?: AnswerCardState;
   /** Large pedagogical glyph (syllables, numbers) vs body text. */
   glyph?: boolean;
+  /** Taille du glyphe (défaut `displayGlyphSmall`) — voir `useExerciseMetrics`. */
+  glyphVariant?: TypographyVariant | undefined;
   accessibilityLabel?: string | undefined;
   style?: StyleProp<ViewStyle> | undefined;
+  /** Style de la face (hauteur, disposition) — les grilles égalisent ici. */
+  contentStyle?: StyleProp<ViewStyle> | undefined;
+  /**
+   * Teinte d'un choix posé (`selected`) : une paire trouvée garde la même
+   * couleur à gauche et à droite, pour qu'on voie ce qui va avec quoi.
+   */
+  tint?: { face: string; edge: string; border: string; ink: string } | undefined;
 }
 
+const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string; ink: string }> = {
+  default: { face: colors.card, edge: colors.cardEdge, border: colors.cardEdge, ink: colors.textPrimary },
+  selected: {
+    face: colors.secondaryFixed,
+    edge: colors.secondaryFixedDim,
+    border: colors.secondary,
+    ink: colors.onSecondaryContainer,
+  },
+  correct: {
+    face: colors.feedbackCorrectContainer,
+    edge: colors.feedbackCorrectShade,
+    border: colors.feedbackCorrect,
+    ink: colors.feedbackCorrect,
+  },
+  // Doux : pétrole, jamais rouge (le programme et la direction l'interdisent).
+  incorrect: {
+    face: colors.secondaryFixed,
+    edge: colors.secondaryFixedDim,
+    border: colors.secondary,
+    ink: colors.onSecondaryContainer,
+  },
+  disabled: {
+    face: colors.lockedContainer,
+    edge: colors.lockedEdge,
+    border: colors.lockedEdge,
+    ink: colors.locked,
+  },
+};
+
 /**
- * White answer card of the exercise screens (mockups S11–S15).
- * Correct/incorrect states pair color with an icon so feedback never relies
- * on color alone.
+ * Une réponse qu'on touche : un galet blanc (direction v3 § 2). Choisie, elle
+ * se pare de pétrole ; juste, de vert avec une coche ; à revoir, de pétrole
+ * avec une flèche de reprise — jamais la couleur seule, jamais du rouge.
  */
 export function EcolnaAnswerCard({
   label,
@@ -29,74 +69,83 @@ export function EcolnaAnswerCard({
   onPress,
   state = 'default',
   glyph = true,
+  glyphVariant = 'displayGlyphSmall',
   accessibilityLabel,
   style,
+  contentStyle,
+  tint,
 }: EcolnaAnswerCardProps) {
-  const borderColor =
-    state === 'selected'
-      ? colors.primaryContainer
-      : state === 'correct'
-        ? colors.feedbackCorrect
-        : state === 'incorrect'
-          ? colors.secondary
-          : 'transparent';
-
-  const backgroundColor =
-    state === 'correct'
-      ? colors.feedbackCorrectContainer
-      : state === 'incorrect'
-        ? colors.feedbackIncorrectContainer
-        : colors.card;
-
+  const { scale } = useResponsive();
+  const look = state === 'selected' && tint ? tint : LOOK[state];
   const disabled = state === 'disabled' || state === 'correct' || state === 'incorrect';
+  const badge = scaled(28, scale);
+  const sunk = state === 'selected' || state === 'correct' || state === 'incorrect';
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <EcolnaGalet
+      face={look.face}
+      edge={look.edge}
+      border={look.border}
+      borderWidth={state === 'default' || state === 'disabled' ? 2 : 3}
+      radius={radius.lg}
+      depth="md"
+      onPress={onPress}
+      disabled={disabled}
+      pressedLook={sunk}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ disabled, selected: state === 'selected' }}
-      disabled={disabled}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.card,
-        shadows.card,
-        {
-          backgroundColor,
-          borderColor,
-          opacity: state === 'disabled' ? 0.45 : 1,
-          transform: [{ scale: pressed && !disabled ? 0.97 : 1 }],
-        },
-        style,
+      style={style}
+      faceStyle={[
+        styles.face,
+        { minHeight: scaled(a11y.childTouchTarget + 8, scale) },
+        contentStyle,
       ]}
     >
       {children ??
         (label !== undefined ? (
           <EcolnaText
-            variant={glyph ? 'displayGlyphSmall' : 'bodyLg'}
+            variant={glyph ? glyphVariant : 'headlineSm'}
             align="center"
-            color={state === 'correct' ? colors.feedbackCorrect : colors.textPrimary}
+            color={look.ink}
           >
             {label}
           </EcolnaText>
         ) : null)}
-      {state === 'correct' ? (
-        <EcolnaIcon name="check" size={22} color={colors.feedbackCorrect} />
+      {state === 'correct' || state === 'incorrect' ? (
+        <View
+          style={[
+            styles.badge,
+            {
+              width: badge,
+              height: badge,
+              borderRadius: badge / 2,
+              backgroundColor: state === 'correct' ? colors.feedbackCorrect : colors.secondary,
+            },
+          ]}
+        >
+          <EcolnaIcon
+            name={state === 'correct' ? 'check' : 'replay'}
+            size={Math.round(badge * 0.62)}
+            color={colors.onPrimary}
+          />
+        </View>
       ) : null}
-      {state === 'incorrect' ? <EcolnaIcon name="close" size={20} color={colors.secondary} /> : null}
-    </Pressable>
+    </EcolnaGalet>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    minHeight: a11y.childTouchTarget,
-    borderRadius: radius.lg,
-    borderWidth: 2.5,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    flexDirection: 'row',
+  face: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.xs,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+  },
+  badge: {
+    position: 'absolute',
+    top: spacing.xs,
+    right: spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

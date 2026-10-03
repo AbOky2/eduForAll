@@ -33,3 +33,38 @@ valeurs exactes de couleurs/spacing). Matrice écran↔route :
 peuvent y être ajoutées par écran pour automatiser la collecte
 (`scripts/visual-regression/` accueillera le diff d'images quand la baseline
 sera stabilisée sur appareil).
+
+## Banc de rendu web (sans simulateur)
+
+Pour regarder l'app **réelle** écran par écran sur trois formats — iPad
+paysage, iPad portrait, téléphone — sans Xcode ni émulateur. C'est le banc qui
+a servi à la refonte v3 (`design/direction-ecrans-v3.md`). Il ne remplace pas
+la relecture sur appareil (audio, clavier, gestes réels), il la prépare.
+
+Rien de livré n'en dépend : la plateforme web n'existe que sous
+`ECOLNA_WEB_PREVIEW=1` (`app.config.ts`, `metro.config.js`), et les paquets
+web s'installent sans toucher `package.json` ni le verrou.
+
+```bash
+# 1. Paquets web, une fois (non enregistrés)
+npm i --no-save react-native-web@~0.21.0 @expo/metro-runtime@~56.0.21
+
+# 2. L'app dans le navigateur
+ECOLNA_WEB_PREVIEW=1 npx expo start --web
+
+# 3. Captures (Playwright ; CHROME_PATH si le Chromium n'est pas le sien)
+SEED=1 node scripts/web-preview/capture.cjs / accueil ipad-l ipad-p phone
+node scripts/web-preview/capture.cjs /learn apprendre ipad-l
+node scripts/web-preview/capture.cjs "/level-map?subject=reading" carte ipad-l
+STEP=cp1-ecriture-lettres-1:0 node scripts/web-preview/capture.cjs /lesson/cp1-ecriture-lettres-1 trace ipad-l
+FRESH=1 node scripts/web-preview/capture.cjs /create-profile profil ipad-l
+```
+
+`SEED=1` sème le profil de démonstration « Amina » (le même que
+`scripts/tools/seed-demo-profile.mjs`) ; `STEP=leçon:n` ouvre une leçon à
+l'étape n ; `CLICK="texte|label:Avatar 2 :|fill:Écris ton prénom ici=Amina"`
+joue un parcours avant la capture. Les images vont dans `.cache/screens/`.
+
+Deux cales, web seulement : `expo-sqlite` web n'a pas de transaction
+exclusive (`scripts/web-preview/expo-sqlite-web.js`), et le banc navigue par
+le routeur impératif (`scripts/web-preview/expo-router-web.js`).

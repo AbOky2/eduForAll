@@ -79,7 +79,7 @@ const config: ExpoConfig = {
   scheme: 'ecolna',
   // Le projet n'embarque pas react-native-web. Le déclarer évite que
   // `expo export --platform all` parte sur une plateforme absente.
-  platforms: ['ios', 'android'],
+  platforms: process.env.ECOLNA_WEB_PREVIEW === '1' ? ['ios', 'android', 'web'] : ['ios', 'android'],
   // Light-only for V1: the Stitch design system is light mode only.
   userInterfaceStyle: 'light',
   icon: './assets/icons/app-icon.png',

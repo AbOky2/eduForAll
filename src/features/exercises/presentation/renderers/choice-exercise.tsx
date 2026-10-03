@@ -5,11 +5,12 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
+  EcolnaCard,
   EcolnaExerciseLayout,
   EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
 import { useResponsive } from '@/design-system/responsive';
-import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -19,8 +20,9 @@ type ChoiceStep = Extract<
 >;
 
 /**
- * Audio and text multiple choice (mockups S11, S12). Audio variant shows the
- * big sand speaker; grid layout is used for dictation-style 2×2 boards.
+ * Audio and text multiple choice (mockups S11, S12). The stimulus sits on a
+ * stage card — the big listen button, or the written question — and the
+ * answers are pebbles sized for a child's finger.
  */
 export function ChoiceExercise({
   step,
@@ -31,6 +33,7 @@ export function ChoiceExercise({
 }: ExerciseRendererProps<ChoiceStep>) {
   const [pressedId, setPressedId] = useState<string | null>(null);
   const { isTablet, splitPanes } = useResponsive();
+  const metrics = useExerciseMetrics();
   const isAudio = step.type === 'audio_multiple_choice';
   // On a tablet the answers get two columns even in list layout — a single
   // column of four cards leaves half the screen empty and the cards small.
@@ -49,28 +52,30 @@ export function ChoiceExercise({
     onSubmit({ kind: 'choice', choiceId });
   };
 
-  const prompt =
-    step.type === 'text_multiple_choice' ? (
-      <EcolnaText variant="headlineMd" align="center">
-        {step.question}
-      </EcolnaText>
-    ) : (
-      <View style={styles.audioWrap}>
+  const prompt = (
+    <EcolnaCard rounded="xl" style={[styles.stage, { minHeight: metrics.listenSize * 1.8 }]}>
+      {step.type === 'text_multiple_choice' ? (
+        <EcolnaText variant={isTablet ? 'displayGlyphSmall' : 'headlineLg'} align="center">
+          {step.question}
+        </EcolnaText>
+      ) : (
         <EcolnaAudioButton
-          size={isTablet ? 120 : 92}
+          size={metrics.listenSize}
           playing={playingAudioId === step.audioId}
           onPress={() => playAudio(step.audioId)}
         />
-      </View>
-    );
+      )}
+    </EcolnaCard>
+  );
 
   const answers = (
-    <View style={grid ? styles.grid : styles.list}>
+    <View style={[grid ? styles.grid : styles.list, { gap: metrics.gap }]}>
       {step.choices.map((choice) => (
         <EcolnaAnswerCard
           key={choice.id}
           label={choice.label}
           glyph={choice.label.length <= 6}
+          glyphVariant={metrics.answerGlyph}
           state={
             !interactive && pressedId !== choice.id
               ? 'disabled'
@@ -80,6 +85,7 @@ export function ChoiceExercise({
           }
           onPress={() => submit(choice.id)}
           style={grid ? styles.gridItem : undefined}
+          contentStyle={{ minHeight: metrics.answerHeight }}
         />
       ))}
     </View>
@@ -89,14 +95,8 @@ export function ChoiceExercise({
 }
 
 const styles = StyleSheet.create({
-  audioWrap: { alignItems: 'center' },
-  list: { gap: spacing.md },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-    justifyContent: 'center',
-  },
+  stage: { alignItems: 'center', justifyContent: 'center' },
+  list: {},
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   gridItem: { width: '46%', flexGrow: 1 },
 });
-

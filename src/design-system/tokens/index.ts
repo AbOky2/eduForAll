@@ -1,4 +1,4 @@
-export { colors, palette } from './colors';
+export { colors, palette, subjectColors } from './colors';
 export type { ColorToken } from './colors';
 export { fontFamilies, typography } from './typography';
 export type { TypographyVariant } from './typography';
@@ -7,6 +7,7 @@ export type { SpacingToken } from './spacing';
 export { radius } from './radius';
 export type { RadiusToken } from './radius';
 export { shadows } from './shadows';
+export { depth } from './depth';
 export { motion } from './motion';
 export { a11y } from './accessibility';
 export { illustration, skinTones } from './illustration';

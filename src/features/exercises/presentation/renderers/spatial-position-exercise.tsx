@@ -1,99 +1,99 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
+  EcolnaAnswerCard,
   EcolnaAudioButton,
-  EcolnaCard,
   EcolnaExerciseLayout,
-  EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
-import { colors, radius, shadows, spacing } from '@/design-system/tokens';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, radius } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type SpatialStep = Extract<ExerciseStep, { type: 'spatial_position' }>;
 type Relation = SpatialStep['choices'][number]['relation'];
 
-const STAGE = 116;
-const OBJECT = 36;
-const REFERENCE = 52;
+/** Proportions d'une scène, en fractions de son côté (dessinée à toute taille). */
+const OBJECT = 36 / 116;
+const REFERENCE = 52 / 116;
 
 /**
  * Where the object sits relative to the reference, per official preposition
- * (programme p. 58). Values are absolute offsets inside the STAGE box.
+ * (programme p. 58), as offsets inside a square stage of side `S`.
  */
-const LAYOUT: Record<Relation, { object: { left: number; top: number }; zAbove: boolean }> = {
-  sur: {
-    object: { left: STAGE / 2 - OBJECT / 2, top: STAGE / 2 - REFERENCE / 2 - OBJECT + 6 },
-    zAbove: true,
-  },
-  sous: {
-    object: { left: STAGE / 2 - OBJECT / 2, top: STAGE / 2 + REFERENCE / 2 - 6 },
-    zAbove: true,
-  },
-  dans: { object: { left: STAGE / 2 - OBJECT / 2, top: STAGE / 2 - OBJECT / 2 }, zAbove: true },
-  devant: { object: { left: STAGE / 2 - OBJECT / 2, top: STAGE / 2 + 6 }, zAbove: true },
-  derriere: {
-    object: { left: STAGE / 2 - OBJECT / 2, top: STAGE / 2 - REFERENCE / 2 - 4 },
-    zAbove: false,
-  },
-  'a-gauche': { object: { left: 8, top: STAGE / 2 - OBJECT / 2 }, zAbove: true },
-  'a-droite': { object: { left: STAGE - OBJECT - 8, top: STAGE / 2 - OBJECT / 2 }, zAbove: true },
-  'au-dessus': { object: { left: STAGE / 2 - OBJECT / 2, top: 6 }, zAbove: true },
-  'en-dessous': { object: { left: STAGE / 2 - OBJECT / 2, top: STAGE - OBJECT - 6 }, zAbove: true },
-  entre: { object: { left: STAGE / 2 - OBJECT / 2, top: STAGE / 2 - OBJECT / 2 }, zAbove: true },
-  'a-cote': {
-    object: { left: STAGE / 2 + REFERENCE / 2 + 2, top: STAGE / 2 - OBJECT / 2 },
-    zAbove: true,
-  },
-};
+function layoutFor(relation: Relation, S: number): { left: number; top: number; zAbove: boolean } {
+  const o = S * OBJECT;
+  const r = S * REFERENCE;
+  const k = S / 116;
+  const mid = S / 2 - o / 2;
+  switch (relation) {
+    case 'sur':
+      return { left: mid, top: S / 2 - r / 2 - o + 6 * k, zAbove: true };
+    case 'sous':
+      return { left: mid, top: S / 2 + r / 2 - 6 * k, zAbove: true };
+    case 'dans':
+    case 'entre':
+      return { left: mid, top: mid, zAbove: true };
+    case 'devant':
+      return { left: mid, top: S / 2 + 6 * k, zAbove: true };
+    case 'derriere':
+      return { left: mid, top: S / 2 - r / 2 - 4 * k, zAbove: false };
+    case 'a-gauche':
+      return { left: 8 * k, top: mid, zAbove: true };
+    case 'a-droite':
+      return { left: S - o - 8 * k, top: mid, zAbove: true };
+    case 'au-dessus':
+      return { left: mid, top: 6 * k, zAbove: true };
+    case 'en-dessous':
+      return { left: mid, top: S - o - 6 * k, zAbove: true };
+    case 'a-cote':
+      return { left: S / 2 + r / 2 + 2 * k, top: mid, zAbove: true };
+  }
+}
 
 /** One candidate scene: the reference object with the small object placed on it. */
 function Scene({
   relation,
   objectId,
   referenceId,
+  size,
 }: {
   relation: Relation;
   objectId: string;
   referenceId: string;
+  size: number;
 }) {
-  const layout = LAYOUT[relation];
+  const layout = layoutFor(relation, size);
+  const o = Math.round(size * OBJECT);
+  const r = Math.round(size * REFERENCE);
+  const k = size / 116;
   const object = (
-    <View style={[styles.object, { left: layout.object.left, top: layout.object.top }]}>
-      <ObjectIcon id={objectId} size={OBJECT} />
+    <View style={[styles.placed, { left: layout.left, top: layout.top }]}>
+      <ObjectIcon id={objectId} size={o} />
     </View>
   );
   return (
-    <View style={styles.stage}>
+    <View style={[styles.stage, { width: size, height: size }]}>
       {/* « entre » needs a second reference so the object reads as in-between. */}
       {relation === 'entre' ? (
         <>
-          <View style={[styles.reference, { left: 6, top: STAGE / 2 - REFERENCE / 2 }]}>
-            <ObjectIcon id={referenceId} size={REFERENCE} />
+          <View style={[styles.placed, { left: 6 * k, top: size / 2 - r / 2 }]}>
+            <ObjectIcon id={referenceId} size={r} />
           </View>
-          <View
-            style={[
-              styles.reference,
-              { left: STAGE - REFERENCE - 6, top: STAGE / 2 - REFERENCE / 2 },
-            ]}
-          >
-            <ObjectIcon id={referenceId} size={REFERENCE} />
+          <View style={[styles.placed, { left: size - r - 6 * k, top: size / 2 - r / 2 }]}>
+            <ObjectIcon id={referenceId} size={r} />
           </View>
           {object}
         </>
       ) : (
         <>
           {!layout.zAbove ? object : null}
-          <View
-            style={[
-              styles.reference,
-              { left: STAGE / 2 - REFERENCE / 2, top: STAGE / 2 - REFERENCE / 2 },
-            ]}
-          >
-            <ObjectIcon id={referenceId} size={REFERENCE} />
+          <View style={[styles.placed, { left: size / 2 - r / 2, top: size / 2 - r / 2 }]}>
+            <ObjectIcon id={referenceId} size={r} />
           </View>
           {layout.zAbove ? object : null}
         </>
@@ -115,6 +115,9 @@ export function SpatialPositionExercise({
   playingAudioId,
 }: ExerciseRendererProps<SpatialStep>) {
   const [picked, setPicked] = useState<string | null>(null);
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
+  const stage = scaled(isTablet ? 136 : 112, scale);
 
   useEffect(() => {
     if (step.audioId) {
@@ -123,75 +126,51 @@ export function SpatialPositionExercise({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
 
-  const prompt = (
-    <EcolnaCard rounded="xl" style={styles.prompt}>
-      <EcolnaText variant="headlineMd" align="center">
-        {step.instruction.text}
-      </EcolnaText>
-      {step.audioId ? (
-        <EcolnaAudioButton
-          variant="sky"
-          size={56}
-          playing={playingAudioId === step.audioId}
-          onPress={() => step.audioId && playAudio(step.audioId)}
-        />
-      ) : null}
-    </EcolnaCard>
-  );
+  // La consigne est dite par l'en-tête de leçon ; ici, seulement la réécoute.
+  const prompt = step.audioId ? (
+    <View style={styles.prompt}>
+      <EcolnaAudioButton
+        size={metrics.listenSize}
+        playing={playingAudioId === step.audioId}
+        onPress={() => step.audioId && playAudio(step.audioId)}
+      />
+    </View>
+  ) : null;
 
   const answers = (
-    <View style={styles.grid}>
+    <View style={[styles.grid, { gap: metrics.gap }]}>
       {step.choices.map((choice) => {
         const selected = picked === choice.id;
         return (
-          <Pressable
+          <EcolnaAnswerCard
             key={choice.id}
-            disabled={!interactive}
             onPress={() => {
               setPicked(choice.id);
               onSubmit({ kind: 'choice', choiceId: choice.id });
             }}
-            accessibilityRole="button"
             accessibilityLabel={choice.relation.replace('-', ' ')}
-            style={[
-              styles.cell,
-              selected && styles.cellSelected,
-              !interactive && !selected && styles.cellDisabled,
-            ]}
+            state={!interactive && !selected ? 'disabled' : selected ? 'selected' : 'default'}
+            contentStyle={styles.cellFace}
           >
             <Scene
               relation={choice.relation}
               objectId={step.objectIllustrationId}
               referenceId={step.referenceIllustrationId}
+              size={stage}
             />
-          </Pressable>
+          </EcolnaAnswerCard>
         );
       })}
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.6} />;
 }
 
 const styles = StyleSheet.create({
-  prompt: { alignItems: 'center', gap: spacing.md },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, justifyContent: 'center' },
-  cell: {
-    padding: spacing.sm,
-    borderRadius: radius.lg,
-    backgroundColor: colors.card,
-    borderWidth: 3,
-    borderColor: 'transparent',
-    ...shadows.card,
-  },
-  cellSelected: { borderColor: colors.primaryContainer },
-  cellDisabled: { opacity: 0.5 },
-  stage: {
-    width: STAGE,
-    height: STAGE,
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceContainerLow,
-  },
-  reference: { position: 'absolute' },
-  object: { position: 'absolute' },
+  prompt: { alignItems: 'center', justifyContent: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  cellFace: { padding: 10 },
+  stage: { borderRadius: radius.md, backgroundColor: colors.surfaceContainerLow },
+  placed: { position: 'absolute' },
 });

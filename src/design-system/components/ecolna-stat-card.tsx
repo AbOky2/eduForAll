@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { EcolnaIcon, type IconName } from '../icons/ecolna-icon';
 import { EcolnaCard, EcolnaText } from '../primitives';
+import { scaled, useResponsive } from '../responsive';
 import { colors, radius, spacing } from '../tokens';
 
 interface EcolnaStatCardProps {
@@ -11,43 +12,36 @@ interface EcolnaStatCardProps {
   label: string;
   container: string;
   tint: string;
-  /** `row` : icône à gauche (espace parent) ; `column` : tuile centrée (profil enfant). */
-  orientation?: 'row' | 'column';
   /** Complément sous la valeur — barre de progression, sous-titre. */
   children?: ReactNode;
+  style?: StyleProp<ViewStyle>;
 }
 
-/** Un chiffre dont on est fier, avec son icône dans un disque de couleur. */
+/**
+ * Un chiffre de l'espace parent : un glyphe du palier S dans un disque teinté,
+ * l'intitulé, la valeur. Sobre — l'adulte lit, il ne joue pas.
+ */
 export function EcolnaStatCard({
   icon,
   value,
   label,
   container,
   tint,
-  orientation = 'row',
   children,
+  style,
 }: EcolnaStatCardProps) {
-  const column = orientation === 'column';
+  const { scale } = useResponsive();
+  const disc = scaled(48, scale);
   return (
-    <EcolnaCard
-      style={column ? styles.columnCard : styles.rowCard}
-      accessibilityLabel={`${label} : ${value}`}
-    >
-      <View style={[styles.disc, column ? styles.discSmall : styles.discLarge, { backgroundColor: container }]}>
-        <EcolnaIcon name={icon} size={column ? 20 : 22} color={tint} filled={column} />
+    <EcolnaCard style={[styles.card, style]} accessibilityLabel={`${label} : ${value}`}>
+      <View style={[styles.disc, { width: disc, height: disc, backgroundColor: container }]}>
+        <EcolnaIcon name={icon} size={24} color={tint} />
       </View>
-      <View style={column ? styles.columnText : styles.rowText}>
-        {column ? null : (
-          <EcolnaText variant="labelMd" color={colors.textSecondary}>
-            {label}
-          </EcolnaText>
-        )}
-        <EcolnaText variant="headlineMd">{value}</EcolnaText>
-        {column ? (
-          <EcolnaText variant="labelSm" color={colors.textSecondary} align="center">
-            {label}
-          </EcolnaText>
-        ) : null}
+      <View style={styles.text}>
+        <EcolnaText variant="labelMd" color={colors.textSecondary}>
+          {label}
+        </EcolnaText>
+        <EcolnaText variant="headlineLg">{value}</EcolnaText>
         {children}
       </View>
     </EcolnaCard>
@@ -55,11 +49,7 @@ export function EcolnaStatCard({
 }
 
 const styles = StyleSheet.create({
-  rowCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  columnCard: { flex: 1, alignItems: 'center', gap: spacing.xxs },
+  card: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   disc: { alignItems: 'center', justifyContent: 'center', borderRadius: radius.pill },
-  discLarge: { width: 44, height: 44 },
-  discSmall: { width: 36, height: 36 },
-  rowText: { flex: 1, gap: spacing.xxs },
-  columnText: { alignItems: 'center', gap: spacing.xxs },
+  text: { flex: 1, gap: spacing.xxs },
 });

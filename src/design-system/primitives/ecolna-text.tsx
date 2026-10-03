@@ -1,9 +1,12 @@
+import type { Ref } from 'react';
 import { Text, type TextProps } from 'react-native';
 
 import { colors, type TypographyVariant } from '../tokens';
 import { useTypography } from '../responsive';
 
 interface EcolnaTextProps extends TextProps {
+  /** React 19 : la ref est une prop ; elle va au `Text` (focus d'accessibilité). */
+  ref?: Ref<Text> | undefined;
   variant?: TypographyVariant;
   color?: string;
   align?: 'left' | 'center' | 'right';

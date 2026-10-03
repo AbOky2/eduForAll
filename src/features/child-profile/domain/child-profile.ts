@@ -33,16 +33,6 @@ export const AVATAR_IDS = [
 ] as const;
 export type AvatarId = (typeof AVATAR_IDS)[number];
 
-/**
- * Legacy `AvatarFace` variant (1–4) for an avatar id, clamped: screens still
- * draw the old face until they switch to `EcolnaAvatar`. Removed at
- * integration (brief § 14.3).
- */
-export function avatarVariant(avatarId: string): 1 | 2 | 3 | 4 {
-  const index = AVATAR_IDS.indexOf(avatarId as AvatarId);
-  return (Math.min(Math.max(index, 0), 3) + 1) as 1 | 2 | 3 | 4;
-}
-
 export function isValidFirstName(candidate: string): boolean {
   const trimmed = candidate.trim();
   return trimmed.length >= 1 && trimmed.length <= 40;

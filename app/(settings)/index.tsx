@@ -8,7 +8,8 @@ import { useSettings } from '@/features/settings/application/settings-store';
 import { createSettingsRepository } from '@/features/settings/infrastructure/settings-repository';
 import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { a11y, colors, radius, spacing } from '@/design-system/tokens';
+import { useResponsive } from '@/design-system/responsive';
+import { a11y, colors, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
@@ -21,6 +22,7 @@ export default function SettingsScreen() {
   const setSoundEnabled = useSettings((state) => state.setSoundEnabled);
   const setActiveProfile = useActiveProfile((state) => state.setProfile);
   const [resetStep, setResetStep] = useState<0 | 1 | 2>(0);
+  const { screenPadding } = useResponsive();
 
   const toggleSound = (enabled: boolean) => {
     setSoundEnabled(enabled);
@@ -41,10 +43,10 @@ export default function SettingsScreen() {
   };
 
   return (
-    <EcolnaScreen background="default">
+    <EcolnaScreen background="plain">
       <EcolnaScreenHeader onBack={goBack} title={fr.settings.title} titleVariant="headlineMd" />
 
-      <View style={styles.content}>
+      <View style={[styles.content, { paddingHorizontal: screenPadding }]}>
         <EcolnaCard rounded="lg" padded={false} style={styles.group}>
           {/* Sound */}
           <View style={styles.row}>
@@ -56,7 +58,7 @@ export default function SettingsScreen() {
               accessibilityLabel={fr.settings.sound}
               value={soundEnabled}
               onValueChange={toggleSound}
-              trackColor={{ true: colors.primaryContainer, false: colors.surfaceContainerHighest }}
+              trackColor={{ true: colors.secondary, false: colors.surfaceContainerHighest }}
               thumbColor={colors.card}
             />
           </View>
@@ -89,7 +91,7 @@ export default function SettingsScreen() {
 
           {/* Offline info */}
           <View style={styles.row}>
-            <EcolnaIcon name="check" size={22} color={colors.secondary} />
+            <EcolnaIcon name="offline-ok" size={22} color={colors.secondary} />
             <View style={styles.rowLabel}>
               <EcolnaText variant="bodyLg">{fr.settings.offlineInfo}</EcolnaText>
               <EcolnaText variant="bodySm" color={colors.textSecondary}>
@@ -105,7 +107,7 @@ export default function SettingsScreen() {
             onPress={() => router.push('/(settings)/privacy')}
             style={styles.row}
           >
-            <EcolnaIcon name="lock" size={22} color={colors.onSurfaceVariant} />
+            <EcolnaIcon name="shield" size={22} color={colors.onSurfaceVariant} />
             <EcolnaText variant="bodyLg" style={styles.rowLabel}>
               {fr.settings.privacy}
             </EcolnaText>
@@ -125,18 +127,14 @@ export default function SettingsScreen() {
           </Pressable>
         </EcolnaCard>
 
-        {/* Danger zone */}
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={fr.settings.resetProgress}
+        {/* Zone sensible : séparée, et doublement confirmée. */}
+        <EcolnaButton
+          label={fr.settings.resetProgress}
+          variant="danger"
+          size="md"
+          icon={<EcolnaIcon name="trash" size={20} color={colors.onErrorContainer} />}
           onPress={() => setResetStep(1)}
-          style={styles.danger}
-        >
-          <EcolnaIcon name="trash" size={20} color={colors.onErrorContainer} />
-          <EcolnaText variant="labelLg" color={colors.onErrorContainer}>
-            {fr.settings.resetProgress}
-          </EcolnaText>
-        </Pressable>
+        />
       </View>
 
       {/* Double confirmation */}
@@ -146,20 +144,22 @@ export default function SettingsScreen() {
         animationType="fade"
         onRequestClose={() => setResetStep(0)}
       >
-        <View style={styles.modalBackdrop}>
+        <View style={[styles.modalBackdrop, { padding: screenPadding }]}>
           <EcolnaCard rounded="xl" style={styles.modalCard}>
+            <View style={styles.modalIcon}>
+              <EcolnaIcon name="trash" size={28} color={colors.onErrorContainer} />
+            </View>
             <EcolnaText variant="headlineSm" align="center">
               {fr.settings.resetTitle}
             </EcolnaText>
             <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
-              {resetStep === 1
-                ? fr.settings.resetMessage
-                : 'Dernière vérification : cette action supprime tout, définitivement.'}
+              {resetStep === 1 ? fr.settings.resetMessage : fr.settings.resetLastCheck}
             </EcolnaText>
-            <EcolnaButton label={fr.common.cancel} onPress={() => setResetStep(0)} />
+            <EcolnaButton label={fr.common.cancel} variant="accent" size="md" onPress={() => setResetStep(0)} />
             <EcolnaButton
               label={resetStep === 1 ? fr.common.continue : fr.settings.resetConfirm}
               variant="danger"
+              size="md"
               onPress={() => (resetStep === 1 ? setResetStep(2) : void resetEverything())}
             />
           </EcolnaCard>
@@ -170,7 +170,7 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { padding: spacing.screenMargin, gap: spacing.lg },
+  content: { gap: spacing.lg, width: '100%', maxWidth: 760, alignSelf: 'center', paddingTop: spacing.sm },
   group: { paddingVertical: spacing.xs },
   row: {
     flexDirection: 'row',
@@ -178,12 +178,12 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    minHeight: a11y.minTouchTarget,
+    minHeight: a11y.minTouchTarget + 8,
   },
   rowColumn: { paddingHorizontal: spacing.lg, paddingVertical: spacing.md, gap: spacing.sm },
   rowInner: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   rowLabel: { flex: 1 },
-  divider: { height: 1, backgroundColor: colors.surfaceContainer, marginHorizontal: spacing.lg },
+  divider: { height: 1.5, backgroundColor: colors.surfaceContainer, marginHorizontal: spacing.lg },
   radioGroup: { gap: spacing.sm, paddingLeft: spacing.xl + spacing.sm },
   radioRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   radio: {
@@ -195,28 +195,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  radioActive: { borderColor: colors.primaryContainer },
-  radioDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: colors.primaryContainer,
-  },
-  danger: {
-    flexDirection: 'row',
+  radioActive: { borderColor: colors.secondary },
+  radioDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: colors.secondary },
+  modalBackdrop: { flex: 1, backgroundColor: colors.scrim, justifyContent: 'center', alignItems: 'center' },
+  modalCard: { gap: spacing.md, width: '100%', maxWidth: 480 },
+  modalIcon: {
+    alignSelf: 'center',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.errorContainer,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.xs,
-    backgroundColor: colors.errorContainer,
-    borderRadius: radius.md,
-    minHeight: a11y.minTouchTarget,
-    paddingHorizontal: spacing.lg,
   },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(22,26,50,0.35)',
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
-  modalCard: { gap: spacing.md },
 });

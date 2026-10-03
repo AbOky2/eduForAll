@@ -8,49 +8,41 @@ import {
   EcolnaAudioButton,
   EcolnaCard,
   EcolnaExerciseLayout,
-  EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
-import { colors, radius, spacing } from '@/design-system/tokens';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { colors, illustration, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type MoneyStep = Extract<ExerciseStep, { type: 'count_money' }>;
 type Coin = MoneyStep['coins'][number];
 
-const COIN_SIZE = 64;
-
 /**
  * Franc CFA d'Afrique centrale (XAF) — the currency in circulation in Chad.
  * Low denominations are brass, high ones nickel, as on the real coins, so
  * the child can sort them by look before reading the number.
  */
-const COIN_STYLE: Record<Coin, { face: string; rim: string; ink: string }> = {
-  5: { face: '#e0b877', rim: '#b58c48', ink: '#4a3410' },
-  10: { face: '#e0b877', rim: '#b58c48', ink: '#4a3410' },
-  25: { face: '#dcb26a', rim: '#ad8340', ink: '#4a3410' },
-  50: { face: '#d7d9e4', rim: '#a9adbe', ink: '#2c3040' },
-  100: { face: '#d7d9e4', rim: '#a9adbe', ink: '#2c3040' },
-  500: { face: '#e6e8f0', rim: '#a9adbe', ink: '#2c3040' },
+const COIN_STYLE: Record<Coin, (typeof illustration.coins)[keyof typeof illustration.coins]> = {
+  5: illustration.coins.brass,
+  10: illustration.coins.brass,
+  25: illustration.coins.brassDeep,
+  50: illustration.coins.nickel,
+  100: illustration.coins.nickel,
+  500: illustration.coins.nickelBright,
 };
 
-function CoinFace({ value }: { value: Coin }) {
+/** Une pièce, dessinée à 64 u et rendue à la taille demandée. */
+function CoinFace({ value, size }: { value: Coin; size: number }) {
   const style = COIN_STYLE[value];
-  const r = COIN_SIZE / 2;
   return (
-    <Svg width={COIN_SIZE} height={COIN_SIZE} viewBox={`0 0 ${COIN_SIZE} ${COIN_SIZE}`}>
-      <Circle cx={r} cy={r} r={r - 2} fill={style.face} stroke={style.rim} strokeWidth={2.5} />
-      <Circle
-        cx={r}
-        cy={r}
-        r={r - 8}
-        fill="none"
-        stroke={style.rim}
-        strokeWidth={1}
-        opacity={0.6}
-      />
+    <Svg width={size} height={size} viewBox="0 0 64 64">
+      <Circle cx={32} cy={33.5} r={29} fill={style.rim} />
+      <Circle cx={32} cy={31} r={29} fill={style.face} stroke={style.rim} strokeWidth={2.5} />
+      <Circle cx={32} cy={31} r={23} fill="none" stroke={style.ring} strokeWidth={1.5} />
       <SvgText
-        x={r}
-        y={r + 6}
+        x={32}
+        y={37}
         fontSize={value >= 100 ? 18 : 20}
         fontWeight="bold"
         fill={style.ink}
@@ -58,7 +50,7 @@ function CoinFace({ value }: { value: Coin }) {
       >
         {String(value)}
       </SvgText>
-      <SvgText x={r} y={r + 19} fontSize={8} fill={style.ink} textAnchor="middle" opacity={0.8}>
+      <SvgText x={32} y={50} fontSize={8} fill={style.ink} textAnchor="middle">
         F CFA
       </SvgText>
     </Svg>
@@ -67,7 +59,8 @@ function CoinFace({ value }: { value: Coin }) {
 
 /**
  * « Les pièces de monnaie » (programme p. 59). The child adds up the coins
- * laid out on the mat — the first real-life use of addition at CP.
+ * laid out on the mat — the first real-life use of addition at CP. The
+ * instruction is said by the lesson header; here, only its replay.
  */
 export function MoneyExercise({
   step,
@@ -77,6 +70,9 @@ export function MoneyExercise({
   playingAudioId,
 }: ExerciseRendererProps<MoneyStep>) {
   const [picked, setPicked] = useState<number | null>(null);
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
+  const coin = scaled(isTablet ? 84 : 64, scale);
 
   useEffect(() => {
     playAudio(step.instruction.audioId);
@@ -84,35 +80,32 @@ export function MoneyExercise({
   }, [step.id]);
 
   const prompt = (
-    <>
-      <EcolnaCard rounded="xl" style={styles.prompt}>
-        <EcolnaText variant="headlineMd" align="center">
-          {step.instruction.text}
-        </EcolnaText>
-        <EcolnaAudioButton
-          variant="sky"
-          size={56}
-          playing={playingAudioId === step.instruction.audioId}
-          onPress={() => playAudio(step.instruction.audioId)}
-        />
-      </EcolnaCard>
-
-      <EcolnaCard rounded="xl" style={styles.mat} backgroundColor={colors.surfaceContainerLow}>
-        <View style={styles.coins}>
-          {step.coins.map((coin, index) => (
-            <CoinFace key={`${coin}-${index}`} value={coin} />
-          ))}
-        </View>
-      </EcolnaCard>
-    </>
+    <EcolnaCard
+      rounded="xl"
+      backgroundColor={colors.surfaceContainer}
+      style={[styles.mat, { gap: metrics.gap, minHeight: coin * 2.6 }]}
+    >
+      <View style={[styles.coins, { gap: scaled(spacing.sm, scale) }]}>
+        {step.coins.map((value, index) => (
+          <CoinFace key={`${value}-${index}`} value={value} size={coin} />
+        ))}
+      </View>
+      <EcolnaAudioButton
+        variant="sky"
+        size={scaled(52, scale)}
+        playing={playingAudioId === step.instruction.audioId}
+        onPress={() => playAudio(step.instruction.audioId)}
+      />
+    </EcolnaCard>
   );
 
   const answers = (
-    <View style={styles.options}>
+    <View style={[styles.options, { gap: metrics.gap }]}>
       {step.options.map((option) => (
         <EcolnaAnswerCard
           key={option}
           label={`${option} F`}
+          glyphVariant={isTablet ? 'displayGlyphSmall' : 'headlineLg'}
           state={
             !interactive && picked !== option
               ? 'disabled'
@@ -124,25 +117,24 @@ export function MoneyExercise({
             setPicked(option);
             onSubmit({ kind: 'number', value: option });
           }}
-          style={styles.optionCard}
+          style={[styles.optionCard, { maxWidth: metrics.tileWidth * 1.6 }]}
+          contentStyle={{ minHeight: metrics.answerHeight }}
         />
       ))}
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1.2} />;
 }
 
 const styles = StyleSheet.create({
-  prompt: { alignItems: 'center', gap: spacing.md },
-  mat: { paddingVertical: spacing.lg, borderRadius: radius.lg },
+  mat: { alignItems: 'center', justifyContent: 'center', paddingVertical: spacing.lg },
   coins: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  options: { flexDirection: 'row', gap: spacing.md, justifyContent: 'center' },
-  optionCard: { flex: 1, maxWidth: 130 },
+  options: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  optionCard: { flexGrow: 1, flexBasis: '28%' },
 });

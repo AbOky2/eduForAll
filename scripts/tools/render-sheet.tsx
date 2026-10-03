@@ -35,7 +35,17 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 const ROOT = join(__dirname, '../..');
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+// Le moteur de rendu : Chrome sur le Mac du propriétaire, le Chromium de
+// Playwright en intégration continue ou en conteneur. CHROME_PATH l'emporte.
+const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  '/opt/pw-browsers/chromium/chrome-linux/chrome',
+  '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  '/usr/bin/chromium',
+  '/usr/bin/google-chrome',
+].filter((candidate): candidate is string => Boolean(candidate));
+const CHROME = CHROME_CANDIDATES.find((candidate) => existsSync(candidate)) ?? CHROME_CANDIDATES[0];
 
 interface SheetCell {
   label: string;
@@ -191,6 +201,8 @@ execFileSync(
   [
     '--headless',
     '--disable-gpu',
+    // Root en conteneur : Chromium refuse de démarrer avec son bac à sable.
+    ...(process.getuid?.() === 0 ? ['--no-sandbox'] : []),
     '--hide-scrollbars',
     `--force-device-scale-factor=${dpr}`,
     `--screenshot=${target}`,

@@ -6,15 +6,22 @@ import {
   EcolnaAnswerCard,
   EcolnaAudioButton,
   EcolnaCard,
+  EcolnaExerciseLayout,
   EcolnaText,
+  useExerciseMetrics,
 } from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
 import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type StoryStep = Extract<ExerciseStep, { type: 'mini_story_question' }>;
 
-/** Short story + comprehension question (CP2 world 4). */
+/**
+ * Short story + comprehension question (CP2 world 4). The story lies on its
+ * own page with its listen button; the question and the answers sit beside
+ * it on a landscape tablet, under it elsewhere.
+ */
 export function MiniStoryExercise({
   step,
   interactive,
@@ -23,58 +30,59 @@ export function MiniStoryExercise({
   playingAudioId,
 }: ExerciseRendererProps<StoryStep>) {
   const [pressedId, setPressedId] = useState<string | null>(null);
+  const { scale, isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
 
   useEffect(() => {
     playAudio(step.storyAudioId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
 
-  return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-      <EcolnaCard rounded="xl" style={styles.storyCard} backgroundColor="#faf7ec">
-        <View style={styles.storyHeader}>
-          <EcolnaAudioButton
-            variant="sky"
-            size={48}
-            playing={playingAudioId === step.storyAudioId}
-            onPress={() => playAudio(step.storyAudioId)}
-          />
-        </View>
-        <EcolnaText variant="bodyLg">{step.story}</EcolnaText>
-      </EcolnaCard>
+  const prompt = (
+    <EcolnaCard rounded="xl" style={[styles.storyCard, { gap: scaled(spacing.md, scale) }]}>
+      <EcolnaAudioButton
+        variant="sky"
+        size={scaled(isTablet ? 60 : 52, scale)}
+        playing={playingAudioId === step.storyAudioId}
+        onPress={() => playAudio(step.storyAudioId)}
+      />
+      <ScrollView style={styles.storyScroll} showsVerticalScrollIndicator={false}>
+        <EcolnaText variant={isTablet ? 'headlineSm' : 'bodyLg'}>{step.story}</EcolnaText>
+      </ScrollView>
+    </EcolnaCard>
+  );
 
-      <EcolnaText variant="headlineSm" align="center">
+  const answers = (
+    <View style={{ gap: metrics.gap }}>
+      <EcolnaText variant={isTablet ? 'headlineMd' : 'headlineSm'} align="center">
         {step.question}
       </EcolnaText>
-
-      <View style={styles.choices}>
-        {step.choices.map((choice) => (
-          <EcolnaAnswerCard
-            key={choice.id}
-            label={choice.label}
-            glyph={false}
-            state={
-              !interactive && pressedId !== choice.id
-                ? 'disabled'
-                : pressedId === choice.id
-                  ? 'selected'
-                  : 'default'
-            }
-            onPress={() => {
-              setPressedId(choice.id);
-              onSubmit({ kind: 'choice', choiceId: choice.id });
-            }}
-          />
-        ))}
-      </View>
-    </ScrollView>
+      {step.choices.map((choice) => (
+        <EcolnaAnswerCard
+          key={choice.id}
+          label={choice.label}
+          glyph={false}
+          state={
+            !interactive && pressedId !== choice.id
+              ? 'disabled'
+              : pressedId === choice.id
+                ? 'selected'
+                : 'default'
+          }
+          onPress={() => {
+            setPressedId(choice.id);
+            onSubmit({ kind: 'choice', choiceId: choice.id });
+          }}
+          contentStyle={{ minHeight: scaled(64, scale) }}
+        />
+      ))}
+    </View>
   );
+
+  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({
-  container: { gap: spacing.lg, paddingBottom: spacing.xl },
-  storyCard: { gap: spacing.md },
-  storyHeader: { alignItems: 'flex-start' },
-  choices: { gap: spacing.md },
+  storyCard: { alignItems: 'flex-start', maxHeight: 460 },
+  storyScroll: { alignSelf: 'stretch' },
 });
-

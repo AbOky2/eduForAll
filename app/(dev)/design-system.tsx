@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { StarRow } from '@/design-system/components/star-row';
 import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
-import { AvatarFace } from '@/design-system/illustrations/scenes';
+import { AVATAR_ART_IDS, EcolnaAvatar } from '@/design-system/avatars';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import {
   EcolnaAnswerCard,
@@ -153,8 +153,8 @@ export default function DesignSystemGallery() {
 
         <Section title="Avatars">
           <View style={styles.wrap}>
-            {([1, 2, 3, 4] as const).map((variant) => (
-              <AvatarFace key={variant} variant={variant} size={56} />
+            {AVATAR_ART_IDS.map((avatarId) => (
+              <EcolnaAvatar key={avatarId} avatarId={avatarId} size={56} />
             ))}
           </View>
         </Section>

@@ -17,6 +17,7 @@ appId: td.ecolna.app.dev
 - assertVisible: 'Roi du calcul'
 
 # Changer d'avatar est un geste d'enfant : un appui, pas de confirmation
-- tapOn: 'Avatar 3'
+# Libellé complet : « Avatar 3 : garçon en jalabiya verte ».
+- tapOn: 'Avatar 3.*'
 - tapOn: 'Retour'
 - assertVisible: 'Tes activités'

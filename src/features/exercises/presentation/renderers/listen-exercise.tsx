@@ -2,16 +2,24 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAudioButton, EcolnaButton, EcolnaCard, EcolnaText } from '@/design-system/primitives';
-import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { colors, spacing } from '@/design-system/tokens';
+import {
+  EcolnaAudioButton,
+  EcolnaButton,
+  EcolnaCard,
+  EcolnaText,
+  useExerciseMetrics,
+} from '@/design-system/primitives';
+import { scaled, useResponsive } from '@/design-system/responsive';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type ListenStep = Extract<ExerciseStep, { type: 'listen' }>;
 
-/** Passive presentation of a sound (mockup S10): huge glyph, replayable audio. */
+/**
+ * Passive presentation of a sound (mockup S10): the glyph, huge, on its
+ * stage; the listen pebble sitting on the stage's edge; then « Suivant ».
+ */
 export function ListenExercise({
   step,
   interactive,
@@ -19,47 +27,47 @@ export function ListenExercise({
   playAudio,
   playingAudioId,
 }: ExerciseRendererProps<ListenStep>) {
+  const { isTablet, scale } = useResponsive();
+  const metrics = useExerciseMetrics();
+
   useEffect(() => {
     // Auto-play once when the step appears so non-readers hear it immediately.
     playAudio(step.audioId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
 
+  const glyphSize = scaled(isTablet ? 150 : 110, scale);
   return (
-    <View style={styles.container}>
-      <EcolnaCard rounded="xl" style={styles.glyphCard} backgroundColor="#faf7ec">
-        <View style={styles.watermark}>
-          <EcolnaIcon name="leaf" size={180} color={colors.exerciseBackground} />
-        </View>
-        <EcolnaText variant="displayGlyph" align="center">
+    <View style={[styles.container, { gap: metrics.gap }]}>
+      <EcolnaCard rounded="xl" style={[styles.glyphCard, { minHeight: scaled(isTablet ? 300 : 240, scale) }]}>
+        <EcolnaText
+          variant="displayGlyph"
+          align="center"
+          style={{ fontSize: glyphSize, lineHeight: Math.round(glyphSize * 1.2) }}
+        >
           {step.glyph}
         </EcolnaText>
       </EcolnaCard>
-      <View style={styles.audioWrap}>
+      <View style={[styles.audioWrap, { marginTop: -metrics.listenSize * 0.5 - metrics.gap }]}>
         <EcolnaAudioButton
-          variant="bordered"
-          size={64}
+          size={metrics.listenSize * 0.8}
           playing={playingAudioId === step.audioId}
           onPress={() => playAudio(step.audioId)}
         />
       </View>
       <EcolnaButton
         label={fr.common.next}
-        variant="ghost"
         disabled={!interactive}
         onPress={() => onSubmit({ kind: 'acknowledge' })}
+        style={styles.next}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, gap: spacing.md, justifyContent: 'center' },
-  glyphCard: {
-    minHeight: 300,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  watermark: { position: 'absolute', opacity: 0.5 },
-  audioWrap: { alignItems: 'center', marginTop: -spacing.xxl },
+  container: { flex: 1, justifyContent: 'center' },
+  glyphCard: { alignItems: 'center', justifyContent: 'center' },
+  audioWrap: { alignItems: 'center' },
+  next: { alignSelf: 'center', minWidth: 240 },
 });

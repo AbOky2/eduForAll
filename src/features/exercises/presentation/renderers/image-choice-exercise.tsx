@@ -2,16 +2,20 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { EcolnaAnswerCard, EcolnaAudioButton, EcolnaExerciseLayout } from '@/design-system/primitives';
-import { useResponsive } from '@/design-system/responsive';
+import {
+  EcolnaAnswerCard,
+  EcolnaAudioButton,
+  EcolnaCard,
+  EcolnaExerciseLayout,
+  useExerciseMetrics,
+} from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
-import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
 type ImageStep = Extract<ExerciseStep, { type: 'image_multiple_choice' }>;
 
-/** Pick the image matching the heard word. */
+/** Pick the image matching the heard word: listen on the stage, touch a picture. */
 export function ImageChoiceExercise({
   step,
   interactive,
@@ -20,7 +24,7 @@ export function ImageChoiceExercise({
   playingAudioId,
 }: ExerciseRendererProps<ImageStep>) {
   const [pressedId, setPressedId] = useState<string | null>(null);
-  const { isTablet } = useResponsive();
+  const metrics = useExerciseMetrics();
 
   useEffect(() => {
     if (step.audioId) {
@@ -30,17 +34,17 @@ export function ImageChoiceExercise({
   }, [step.id]);
 
   const prompt = step.audioId ? (
-    <View style={styles.audioWrap}>
+    <EcolnaCard rounded="xl" style={[styles.stage, { minHeight: metrics.listenSize * 1.8 }]}>
       <EcolnaAudioButton
-        size={isTablet ? 108 : 84}
+        size={metrics.listenSize}
         playing={playingAudioId === step.audioId}
         onPress={() => step.audioId && playAudio(step.audioId)}
       />
-    </View>
+    </EcolnaCard>
   ) : null;
 
   const answers = (
-    <View style={styles.grid}>
+    <View style={[styles.grid, { gap: metrics.gap }]}>
       {step.choices.map((choice) => (
         <EcolnaAnswerCard
           key={choice.id}
@@ -56,9 +60,11 @@ export function ImageChoiceExercise({
             setPressedId(choice.id);
             onSubmit({ kind: 'choice', choiceId: choice.id });
           }}
-          style={styles.imageCard}
+          // Trois images : trois colonnes égales ; quatre : deux par deux.
+          style={{ width: step.choices.length === 3 ? '30%' : '46%', flexGrow: 1 }}
+          contentStyle={{ minHeight: metrics.objectSize * 1.5 }}
         >
-          <ObjectIcon id={choice.illustrationId} size={isTablet ? 96 : 72} />
+          <ObjectIcon id={choice.illustrationId} size={Math.round(metrics.objectSize * 1.15)} />
         </EcolnaAnswerCard>
       ))}
     </View>
@@ -68,12 +74,6 @@ export function ImageChoiceExercise({
 }
 
 const styles = StyleSheet.create({
-  audioWrap: { alignItems: 'center' },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-    justifyContent: 'center',
-  },
-  imageCard: { width: '46%', flexGrow: 1, paddingVertical: spacing.lg },
+  stage: { alignItems: 'center', justifyContent: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
 });
