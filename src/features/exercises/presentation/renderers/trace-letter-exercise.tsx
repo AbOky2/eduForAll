@@ -9,8 +9,12 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { SlateBoard } from '@/design-system/components/slate-board';
 import { EcolnaButton, EcolnaText, useExerciseMetrics } from '@/design-system/primitives';
-import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, radius, subjectColors } from '@/design-system/tokens';
+import {
+  ExerciseAnchor,
+  feedbackSheetBite,
+} from '@/design-system/primitives/ecolna-exercise-layout';
+import { scaled, useResponsive, useTypography } from '@/design-system/responsive';
+import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -70,8 +74,10 @@ export function TraceLetterExercise({
   playAudio,
 }: ExerciseRendererProps<TraceStep>) {
   const glyph = useMemo(() => glyphForTrace(step.letter), [step.letter]);
-  const { isTablet, isLandscape, scale, width, height, screenPadding } = useResponsive();
+  const { isTablet, isLandscape, scale, width, height, screenPadding, contentMaxWidth } =
+    useResponsive();
   const metrics = useExerciseMetrics();
+  const typography = useTypography();
   const reducedMotion = useReducedMotion();
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
   const [strokeIndex, setStrokeIndex] = useState(0);
@@ -350,7 +356,7 @@ export function TraceLetterExercise({
   if (!glyph) {
     // Explicit content fallback: unknown letter → acknowledge step, no dead end.
     return (
-      <View style={[styles.container, { gap: metrics.gap }]}>
+      <View style={[styles.container, styles.centered, { gap: metrics.gap }]}>
         <EcolnaText variant="displayGlyph" align="center">
           {step.letter}
         </EcolnaText>
@@ -374,268 +380,290 @@ export function TraceLetterExercise({
       : scaled(20, scale);
   const midDash = `${scaled(3, scale)} ${scaled(9, scale)}`;
 
+  // La taille de cahier de l'ardoise : debout, elle grandit presque en carré
+  // (le geste a la place) ; couchée, elle est calée sur la hauteur.
+  const slateCap = isLandscape
+    ? scaled(isTablet ? 400 : 340, scale)
+    : Math.min(width - 2 * screenPadding, Math.round(height * 0.55));
+  // L'ardoise est le bloc de l'exercice : elle prend la colonne entière (les
+  // lignes du cahier s'allongent) et la part du corps que vise tout bloc
+  // (`metrics.block`) — l'air au-dessus est celui des autres exercices.
+  // L'ancrage garde sous le bloc la morsure de la feuille de retour ; le tracé
+  // n'en a pas (il se valide seul) : l'ardoise y descend, ne laissant que la
+  // place de la phrase d'aide. La lettre garde ainsi sa boîte, calée sur la
+  // hauteur. Avant la mesure du corps, une ardoise basse : rien ne déborde.
+  const hintGap = scaled(spacing.md, scale);
+  const hintRoom = hintGap + (typography.headlineSm.lineHeight ?? 0) + scaled(spacing.sm, scale);
+  const target = metrics.block > 0 ? metrics.block : metrics.blockMax;
+  const slateHeight =
+    target > 0
+      ? Math.max(
+          scaled(160, scale),
+          Math.min(slateCap, target + Math.max(0, feedbackSheetBite(isTablet, scale) - hintRoom)),
+        )
+      : scaled(160, scale);
+  // Ce qui passe dans la morsure : l'ancrage ne compte que le bloc visé.
+  const overlap = target > 0 ? Math.max(0, slateHeight - target) : 0;
+
   return (
-    <View style={[styles.container, { gap: metrics.gap }]}>
-      {/* L'ardoise prend la hauteur que la consigne et le bouton lui laissent, sans dépasser sa taille de cahier. */}
-      <SlateBoard
-        style={[
-          styles.board,
-          {
-            // Debout, l'ardoise grandit presque en carré : le geste a la place.
-            maxHeight: isLandscape
-              ? scaled(isTablet ? 400 : 340, scale)
-              : Math.min(width - 2 * screenPadding, Math.round(height * 0.55)),
-          },
-        ]}
-      >
-        <GestureDetector gesture={pan}>
-          <View
-            style={styles.canvas}
-            onLayout={onLayout}
-            accessibilityLabel={fr.lesson.traceLetterLabel(step.letter)}
-          >
-            <Svg width="100%" height="100%">
-              {/* Les lignes du cahier : on pose la lettre sur la ligne de base. */}
-              {box.side > 0
-                ? (['ascender', 'xHeight', 'baseline'] as const).map((line) => {
-                    const y = box.top + WRITING_LINES[line] * box.side;
-                    return (
-                      <Line
-                        key={line}
-                        x1={lineStart}
-                        x2={boardSize.width - lineStart}
-                        y1={y}
-                        y2={y}
-                        stroke={LINE}
-                        strokeWidth={2}
-                        strokeDasharray={line === 'baseline' ? '1 0' : '8 8'}
-                        opacity={line === 'ascender' ? 0.6 : 1}
-                      />
-                    );
-                  })
-                : null}
-
-              {/* Le modèle : une bande de craie voilée, aux bouts francs — elle commence
-                  sur la hauteur d'x et finit sur la ligne de base. Un point reste un disque. */}
-              <LetterBand
-                strokes={scaledStrokes}
-                joints={joints}
-                width={guideWidth}
-                color={MODEL}
-              />
-
-              {/* La ligne médiane, tiretée, sur ce qui reste à écrire. */}
-              {!done
-                ? scaledStrokes.map((stroke, index) =>
-                    index >= strokeIndex && stroke.length > 1 ? (
-                      <Path
-                        key={`m-${index}`}
-                        d={smoothPath(stroke)}
-                        fill="none"
-                        stroke={SOFT}
-                        strokeWidth={3}
-                        strokeDasharray={midDash}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    ) : null,
-                  )
-                : null}
-
-              {/* Ce qui est déjà écrit, à la craie fraîche : chaque trait fini, puis
-                  le début du trait en cours — sur la courbe même du modèle. */}
-              {scaledStrokes.map((stroke, index) => {
-                if (index > strokeIndex) {
-                  return null;
-                }
-                const first = stroke[0];
-                if (stroke.length === 1 && first && index < strokeIndex) {
-                  return (
-                    <Circle
-                      key={`w-${index}`}
-                      cx={first[0]}
-                      cy={first[1]}
-                      r={strokeWidth / 2 + 2}
-                      fill={CHALK}
-                    />
-                  );
-                }
-                const segments = index < strokeIndex ? stroke.length - 1 : checkpointIndex - 1;
-                return segments > 0 ? (
-                  <Path
-                    key={`w-${index}`}
-                    d={smoothPath(stroke, segments)}
-                    fill="none"
-                    stroke={CHALK}
-                    strokeWidth={strokeWidth}
-                    strokeLinecap="butt"
-                    strokeLinejoin="round"
-                  />
-                ) : null;
-              })}
-
-              {/* Les jalons du trait en cours : discrets, sauf le prochain, au soleil. */}
-              {currentStroke && !done
-                ? currentStroke.map(([x, y], cIndex) => {
-                    if (cIndex < checkpointIndex) {
-                      return null;
-                    }
-                    const isNext = cIndex === checkpointIndex;
-                    return (
-                      <Circle
-                        key={`j-${cIndex}`}
-                        cx={x}
-                        cy={y}
-                        r={isNext ? startRadius : stepRadius}
-                        fill={isNext ? colors.reward : SOFT}
-                        stroke={isNext ? colors.white : 'none'}
-                        strokeWidth={isNext ? 3 : 0}
-                      />
-                    );
-                  })
-                : null}
-
-              {arrow && !touching ? (
-                <Path
-                  d={arrow}
-                  fill="none"
-                  stroke={colors.reward}
-                  strokeWidth={scaled(4, scale)}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              ) : null}
-
-              {trail.length > 0 ? (
-                <Polyline
-                  points={trail.join(' ')}
-                  fill="none"
-                  stroke={CHALK}
-                  strokeWidth={strokeWidth}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              ) : null}
-            </Svg>
-
-            {/* Les numéros des traits encore à écrire. */}
-            {!done
-              ? labels.map(([x, y], index) =>
-                  index >= strokeIndex ? (
-                    <View
-                      key={`n-${index}`}
-                      pointerEvents="none"
-                      style={[
-                        styles.label,
-                        {
-                          left: x - labelRadius,
-                          top: y - labelRadius,
-                          width: labelRadius * 2,
-                          height: labelRadius * 2,
-                          borderRadius: labelRadius,
-                        },
-                      ]}
-                    >
-                      <EcolnaText variant="headlineSm" color={CHALK} align="center">
-                        {index + 1}
-                      </EcolnaText>
-                    </View>
-                  ) : null,
-                )
-              : null}
-
-            {/* La bille qui montre le chemin. */}
-            {demo ? (
-              <Animated.View
-                pointerEvents="none"
-                style={[
-                  styles.bead,
-                  {
-                    width: startRadius * 2,
-                    height: startRadius * 2,
-                    borderRadius: startRadius,
-                    opacity: beadOpacity,
-                    transform: demo.transform,
-                  },
-                ]}
-              />
-            ) : null}
-
-            {/* Fini : la lettre passe au soleil, d'un petit bond. */}
-            {done ? (
-              <Animated.View
-                pointerEvents="none"
-                style={[
-                  styles.fill,
-                  {
-                    opacity: shine.interpolate({
-                      inputRange: [0, 0.35, 1],
-                      outputRange: [0, 1, 1],
-                    }),
-                    transform: [
-                      {
-                        scale: shine.interpolate({
-                          inputRange: [0, 0.55, 1],
-                          outputRange: [0.97, 1.045, 1],
-                        }),
-                      },
-                    ],
-                  },
-                ]}
+    // Ancrée sous la consigne comme tout exercice (air 1 : 1,25), dans la
+    // colonne lisible : ses bords tombent sur la gouttière, comme la bande
+    // d'écoute et les cartes.
+    <View style={[styles.container, { maxWidth: contentMaxWidth }]}>
+      <ExerciseAnchor onLayout={metrics.onBodyLayout}>
+        {/* Au-dessus de l'air du bas qu'elle recouvre : le doigt l'atteint partout. */}
+        <View style={[styles.block, { marginBottom: -overlap }]}>
+          <SlateBoard style={[styles.board, { height: slateHeight }]}>
+            <GestureDetector gesture={pan}>
+              <View
+                style={styles.canvas}
+                onLayout={onLayout}
+                accessibilityLabel={fr.lesson.traceLetterLabel(step.letter)}
               >
                 <Svg width="100%" height="100%">
+                  {/* Les lignes du cahier : on pose la lettre sur la ligne de base. */}
+                  {box.side > 0
+                    ? (['ascender', 'xHeight', 'baseline'] as const).map((line) => {
+                        const y = box.top + WRITING_LINES[line] * box.side;
+                        return (
+                          <Line
+                            key={line}
+                            x1={lineStart}
+                            x2={boardSize.width - lineStart}
+                            y1={y}
+                            y2={y}
+                            stroke={LINE}
+                            strokeWidth={2}
+                            strokeDasharray={line === 'baseline' ? '1 0' : '8 8'}
+                            opacity={line === 'ascender' ? 0.6 : 1}
+                          />
+                        );
+                      })
+                    : null}
+
+                  {/* Le modèle : une bande de craie voilée, aux bouts francs — elle commence
+                  sur la hauteur d'x et finit sur la ligne de base. Un point reste un disque. */}
                   <LetterBand
                     strokes={scaledStrokes}
                     joints={joints}
                     width={guideWidth}
-                    color={colors.reward}
+                    color={MODEL}
                   />
+
+                  {/* La ligne médiane, tiretée, sur ce qui reste à écrire. */}
+                  {!done
+                    ? scaledStrokes.map((stroke, index) =>
+                        index >= strokeIndex && stroke.length > 1 ? (
+                          <Path
+                            key={`m-${index}`}
+                            d={smoothPath(stroke)}
+                            fill="none"
+                            stroke={SOFT}
+                            strokeWidth={3}
+                            strokeDasharray={midDash}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        ) : null,
+                      )
+                    : null}
+
+                  {/* Ce qui est déjà écrit, à la craie fraîche : chaque trait fini, puis
+                  le début du trait en cours — sur la courbe même du modèle. */}
+                  {scaledStrokes.map((stroke, index) => {
+                    if (index > strokeIndex) {
+                      return null;
+                    }
+                    const first = stroke[0];
+                    if (stroke.length === 1 && first && index < strokeIndex) {
+                      return (
+                        <Circle
+                          key={`w-${index}`}
+                          cx={first[0]}
+                          cy={first[1]}
+                          r={strokeWidth / 2 + 2}
+                          fill={CHALK}
+                        />
+                      );
+                    }
+                    const segments = index < strokeIndex ? stroke.length - 1 : checkpointIndex - 1;
+                    return segments > 0 ? (
+                      <Path
+                        key={`w-${index}`}
+                        d={smoothPath(stroke, segments)}
+                        fill="none"
+                        stroke={CHALK}
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="butt"
+                        strokeLinejoin="round"
+                      />
+                    ) : null;
+                  })}
+
+                  {/* Les jalons du trait en cours : discrets, sauf le prochain, au soleil. */}
+                  {currentStroke && !done
+                    ? currentStroke.map(([x, y], cIndex) => {
+                        if (cIndex < checkpointIndex) {
+                          return null;
+                        }
+                        const isNext = cIndex === checkpointIndex;
+                        return (
+                          <Circle
+                            key={`j-${cIndex}`}
+                            cx={x}
+                            cy={y}
+                            r={isNext ? startRadius : stepRadius}
+                            fill={isNext ? colors.reward : SOFT}
+                            stroke={isNext ? colors.white : 'none'}
+                            strokeWidth={isNext ? 3 : 0}
+                          />
+                        );
+                      })
+                    : null}
+
+                  {arrow && !touching ? (
+                    <Path
+                      d={arrow}
+                      fill="none"
+                      stroke={colors.reward}
+                      strokeWidth={scaled(4, scale)}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  ) : null}
+
+                  {trail.length > 0 ? (
+                    <Polyline
+                      points={trail.join(' ')}
+                      fill="none"
+                      stroke={CHALK}
+                      strokeWidth={strokeWidth}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  ) : null}
                 </Svg>
-              </Animated.View>
-            ) : null}
 
-            {/* Le modèle du maître, en marge : la lettre telle qu'on la lit. */}
-            <View
-              pointerEvents="none"
-              accessibilityElementsHidden
-              importantForAccessibility="no-hide-descendants"
-              style={[
-                styles.chip,
-                {
-                  top: chipInset,
-                  left: chipInset,
-                  minWidth: chipWidth,
-                  height: chipSize,
-                  borderRadius: radius.lg,
-                },
-              ]}
+                {/* Les numéros des traits encore à écrire. */}
+                {!done
+                  ? labels.map(([x, y], index) =>
+                      index >= strokeIndex ? (
+                        <View
+                          key={`n-${index}`}
+                          pointerEvents="none"
+                          style={[
+                            styles.label,
+                            {
+                              left: x - labelRadius,
+                              top: y - labelRadius,
+                              width: labelRadius * 2,
+                              height: labelRadius * 2,
+                              borderRadius: labelRadius,
+                            },
+                          ]}
+                        >
+                          <EcolnaText variant="headlineSm" color={CHALK} align="center">
+                            {index + 1}
+                          </EcolnaText>
+                        </View>
+                      ) : null,
+                    )
+                  : null}
+
+                {/* La bille qui montre le chemin. */}
+                {demo ? (
+                  <Animated.View
+                    pointerEvents="none"
+                    style={[
+                      styles.bead,
+                      {
+                        width: startRadius * 2,
+                        height: startRadius * 2,
+                        borderRadius: startRadius,
+                        opacity: beadOpacity,
+                        transform: demo.transform,
+                      },
+                    ]}
+                  />
+                ) : null}
+
+                {/* Fini : la lettre passe au soleil, d'un petit bond. */}
+                {done ? (
+                  <Animated.View
+                    pointerEvents="none"
+                    style={[
+                      styles.fill,
+                      {
+                        opacity: shine.interpolate({
+                          inputRange: [0, 0.35, 1],
+                          outputRange: [0, 1, 1],
+                        }),
+                        transform: [
+                          {
+                            scale: shine.interpolate({
+                              inputRange: [0, 0.55, 1],
+                              outputRange: [0.97, 1.045, 1],
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                  >
+                    <Svg width="100%" height="100%">
+                      <LetterBand
+                        strokes={scaledStrokes}
+                        joints={joints}
+                        width={guideWidth}
+                        color={colors.reward}
+                      />
+                    </Svg>
+                  </Animated.View>
+                ) : null}
+
+                {/* Le modèle du maître, en marge : la lettre telle qu'on la lit. */}
+                <View
+                  pointerEvents="none"
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                  style={[
+                    styles.chip,
+                    {
+                      top: chipInset,
+                      left: chipInset,
+                      minWidth: chipWidth,
+                      height: chipSize,
+                      borderRadius: radius.lg,
+                    },
+                  ]}
+                >
+                  <EcolnaText
+                    variant="displayGlyphSmall"
+                    color={subjectColors.writing.tint}
+                    align="center"
+                    style={{ lineHeight: chipSize }}
+                  >
+                    {step.letter}
+                  </EcolnaText>
+                </View>
+              </View>
+            </GestureDetector>
+          </SlateBoard>
+
+          {/* La phrase d'aide, sous l'ardoise, dans l'air que l'ancrage garde en bas
+          (aucune feuille de retour n'y monte : le tracé se valide seul). Le
+          tracé fini se valide de lui-même : plus rien à lire. */}
+          {!done ? (
+            <EcolnaText
+              variant="headlineSm"
+              color={colors.textSecondary}
+              align="center"
+              style={[styles.hint, { marginTop: hintGap }]}
             >
-              <EcolnaText
-                variant="displayGlyphSmall"
-                color={subjectColors.writing.tint}
-                align="center"
-                style={{ lineHeight: chipSize }}
-              >
-                {step.letter}
-              </EcolnaText>
-            </View>
-          </View>
-        </GestureDetector>
-      </SlateBoard>
-
-      {done ? (
-        // Le tracé fini se valide de lui-même : pas de bouton à chercher.
-        <View style={{ minHeight: scaled(60, scale) }} />
-      ) : (
-        <EcolnaText
-          variant="headlineSm"
-          color={colors.textSecondary}
-          align="center"
-          style={{ minHeight: scaled(60, scale) }}
-        >
-          {fr.lesson.traceLetterHint}
-        </EcolnaText>
-      )}
+              {fr.lesson.traceLetterHint}
+            </EcolnaText>
+          ) : null}
+        </View>
+      </ExerciseAnchor>
     </View>
   );
 }
@@ -684,14 +712,11 @@ function LetterBand({ strokes, joints, width, color }: LetterBandProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    width: '100%',
-    maxWidth: 760,
-    alignSelf: 'center',
-  },
-  board: { alignSelf: 'stretch', flexGrow: 1, flexShrink: 1, minHeight: 180 },
+  container: { flex: 1, width: '100%', alignSelf: 'center' },
+  centered: { justifyContent: 'center' },
+  block: { zIndex: 1 },
+  board: { alignSelf: 'stretch' },
+  hint: { position: 'absolute', top: '100%', left: 0, right: 0 },
   canvas: { flex: 1 },
   fill: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   label: {

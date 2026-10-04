@@ -12,6 +12,7 @@ import { fr } from '@/localization/fr/strings';
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import {
+  a11y,
   colors,
   radius,
   shadows,
@@ -36,8 +37,40 @@ const StimulusFillContext = createContext(false);
  */
 const AIR_ABOVE = 1;
 const AIR_BELOW = 1.25;
-/** Sur grande tablette, le bloc vise cette part de la hauteur du corps. */
-const BLOCK_SHARE = 0.6;
+/**
+ * Le bloc vise cette part de la hauteur du corps — plafonné par `blockMax`,
+ * jamais sous la feuille de retour.
+ */
+const BLOCK_SHARE = 0.7;
+/** Dans la bande d'écoute (empilé), le disque se règle sur le bloc. */
+const BAND_DISC_SHARE = 0.22;
+/**
+ * À côté des réponses, le pavé d'écoute est un peu plus étroit qu'une carte :
+ * le disque et une marge d'air de chaque côté. Les réponses restent la vedette.
+ */
+const PANE_OVER_DISC = 1.42;
+/**
+ * Côte à côte, une rangée de réponses (et le pavé, qui prend sa hauteur) a la
+ * silhouette d'une carte presque carrée, à peine plus haute que large — calée
+ * sur trois réponses, le cas du programme. Jamais un bandeau couché.
+ */
+export const PANE_CARD_RATIO = 1.08;
+/**
+ * Empilé, une carte de grille (syllabe, nombre, forme) vise cette silhouette
+ * dans la place mesurée : plus de bandeaux 2,4 : 1 sous la bande d'écoute.
+ */
+export const GRID_CARD_RATIO = 0.9;
+
+/**
+ * L'air entre le bas des réponses et la feuille de retour, en plus de la
+ * morsure : la carte choisie ne touche jamais le bord de la feuille.
+ */
+const SHEET_AIR = spacing.xs;
+
+/** L'écart entre les deux volets (stimulus et réponses). */
+export function splitGapOf(splitPanes: boolean, scale: number): number {
+  return scaled(splitPanes ? spacing.xxl : spacing.xl, scale);
+}
 
 /**
  * Ce que la feuille de retour (`FeedbackBanner`) recouvre du bas du corps, plus
@@ -182,10 +215,10 @@ export interface ExerciseMetrics {
   /** Écart entre réponses. */
   gap: number;
   /**
-   * La hauteur visée pour tout le bloc (stimulus et réponses) : ≈ 60 % du
-   * corps mesuré sur grande tablette, l'air restant réparti 1:1,25 au-dessus
-   * de la feuille de retour. 0 ailleurs, ou tant que le corps n'est pas
-   * mesuré : les paliers ci-dessus suffisent.
+   * La hauteur visée pour tout le bloc (stimulus et réponses) : ≈ 70 % du
+   * corps mesuré, plafonnée par `blockMax` — le bloc ne passe jamais sous la
+   * feuille de retour ; l'air restant se répartit au-dessus. 0 tant que le
+   * corps n'est pas mesuré : les paliers ci-dessus suffisent.
    */
   block: number;
   /**
@@ -194,8 +227,10 @@ export interface ExerciseMetrics {
    */
   blockMax: number;
   /**
-   * Écoute seule : une bande pleine largeur au-dessus des réponses (`band`),
-   * ou un volet à côté d'elles (`pane`, tablette 7" couchée, trop basse).
+   * Écoute seule : la grammaire suit l'orientation, pas la taille de
+   * l'appareil. Couché (deux volets), le pavé d'écoute se pose à côté des
+   * réponses (`pane`) ; debout et au téléphone, une bande pleine largeur
+   * au-dessus d'elles (`band`).
    */
   listenLayout: 'band' | 'pane';
   /**
@@ -205,8 +240,18 @@ export interface ExerciseMetrics {
   listenBand: number;
   /** Diamètre du disque dans le pavé d'écoute. */
   listenDisc: number;
-  /** Côte à côte (`splitPanes`) : les réponses sous la bande tiennent sur une rangée. */
+  /** Côte à côte (`splitPanes`) : les réponses à côté du pavé tiennent sur une rangée. */
   wide: boolean;
+  /** L'écart entre les deux volets (le pavé et les réponses). */
+  splitGap: number;
+  /** Largeur mesurée de la colonne de l'exercice (0 tant qu'elle ne l'est pas). */
+  columnWidth: number;
+  /**
+   * À côté du pavé d'écoute, la hauteur de la rangée de réponses — donc du
+   * pavé : une carte presque carrée (`PANE_CARD_RATIO`), la même d'un exercice
+   * à l'autre, jamais au-delà du plafond. 0 empilé ou avant la mesure.
+   */
+  paneHeight: number;
   /** Mesure du corps : `EcolnaExerciseLayout` (prop `metrics`) ou `ExerciseAnchor` la branche. */
   onBodyLayout: (event: LayoutChangeEvent) => void;
 }
@@ -219,39 +264,57 @@ export interface ExerciseMetrics {
  */
 export function useExerciseMetrics(): ExerciseMetrics {
   const { isTablet, scale, height, splitPanes } = useResponsive();
-  const [bodyHeight, setBodyHeight] = useState(0);
+  const [body, setBody] = useState({ width: 0, height: 0 });
   // Une grande tablette (≥ 780 dp de haut) a la place de réponses plus
   // grandes : la largeur seule laissait l'exercice tassé au milieu du blanc.
   const roomy = isTablet && height >= 780;
   const listenSize = scaled(roomy ? 116 : isTablet ? 100 : 88, scale);
+  const gap = scaled(isTablet ? spacing.lg : spacing.md, scale);
+  const splitGap = splitGapOf(splitPanes, scale);
   const bite = feedbackSheetBite(isTablet, scale);
 
-  const blockMax = bodyHeight > 0 ? Math.max(0, bodyHeight - bite - scaled(spacing.lg, scale)) : 0;
-  // Le bas du bloc tombe à (corps − bloc) × 1/2,25 + bloc : il reste au-dessus
-  // de la feuille tant que bloc ≤ corps − 2,25/1,25 × morsure.
+  const blockMax =
+    body.height > 0 ? Math.max(0, body.height - bite - scaled(spacing.lg, scale)) : 0;
+  // Le bas du bloc ne descend jamais sous la feuille : l'ancre garde la
+  // morsure sous lui (`ExerciseAnchor`), la mise en page un filet d'air
+  // (`SHEET_AIR`) ; l'air du dessus cède d'abord.
+  const sheetAir = scaled(SHEET_AIR, scale);
   const block =
-    roomy && bodyHeight > 0
+    body.height > 0
+      ? Math.max(0, Math.min(Math.round(body.height * BLOCK_SHARE), blockMax - sheetAir))
+      : 0;
+
+  const listenLayout = splitPanes ? 'pane' : 'band';
+  // Le disque du volet a une taille fixe, sous celle du bouton d'écoute : le
+  // pavé reste plus étroit qu'une carte. Dans la bande, il se règle sur le
+  // bloc : la place va aux réponses.
+  const listenDisc =
+    listenLayout === 'pane'
+      ? Math.min(listenSize, scaled(92, scale))
+      : block > 0
+        ? Math.min(listenSize, Math.max(scaled(84, scale), Math.round(block * BAND_DISC_SHARE)))
+        : listenSize;
+  const listenBand =
+    listenLayout === 'pane'
+      ? Math.round(listenDisc * PANE_OVER_DISC)
+      : listenDisc + 2 * scaled(spacing.sm, scale);
+  // Trois réponses à côté du pavé : la largeur d'une case fixe la hauteur
+  // de la rangée (et du pavé) pour tous les exercices d'écoute — sous le bloc
+  // visé, un peu d'air restant sous la consigne d'une tablette basse (7").
+  const paneCell =
+    listenLayout === 'pane' && body.width > 0
+      ? (body.width - listenBand - splitGap - 2 * gap) / 3
+      : 0;
+  const paneHeight =
+    paneCell > 0
       ? Math.max(
-          0,
-          Math.round(
-            Math.min(
-              bodyHeight * BLOCK_SHARE,
-              bodyHeight - ((AIR_ABOVE + AIR_BELOW) / AIR_BELOW) * bite,
-            ),
+          scaled(a11y.childTouchTarget + 8, scale),
+          Math.min(
+            block > 0 ? block - scaled(spacing.xs, scale) : Infinity,
+            Math.round(paneCell * PANE_CARD_RATIO),
           ),
         )
       : 0;
-
-  const listenLayout = splitPanes && !roomy ? 'pane' : 'band';
-  // Dans la bande, le disque se règle sur le bloc : la place va aux réponses.
-  const listenDisc =
-    block > 0
-      ? Math.min(listenSize, Math.max(scaled(84, scale), Math.round(block * 0.28)))
-      : listenSize;
-  const listenBand =
-    listenLayout === 'pane'
-      ? Math.round(listenSize * 1.8)
-      : listenDisc + 2 * scaled(spacing.sm, scale);
 
   return {
     answerHeight: scaled(roomy ? 124 : isTablet ? 96 : 72, scale),
@@ -259,25 +322,34 @@ export function useExerciseMetrics(): ExerciseMetrics {
     answerGlyph: isTablet ? 'displayGlyph' : 'displayGlyphSmall',
     objectSize: scaled(roomy ? 118 : isTablet ? 96 : 72, scale),
     listenSize,
-    gap: scaled(isTablet ? spacing.lg : spacing.md, scale),
+    gap,
     block,
     blockMax,
     listenLayout,
     listenBand,
     listenDisc,
     wide: splitPanes,
+    splitGap,
+    columnWidth: body.width,
+    paneHeight,
     onBodyLayout: (event: LayoutChangeEvent) => {
-      const next = Math.round(event.nativeEvent.layout.height);
-      setBodyHeight((current) => (Math.abs(current - next) < 1 ? current : next));
+      const next = {
+        width: Math.round(event.nativeEvent.layout.width),
+        height: Math.round(event.nativeEvent.layout.height),
+      };
+      setBody((current) =>
+        Math.abs(current.width - next.width) < 1 && Math.abs(current.height - next.height) < 1
+          ? current
+          : next,
+      );
     },
   };
 }
 
 /**
  * La hauteur que les réponses peuvent prendre — sous la bande d'écoute quand
- * l'exercice n'est qu'une écoute : la hauteur visée sur grande tablette,
- * ailleurs (ou `limit: 'max'`) le plafond. 0 : inconnue, les paliers
- * s'appliquent.
+ * l'exercice n'est qu'une écoute : la hauteur visée (ou, `limit: 'max'`, le
+ * plafond). 0 : inconnue, les paliers s'appliquent.
  */
 export function answersRoom(
   metrics: Pick<ExerciseMetrics, 'block' | 'blockMax' | 'listenLayout' | 'listenBand' | 'gap'>,
@@ -295,9 +367,9 @@ export function answersRoom(
 
 /**
  * La hauteur d'une carte de réponse dans `rows` rangées tenant dans `room`
- * (0 : pas de borne, la taille voulue). `grow` : une rangée unique sous la
- * bande d'écoute prend exactement la place ; sinon, les cartes se resserrent
- * seulement. Jamais sous `min` (la cible tactile).
+ * (0 : pas de borne, la taille voulue). `grow` : les rangées prennent
+ * exactement la place ; sinon, les cartes se resserrent seulement. Jamais
+ * sous `min` (la cible tactile).
  */
 export function fitAnswerHeight({
   preferred,
@@ -319,6 +391,65 @@ export function fitAnswerHeight({
   }
   const perRow = Math.floor((room - gap * (Math.max(1, rows) - 1)) / Math.max(1, rows));
   return Math.max(min, grow ? perRow : Math.min(preferred, perRow));
+}
+
+/**
+ * La largeur d'une case dans une rangée de `columns` réponses d'une écoute
+ * seule : toute la colonne mesurée sous la bande, ce qui reste à côté du
+ * pavé (`beside`). 0 tant que la colonne n'est pas mesurée.
+ */
+export function listenCellWidth(
+  metrics: Pick<ExerciseMetrics, 'columnWidth' | 'listenBand' | 'splitGap' | 'gap'>,
+  columns: number,
+  beside: boolean,
+): number {
+  if (!(metrics.columnWidth > 0)) {
+    return 0;
+  }
+  const count = Math.max(1, columns);
+  const row = metrics.columnWidth - (beside ? metrics.listenBand + metrics.splitGap : 0);
+  return Math.max(0, Math.floor((row - metrics.gap * (count - 1)) / count));
+}
+
+/**
+ * La hauteur d'une carte de réponse d'une écoute seule (syllabes, nombres,
+ * formes, scènes). À côté du pavé, sur une rangée : la hauteur commune du pavé
+ * (`paneHeight`), presque carrée. Empilé : la silhouette `ratio` × largeur de
+ * case (0 : la taille voulue seule), dans la place mesurée sous la bande —
+ * jamais sous la feuille de retour, jamais sous `min`.
+ */
+export function listenAnswerHeight(
+  metrics: Pick<
+    ExerciseMetrics,
+    | 'block'
+    | 'blockMax'
+    | 'listenLayout'
+    | 'listenBand'
+    | 'gap'
+    | 'splitGap'
+    | 'columnWidth'
+    | 'paneHeight'
+  >,
+  {
+    columns,
+    rows,
+    preferred,
+    min,
+    ratio = GRID_CARD_RATIO,
+  }: { columns: number; rows: number; preferred: number; min: number; ratio?: number },
+): number {
+  const beside = metrics.listenLayout === 'pane';
+  if (beside && rows === 1 && metrics.paneHeight > 0) {
+    return metrics.paneHeight;
+  }
+  const cell = ratio > 0 ? listenCellWidth(metrics, columns, beside) : 0;
+  return fitAnswerHeight({
+    preferred: cell > 0 ? Math.max(preferred, Math.round(cell * ratio)) : preferred,
+    room: answersRoom(metrics, true),
+    rows,
+    gap: metrics.gap,
+    min,
+  });
 }
 
 /**
@@ -368,10 +499,10 @@ interface EcolnaExerciseLayoutProps {
  * below the fold and a six-year-old has to scroll to find them, which is
  * exactly the moment an exercise stops being about reading.
  *
- * Une écoute seule n'a pas de volet : sur grande tablette et partout où l'on
- * empile, une bande d'écoute pleine largeur au-dessus de réponses qui
- * prennent toute la colonne ; sur une tablette 7" couchée, un volet étroit de
- * largeur fixe à côté d'elles.
+ * Une écoute seule n'a pas d'image à montrer : couchée (deux volets), quelle
+ * que soit la tablette, le pavé d'écoute se pose à côté des réponses, à la
+ * hauteur de leur rangée ; debout et au téléphone, une bande pleine largeur
+ * au-dessus d'elles. Une seule grammaire, réglée par l'orientation.
  */
 export function EcolnaExerciseLayout({
   prompt = null,
@@ -381,9 +512,11 @@ export function EcolnaExerciseLayout({
   metrics,
 }: EcolnaExerciseLayoutProps) {
   const { splitPanes, scale } = useResponsive();
-  const gap = scaled(splitPanes ? spacing.xxl : spacing.xl, scale);
+  const gap = splitGapOf(splitPanes, scale);
   const paneGap = scaled(spacing.md, scale);
   const onLayout = metrics?.onBodyLayout;
+  // Le filet d'air au-dessus de la feuille de retour (voir `useExerciseMetrics`).
+  const settle = { marginBottom: scaled(SHEET_AIR, scale) };
 
   if (listen) {
     const disc = metrics?.listenDisc ?? scaled(100, scale);
@@ -394,7 +527,7 @@ export function EcolnaExerciseLayout({
     if (metrics?.listenLayout === 'pane') {
       return (
         <ExerciseAnchor onLayout={onLayout}>
-          <View style={[styles.split, { gap }]}>
+          <View style={[styles.split, settle, { gap }]}>
             <View style={{ width: band }}>{pad(styles.grow)}</View>
             <View style={[styles.pane, { gap: paneGap }]}>{answers}</View>
           </View>
@@ -403,7 +536,7 @@ export function EcolnaExerciseLayout({
     }
     return (
       <ExerciseAnchor onLayout={onLayout}>
-        <View style={{ gap: metrics?.gap ?? paneGap }}>
+        <View style={[settle, { gap: metrics?.gap ?? paneGap }]}>
           {pad({ minHeight: band })}
           {answers}
         </View>
@@ -416,7 +549,7 @@ export function EcolnaExerciseLayout({
   if (!prompt) {
     return (
       <ExerciseAnchor onLayout={onLayout}>
-        <View style={styles.alone}>{answers}</View>
+        <View style={[styles.alone, settle]}>{answers}</View>
       </ExerciseAnchor>
     );
   }
@@ -424,7 +557,7 @@ export function EcolnaExerciseLayout({
   if (!splitPanes) {
     return (
       <ExerciseAnchor onLayout={onLayout}>
-        <View style={{ gap }}>
+        <View style={[settle, { gap }]}>
           {prompt}
           {answers}
         </View>
@@ -434,7 +567,7 @@ export function EcolnaExerciseLayout({
 
   return (
     <ExerciseAnchor onLayout={onLayout}>
-      <View style={[styles.split, { gap }]}>
+      <View style={[styles.split, settle, { gap }]}>
         <View style={[styles.pane, { flex: promptWeight, gap: paneGap }]}>
           <StimulusFillContext.Provider value>{prompt}</StimulusFillContext.Provider>
         </View>

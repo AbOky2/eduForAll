@@ -23,6 +23,8 @@ export const fr = {
     replay: 'Rejouer',
     skip: 'Passer',
     back: 'Retour',
+    /** La croix d'un écran qui s'ouvre par-dessus (hors connexion). */
+    close: 'Fermer',
     understood: 'C’est compris',
     listen: 'Écouter',
     listenHint: 'Fait écouter le son',
@@ -122,6 +124,22 @@ export const fr = {
       `${steps} activité${steps > 1 ? 's' : ''} · ${minutes} min`,
     reviseTitle: 'On revoit ensemble ?',
     reviseCount: (count: number) => (count > 1 ? `${count} notions à revoir` : '1 notion à revoir'),
+    /**
+     * Le compte, avec la discipline quand toutes les notions en viennent
+     * (« 1 notion de langage à revoir ») — le libellé lu de la carte ;
+     * « à revoir » ne se coupe pas s'il s'affiche un jour.
+     */
+    reviseCountIn: (count: number, subject: 'language' | 'reading' | 'writing' | 'math') => {
+      const ofSubject = {
+        language: 'de langage',
+        reading: 'de lecture',
+        writing: 'd’écriture',
+        math: 'de calcul',
+      }[subject];
+      return count > 1
+        ? `${count} notions ${ofSubject} à revoir`
+        : `1 notion ${ofSubject} à revoir`;
+    },
     /** La pilule de la carte « On revoit ensemble ? ». */
     reviseAction: 'Revoir',
   },

@@ -11,10 +11,12 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { cardSound, echoKinds } from './card-sound';
 
 type StoryStep = Extract<ExerciseStep, { type: 'mini_story_question' }>;
 
@@ -34,6 +36,7 @@ export function MiniStoryExercise({
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
 
   useEffect(() => {
     playAudio(step.storyAudioId);
@@ -69,6 +72,13 @@ export function MiniStoryExercise({
             setPressedId(choice.id);
             onSubmit({ kind: 'choice', choiceId: choice.id });
           }}
+          // Retouchée pendant la reprise : elle se redit, sans répondre.
+          onEcho={echo(pressedId === choice.id, () => {
+            const sound = cardSound(echoKinds(null), choice.label);
+            if (sound) {
+              playAudio(sound);
+            }
+          })}
           contentStyle={{ minHeight: scaled(64, scale) }}
         />
       ))}

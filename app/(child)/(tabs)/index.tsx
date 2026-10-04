@@ -24,7 +24,6 @@ import { EcolnaPill } from '@/design-system/components/ecolna-pill';
 import { LessonHeroCard } from '@/design-system/components/lesson-hero-card';
 import { SubjectTile, subjectTileRoom } from '@/design-system/components/subject-tile';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
-import { SubjectArt } from '@/design-system/icons/subject-art';
 import { EcolnaGalet, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
@@ -39,25 +38,26 @@ const SUBJECT_LABELS: Record<Subject, string> = {
 };
 
 /**
- * La discipline de la première notion à revoir (dans l'ordre où l'atelier de
- * révision les montrera) : la carte « On revoit ensemble ? » porte son
- * emblème, une image pour l'enfant qui ne lit pas encore.
+ * La discipline des notions à revoir — celles que l'atelier de révision
+ * montrera —, quand elles viennent toutes de la même : le libellé lu de la
+ * carte « On revoit ensemble ? » la nomme (« 1 notion de langage à
+ * revoir »). Plusieurs disciplines, ou une notion sans leçon connue : aucune.
  */
-async function firstRevisionSubject(childProfileId: ChildProfileId): Promise<Subject | null> {
+async function sharedRevisionSubject(childProfileId: ChildProfileId): Promise<Subject | null> {
   const db = await getDatabase();
   const open = await createRevisionRepository(db).findOpen(
     childProfileId,
     REVISION_BATCH,
     new Date().toISOString(),
   );
-  for (const { skillId } of open) {
-    const lessonId = lessonForSkill(skillId);
-    const subject = lessonId ? worldOfLesson(lessonId)?.subject : undefined;
-    if (subject) {
-      return subject;
-    }
-  }
-  return null;
+  const subjects = new Set(
+    open.map(({ skillId }) => {
+      const lessonId = lessonForSkill(skillId);
+      return (lessonId ? worldOfLesson(lessonId)?.subject : undefined) ?? null;
+    }),
+  );
+  const [only] = subjects;
+  return subjects.size === 1 && only ? only : null;
 }
 
 interface HomeData {
@@ -99,7 +99,7 @@ export default function ChildHomeScreen() {
       profile
         ? Promise.all([
             loadHomeSummary(profile.id, profile.level),
-            firstRevisionSubject(profile.id),
+            sharedRevisionSubject(profile.id),
           ]).then(([summary, revisionSubject]) => ({ summary, revisionSubject }))
         : null,
     profile?.id ?? null,
@@ -201,11 +201,20 @@ export default function ChildHomeScreen() {
     router.push(`/(child)/level-map?subject=${subject.subject}`);
   };
 
-  // La révision : l'emblème de la discipline à revoir, son titre, son compte,
-  // et le bouton bleu plein « Revoir » — la seule action bleue de l'accueil :
-  // le bleu dit « on revoit ». Il fait partie de la carte, qui se touche
-  // tout entière (comme le bouton soleil de la carte du jour).
+  // La révision a son propre emblème, de la famille des emblèmes de
+  // discipline (un disque plein, un symbole blanc) : la flèche de reprise du
+  // bouton et de l'atelier, sur le bleu de la révision — jamais l'emblème
+  // d'une matière, qui se confondrait avec la carte du jour et sa tuile.
+  // Puis son titre, son compte, et le bouton bleu plein « Revoir », la seule
+  // action bleue de l'accueil. Le bouton fait partie de la carte, qui se
+  // touche tout entière (comme le bouton soleil de la carte du jour).
+  // À l'écran, le compte seul : couchée (carte en colonne) ou au téléphone,
+  // la discipline couperait la phrase en trois. Le lecteur d'écran l'entend.
   const revisionSubject = data?.revisionSubject ?? null;
+  const reviseCount = fr.home.reviseCount(revisionCount);
+  const reviseSpoken = revisionSubject
+    ? fr.home.reviseCountIn(revisionCount, revisionSubject)
+    : reviseCount;
   const reviseArt = scaled(short ? 40 : 48, scale);
   const reviseAction = (
     <View
@@ -234,7 +243,7 @@ export default function ChildHomeScreen() {
         radius={radius.xxl}
         shadow={shadows.card}
         onPress={() => router.push('/(child)/revision')}
-        accessibilityLabel={`${fr.home.reviseTitle} ${fr.home.reviseCount(revisionCount)}`}
+        accessibilityLabel={`${fr.home.reviseTitle} ${reviseSpoken}`}
         style={splitPanes ? styles.revisionSide : undefined}
         faceStyle={[
           splitPanes ? styles.revisionColumn : styles.revisionRow,
@@ -245,18 +254,21 @@ export default function ChildHomeScreen() {
         ]}
       >
         <View style={[styles.revisionHead, !splitPanes && styles.grow, { gap: scaled(spacing.sm, scale) }]}>
-          {revisionSubject ? (
-            // Une boîte à sa taille : le titre qui passe à la ligne ne la serre jamais.
-            <View style={{ width: reviseArt, height: reviseArt }}>
-              <SubjectArt subject={revisionSubject} size={reviseArt} />
-            </View>
-          ) : null}
+          {/* Une boîte à sa taille : le titre qui passe à la ligne ne la serre jamais. */}
+          <View
+            style={[
+              styles.reviseEmblem,
+              { width: reviseArt, height: reviseArt, borderRadius: reviseArt / 2 },
+            ]}
+          >
+            <EcolnaIcon name="replay" size={Math.round(reviseArt * 0.52)} color={colors.white} />
+          </View>
           <View style={styles.revisionText}>
             <EcolnaText variant={splitPanes && !short ? 'headlineMd' : 'headlineSm'}>
               {fr.home.reviseTitle}
             </EcolnaText>
             <EcolnaText variant="bodyMd" color={colors.textSecondary}>
-              {fr.home.reviseCount(revisionCount)}
+              {reviseCount}
             </EcolnaText>
           </View>
         </View>
@@ -425,6 +437,7 @@ const styles = StyleSheet.create({
   revisionColumn: { justifyContent: 'center', alignItems: 'flex-start' },
   revisionHead: { flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch', flexShrink: 1 },
   revisionText: { flexShrink: 1, gap: 2 },
+  reviseEmblem: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.brand },
   reviseButton: {
     flexDirection: 'row',
     alignItems: 'center',

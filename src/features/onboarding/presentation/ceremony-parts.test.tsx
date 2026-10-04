@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { colors } from '@/design-system/tokens';
 
-import { LevelCard, StepDots } from './ceremony-parts';
+import { LevelCard, StepDots, ceremonyColumns, ceremonyFooterBottom } from './ceremony-parts';
 
 describe('l’indicateur d’étapes', () => {
   it('montre les étapes à venir en gris lisible, l’étape en cours en pilule bleue', () => {
@@ -35,5 +35,32 @@ describe('la carte de classe', () => {
     expect(screen.getByText('1')).toBeTruthy();
     expect(screen.getByText('CP1')).toBeTruthy();
     expect(screen.queryByText(/année/)).toBeNull();
+  });
+});
+
+describe('les deux volets de l’entrée à l’école', () => {
+  // Les fenêtres du banc : grande tablette couchée, 7" couchée (gouttière,
+  // échelle de useResponsive).
+  it.each([
+    ['iPad 11" couché', 1180, 1.3, 90],
+    ['7" couchée', 1024, 1.15, 48],
+    ['iPad 13" couché', 1376, 1.3, 188],
+  ])('le pied tombe sur la gouttière de droite (%s)', (_name, width, scale, gutter) => {
+    const columns = ceremonyColumns(width, scale, gutter);
+    // La colonne commence après la scène (44 % de la largeur) et sa marge…
+    expect(columns.left).toBeGreaterThan(columns.stage);
+    expect(columns.stage).toBe(Math.round(width * 0.44));
+    // … et s'arrête sur la gouttière, comme « Passer » au-dessus.
+    expect(columns.left + columns.width).toBe(width - gutter);
+  });
+
+  it('ne dépasse jamais 760 dp de large, ni ne devient négative', () => {
+    expect(ceremonyColumns(3000, 1.3, 48).width).toBe(760);
+    expect(ceremonyColumns(0, 1, 20).width).toBe(0);
+  });
+
+  it('pose le pied au même endroit au-dessus du bord, avec ou sans encoche', () => {
+    expect(ceremonyFooterBottom(0)).toBe(24);
+    expect(ceremonyFooterBottom(34)).toBe(42);
   });
 });

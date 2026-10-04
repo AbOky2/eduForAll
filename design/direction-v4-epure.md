@@ -160,15 +160,18 @@ servi que de références de proportions : aucun tracé n'en provient.
   satellite + 8 dp). Ailleurs, une composition propre : la carte du jour
   montre l'image de la leçon seule sur son disque blanc ; la création de
   profil s'ouvre sur une invitation (disque cerclé d'un pointillé bleu, une
-  main qui salue) que le personnage choisi remplace ; l'écran hors connexion
-  montre la tablette, ses quatre disciplines à l'écran.
+  main qui salue) que le personnage choisi remplace ; la promesse « sans
+  internet » (onboarding page 3 et écran hors connexion) est une seule
+  illustration : une tablette de nuit couchée, ses quatre disciplines à
+  l'écran, l'enfant à côté, la coche verte sur un disque bleu.
 - **Célébration** : la nuit ; l'enfant en joie sur un disque `nightSoft`
   cerclé d'une vannerie en pointillé rond ; ses trois grandes étoiles (celle
   du milieu ≈ 125 dp) éclosent l'une après l'autre au-dessus de lui, puis les
   mots entrent ; une pluie de confettis unique. À droite, sur le même axe :
   la discipline et le titre de la leçon, « Bravo ! », une louange (jamais
   « ce n'est pas assez »), les médailles gagnées en médaillons nommés qui
-  entrent sur un ressort, la suite (flèche « avancer », pas ▶). Rien ne
+  entrent sur un ressort, puis UNE action dominante, « Leçon suivante → »
+  (la flèche après le mot), et « Rejouer » en lien discret dessous. Rien ne
   bouge en mouvement réduit.
 - **Marque** : le livre ouvert de l'icône passe aux couleurs v4 — fond bleu
   marque, page blanche, page soleil (`assets/icons/*.svg`, `npm run
@@ -191,44 +194,59 @@ servi que de références de proportions : aucun tracé n'en provient.
   revoir) ; les autres restent blanches — jamais grisées
   (`AnswerVerdictContext`, `useAnswerCardState`). Au premier essai manqué
   d'un exercice à choix unique, les autres cartes se rouvrent après 0,9 s :
-  en toucher une vaut « Réessayer » et cette réponse (la carte choisie garde
-  sa marque) ; le décompte des essais reste le même.
+  en toucher une vaut « Réessayer » et cette réponse ; la carte choisie garde
+  sa marque et, touchée, dit son mot en se secouant, sans répondre — jamais
+  un appui mort. Le décompte des essais reste le même. Sous la feuille
+  d'indice, aucune carte ne se dit choisie.
 - **La consigne est dite d'elle-même** à chaque exercice, puis le son de
   l'exercice (`playSequence`) ; le bouton de consigne — la bouée du
   non-lecteur — porte une bulle de parole, sur un disque bleu fileté plus
   grand que la croix ; le haut-parleur est réservé au son à trouver.
-- **Écouter seul** : quand le stimulus n'est qu'un son, une seule grammaire —
-  sur grande tablette, une bande d'écoute pleine largeur au-dessus des
-  réponses ; sur 7", un pavé de largeur fixe à côté. Tout le pavé se touche.
+- **Écouter seul** : quand le stimulus n'est qu'un son, la grammaire suit
+  l'orientation — couché, un pavé de largeur fixe (à la hauteur de la
+  rangée) à côté de réponses presque carrées ; debout et au téléphone, une
+  bande pleine largeur au-dessus. Tout le pavé se touche. Un iPad montre
+  toujours des réponses au moins aussi grandes qu'une 7".
 - **Tracer** : l'ardoise est de nuit ; la lettre modèle dans une pastille en
   haut à gauche ; le modèle à la craie (`slateChalk`, bouts francs posés sur
   les lignes) porte une ligne médiane tiretée ; une bille soleil court le
   long du trait à écrire (flèche fixe en mouvement réduit) ; les traits sont
-  numérotés ; seul le prochain jalon est gros. La lettre se dit à
-  l'ouverture et à la fin, où elle passe au soleil (1,4 s, une vibration).
-- **Relier** : un point d'accroche à cheval sur le filet de chaque carte
-  (blanc au repos, bleu au choix, teinte de la paire une fois reliée) ; on
-  commence d'un côté ou de l'autre ; chaque carte dit son son ou son mot
-  quand il existe ; à « à revoir », seules les paires fausses le montrent et
-  seules elles s'effacent.
+  numérotés en pastille ; seul le prochain jalon est gros. La lettre se dit
+  à l'ouverture et à la fin, où elle passe au soleil (1,4 s, une vibration).
+  L'ardoise prend la colonne lisible et s'ancre comme tout exercice.
+- **Relier** : un œillet à cheval sur le filet de chaque carte (blanc cerclé
+  de la teinte soutenue de la discipline, ≥ 3:1 ; bleu au choix ; teinte de
+  la paire une fois reliée). On relie en glissant (trait élastique bleu qui
+  s'accroche au survol, se rétracte si on lâche ailleurs) ou en touchant une
+  carte puis l'autre, d'un côté ou de l'autre ; une main montre le geste une
+  fois (flèche fixe en mouvement réduit) ; chaque carte dit son son ou son
+  mot quand il existe ; à « à revoir », seules les paires fausses le montrent
+  et seules elles s'effacent.
 - **Le personnage réagit** : dans la feuille de retour, l'enfant (joie si
   c'est juste, calme sinon) porte la pastille du verdict.
-- **L'ampoule ne s'offre qu'après un premier essai manqué** (disque soleil,
-  ressort, une pulsation) : avant, elle volerait le premier regard et
-  priverait l'enfant de ses trois étoiles.
-- **L'aide monte d'elle-même** : au deuxième essai manqué, l'indice s'ouvre et
-  se dit ; au troisième, « On reverra ça ensemble. » et l'on avance — l'étape
+- **L'ampoule ne s'offre qu'après un premier essai manqué**, au bout de la
+  rangée de consigne, du diamètre de la bouée (disque soleil, ressort, une
+  pulsation) : avant, elle volerait le premier regard et priverait l'enfant
+  de ses trois étoiles. Cachée, elle n'est rien : la barre de progression
+  court de la croix à la gouttière.
+- **L'aide monte d'elle-même** : « Réessayer » rejoue le son de l'étape ; au
+  deuxième essai manqué, l'indice s'ouvre, se dit, puis le son de l'étape
+  repart ; au troisième, « On reverra ça ensemble. » et l'on avance — l'étape
   part en révision. Un enfant ne tourne jamais en rond.
 - **Rien à juger, pas de « Bravo »** : écouter, répéter et tracer enchaînent
   sans feuille de retour ; le tracé se valide seul, la lettre brille au soleil.
 - **Les lignes du cahier** : sur l'ardoise, la ligne de base (pleine), la
   hauteur d'x et les hampes (tiretées) ; les lettres courtes sont posées sur
   la même hauteur d'x.
-- **Plus grand sur grande tablette** : le bloc d'exercice vise 50 à 60 % de
-  la hauteur mesurée du corps, sans jamais passer sous la feuille de retour ;
-  l'air se répartit 1 : 1,25 au-dessus et au-dessous de la consigne.
-- **Relier** (suite) : au repos, les points d'accroche (≈ 30 dp) prennent la
-  teinte pâle de la discipline ; les cartes plafonnées élargissent le couloir.
+- **Plus grand sur grande tablette** : le bloc d'exercice vise 70 % de la
+  hauteur mesurée du corps, sans jamais passer sous la feuille de retour (un
+  filet d'air de 8 dp au-dessus d'elle) ; l'air se répartit 1 : 1,25
+  au-dessus et au-dessous de la consigne. Les cartes de « relier » sont
+  plafonnées pour élargir le couloir du geste.
+- **Le contenu ne trompe pas** : une question d'images ne montre jamais deux
+  fois le même dessin (le générateur échoue sinon) ; les dessins qui servent
+  de bonne réponse à plusieurs mots sont comptés, plafonnés et soumis à
+  l'enseignant référent (`docs/pedagogical-validation.md`, point 9).
 
 ## 8 quater. Mise en page
 

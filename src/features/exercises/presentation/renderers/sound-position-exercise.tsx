@@ -11,6 +11,7 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
@@ -60,6 +61,7 @@ export function SoundPositionExercise({
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
 
   useEffect(() => {
     playAudio(step.audioId);
@@ -98,6 +100,8 @@ export function SoundPositionExercise({
               setPicked(position);
               onSubmit({ kind: 'value', value: position });
             }}
+            // Retouchée pendant la reprise : elle frémit, sans répondre.
+            onEcho={echo(picked === position)}
             style={!isTablet ? styles.optionCard : undefined}
             contentStyle={[
               styles.optionFace,

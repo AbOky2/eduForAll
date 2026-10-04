@@ -36,15 +36,47 @@ export function audioSlug(text: string): string {
     .slice(0, 60);
 }
 
+/** Les familles de sons embarqués qu'une carte peut porter. */
+export type CardSoundKind = 'son' | 'mot' | 'syllabe' | 'lettre' | 'phrase' | 'nombre';
+
 /**
  * Le son embarqué qui dit une carte (`son-o`, `mot-moto`), s'il existe —
- * sinon rien : une carte muette vaut mieux qu'un son inventé.
+ * sinon rien : une carte muette vaut mieux qu'un son inventé. Plusieurs
+ * familles : la première qui a ce son (`['syllabe', 'son']` : « syllabe-ou »
+ * avant « son-ou »).
  */
 export function cardSound(
-  kind: 'son' | 'mot',
+  kind: CardSoundKind | readonly CardSoundKind[],
   text: string,
   exists: (audioId: string) => boolean = (audioId) => resolveAudioSource(audioId) !== null,
 ): string | null {
-  const audioId = `${kind}-${audioSlug(text)}`;
-  return exists(audioId) ? audioId : null;
+  const slug = audioSlug(text);
+  if (!slug) {
+    return null;
+  }
+  const kinds: readonly CardSoundKind[] = typeof kind === 'string' ? [kind] : kind;
+  for (const family of kinds) {
+    const audioId = `${family}-${slug}`;
+    if (exists(audioId)) {
+      return audioId;
+    }
+  }
+  return null;
+}
+
+/** Ce qu'une carte-nombre redit : son nombre (« lettre-2 » se dit « deux »). */
+export const NUMBER_SOUNDS: readonly CardSoundKind[] = ['nombre', 'lettre'];
+
+/** Ordre de repli pour une carte écrite quelconque : le mot d'abord. */
+const ANY_TEXT: readonly CardSoundKind[] = ['mot', 'syllabe', 'lettre', 'son', 'phrase', 'nombre'];
+
+/**
+ * Les familles à essayer pour dire une réponse, dans le registre du stimulus
+ * quand il en a un (« syllabe-li » à trouver : « ra » se dit « syllabe-ra »),
+ * puis les autres.
+ */
+export function echoKinds(stimulusAudioId?: string | null): readonly CardSoundKind[] {
+  const family = stimulusAudioId?.split('-')[0];
+  const own = ANY_TEXT.find((kind) => kind === family);
+  return own ? [own, ...ANY_TEXT.filter((kind) => kind !== own)] : ANY_TEXT;
 }

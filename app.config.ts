@@ -166,7 +166,7 @@ const config: ExpoConfig = {
     reactCompiler: true,
   },
   extra: {
-    contentVersion: '2.1.0',
+    contentVersion: '2.1.1',
     ...(EAS_PROJECT_ID ? { eas: { projectId: EAS_PROJECT_ID } } : {}),
   },
 };

@@ -10,7 +10,12 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
-import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
+import {
+  answersRoom,
+  fitAnswerHeight,
+  listenAnswerHeight,
+} from '@/design-system/primitives/ecolna-exercise-layout';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { a11y, colors, illustration, spacing } from '@/design-system/tokens';
 
@@ -100,6 +105,12 @@ function AttributeShape({
 }
 
 /**
+ * Sous la bande d'écoute, une carte de formes est couchée sans être un
+ * bandeau : les formes y gardent leur taille, l'air autour d'elles grandit.
+ */
+const ATTRIBUTE_CARD_RATIO = 0.6;
+
+/**
  * Sizes, colours, shapes and quantities (programme p. 58 — « les tailles »,
  * « les couleurs », « les formes », « les quantités »). Everything is drawn,
  * so this exercise family needs no illustration asset.
@@ -115,24 +126,30 @@ export function AttributeExercise({
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
   const audioId = step.audioId ?? null;
-  const wide = audioId !== null && metrics.listenLayout === 'band' && metrics.wide;
-  // Une rangée de deux ou trois ; quatre, deux par deux.
-  const columns = step.choices.length === 4 ? 2 : Math.max(1, Math.min(3, step.choices.length));
+  // Une rangée de deux ou trois ; quatre, deux par deux (à côté du pavé
+  // d'écoute, une seule rangée).
+  const beside = audioId !== null && metrics.listenLayout === 'pane';
+  const columns =
+    step.choices.length === 4 && !beside
+      ? 2
+      : Math.max(1, Math.min(beside ? 4 : 3, step.choices.length));
   const rows: (typeof step.choices)[] = [];
   for (let start = 0; start < step.choices.length; start += columns) {
     rows.push(step.choices.slice(start, start + columns));
   }
   // La carte se règle sur la place mesurée (sous la bande d'écoute) : jamais
-  // sous la feuille de retour, et toute la place sur une tablette couchée.
-  const faceHeight = fitAnswerHeight({
+  // sous la feuille de retour ; à côté du pavé, à la hauteur commune du pavé.
+  const sizing = {
     preferred: Math.round(scaled(isTablet ? 104 : 84, scale) * 1.4),
-    room: answersRoom(metrics, audioId !== null),
     rows: rows.length,
-    gap: metrics.gap,
-    grow: wide,
     min: scaled(a11y.childTouchTarget + 8, scale),
-  });
+  };
+  const faceHeight =
+    audioId !== null
+      ? listenAnswerHeight(metrics, { ...sizing, columns, ratio: ATTRIBUTE_CARD_RATIO })
+      : fitAnswerHeight({ ...sizing, room: answersRoom(metrics, false), gap: metrics.gap });
   const cell = Math.min(scaled(isTablet ? 104 : 84, scale), Math.round(faceHeight / 1.4));
 
   useEffect(() => {
@@ -155,6 +172,8 @@ export function AttributeExercise({
             <EcolnaAnswerCard
               key={choice.id}
               onPress={() => submit(choice.id)}
+              // Retouchée pendant la reprise : elle frémit, sans répondre.
+              onEcho={echo(picked === choice.id)}
               accessibilityLabel={choice.label ?? `${choice.shape} ${choice.color}`}
               state={cardState(picked === choice.id)}
               style={styles.cell}

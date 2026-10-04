@@ -14,6 +14,10 @@ describe('copie française', () => {
     expect(fr.home.lessonsDone(4)).toBe('4 leçons terminées');
     expect(fr.home.reviseCount(1)).toBe('1 notion à revoir');
     expect(fr.home.reviseCount(3)).toBe('3 notions à revoir');
+    // La discipline, avec son élision ; « à revoir » ne se coupe pas.
+    expect(fr.home.reviseCountIn(1, 'language')).toBe('1 notion de langage à revoir');
+    expect(fr.home.reviseCountIn(2, 'writing')).toBe('2 notions d’écriture à revoir');
+    expect(fr.home.reviseCountIn(3, 'math')).toBe('3 notions de calcul à revoir');
     expect(fr.achievements.countEarned(1, 14)).toBe('1 badge sur 14');
     expect(fr.achievements.countEarned(5, 14)).toBe('5 badges sur 14');
   });

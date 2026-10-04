@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { slug } from '../../../../../scripts/content/audio';
-import { audioSlug, cardSound } from './card-sound';
+import { NUMBER_SOUNDS, audioSlug, cardSound, echoKinds } from './card-sound';
 
 /** Tous les textes de cartes « relier » du programme livré. */
 function shippedPairTexts(): string[] {
@@ -60,5 +60,35 @@ describe('cardSound', () => {
     expect(cardSound('mot', 'lune', exists)).toBe('mot-lune');
     expect(cardSound('mot', 'melon', exists)).toBeNull();
     expect(exists).toHaveBeenCalledWith('mot-melon');
+  });
+});
+
+describe('cardSound — plusieurs familles', () => {
+  it('takes the first family that has the sound', () => {
+    // « ou » est une syllabe et un son : la famille demandée d'abord.
+    expect(cardSound(['syllabe', 'son'], 'ou')).toBe('syllabe-ou');
+    expect(cardSound(['son', 'syllabe'], 'ou')).toBe('son-ou');
+    // Un nombre se dit par son enregistrement de nombre, sinon de chiffre.
+    expect(cardSound(NUMBER_SOUNDS, '5')).toBe('nombre-5');
+    expect(cardSound(NUMBER_SOUNDS, '2')).toBe('lettre-2');
+    expect(cardSound(NUMBER_SOUNDS, '0')).toBeNull();
+  });
+
+  it('never names a sound for an empty text', () => {
+    const exists = jest.fn(() => true);
+    expect(cardSound(['mot', 'son'], '…', exists)).toBeNull();
+    expect(exists).not.toHaveBeenCalled();
+  });
+});
+
+describe('echoKinds', () => {
+  it('says an answer in the voice of the stimulus first', () => {
+    expect(echoKinds('syllabe-li')[0]).toBe('syllabe');
+    expect(echoKinds('phrase-je-vais-a1-l-e1cole')[0]).toBe('phrase');
+    expect(echoKinds('mot-e1cole')[0]).toBe('mot');
+    // Sans stimulus (ou d'une famille inconnue) : le mot d'abord, puis le reste.
+    expect(echoKinds(null)[0]).toBe('mot');
+    expect(echoKinds('instr-touche')[0]).toBe('mot');
+    expect(new Set(echoKinds('syllabe-li')).size).toBe(echoKinds(null).length);
   });
 });

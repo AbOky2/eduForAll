@@ -24,6 +24,26 @@ export function heroTitleStyle(isTablet: boolean, scale: number): TextStyle {
 }
 
 /**
+ * Les deux volets de l'entrée à l'école, couchés sur grande tablette
+ * (onboarding, puis création de profil) : la scène à gauche, sur 44 % de la
+ * largeur ; à droite, la colonne des mots et du pied, de la marge propre de
+ * la scène jusqu'à la gouttière de l'écran. Les points et le bouton tombent
+ * ainsi au même endroit d'un écran à l'autre — mêmes bords, même largeur.
+ * (Les valeurs de `create-profile.tsx` : `stageWidth`, `panelPadLeft`,
+ * `panelInner`.)
+ */
+export function ceremonyColumns(width: number, scale: number, screenPadding: number) {
+  const stage = Math.round(width * 0.44);
+  const left = stage + scaled(spacing.xl, scale);
+  return { stage, left, width: Math.max(0, Math.min(width - left - screenPadding, 760)) };
+}
+
+/** Le bas du pied des deux volets, au-dessus du bord de l'écran (création de profil comprise). */
+export function ceremonyFooterBottom(insetBottom: number): number {
+  return Math.max(insetBottom, spacing.md) + spacing.xs;
+}
+
+/**
  * L'indicateur d'étapes, le même dans l'onboarding et la création de profil :
  * des points de ≈ 10 dp, l'actif en pilule bleue de ≈ 28 dp. Les autres sont
  * en `inkDisabled` (2,2:1 sur la toile) — un adulte voit combien d'étapes

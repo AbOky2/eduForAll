@@ -10,11 +10,17 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
-import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
+import {
+  answersRoom,
+  fitAnswerHeight,
+  listenAnswerHeight,
+} from '@/design-system/primitives/ecolna-exercise-layout';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { a11y } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { cardSound, echoKinds } from './card-sound';
 
 type ChoiceStep = Extract<
   ExerciseStep,
@@ -22,20 +28,20 @@ type ChoiceStep = Extract<
 >;
 
 /**
- * Cartes par rangée. Sous la bande d'écoute d'une tablette couchée, une seule
- * rangée (jusqu'à quatre, même des phrases : elles passent à la ligne dans
- * leur carte). Une grille met deux ou trois cartes par rangée (quatre : deux
- * par deux) ; une liste, une par rangée.
+ * Cartes par rangée. Une liste (des phrases) en met une par rangée — à côté du
+ * pavé d'écoute comme dessous : une phrase se lit d'un trait. Une grille (des
+ * syllabes, des mots) : une seule rangée à côté du pavé d'une tablette couchée
+ * (jusqu'à quatre) ; ailleurs, deux ou trois par rangée (quatre : deux par deux).
  */
 export function choiceColumns(
   count: number,
-  { wide, grid }: { wide: boolean; grid: boolean },
+  { beside, grid }: { beside: boolean; grid: boolean },
 ): number {
-  if (wide && count <= 4) {
-    return Math.max(1, count);
-  }
   if (!grid) {
     return 1;
+  }
+  if (beside && count <= 4) {
+    return Math.max(1, count);
   }
   return count === 4 ? 2 : Math.max(1, Math.min(3, count));
 }
@@ -56,13 +62,14 @@ export function ChoiceExercise({
   const { isTablet, splitPanes, scale } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
   const isAudio = step.type === 'audio_multiple_choice';
   // On a tablet the answers get two columns even in list layout — a single
   // column of four cards leaves half the screen empty and the cards small.
   const grid =
     (isAudio && step.layout === 'grid') || (isTablet && !splitPanes && step.choices.length >= 4);
-  const wide = isAudio && metrics.listenLayout === 'band' && metrics.wide;
-  const columns = choiceColumns(step.choices.length, { wide, grid });
+  const beside = isAudio && metrics.listenLayout === 'pane';
+  const columns = choiceColumns(step.choices.length, { beside, grid });
   const rows: (typeof step.choices)[] = [];
   for (let start = 0; start < step.choices.length; start += columns) {
     rows.push(step.choices.slice(start, start + columns));
@@ -80,16 +87,26 @@ export function ChoiceExercise({
     onSubmit({ kind: 'choice', choiceId });
   };
 
-  // Sur une rangée unique, les cartes prennent la place mesurée sous la bande ;
-  // ailleurs, elles se resserrent plutôt que de passer sous la feuille de retour.
-  const answerHeight = fitAnswerHeight({
-    preferred: metrics.answerHeight,
-    room: answersRoom(metrics, isAudio),
-    rows: rows.length,
-    gap: metrics.gap,
-    grow: wide,
-    min: scaled(a11y.childTouchTarget + 8, scale),
-  });
+  // Une écoute seule : une grille presque carrée (à la hauteur du pavé quand
+  // elle est à côté de lui), une liste à sa hauteur de phrase. Partout, les
+  // cartes se resserrent plutôt que de passer sous la feuille de retour.
+  const min = scaled(a11y.childTouchTarget + 8, scale);
+  const answerHeight = isAudio
+    ? listenAnswerHeight(metrics, {
+        columns,
+        rows: rows.length,
+        preferred: metrics.answerHeight,
+        min,
+        ...(grid ? {} : { ratio: 0 }),
+      })
+    : fitAnswerHeight({
+        preferred: metrics.answerHeight,
+        room: answersRoom(metrics, false),
+        rows: rows.length,
+        gap: metrics.gap,
+        min,
+      });
+  const stimulusAudioId = isAudio ? step.audioId : null;
 
   const answers = (
     <View style={{ gap: metrics.gap }}>
@@ -106,6 +123,13 @@ export function ChoiceExercise({
               glyphVariant={choice.label.length <= 6 ? metrics.answerGlyph : 'displayGlyphSmall'}
               state={cardState(pressedId === choice.id)}
               onPress={() => submit(choice.id)}
+              // Retouchée pendant la reprise : elle se redit, sans répondre.
+              onEcho={echo(pressedId === choice.id, () => {
+                const sound = cardSound(echoKinds(stimulusAudioId), choice.label);
+                if (sound) {
+                  playAudio(sound);
+                }
+              })}
               style={styles.cell}
               contentStyle={{ minHeight: answerHeight }}
             />

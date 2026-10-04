@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { createElement, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Animated, Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 
 import { resolveAudioSource } from '@/content/audio-registry.generated';
 import { asId } from '@/core/ids/ids';
@@ -22,10 +22,15 @@ import {
   answerAgainEvents,
   canAnswerAgainByCard,
 } from '@/features/lesson-session/domain/retry-by-card';
+import {
+  hintAudioSequence,
+  makesSound,
+  retryAudioSequence,
+} from '@/features/lesson-session/domain/step-audio';
+import { HintButton } from '@/features/lesson-session/presentation/hint-button';
 import { recordLessonCompletion } from '@/features/progress/application/record-lesson-completion';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import { useSettings } from '@/features/settings/application/settings-store';
-import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { EcolnaAvatar } from '@/design-system/avatars';
 import { FeedbackBanner } from '@/design-system/components/feedback-banner';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
@@ -41,7 +46,7 @@ import {
   EcolnaText,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { a11y, colors, shadows, spacing, subjectColors } from '@/design-system/tokens';
+import { a11y, colors, spacing, subjectColors } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
 
 const log = createLogger('lesson-session');
@@ -56,16 +61,6 @@ const QUIET_STEPS = new Set(['listen', 'listen_and_repeat', 'trace_letter', 'tra
  * appui d'un petit doigt, qui compterait sinon comme un deuxième essai.
  */
 const RETRY_BY_CARD_DELAY_MS = 900;
-
-/**
- * L'étape fait-elle entendre quelque chose (un son, un mot, une histoire) ?
- * « Écoute encore une fois » n'a de sens que là ; ailleurs on dit « regarde ».
- */
-function makesSound(step: object): boolean {
-  return ['audioId', 'storyAudioId', 'statementAudioId'].some(
-    (key) => typeof (step as Record<string, unknown>)[key] === 'string',
-  );
-}
 
 /**
  * Lesson session (mockups S10–S15). Presentation shell around the pure
@@ -165,6 +160,17 @@ function SessionBody({
       .catch((cause) => log.warn(`audio failed for ${audioId}: ${String(cause)}`));
   };
 
+  // Des sons l'un après l'autre ; chacun allume l'anneau de son bouton (la
+  // bande d'écoute pulse quand le mot repart).
+  const playSequence = (audioIds: readonly string[]) => {
+    if (!soundEnabled || audioIds.length === 0) {
+      return;
+    }
+    audio.current
+      .playSequence(audioIds, markPlaying)
+      .catch((cause) => log.warn(`audio sequence failed: ${String(cause)}`));
+  };
+
   // Persist the reached step so a killed app resumes exactly here.
   useEffect(() => {
     if (state.phase !== 'presenting') {
@@ -230,16 +236,16 @@ function SessionBody({
     }
   }, [state]);
 
-  // L'indice s'ouvre (demandé, ou de lui-même après deux essais) : il est dit.
+  // L'indice s'ouvre (demandé, ou de lui-même après deux essais) : il est dit,
+  // puis le son de l'étape repart — « Écoute encore le mot. », et le mot.
   useEffect(() => {
     if (state.phase !== 'showing_hint' || !soundEnabled) {
       return;
     }
-    const hintAudio = currentStep(state).hint?.audioId;
-    if (hintAudio) {
+    const sequence = hintAudioSequence(currentStep(state));
+    if (sequence.length > 0) {
       audio.current
-        .play(hintAudio)
-        .then(() => markPlaying(hintAudio))
+        .playSequence(sequence, markPlaying)
         .catch((cause) => log.warn(`hint audio failed: ${String(cause)}`));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -287,10 +293,13 @@ function SessionBody({
   const renderer = step ? rendererFor(step) : null;
   // L'indice n'est offert qu'après un premier essai manqué (hint-offer.ts).
   const hintOffered = isHintOffered(state);
+  // La bouée de qui ne lit pas : un peu plus grande que la croix sur tablette.
+  // L'ampoule, à l'autre bout de la rangée, prend le même diamètre.
+  const buoy = Math.max(a11y.childTouchTarget, scaled(isTablet ? 60 : 52, scale));
 
   return (
     <EcolnaScreen background="exercise" fullWidth>
-      {/* En-tête : fermer — progression — indice. */}
+      {/* En-tête : fermer — la progression, jusqu'à la gouttière. */}
       <View
         style={[
           styles.header,
@@ -311,12 +320,6 @@ function SessionBody({
             accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
           />
         </View>
-        {/* key : une apparition (et sa pulsation) par étape. */}
-        <HintButton
-          key={step?.id ?? 'done'}
-          visible={hintOffered}
-          onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
-        />
       </View>
 
       {/* La consigne, une seule fois, et toujours réécoutable. */}
@@ -330,9 +333,8 @@ function SessionBody({
           <EcolnaAudioButton
             variant="instruction"
             icon="speech"
-            // La bouée de qui ne lit pas : un peu plus grande que la croix sur
-            // tablette ; elle part du même bord.
-            size={Math.max(a11y.childTouchTarget, scaled(isTablet ? 60 : 52, scale))}
+            // Elle part du même bord que la croix.
+            size={buoy}
             accessibilityLabel={fr.lesson.replayInstruction}
             playing={playingAudioId === step.instruction.audioId}
             onPress={() => playAudio(step.instruction.audioId)}
@@ -343,6 +345,20 @@ function SessionBody({
           >
             {step.instruction.text}
           </EcolnaText>
+          {step.hint ? (
+            // L'ampoule répond à la bouée, au bout de la consigne, sur la
+            // gouttière : là où se pose le regard. Sa place est tenue d'avance
+            // — la consigne ne se replie pas quand elle arrive.
+            <View style={[styles.hintSlot, { width: buoy, height: buoy }]}>
+              {/* key : une apparition (et sa pulsation) par étape. */}
+              <HintButton
+                key={step.id}
+                visible={hintOffered}
+                diameter={buoy}
+                onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
+              />
+            </View>
+          ) : null}
         </View>
       ) : null}
 
@@ -432,7 +448,12 @@ function SessionBody({
               ? fr.common.continue
               : fr.common.retry
           }
-          onAction={() => dispatch({ type: 'FEEDBACK_DISMISSED' })}
+          onAction={() => {
+            // « Réessayer » ramène à la question : le mot repart avec elle.
+            const replay = retryAudioSequence(state);
+            dispatch({ type: 'FEEDBACK_DISMISSED' });
+            playSequence(replay);
+          }}
         />
       ) : null}
 
@@ -447,12 +468,13 @@ function SessionBody({
               </EcolnaText>
               {step.hint.audioId ? (
                 // L'indice est une phrase dite : la même bouée que la consigne.
+                // Elle redit la phrase, puis le mot.
                 <EcolnaAudioButton
                   variant="instruction"
                   icon="speech"
                   size={scaled(48, scale)}
                   playing={playingAudioId === step.hint.audioId}
-                  onPress={() => step.hint?.audioId && playAudio(step.hint.audioId)}
+                  onPress={() => playSequence(hintAudioSequence(step))}
                 />
               ) : null}
             </View>
@@ -501,74 +523,7 @@ function SessionBody({
   );
 }
 
-/**
- * L'ampoule d'indice. Cachée, elle garde sa place : la barre ne saute pas.
- * Offerte (après un premier essai manqué), c'est la bonne action : un disque
- * soleil qui arrive d'un ressort (0,9 → 1) et d'une seule pulsation de halo —
- * rien de tout cela en mouvement réduit.
- */
-function HintButton({ visible, onPress }: { visible: boolean; onPress: () => void }) {
-  const { scale } = useResponsive();
-  const reducedMotion = useReducedMotion();
-  const diameter = Math.max(48, scaled(52, scale));
-  // 0,9 dès le départ : la première image de l'ampoule est déjà celle du ressort.
-  const [pop] = useState(() => new Animated.Value(0.9));
-  const [glow] = useState(() => new Animated.Value(0));
-  const announced = useRef(false);
-
-  useEffect(() => {
-    if (!visible) {
-      return;
-    }
-    if (reducedMotion) {
-      pop.setValue(1);
-      glow.setValue(0);
-      return;
-    }
-    if (announced.current) {
-      return;
-    }
-    announced.current = true;
-    Animated.parallel([
-      Animated.spring(pop, { toValue: 1, useNativeDriver: true, speed: 14, bounciness: 9 }),
-      Animated.sequence([
-        Animated.timing(glow, { toValue: 1, duration: 240, useNativeDriver: true }),
-        Animated.timing(glow, { toValue: 0, duration: 560, useNativeDriver: true }),
-      ]),
-    ]).start();
-  }, [visible, reducedMotion, pop, glow]);
-
-  if (!visible) {
-    return <View style={{ width: diameter, height: diameter }} />;
-  }
-  return (
-    <Animated.View style={{ transform: [{ scale: pop }] }}>
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.glow,
-          shadows.glowReward,
-          {
-            borderRadius: diameter / 2,
-            opacity: glow,
-            transform: [
-              { scale: glow.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) },
-            ],
-          },
-        ]}
-      />
-      <EcolnaIconButton
-        icon="lightbulb"
-        tone="sun"
-        accessibilityLabel={fr.lesson.hint}
-        onPress={onPress}
-      />
-    </Animated.View>
-  );
-}
-
 const styles = StyleSheet.create({
-  glow: { ...StyleSheet.absoluteFill, backgroundColor: colors.reward },
   header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   progressWrap: { flex: 1 },
   instruction: {
@@ -578,6 +533,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xs,
   },
   instructionText: { flex: 1 },
+  hintSlot: { marginLeft: 'auto', alignItems: 'center', justifyContent: 'center' },
   body: { flex: 1, width: '100%', alignSelf: 'center' },
   bodyContent: { flexGrow: 1, paddingTop: spacing.sm },
   missing: {

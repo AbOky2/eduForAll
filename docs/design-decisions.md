@@ -184,9 +184,9 @@ en est la référence.
   paysage — portraits redessinés, médailles plates, compositions « orbite ».
 - Retirés : scènes et décors v3, glyphes M/S, jeton `depth`, polices
   Quicksand et Plus Jakarta Sans.
-- **Quatre rondes de critique indépendante** (direction artistique, enfant et
+- **Cinq rondes de critique indépendante** (direction artistique, enfant et
   pédagogie, finition adaptative) sur les captures réelles de l'app, notes
-  de 6/5,5/6,5 à 7,5/7,5/7,6 ; chaque constat partagé a été corrigé. Ronde 3 :
+  de 6/5,5/6,5 à 7,7/7,2/7,8 ; chaque constat partagé a été corrigé. Ronde 3 :
   rien ne déborde de sa carte (image mesurée), cartes-nombres aux
   proportions d'une carte, verdict par paire dans « relier », ardoise à la
   craie avec la bille qui montre le sens du geste, invitation à la place de
@@ -201,3 +201,11 @@ en est la référence.
   « tu es ici », mondes en points dans « Apprendre », quatre têtes, trois
   regards et trois bouches pour les douze enfants, carte « À propos » qui
   cite le programme officiel.
+  Ronde 5 : exercice couché au pavé d'écoute à côté de cartes presque
+  carrées (un iPad ne montre plus plus petit qu'une 7"), relier au glisser
+  avec main de démonstration et œillets visibles, l'indice et « Réessayer »
+  rejouent le son, la carte « à revoir » dit son mot, ampoule au bout de la
+  consigne, une seule action dominante à la réussite, pied d'onboarding
+  immobile, vraie illustration de la tablette « sans internet », révision
+  bleue sur l'accueil, et 16 questions d'images qui montraient deux fois le
+  même dessin corrigées (contenu 2.1.1, garde-fou au générateur).

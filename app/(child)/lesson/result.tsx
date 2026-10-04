@@ -16,11 +16,7 @@ import { useReducedMotion } from '@/design-system/accessibility/use-reduced-moti
 import { EcolnaAvatar } from '@/design-system/avatars';
 import type { BadgeLabelVariant } from '@/design-system/components/badge-tile';
 import { Confetti } from '@/design-system/components/confetti';
-import {
-  STAR_MIDDLE_RATIO,
-  StarRow,
-  starsPeakAt,
-} from '@/design-system/components/star-row';
+import { STAR_MIDDLE_RATIO, StarRow, starsPeakAt } from '@/design-system/components/star-row';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { SubjectArt } from '@/design-system/icons/subject-art';
 import {
@@ -100,7 +96,9 @@ function Reveal({ delay, rise, children }: { delay: number; rise: number; childr
     <Animated.View
       style={{
         opacity: shown,
-        transform: [{ translateY: shown.interpolate({ inputRange: [0, 1], outputRange: [rise, 0] }) }],
+        transform: [
+          { translateY: shown.interpolate({ inputRange: [0, 1], outputRange: [rise, 0] }) },
+        ],
       }}
     >
       {children}
@@ -394,10 +392,12 @@ export default function LessonResultScreen() {
           {nextLessonId ? (
             <EcolnaButton
               label={fr.result.nextLesson}
-              // Avancer, c'est une flèche : ▶ voudrait dire « lire le son ».
+              // Avancer, c'est une flèche, après le mot, dans le sens de la
+              // marche : ▶ voudrait dire « lire le son ».
               icon={
                 <EcolnaIcon name="arrow-forward" size={scaled(20, scale)} color={colors.onReward} />
               }
+              iconAfter
               onPress={() => router.replace(`/(child)/lesson/${nextLessonId}`)}
             />
           ) : (
@@ -406,16 +406,27 @@ export default function LessonResultScreen() {
               icon={
                 <EcolnaIcon name="arrow-forward" size={scaled(20, scale)} color={colors.onReward} />
               }
+              iconAfter
               onPress={() => router.replace('/(child)/(tabs)')}
             />
           )}
           {lessonId ? (
+            // Une seule action domine : rejouer reste là, discret — un lien
+            // blanc à sa largeur, centré sous le soleil, cible d'enfant.
             <EcolnaButton
               label={fr.common.replay}
-              variant="secondary"
+              variant="ghost"
+              size="md"
               onDark
               icon={<EcolnaIcon name="replay" size={scaled(20, scale)} color={colors.white} />}
               onPress={() => router.replace(`/(child)/lesson/${lessonId}`)}
+              style={[
+                styles.replay,
+                {
+                  minHeight: Math.max(a11y.childTouchTarget, scaled(52, scale)),
+                  paddingHorizontal: scaled(spacing.xl, scale),
+                },
+              ]}
             />
           ) : null}
         </View>
@@ -490,4 +501,5 @@ const styles = StyleSheet.create({
   badgeTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   badgeRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   buttons: {},
+  replay: { alignSelf: 'center' },
 });

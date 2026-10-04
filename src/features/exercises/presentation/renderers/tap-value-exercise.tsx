@@ -11,12 +11,18 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
-import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
+import {
+  answersRoom,
+  fitAnswerHeight,
+  listenAnswerHeight,
+} from '@/design-system/primitives/ecolna-exercise-layout';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { a11y } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { cardSound, type CardSoundKind } from './card-sound';
 
 type TapStep = Extract<
   ExerciseStep,
@@ -24,15 +30,20 @@ type TapStep = Extract<
 >;
 
 /**
- * Tuiles par rangée : une seule rangée sous la bande d'écoute d'une tablette
+ * Tuiles par rangée : une seule rangée à côté du pavé d'écoute d'une tablette
  * couchée (jusqu'à quatre) ; ailleurs, quatre deux par deux, sinon trois au
  * plus par rangée.
  */
-export function tapColumns(count: number, wide: boolean): number {
-  if (wide && count <= 4) {
+export function tapColumns(count: number, beside: boolean): number {
+  if (beside && count <= 4) {
     return Math.max(1, count);
   }
   return count === 4 ? 2 : Math.max(1, Math.min(3, count));
+}
+
+/** Ce qu'une tuile retouchée redit : sa syllabe, ou sa lettre. */
+function tileSounds(type: TapStep['type']): readonly CardSoundKind[] {
+  return type === 'tap_syllable' ? ['syllabe', 'son', 'lettre'] : ['lettre', 'son'];
 }
 
 /** Tap the right letter/syllable, or complete a masked word. */
@@ -46,24 +57,34 @@ export function TapValueExercise({
   const [pressed, setPressed] = useState<string | null>(null);
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
   const { scale } = useResponsive();
   const audioId = step.audioId ?? null;
   // Le mot à compléter se regarde : seul le cas sans mot est une écoute seule.
   const listenOnly = audioId !== null && step.type !== 'fill_missing_letter';
-  const wide = listenOnly && metrics.listenLayout === 'band' && metrics.wide;
-  const columns = tapColumns(step.options.length, wide);
+  const beside = listenOnly && metrics.listenLayout === 'pane';
+  const columns = tapColumns(step.options.length, beside);
   const rows: string[][] = [];
   for (let start = 0; start < step.options.length; start += columns) {
     rows.push(step.options.slice(start, start + columns));
   }
-  const answerHeight = fitAnswerHeight({
-    preferred: metrics.answerHeight,
-    room: answersRoom(metrics, listenOnly),
-    rows: rows.length,
-    gap: metrics.gap,
-    grow: wide,
-    min: scaled(a11y.childTouchTarget + 8, scale),
-  });
+  const min = scaled(a11y.childTouchTarget + 8, scale);
+  // Une écoute seule : des tuiles presque carrées, à la hauteur du pavé quand
+  // elles sont à côté de lui — jamais des bandeaux sous la bande.
+  const answerHeight = listenOnly
+    ? listenAnswerHeight(metrics, {
+        columns,
+        rows: rows.length,
+        preferred: metrics.answerHeight,
+        min,
+      })
+    : fitAnswerHeight({
+        preferred: metrics.answerHeight,
+        room: answersRoom(metrics, false),
+        rows: rows.length,
+        gap: metrics.gap,
+        min,
+      });
 
   useEffect(() => {
     if (audioId) {
@@ -86,6 +107,13 @@ export function TapValueExercise({
                 setPressed(option);
                 onSubmit({ kind: 'value', value: option });
               }}
+              // Retouchée pendant la reprise : elle redit sa syllabe, sans répondre.
+              onEcho={echo(pressed === option, () => {
+                const sound = cardSound(tileSounds(step.type), option);
+                if (sound) {
+                  playAudio(sound);
+                }
+              })}
               style={styles.cell}
               contentStyle={{ minHeight: answerHeight }}
             />

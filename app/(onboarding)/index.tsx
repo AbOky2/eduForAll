@@ -22,7 +22,12 @@ import {
 } from '@/design-system/illustrations/orbit';
 import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { StepDots, heroTitleStyle } from '@/features/onboarding/presentation/ceremony-parts';
+import {
+  StepDots,
+  ceremonyColumns,
+  ceremonyFooterBottom,
+  heroTitleStyle,
+} from '@/features/onboarding/presentation/ceremony-parts';
 import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -48,9 +53,13 @@ const PAGES = ACTIONS.length;
  * en orbite), les quatre disciplines du programme, et la promesse « sans
  * connexion » (la tablette de l'écran hors connexion : une seule image de la
  * promesse dans toute l'app). En paysage, deux volets : l'image posée sur la
- * gouttière, et en face la colonne des mots — titre, phrase, puis les points
- * et le bouton —, le tout centré en hauteur face à l'image, comme l'écran
- * hors connexion. Ailleurs, l'image au-dessus des mots et le pied en bas.
+ * gouttière, centrée sur l'écran, et en face la colonne des mots — celle de
+ * la création de profil qui suit (`ceremonyColumns`). Le pied (les points et
+ * le bouton) est rendu une seule fois, immobile au bas de cette colonne : il
+ * ne saute ni d'une page à l'autre ni vers la création de profil, où il
+ * reprend la même place ; titre et phrase se centrent, au-dessus de lui,
+ * sur l'axe de l'image. Ailleurs, l'image au-dessus des mots et le pied en
+ * bas, centré.
  * Les pages prennent la largeur RÉELLE du conteneur, pas celle de la fenêtre.
  */
 export default function OnboardingScreen() {
@@ -61,8 +70,10 @@ export default function OnboardingScreen() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState({ width: 0, height: 0 });
   // La hauteur de la rangée du logo : en deux volets, la même marge en bas
-  // centre la composition sur l'écran, pas sous le logo.
+  // centre l'image sur l'écran, pas sous le logo.
   const [barHeight, setBarHeight] = useState(0);
+  // La hauteur du pied des deux volets, mesurée : les mots se centrent au-dessus.
+  const [footerHeight, setFooterHeight] = useState(0);
 
   const onLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -96,19 +107,35 @@ export default function OnboardingScreen() {
   // De l'air en haut et en bas, à la mesure des marges latérales : le logo
   // et le bouton ne collent plus aux bords.
   const bottomPad = Math.max(insets.bottom, scaled(spacing.xxl, scale));
-  // En deux volets, la ligne se partage exactement : image (un carré posé sur
-  // la gouttière), l'air, la colonne de mots — jusqu'à la gouttière de droite.
-  // Le bas des pages répond au haut (la rangée du logo) : l'ensemble est
-  // centré sur l'écran.
+  // En deux volets, la colonne des mots et du pied est celle de la création
+  // de profil ; l'image (un carré posé sur la gouttière) prend ce qui reste
+  // devant elle, moins l'air. Le bas de l'image répond au haut (la rangée du
+  // logo) : elle est centrée sur l'écran, comme l'enfant de l'écran suivant.
   const inner = Math.max(0, size.width - screenPadding * 2);
+  const columns = ceremonyColumns(size.width, scale, screenPadding);
   const gap = scaled(splitPanes ? spacing.xxxl : spacing.xl, scale);
   const pageBottom = splitPanes ? Math.max(bottomPad, insets.top + barHeight) : 0;
   const orbit = splitPanes
-    ? Math.round(Math.min(inner * 0.46, (size.height - pageBottom) * 0.86))
+    ? Math.max(
+        0,
+        Math.round(Math.min(columns.left - gap - screenPadding, (size.height - pageBottom) * 0.86)),
+      )
     : Math.round(Math.min(inner, size.height * 0.5, scaled(isTablet ? 440 : 300, scale)));
-  const wordsWidth = splitPanes
-    ? inner - orbit - gap
-    : Math.min(inner, scaled(isTablet ? 600 : 520, scale));
+  // Debout et au téléphone, une colonne lisible sous l'image.
+  const wordsWidth = Math.min(inner, scaled(isTablet ? 600 : 520, scale));
+  // Le pied des deux volets : au bas de l'écran, à la hauteur de celui de la
+  // création de profil. Avant sa mesure, sa hauteur attendue (points, air,
+  // bouton) : les mots ne bougent pas quand elle arrive.
+  const footerBottom = ceremonyFooterBottom(insets.bottom);
+  const footerReserve =
+    footerBottom +
+    (footerHeight || scaled(10, scale) + scaled(spacing.md, scale) + scaled(60, scale)) +
+    scaled(spacing.xl, scale);
+  // Titre et phrase se centrent sur l'axe de l'image, le centre de l'écran :
+  // une cale au-dessus d'eux, dans la hauteur que laisse le pied, les y
+  // descend. Si une page manque de hauteur, la cale cède la première — les
+  // mots remontent, jamais sous les points.
+  const axisSpacer = Math.max(0, footerReserve - pageBottom);
 
   /** Les points et le bouton d'une page. */
   const footerOf = (index: number) => (
@@ -128,30 +155,37 @@ export default function OnboardingScreen() {
     </View>
   );
 
-  const pageOf = (index: number, art: ReactNode, words: ReactNode) => (
-    <View
-      style={[
-        styles.page,
-        { width: size.width, paddingHorizontal: screenPadding },
-        splitPanes
-          ? [styles.pageSplit, { gap, paddingBottom: pageBottom }]
-          : { gap: scaled(spacing.xxl, scale) },
-      ]}
-    >
-      <View style={splitPanes ? [styles.artPane, { width: orbit, height: orbit }] : styles.artStack}>
-        {art}
+  const pageOf = (art: ReactNode, words: ReactNode) =>
+    splitPanes ? (
+      // Deux volets : l'image sur la gouttière, centrée sur l'écran ; les
+      // mots dans la colonne du pied, au-dessus de lui, sur l'axe de l'image.
+      <View style={{ width: size.width, height: size.height }}>
+        <View style={[styles.artPane, { left: screenPadding, width: orbit, bottom: pageBottom }]}>
+          <View style={[styles.artSquare, { width: orbit, height: orbit }]}>{art}</View>
+        </View>
+        <View
+          style={[
+            styles.wordsPane,
+            { left: columns.left, width: columns.width, bottom: footerReserve },
+          ]}
+        >
+          <View style={[styles.axisSpacer, { height: axisSpacer }]} />
+          <View style={{ gap: scaled(spacing.md, scale) }}>{words}</View>
+        </View>
       </View>
-      <View style={[styles.words, { width: wordsWidth, gap: scaled(spacing.md, scale) }]}>
-        {words}
-        {/* En deux volets, les points et le bouton suivent les mots. */}
-        {splitPanes ? (
-          <View style={{ marginTop: scaled(spacing.xxl, scale) - scaled(spacing.md, scale) }}>
-            {footerOf(index)}
-          </View>
-        ) : null}
+    ) : (
+      <View
+        style={[
+          styles.page,
+          { width: size.width, paddingHorizontal: screenPadding, gap: scaled(spacing.xxl, scale) },
+        ]}
+      >
+        <View style={styles.artStack}>{art}</View>
+        <View style={[styles.words, { width: wordsWidth, gap: scaled(spacing.md, scale) }]}>
+          {words}
+        </View>
       </View>
-    </View>
-  );
+    );
 
   const align = splitPanes ? 'left' : 'center';
   const titleStyle = heroTitleStyle(isTablet, scale);
@@ -240,7 +274,6 @@ export default function OnboardingScreen() {
           >
             {/* Page 1 — Ton école t'accompagne partout (S02) */}
             {pageOf(
-              0,
               orbitArt(
                 hero,
                 <EcolnaAvatar avatarId="avatar-2" size={hero} expression="joy" />,
@@ -262,7 +295,6 @@ export default function OnboardingScreen() {
 
             {/* Page 2 — Les quatre disciplines du programme (S03) */}
             {pageOf(
-              1,
               <View
                 style={[styles.subjectGrid, { width: tile * 2 + gridGap, gap: gridGap }]}
               >
@@ -298,9 +330,9 @@ export default function OnboardingScreen() {
             )}
 
             {/* Page 3 — Fonctionne sans connexion (S04) : la tablette de
-                l'écran hors connexion, ses quatre disciplines à l'écran. */}
+                l'écran hors connexion, ses quatre disciplines à l'écran, et
+                l'enfant de la page 1 à côté. */}
             {pageOf(
-              2,
               <OfflineTabletArt size={orbit} />,
               <>
                 <EcolnaText variant="displayHero" align={align} style={titleStyle}>
@@ -315,8 +347,27 @@ export default function OnboardingScreen() {
         ) : null}
       </View>
 
-      {/* Le pied, hors des deux volets : centré sous l'image et les mots. */}
-      {splitPanes ? null : (
+      {/* Le pied, rendu une seule fois. En deux volets, immobile au bas de la
+          colonne des mots (la place du pied de la création de profil) ;
+          sinon centré sous l'image et les mots. */}
+      {splitPanes ? (
+        size.width > 0 ? (
+          <View
+            style={[
+              styles.footerSplit,
+              { left: columns.left, width: columns.width, bottom: footerBottom },
+            ]}
+            onLayout={(event) => {
+              const next = Math.round(event.nativeEvent.layout.height);
+              if (next !== footerHeight) {
+                setFooterHeight(next);
+              }
+            }}
+          >
+            {footerOf(page)}
+          </View>
+        ) : null
+      ) : (
         <View
           style={[styles.footer, { paddingHorizontal: screenPadding, paddingBottom: bottomPad }]}
         >
@@ -336,9 +387,11 @@ const styles = StyleSheet.create({
   },
   pager: { flex: 1 },
   page: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  // Deux volets : l'image part de la gouttière, les mots en face, centrés sur son axe.
-  pageSplit: { flexDirection: 'row', justifyContent: 'flex-start' },
-  artPane: { alignItems: 'flex-start', justifyContent: 'center' },
+  // Deux volets : l'image part de la gouttière, les mots dans la colonne du pied.
+  artPane: { position: 'absolute', top: 0, justifyContent: 'center' },
+  artSquare: { alignItems: 'flex-start', justifyContent: 'center' },
+  wordsPane: { position: 'absolute', top: 0, justifyContent: 'center' },
+  axisSpacer: { flexShrink: 1, minHeight: 0 },
   artStack: { alignItems: 'center' },
   words: { justifyContent: 'center' },
   subjectGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
@@ -348,6 +401,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footer: { paddingTop: spacing.md, alignItems: 'center' },
+  footerSplit: { position: 'absolute' },
   footerBody: { alignSelf: 'stretch', alignItems: 'center' },
   dots: { alignItems: 'center' },
   dotsSplit: { alignSelf: 'flex-start' },

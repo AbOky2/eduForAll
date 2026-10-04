@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "contentVersion": "2.1.0",
+ "contentVersion": "2.1.1",
  "generatedAt": "2026-08-26T00:00:00.000Z",
  "levels": [
   {
@@ -1375,9 +1375,9 @@
            "label": "ami"
           },
           {
-           "id": "frère",
-           "illustrationId": "icon-friends",
-           "label": "frère"
+           "id": "papa",
+           "illustrationId": "icon-father",
+           "label": "papa"
           }
          ],
          "correctChoiceId": "bébé"
@@ -1404,9 +1404,9 @@
            "label": "ami"
           },
           {
-           "id": "frère",
-           "illustrationId": "icon-friends",
-           "label": "frère"
+           "id": "papa",
+           "illustrationId": "icon-father",
+           "label": "papa"
           },
           {
            "id": "sœur",
@@ -6394,9 +6394,9 @@
            "label": "fête"
           },
           {
-           "id": "tambour",
-           "illustrationId": "icon-drum",
-           "label": "tambour"
+           "id": "ballon",
+           "illustrationId": "icon-ball",
+           "label": "ballon"
           },
           {
            "id": "boubou",
@@ -23475,9 +23475,9 @@
            "label": "table-banc"
           },
           {
-           "id": "classe",
-           "illustrationId": "icon-desk",
-           "label": "classe"
+           "id": "ardoise",
+           "illustrationId": "icon-slate",
+           "label": "ardoise"
           }
          ],
          "correctChoiceId": "cartable"
@@ -23504,9 +23504,9 @@
            "label": "table-banc"
           },
           {
-           "id": "classe",
-           "illustrationId": "icon-desk",
-           "label": "classe"
+           "id": "ardoise",
+           "illustrationId": "icon-slate",
+           "label": "ardoise"
           },
           {
            "id": "leçon",
@@ -24015,9 +24015,9 @@
            "label": "jambe"
           },
           {
-           "id": "doigt",
-           "illustrationId": "icon-hand",
-           "label": "doigt"
+           "id": "oreille",
+           "illustrationId": "icon-ear",
+           "label": "oreille"
           }
          ],
          "correctChoiceId": "bras"
@@ -24518,9 +24518,9 @@
            "label": "ceinture"
           },
           {
-           "id": "tissu",
-           "illustrationId": "icon-scarf",
-           "label": "tissu"
+           "id": "chapeau",
+           "illustrationId": "icon-hat",
+           "label": "chapeau"
           }
          ],
          "correctChoiceId": "bouton"
@@ -24921,9 +24921,9 @@
            "label": "oncle"
           },
           {
-           "id": "tante",
-           "illustrationId": "icon-mother",
-           "label": "tante"
+           "id": "bébé",
+           "illustrationId": "icon-baby",
+           "label": "bébé"
           }
          ],
          "correctChoiceId": "grand-mère"
@@ -24989,9 +24989,9 @@
            "label": "cousin"
           },
           {
-           "id": "famille",
-           "illustrationId": "icon-friends",
-           "label": "famille"
+           "id": "bébé",
+           "illustrationId": "icon-baby",
+           "label": "bébé"
           }
          ],
          "correctChoiceId": "tante"
@@ -27837,9 +27837,9 @@
            "label": "nuit"
           },
           {
-           "id": "harmattan",
-           "illustrationId": "icon-wind",
-           "label": "harmattan"
+           "id": "orage",
+           "illustrationId": "icon-lightning",
+           "label": "orage"
           }
          ],
          "correctChoiceId": "poussière"
@@ -28707,9 +28707,9 @@
            "label": "prix"
           },
           {
-           "id": "monnaie",
-           "illustrationId": "icon-money",
-           "label": "monnaie"
+           "id": "panier",
+           "illustrationId": "icon-basket",
+           "label": "panier"
           }
          ],
          "correctChoiceId": "commerçant"
@@ -28736,9 +28736,9 @@
            "label": "prix"
           },
           {
-           "id": "monnaie",
-           "illustrationId": "icon-money",
-           "label": "monnaie"
+           "id": "panier",
+           "illustrationId": "icon-basket",
+           "label": "panier"
           },
           {
            "id": "kilo",
@@ -29154,9 +29154,9 @@
            "label": "gare"
           },
           {
-           "id": "bagage",
-           "illustrationId": "icon-suitcase",
-           "label": "bagage"
+           "id": "bille",
+           "illustrationId": "icon-marble",
+           "label": "bille"
           }
          ],
          "correctChoiceId": "voyage"
@@ -29256,9 +29256,9 @@
            "label": "départ"
           },
           {
-           "id": "retour",
-           "illustrationId": "icon-road",
-           "label": "retour"
+           "id": "valise",
+           "illustrationId": "icon-suitcase",
+           "label": "valise"
           }
          ],
          "correctChoiceId": "fleuve"
@@ -31040,9 +31040,9 @@
            "label": "mariage"
           },
           {
-           "id": "danse",
-           "illustrationId": "icon-drum",
-           "label": "danse"
+           "id": "ballon",
+           "illustrationId": "icon-ball",
+           "label": "ballon"
           }
          ],
          "correctChoiceId": "cérémonie"
@@ -31511,9 +31511,9 @@
            "label": "colère"
           },
           {
-           "id": "courage",
-           "illustrationId": "icon-happy",
-           "label": "courage"
+           "id": "peur",
+           "illustrationId": "icon-afraid",
+           "label": "peur"
           }
          ],
          "correctChoiceId": "joie"

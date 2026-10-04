@@ -9,12 +9,14 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { EmptyQuantityScene } from '@/design-system/illustrations/school-art';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { NUMBER_SOUNDS, cardSound } from './card-sound';
 import { ILLUSTRATION_FILL, packObjects } from './illustration-fit';
 
 type CountStep = Extract<ExerciseStep, { type: 'count_objects' }>;
@@ -24,7 +26,7 @@ export const NUMBER_CARD_RATIO = 1.2;
 /** Côte à côte, la scène dépasse les cartes d'un peu, sans les écraser. */
 const SCENE_OVER_CARDS = 1.3;
 /**
- * Sur grande tablette couchée, le bloc vise la hauteur mesurée (`block`) : la
+ * Sur tablette couchée, le bloc vise la hauteur mesurée (`block`) : la
  * scène grandit jusqu'à ce rapport de la hauteur des nombres ; quand elle n'a
  * que peu d'objets, elle leur cède un peu de largeur (au-delà, il lui faut
  * toute la sienne pour ranger ses objets sans s'allonger).
@@ -61,6 +63,7 @@ export function CountObjectsExercise({
   step,
   interactive,
   onSubmit,
+  playAudio,
 }: ExerciseRendererProps<CountStep>) {
   const [pressed, setPressed] = useState<number | null>(null);
   // Largeurs mesurées : la rangée des nombres et l'intérieur de la scène.
@@ -69,6 +72,7 @@ export function CountObjectsExercise({
   const { isTablet, scale, splitPanes } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
 
   const options = step.options.length;
   const cardWidth =
@@ -78,7 +82,7 @@ export function CountObjectsExercise({
   const cardHeight = Math.max(metrics.answerHeight, Math.round(cardWidth * NUMBER_CARD_RATIO));
 
   const scenePadding = scaled(spacing.lg, scale);
-  // Le bloc visé n'existe que mesuré, sur grande tablette.
+  // Le bloc visé n'existe que mesuré (il reste sous la feuille de retour).
   const roomy = splitPanes && metrics.block > 0;
   const boosted = step.count <= 4;
   const sceneMinHeight = splitPanes
@@ -161,6 +165,13 @@ export function CountObjectsExercise({
             setPressed(option);
             onSubmit({ kind: 'number', value: option });
           }}
+          // Retouchée pendant la reprise : elle redit son nombre, sans répondre.
+          onEcho={echo(pressed === option, () => {
+            const sound = cardSound(NUMBER_SOUNDS, String(option));
+            if (sound) {
+              playAudio(sound);
+            }
+          })}
           style={{ width: cardWidth }}
           contentStyle={{ height: cardHeight, paddingHorizontal: scaled(spacing.xs, scale) }}
         />

@@ -1,10 +1,11 @@
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import * as Haptics from 'expo-haptics';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { State, type PanGesture } from 'react-native-gesture-handler';
 import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
+import { SlateBoard } from '@/design-system/components/slate-board';
 import { colors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -17,6 +18,14 @@ jest.mock('expo-haptics', () => ({
   NotificationFeedbackType: { Success: 'success' },
   ImpactFeedbackStyle: { Light: 'light', Medium: 'medium' },
 }));
+
+jest.mock('react-native/Libraries/Utilities/useWindowDimensions');
+const mockedDimensions = useWindowDimensions as unknown as jest.Mock;
+
+beforeEach(() => {
+  // La fenêtre par défaut des tests (celle de React Native).
+  mockedDimensions.mockReturnValue({ width: 750, height: 1334, scale: 2, fontScale: 1 });
+});
 
 type TraceStep = Extract<ExerciseStep, { type: 'trace_letter' }>;
 
@@ -152,5 +161,42 @@ describe('TraceLetterExercise — the slate', () => {
     expect(screen.getByText(fr.errors.contentUnavailable)).toBeTruthy();
     fireEvent.press(screen.getByText(fr.common.next));
     expect(onSubmit).toHaveBeenCalledWith({ kind: 'trace', reachedAllCheckpoints: true });
+  });
+});
+
+describe('TraceLetterExercise — mise en page', () => {
+  it('spans the readable column on a landscape iPad, anchored like every exercise', async () => {
+    mockedDimensions.mockReturnValue({ width: 1180, height: 820, scale: 2, fontScale: 1 });
+    render(
+      <TraceLetterExercise
+        step={step('i', 'lettre-i')}
+        interactive
+        onSubmit={jest.fn()}
+        playAudio={jest.fn()}
+        playingAudioId={null}
+      />,
+    );
+    await act(async () => {});
+    const anchor = screen.getByTestId('exercise-anchor');
+    // La colonne lisible (1000 dp sur une grande tablette), plus 760 en dur.
+    let column = anchor.parent;
+    while (column && StyleSheet.flatten(column.props.style)?.maxWidth === undefined) {
+      column = column.parent;
+    }
+    expect(StyleSheet.flatten(column?.props.style)).toMatchObject({ maxWidth: 1000 });
+
+    // Le corps mesuré (iPad couché, sous la consigne) : l'ardoise prend la
+    // part de tout bloc et la lettre garde sa boîte, sans passer la taille de
+    // cahier (400 × 1,3).
+    fireEvent(anchor, 'layout', {
+      nativeEvent: { layout: { x: 0, y: 0, width: 1000, height: 583 } },
+    });
+    await act(async () => {});
+    const slate = StyleSheet.flatten(screen.UNSAFE_getByType(SlateBoard).props.style);
+    expect(slate.height).toBeGreaterThanOrEqual(400);
+    expect(slate.height).toBeLessThanOrEqual(520);
+    // La phrase d'aide ne pousse pas l'ardoise : elle se pose dans l'air du bas.
+    const hint = screen.getByText(fr.lesson.traceLetterHint);
+    expect(StyleSheet.flatten(hint.props.style)).toMatchObject({ position: 'absolute' });
   });
 });

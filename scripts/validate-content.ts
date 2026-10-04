@@ -6,12 +6,21 @@
  *  - prerequisite references resolve
  *  - every referenced audio/illustration id exists in the asset list
  *  - answer keys are coherent (correctChoiceId exists, options contain answers)
+ *  - no « Touche l'image » question shows the same drawing on two cards, and
+ *    the drawings shared by several target words stay under their ceiling
  * Exits non-zero on any failure (used by validate:release and CI).
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { curriculumManifestSchema } from '../src/content/schemas/curriculum-schema';
+import {
+  countSharedTargets,
+  duplicateIllustrations,
+  imageQuestions,
+  sharedTargetIllustrations,
+  sharedTargetRegressions,
+} from './content/image-checks';
 
 const ROOT = join(__dirname, '..');
 const raw = JSON.parse(
@@ -74,6 +83,11 @@ for (const level of manifest.levels) {
             for (const choice of step.choices) {
               requireAsset(choice.illustrationId, where);
             }
+            // Deux cartes au même dessin : l'enfant qui a bien entendu peut
+            // toucher la « mauvaise ». La question n'a pas de réponse.
+            for (const clash of duplicateIllustrations(step.choices)) {
+              problems.push(`${where}: ${clash}`);
+            }
             break;
           case 'tap_letter':
           case 'tap_syllable':
@@ -116,8 +130,6 @@ for (const level of manifest.levels) {
               problems.push(`${where}: answer not among options`);
             }
             break;
-          case 'mini_story_question':
-            break;
           default:
             break;
         }
@@ -134,6 +146,18 @@ for (const level of manifest.levels) {
       }
     }
   }
+}
+
+// Un même dessin, bonne réponse de plusieurs mots : en attente d'une décision
+// pédagogique (docs/pedagogical-validation.md, point 9), plafonné.
+const sharedTargets = sharedTargetIllustrations(imageQuestions(manifest));
+problems.push(...sharedTargetRegressions(sharedTargets));
+if (sharedTargets.length > 0) {
+  const count = countSharedTargets(sharedTargets);
+  console.warn(
+    `⚠️  ${count.illustrations} illustrations are the correct answer for several words ` +
+      `(${count.extraWords} extra words) — docs/pedagogical-validation.md, point 9.`,
+  );
 }
 
 if (problems.length > 0) {

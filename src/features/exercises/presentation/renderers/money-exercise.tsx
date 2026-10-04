@@ -10,10 +10,12 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { illustration, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { NUMBER_SOUNDS, cardSound } from './card-sound';
 
 type MoneyStep = Extract<ExerciseStep, { type: 'count_money' }>;
 type Coin = MoneyStep['coins'][number];
@@ -62,11 +64,17 @@ function CoinFace({ value, size }: { value: Coin; size: number }) {
  * laid out on the mat — the first real-life use of addition at CP. The
  * instruction is said (and replayed) by the lesson header.
  */
-export function MoneyExercise({ step, interactive, onSubmit }: ExerciseRendererProps<MoneyStep>) {
+export function MoneyExercise({
+  step,
+  interactive,
+  onSubmit,
+  playAudio,
+}: ExerciseRendererProps<MoneyStep>) {
   const [picked, setPicked] = useState<number | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
   const coin = scaled(isTablet ? 84 : 64, scale);
 
   const prompt = (
@@ -92,6 +100,13 @@ export function MoneyExercise({ step, interactive, onSubmit }: ExerciseRendererP
             setPicked(option);
             onSubmit({ kind: 'number', value: option });
           }}
+          // Retouchée pendant la reprise : elle redit sa somme, sans répondre.
+          onEcho={echo(picked === option, () => {
+            const sound = cardSound(NUMBER_SOUNDS, String(option));
+            if (sound) {
+              playAudio(sound);
+            }
+          })}
           style={[styles.optionCard, { maxWidth: metrics.tileWidth * 1.6 }]}
           contentStyle={{ minHeight: metrics.answerHeight }}
         />

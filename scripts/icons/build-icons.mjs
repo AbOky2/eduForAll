@@ -61,6 +61,8 @@ const ICONS = {
   crown: 'crown',
   flag: 'flag',
   hand: 'hand-waving',
+  // La main qui montre un geste (relier : glisser d'un point à l'autre).
+  'hand-pointing': 'hand-pointing',
   footprints: 'footprints',
   path: 'path',
   'seal-check': 'seal-check',

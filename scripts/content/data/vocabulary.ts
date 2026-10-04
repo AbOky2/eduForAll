@@ -26,6 +26,17 @@ export interface Theme {
   subtitle: string;
   cp1Words: VocabWord[];
   cp2Words: VocabWord[];
+  /**
+   * Mots de réserve pour les questions « Touche l'image » : quand la rotation
+   * du thème mettrait deux fois le même dessin à l'écran (« ami » et « frère »
+   * en icon-friends), le distracteur fautif cède sa place au premier mot de
+   * réserve dont le dessin est libre. Chaque mot est CE QUE son dessin montre
+   * (« papa » pour icon-father, jamais « oncle »), vient du thème ou du même
+   * monde, a déjà son enregistrement (`mot-…`), et n'a pas de lien de sens
+   * avec la bonne réponse — sinon l'enfant hésite à raison.
+   */
+  cp1Reserve?: VocabWord[];
+  cp2Reserve?: VocabWord[];
   /** Structures à mémoriser et redire (CP1 : simples, CP2 : étendues). */
   cp1Structures: string[];
   cp2Structures: string[];
@@ -57,6 +68,7 @@ export const THEMES: Theme[] = [
       { word: 'cour', icon: 'icon-road' },
       { word: 'directeur', icon: 'icon-teacher' },
     ],
+    cp2Reserve: [{ word: 'ardoise', icon: 'icon-slate' }],
     cp1Structures: [
       'Je vais à l’école.',
       'C’est mon ardoise.',
@@ -102,6 +114,7 @@ export const THEMES: Theme[] = [
       { word: 'doigt', icon: 'icon-hand' },
       { word: 'cheveux', icon: 'icon-head' },
     ],
+    cp2Reserve: [{ word: 'oreille', icon: 'icon-ear' }],
     cp1Structures: [
       'J’ai deux mains.',
       'Voici ma tête.',
@@ -147,6 +160,7 @@ export const THEMES: Theme[] = [
       { word: 'ceinture', icon: 'icon-scarf' },
       { word: 'tissu', icon: 'icon-scarf' },
     ],
+    cp2Reserve: [{ word: 'chapeau', icon: 'icon-hat' }],
     cp1Structures: [
       'Je porte un boubou.',
       'Voici mes chaussures.',
@@ -282,6 +296,8 @@ export const THEMES: Theme[] = [
       { word: 'cousin', icon: 'icon-friends' },
       { word: 'famille', icon: 'icon-friends' },
     ],
+    cp1Reserve: [{ word: 'papa', icon: 'icon-father' }],
+    cp2Reserve: [{ word: 'bébé', icon: 'icon-baby' }],
     cp1Structures: [
       'Voici mon papa.',
       'C’est ma maman.',
@@ -463,6 +479,7 @@ export const THEMES: Theme[] = [
       { word: 'nuit', icon: 'icon-moon' },
       { word: 'harmattan', icon: 'icon-wind' },
     ],
+    cp2Reserve: [{ word: 'orage', icon: 'icon-lightning' }],
     cp1Structures: ['Il pleut.', 'Le soleil est chaud.', 'Le vent souffle.', 'Voici la lune.'],
     cp2Structures: [
       'Pendant la saison des pluies, le champ devient vert.',
@@ -502,6 +519,12 @@ export const THEMES: Theme[] = [
       { word: 'fleuve', icon: 'icon-water' },
       { word: 'départ', icon: 'icon-road' },
       { word: 'retour', icon: 'icon-road' },
+    ],
+    // « valise » a le dessin de « voyage » : pour cette question-là, « bille »
+    // (un jeu, sans lien avec le voyage) prend le relais.
+    cp2Reserve: [
+      { word: 'valise', icon: 'icon-suitcase' },
+      { word: 'bille', icon: 'icon-marble' },
     ],
     cp1Structures: [
       'Je pars en voyage.',
@@ -638,6 +661,7 @@ export const THEMES: Theme[] = [
       { word: 'kilo', icon: 'icon-scale' },
       { word: 'client', icon: 'icon-friends' },
     ],
+    cp2Reserve: [{ word: 'panier', icon: 'icon-basket' }],
     cp1Structures: [
       'Je vais au marché.',
       'Voici mon panier.',
@@ -773,6 +797,8 @@ export const THEMES: Theme[] = [
       { word: 'baptême', icon: 'icon-baby' },
       { word: 'cadeau', icon: 'icon-suitcase' },
     ],
+    cp1Reserve: [{ word: 'ballon', icon: 'icon-ball' }],
+    cp2Reserve: [{ word: 'ballon', icon: 'icon-ball' }],
     cp1Structures: [
       'C’est la fête.',
       'On joue du tambour.',
@@ -818,6 +844,7 @@ export const THEMES: Theme[] = [
       { word: 'surprise', icon: 'icon-afraid' },
       { word: 'amitié', icon: 'icon-friends' },
     ],
+    cp2Reserve: [{ word: 'peur', icon: 'icon-afraid' }],
     cp1Structures: ['Je suis content.', 'Il est triste.', 'Elle rit.', 'J’ai peur du serpent.'],
     cp2Structures: [
       'Quand mon ami part, je suis triste.',

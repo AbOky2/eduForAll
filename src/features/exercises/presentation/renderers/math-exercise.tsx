@@ -11,12 +11,14 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
 import { QuantityCard, QuantityGroup } from '@/design-system/components/quantity-group';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { NUMBER_SOUNDS, cardSound } from './card-sound';
 
 type MathStep = Extract<
   ExerciseStep,
@@ -167,6 +169,7 @@ export function MathExercise({
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
   // Objets à compter : suivent la classe de fenêtre comme la typographie.
   const iconSize = scaled(isTablet ? 52 : 38, scale);
   const cell = scaled(isTablet ? 72 : 56, scale);
@@ -270,6 +273,13 @@ export function MathExercise({
           glyphVariant={metrics.answerGlyph}
           state={cardState(pressed === option)}
           onPress={() => submit(option)}
+          // Retouchée pendant la reprise : elle redit son nombre, sans répondre.
+          onEcho={echo(pressed === option, () => {
+            const sound = cardSound(NUMBER_SOUNDS, String(option));
+            if (sound) {
+              playAudio(sound);
+            }
+          })}
           style={[styles.numberCard, { maxWidth: metrics.tileWidth * 1.3 }]}
           contentStyle={{ minHeight: metrics.answerHeight }}
         />

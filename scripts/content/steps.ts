@@ -7,6 +7,7 @@
  */
 import { audio, say } from './audio';
 import { illustration } from './assets';
+import { duplicateIllustrations } from './image-checks';
 
 export type AnyStep = Record<string, unknown>;
 
@@ -126,6 +127,20 @@ export function imageMcqStep(
   distractors: { word: string; icon: string }[],
   instruction = 'Touche l’image du mot que tu entends.',
 ): AnyStep {
+  const candidates = [correct, ...distractors];
+  // Deux cartes au même dessin, et l'enfant qui a bien entendu peut toucher
+  // la « mauvaise » : la question n'a plus de réponse. Le générateur refuse.
+  const clashes = duplicateIllustrations(
+    candidates.map((candidate) => ({ id: candidate.word, illustrationId: candidate.icon })),
+  );
+  if (clashes.length > 0) {
+    throw new Error(
+      `image_multiple_choice « ${correct.word} » (${lessonId}) : ${clashes.join(' ; ')}`,
+    );
+  }
+  if (new Set(candidates.map((candidate) => candidate.word)).size !== candidates.length) {
+    throw new Error(`image_multiple_choice « ${correct.word} » (${lessonId}) : mot en double`);
+  }
   return {
     id: stepId(lessonId),
     type: 'image_multiple_choice',
@@ -133,7 +148,7 @@ export function imageMcqStep(
     instruction: say.instruction(instruction),
     hint: say.hint('Écoute encore le mot.'),
     audioId: say.word(correct.word),
-    choices: [correct, ...distractors].map((candidate) => ({
+    choices: candidates.map((candidate) => ({
       id: candidate.word,
       illustrationId: illustration(candidate.icon),
       label: candidate.word,

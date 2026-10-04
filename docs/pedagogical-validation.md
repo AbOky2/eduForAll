@@ -18,7 +18,8 @@ contenus officiels des quatre disciplines instrumentales sont couverts.
 Ce qui est **vérifié automatiquement** : la couverture du programme, la
 cohérence des références, la justesse des réponses, la répartition par
 discipline conforme à la grille horaire, l'unicité des identifiants, la
-résolution des prérequis (`npm run validate:content`, `npm test`).
+résolution des prérequis, et dans chaque question « Touche l'image » l'absence
+de deux cartes au même dessin (`npm run validate:content`, `npm test`).
 
 Ce qui **doit être validé par un enseignant** : tout ce qui relève du jugement
 professionnel — l'ordre d'introduction des sons, le choix du lexique, la
@@ -48,7 +49,7 @@ exercices physiques — 8 h 05) relèvent d'une pratique collective encadrée.
 
 ---
 
-## Les 8 points à trancher avec l'enseignant
+## Les 9 points à trancher avec l'enseignant
 
 Ce sont les décisions que le programme ne prend pas à notre place. Ce sont
 **les seules choses inventées** — le reste est cité.
@@ -141,6 +142,101 @@ locuteur `siwis` des deux côtés, donc un seul timbre pour l'enfant.
 > **À valider :** est-ce ainsi qu'on dit ces sons dans une classe tchadienne ?
 > Écouter la planche d'écoute (§ « Voix » de `docs/audio-pipeline.md`).
 
+### 9. Les pictogrammes qui servent de bonne réponse à plusieurs mots
+
+Dans une question « Touche l'image », l'enfant entend un mot et touche son
+dessin. Aujourd'hui, **41 pictogrammes sont la bonne réponse de plusieurs mots
+différents** : 96 mots cibles en tout, dont 55 ne sont pas ce que le dessin
+montre, sur 66 étapes. Le même pantalon vaut « pantalon », « jupe » et
+« poche » ; la même maman vaut « maman », « grand-mère », « tante » et
+« mariage ». Pour un enfant qui apprend le français à l'école, l'association
+mot-image est tout l'exercice : il retient que ce pantalon s'appelle « jupe ».
+
+C'est un autre défaut que celui corrigé dans le contenu 2.1.1 — deux cartes au
+même dessin dans une même question (16 questions, dont « fête » et « tambour »
+toutes deux en tambour). Celui-là ne demandait pas de jugement : chaque
+distracteur fautif a été remplacé par un mot du thème ou du même monde qui a
+son propre dessin, et le générateur comme `npm run validate:content` refusent
+désormais tout cas de ce genre.
+
+Ici, il faut choisir, mot par mot, entre deux voies :
+
+- **Dessiner un pictogramme dédié** (`src/design-system/illustrations/`), quand
+  le mot désigne un objet, une personne ou un lieu qu'un dessin montre sans
+  hésitation : jupe, poche, robe, sandale, roue, racine, chauffeur, docteur,
+  grand-mère…
+- **Basculer l'étape en choix audio ou en écoute** (`audio_multiple_choice`,
+  `listen`), quand le mot est une notion qu'aucun dessin ne désigne seul :
+  fête, cérémonie, courage, saison, chaleur, prix, voyage, quartier… ou un lien
+  de parenté — un dessin d'oncle est un dessin de papa.
+
+Reste un cas à juger : la **même notion**, où le dessin vaut honnêtement pour
+les deux mots (« fâché » et « colère », « triste » et « tristesse », « content »
+et « joie », « éleveur » et « berger », « vache » et « zébu », « valise » et
+« bagage »). Le partage peut alors être conservé, ou un dessin plus précis
+servir les deux (un zébu, avec sa bosse).
+
+La colonne de droite porte une **proposition ECOLNA, pas une décision** :
+29 dessins dédiés, 20 bascules en audio, 6 « même notion ».
+
+> **À valider :** pour chaque mot, dessin dédié, bascule en audio ou partage
+> accepté ? Faut-il plutôt retirer certains mots des questions d'image ?
+
+| Pictogramme | Ce que montre le dessin (étapes) | Autres mots cibles → proposition (étapes) |
+|---|---|---|
+| `icon-angry` | « fâché » (`cp1-langage-sentiments-1-s226`) | « colère » → même notion (`cp2-langage-sentiments-1-s1053`) |
+| `icon-baby` | « bébé » (`cp1-langage-famille-1-s44`, `cp1-lecture-é-1-s274`, `cp1-lecture-b-1-s393`, `cp1-lecture-revision-4-s453`, `cp2-lecture-equiv-e-1-s1354`) | « enfant » → dessin (`cp2-lecture-an-1-s1115`, `cp2-lecture-revision-2-s1163`) |
+| `icon-ball` | « ballon » (`cp1-langage-jeux-1-s172`) | « jeu » → audio (`cp2-langage-jeux-1-s992`) |
+| `icon-bed` | « lit » (`cp1-lecture-i-1-s247`, `cp1-lecture-l-1-s285`, `cp1-lecture-revision-2-s340`, `cp1-lecture-phrases-1-s557`) | « moustiquaire » → dessin (`cp2-langage-maladies-1-s1024`) |
+| `icon-bicycle` | « vélo » (`cp1-langage-transport-1-s184`, `cp1-lecture-v-1-s442`) | « roue » → dessin (`cp2-langage-transport-1-s1010`) |
+| `icon-boubou` | « boubou » (`cp1-langage-habits-1-s27`, `cp1-langage-fetes-1-s211`) | « robe » → dessin (`cp2-langage-habits-1-s827`) |
+| `icon-bus` | « car » (`cp1-langage-voyages-1-s158`) | « gare » → audio (`cp2-langage-voyages-1-s978`)<br>« chauffeur » → dessin (`cp2-langage-transport-1-s1009`) |
+| `icon-car` | « voiture » (`cp1-langage-transport-1-s185`) | « taxi » → dessin (`cp2-lecture-phrases-6-s1412`) |
+| `icon-cow` | « vache » (`cp2-langage-animaux-1-s902`) | « zébu » → même notion (`cp2-lecture-z-x-1-s1084`, `cp2-lecture-phrases-4-s1402`) |
+| `icon-desk` | « table-banc » (`cp2-langage-ecole-1-s798`) | « classe » → audio (`cp2-langage-ecole-1-s799`, `cp2-lecture-bl-cl-fl-pl-gl-1-s1171`, `cp2-lecture-revision-3-s1218`) |
+| `icon-drum` | « tambour » (`cp1-langage-jeux-1-s175`, `cp1-langage-fetes-1-s210`) | « fête » → audio (`cp1-langage-fetes-1-s209`)<br>« danse » → dessin (`cp2-langage-jeux-1-s995`, `cp2-langage-fetes-1-s1039`)<br>« cérémonie » → audio (`cp2-langage-fetes-1-s1037`) |
+| `icon-father` | « papa » (`cp1-langage-famille-1-s42`, `cp1-lecture-p-1-s349`, `cp1-lecture-revision-3-s404`) | « oncle » → audio (`cp2-langage-famille-1-s844`) |
+| `icon-foot` | « pied » (`cp1-langage-corps-humain-1-s18`) | « jambe » → dessin (`cp2-langage-corps-humain-1-s815`) |
+| `icon-friends` | « ami » (`cp1-langage-famille-1-s45`, `cp1-langage-fetes-1-s212`, `cp1-lecture-phrases-7-s587`) | « équipe » → dessin (`cp2-langage-jeux-1-s993`)<br>« invité » → audio (`cp2-langage-fetes-1-s1040`) |
+| `icon-hand` | « main » (`cp1-langage-corps-humain-1-s17`) | « bras » → dessin (`cp2-langage-corps-humain-1-s814`, `cp2-lecture-br-cr-dr-1-s1184`) |
+| `icon-happy` | « content » (`cp1-langage-sentiments-1-s224`) | « joie » → même notion (`cp2-langage-sentiments-1-s1052`)<br>« courage » → audio (`cp2-langage-sentiments-1-s1054`) |
+| `icon-herder` | « éleveur » (`cp1-langage-metiers-1-s80`) | « berger » → même notion (`cp2-langage-metiers-1-s889`) |
+| `icon-hut` | « case » (`cp1-langage-maison-1-s53`, `cp1-lecture-c-1-s492`, `cp1-lecture-revision-6-s551`) | « village » → dessin (`cp1-langage-village-1-s68`)<br>« toit » → dessin (`cp2-langage-maison-1-s860`)<br>« quartier » → audio (`cp2-langage-village-1-s874`) |
+| `icon-lightning` | « orage » (`cp2-langage-phenomenes-naturels-1-s932`) | « feu » → dessin (`cp2-lecture-eu-1-s1226`, `cp2-lecture-revision-4-s1260`) |
+| `icon-market` | « marché » (`cp1-langage-village-1-s71`, `cp1-langage-marche-1-s146`) | « commerçant » → dessin (`cp2-langage-metiers-1-s890`, `cp2-langage-marche-1-s963`) |
+| `icon-medicine` | « médicament » (`cp1-langage-maladies-1-s201`) | « docteur » → dessin (`cp2-langage-maladies-1-s1023`) |
+| `icon-money` | « argent » (`cp1-langage-marche-1-s148`) | « prix » → audio (`cp2-langage-marche-1-s964`)<br>« monnaie » → audio (`cp2-langage-marche-1-s965`) |
+| `icon-moon` | « lune » (`cp1-lecture-u-1-s261`, `cp1-lecture-phrases-2-s562`) | « soir » → audio (`cp2-lecture-oir-air-1-s1330`) |
+| `icon-mosquito` | « moustique » (`cp1-langage-maladies-1-s200`, `cp2-lecture-phrases-2-s1392`) | « paludisme » → audio (`cp2-langage-maladies-1-s1022`) |
+| `icon-mother` | « maman » (`cp1-langage-famille-1-s43`, `cp1-lecture-m-1-s300`, `cp1-lecture-phrases-5-s577`) | « grand-mère » → dessin (`cp2-langage-famille-1-s843`)<br>« tante » → audio (`cp2-langage-famille-1-s845`)<br>« mariage » → dessin (`cp2-langage-fetes-1-s1038`) |
+| `icon-peanut` | « arachide » (`cp2-langage-aliments-1-s949`) | « graine » → dessin (`cp2-langage-plantes-1-s920`) |
+| `icon-pot` | « marmite » (`cp1-langage-maison-1-s56`) | « tasse » → dessin (`cp2-lecture-as-es-er-1-s1305`) |
+| `icon-rain` | « pluie » (`cp1-langage-phenomenes-naturels-1-s120`) | « saison » → audio (`cp2-langage-phenomenes-naturels-1-s933`) |
+| `icon-road` | « route » (`cp1-langage-village-1-s70`, `cp1-langage-voyages-1-s157`) | « course » → dessin (`cp2-langage-jeux-1-s994`) |
+| `icon-sad` | « triste » (`cp1-langage-sentiments-1-s225`) | « malade » → dessin (`cp1-langage-maladies-1-s198`)<br>« tristesse » → même notion (`cp2-langage-sentiments-1-s1055`) |
+| `icon-satchel` | « cartable » (`cp2-langage-ecole-1-s797`) | « sac » → dessin (`cp2-lecture-ac-ec-oc-ic-1-s1292`) |
+| `icon-scale` | « balance » (`cp2-langage-marche-1-s962`) | « kilo » → audio (`cp2-lecture-k-qu-1-s1071`, `cp2-lecture-revision-1-s1107`, `cp2-lecture-phrases-1-s1387`) |
+| `icon-school` | « école » (`cp1-langage-ecole-1-s1`, `cp1-lecture-phrases-3-s567`) | « ville » → dessin (`cp2-langage-village-1-s875`)<br>« cinéma » → audio (`cp2-lecture-equiv-s-1-s1364`) |
+| `icon-shirt` | « chemise » (`cp1-langage-habits-1-s28`) | « bouton » → dessin (`cp2-langage-habits-1-s830`) |
+| `icon-shoe` | « chaussure » (`cp1-langage-habits-1-s30`) | « sandale » → dessin (`cp2-langage-habits-1-s828`) |
+| `icon-suitcase` | « valise » (`cp1-langage-voyages-1-s159`) | « voyage » → audio (`cp2-langage-voyages-1-s977`)<br>« bagage » → même notion (`cp2-langage-voyages-1-s979`) |
+| `icon-sun` | « soleil » (`cp1-langage-phenomenes-naturels-1-s122`) | « chaleur » → audio (`cp2-langage-phenomenes-naturels-1-s934`) |
+| `icon-tree` | « arbre » (`cp1-langage-plantes-1-s105`, `cp1-lecture-a-1-s240`) | « racine » → dessin (`cp2-langage-plantes-1-s919`) |
+| `icon-trousers` | « pantalon » (`cp1-langage-habits-1-s29`) | « jupe » → dessin (`cp1-lecture-j-1-s462`, `cp1-lecture-revision-5-s517`)<br>« poche » → dessin (`cp2-langage-habits-1-s829`) |
+| `icon-water` | « eau » (`cp1-langage-aliments-1-s134`, `cp2-lecture-au-eau-1-s1237`) | « fleuve » → dessin (`cp2-langage-voyages-1-s980`) |
+| `icon-wind` | « vent » (`cp1-langage-phenomenes-naturels-1-s121`) | « poussière » → audio (`cp2-langage-phenomenes-naturels-1-s935`) |
+
+Garde-fou : le générateur imprime cette liste à chaque génération
+(AVERTISSEMENT, pas une erreur) et échoue si l'un des deux compteurs dépasse
+son plafond — 41 pictogrammes partagés, 55 mots « en trop »
+(`SHARED_TARGET_CEILING`, dans `scripts/content/image-checks.ts`) ;
+`npm run validate:content` et `npm test` appliquent les mêmes plafonds. Ces
+nombres ne peuvent donc que baisser : chaque décision appliquée les fait
+descendre, et le générateur indique alors les nouveaux plafonds à inscrire.
+Liste établie sur le contenu 2.1.1 — si l'ordre des leçons change, les
+identifiants d'étape changent, et la liste à jour est celle qu'imprime
+`npx tsx scripts/generate-content.ts`.
+
 ---
 
 ## Protocole d'atelier proposé (une demi-journée)
@@ -153,7 +249,7 @@ différentes (urbaine / rurale).
 | 30 mn | Présentation du projet et du périmètre | ce document, §1-2 |
 | 45 mn | Revue de la progression de lecture | §1, §2, `docs/couverture-programme.md` |
 | 45 mn | Revue du lexique et des 18 thèmes | §3, §5 |
-| 30 mn | Revue des illustrations | `docs/pictogrammes.html` |
+| 30 mn | Revue des illustrations et des pictogrammes partagés | §7, §9, `docs/pictogrammes.html` |
 | 60 mn | **Essai de l'app sur tablette**, une leçon par discipline | l'appareil |
 | 30 mn | Grille de corrections, priorisation | tableau ci-dessous |
 
@@ -172,8 +268,8 @@ manifeste.
 
 ## Après l'atelier
 
-1. Intégrer les corrections, bump `contentVersion` (2.0.0 → 2.1.0).
-2. **Enregistrer les voix définitives** — 821 fichiers, aujourd'hui en TTS de
+1. Intégrer les corrections, incrémenter `contentVersion` (aujourd'hui 2.1.1).
+2. **Enregistrer les voix définitives** — 824 fichiers, aujourd'hui en TTS de
    synthèse. C'est le dernier verrou avant le pilote
    (`docs/audio-pipeline.md`). Idéalement une voix d'enseignant·e tchadien·ne :
    l'accent et le débit comptent autant que le contenu.

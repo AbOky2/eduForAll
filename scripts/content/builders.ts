@@ -47,7 +47,7 @@ import {
 } from './steps';
 import type { SoundUnit, WordEntry } from './data/reading-cp1';
 import type { Cp2Unit } from './data/reading-cp2';
-import type { Theme } from './data/vocabulary';
+import type { Theme, VocabWord } from './data/vocabulary';
 import {
   CFA_COINS,
   COUNTABLES,
@@ -444,6 +444,48 @@ function letterDistractors(answer: string): string[] {
 
 const LANGUAGE_REF = 'Langage/Élocution CP — thèmes de vocabulaire (p. 19) et objectifs (p. 18)';
 
+/**
+ * Les distracteurs d'une question d'image du thème : la rotation habituelle,
+ * sauf qu'un mot dont le dessin est déjà à l'écran (« frère » et « ami »
+ * partagent icon-friends) cède sa place au premier mot de réserve du thème,
+ * qui a son propre dessin. Les autres distracteurs ne bougent pas.
+ */
+function imageDistractors(
+  correct: VocabWord,
+  rotation: readonly VocabWord[],
+  reserve: readonly VocabWord[],
+  where: string,
+): VocabWord[] {
+  const shown: VocabWord[] = [correct];
+  const isShown = (entry: VocabWord) =>
+    shown.some((other) => other.icon === entry.icon || other.word === entry.word);
+  // D'abord les distracteurs sains de la rotation, à leur place…
+  const kept = rotation.map((entry) => {
+    if (isShown(entry)) {
+      return null;
+    }
+    shown.push(entry);
+    return entry;
+  });
+  // … puis un mot de réserve à la place de chaque dessin déjà montré.
+  return kept.map((entry, position) => {
+    if (entry) {
+      return entry;
+    }
+    const substitute = reserve.find((candidate) => !isShown(candidate));
+    if (!substitute) {
+      const clashing = rotation[position];
+      throw new Error(
+        `${where} : « ${clashing?.word} » a le même dessin qu’une autre carte (${clashing?.icon}) ` +
+          'et la réserve du thème n’a plus de mot au dessin libre — en ajouter un dans ' +
+          'scripts/content/data/vocabulary.ts.',
+      );
+    }
+    shown.push(substitute);
+    return substitute;
+  });
+}
+
 /** Leçon 1 d'un thème : le vocabulaire, entendu puis reconnu. */
 export function vocabularyLesson(
   theme: Theme,
@@ -455,12 +497,18 @@ export function vocabularyLesson(
   const skills = [skillLanguage(theme.id)];
   const ctx = base(id, skills);
   const words = level === 'cp1' ? theme.cp1Words : theme.cp2Words;
+  const reserve = (level === 'cp1' ? theme.cp1Reserve : theme.cp2Reserve) ?? [];
   const steps: AnyStep[] = [];
 
   for (let index = 0; index < 4; index += 1) {
     const correct = pick(words, index);
-    const distractors = [pick(words, index + 1), pick(words, index + 2)].filter(
-      (entry) => entry.word !== correct.word,
+    const distractors = imageDistractors(
+      correct,
+      [pick(words, index + 1), pick(words, index + 2)].filter(
+        (entry) => entry.word !== correct.word,
+      ),
+      reserve,
+      `${id} (« ${correct.word} »)`,
     );
     steps.push(
       imageMcqStep(

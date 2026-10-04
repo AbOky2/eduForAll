@@ -32,10 +32,18 @@ import { audioEntries } from './content/audio';
 import { usedIllustrations } from './content/assets';
 import { buildCp1 } from './content/cp1';
 import { buildCp2 } from './content/cp2';
+import {
+  SHARED_TARGET_CEILING,
+  countSharedTargets,
+  duplicateIllustrations,
+  imageQuestions,
+  sharedTargetIllustrations,
+  sharedTargetRegressions,
+} from './content/image-checks';
 import type { LessonSpec, WorldSpec } from './content/lesson';
 
 const ROOT = join(__dirname, '..');
-const CONTENT_VERSION = '2.1.0';
+const CONTENT_VERSION = '2.1.1';
 const GENERATED_AT = '2026-08-26T00:00:00.000Z';
 
 const cp1 = buildCp1();
@@ -109,6 +117,18 @@ for (const world of [...cp1, ...cp2] as WorldSpec[]) {
   }
   worldIds.add(world.id);
 }
+// « Touche l'image » : deux cartes au même dessin rendent la question sans
+// réponse. imageMcqStep le refuse déjà ; ce filet couvre tout le manifeste.
+const questions = imageQuestions(manifest);
+for (const question of questions) {
+  for (const clash of duplicateIllustrations(question.choices)) {
+    problems.push(`${question.id} : ${clash}`);
+  }
+}
+// Un même dessin, bonne réponse de plusieurs mots : décision pédagogique en
+// attente (docs/pedagogical-validation.md, point 9). Toléré, mais plafonné.
+const sharedTargets = sharedTargetIllustrations(questions);
+problems.push(...sharedTargetRegressions(sharedTargets));
 if (problems.length > 0) {
   console.error('CONTENU INCOHÉRENT :');
   for (const problem of problems.slice(0, 20)) {
@@ -316,3 +336,26 @@ console.log(
   `Répartition : lecture ${bySubject('reading')} · langage ${bySubject('language')} · ` +
     `écriture ${bySubject('writing')} · calcul ${bySubject('math')}`,
 );
+if (sharedTargets.length > 0) {
+  const count = countSharedTargets(sharedTargets);
+  console.warn(
+    `\nAVERTISSEMENT — ${count.illustrations} pictogrammes servent de bonne réponse à ` +
+      `plusieurs mots (${count.extraWords} mots en trop ; plafonds ` +
+      `${SHARED_TARGET_CEILING.illustrations} et ${SHARED_TARGET_CEILING.extraWords}) : ` +
+      "à trancher avec l'enseignant, docs/pedagogical-validation.md, point 9.",
+  );
+  for (const shared of sharedTargets) {
+    console.warn(
+      `  ${shared.illustrationId} : ${shared.targets.map((target) => `« ${target.word} »`).join(', ')}`,
+    );
+  }
+  if (
+    count.illustrations < SHARED_TARGET_CEILING.illustrations ||
+    count.extraWords < SHARED_TARGET_CEILING.extraWords
+  ) {
+    console.warn(
+      `  → en baisse : abaisser SHARED_TARGET_CEILING à { illustrations: ` +
+        `${count.illustrations}, extraWords: ${count.extraWords} }.`,
+    );
+  }
+}

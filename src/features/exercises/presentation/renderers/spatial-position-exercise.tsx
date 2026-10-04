@@ -8,7 +8,13 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
-import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
+import {
+  answersRoom,
+  fitAnswerHeight,
+  listenAnswerHeight,
+  listenCellWidth,
+} from '@/design-system/primitives/ecolna-exercise-layout';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { a11y, colors, radius, spacing } from '@/design-system/tokens';
@@ -26,7 +32,10 @@ const REFERENCE = 52 / 116;
  * Where the object sits relative to the reference, per official preposition
  * (programme p. 58), as offsets inside a square stage of side `S`.
  */
-function layoutFor(relation: Relation, S: number): { left: number; top: number; zAbove: boolean } {
+function layoutFor(
+  relation: Relation,
+  S: number,
+): { left: number; top: number; zAbove: boolean; shift?: number } {
   const o = S * OBJECT;
   const r = S * REFERENCE;
   const k = S / 116;
@@ -51,8 +60,12 @@ function layoutFor(relation: Relation, S: number): { left: number; top: number; 
       return { left: mid, top: 6 * k, zAbove: true };
     case 'en-dessous':
       return { left: mid, top: S - o - 6 * k, zAbove: true };
-    case 'a-cote':
-      return { left: S / 2 + r / 2 + 2 * k, top: mid, zAbove: true };
+    case 'a-cote': {
+      // Le couple se centre dans la scène (le repère glisse à gauche) : l'objet
+      // ne déborde jamais du cadre ni de la carte.
+      const shift = -(o + 2 * k) / 2;
+      return { left: S / 2 + r / 2 + 2 * k + shift, top: mid, zAbove: true, shift };
+    }
   }
 }
 
@@ -93,7 +106,12 @@ function Scene({
       ) : (
         <>
           {!layout.zAbove ? object : null}
-          <View style={[styles.placed, { left: size / 2 - r / 2, top: size / 2 - r / 2 }]}>
+          <View
+            style={[
+              styles.placed,
+              { left: size / 2 - r / 2 + (layout.shift ?? 0), top: size / 2 - r / 2 },
+            ]}
+          >
             <ObjectIcon id={referenceId} size={r} />
           </View>
           {layout.zAbove ? object : null}
@@ -119,6 +137,7 @@ export function SpatialPositionExercise({
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
+  const echo = useAnswerEcho(interactive);
   const audioId = step.audioId ?? null;
   // Trois scènes sur une rangée sur tablette ; au téléphone, deux par rangée.
   const columns = isTablet ? Math.min(4, step.choices.length) : 2;
@@ -127,15 +146,24 @@ export function SpatialPositionExercise({
     rows.push(step.choices.slice(start, start + columns));
   }
   const facePadding = scaled(spacing.xs, scale);
-  // La scène se règle sur la place mesurée : jamais sous la feuille de retour.
-  const faceHeight = fitAnswerHeight({
+  const sizing = {
     preferred: scaled(isTablet ? 168 : 112, scale) + 2 * facePadding,
-    room: answersRoom(metrics, audioId !== null),
     rows: rows.length,
-    gap: metrics.gap,
     min: scaled(a11y.childTouchTarget + 8, scale),
-  });
-  const stage = faceHeight - 2 * facePadding;
+  };
+  // La scène se règle sur la place mesurée : jamais sous la feuille de retour ;
+  // à côté du pavé d'écoute, à la hauteur commune du pavé.
+  const faceHeight =
+    audioId !== null
+      ? listenAnswerHeight(metrics, { ...sizing, columns, ratio: 0 })
+      : fitAnswerHeight({ ...sizing, room: answersRoom(metrics, false), gap: metrics.gap });
+  // Carrée, la scène tient aussi dans la largeur de sa carte (filets compris).
+  const cellWidth =
+    audioId !== null ? listenCellWidth(metrics, columns, metrics.listenLayout === 'pane') : 0;
+  const stage = Math.min(
+    faceHeight - 2 * facePadding,
+    cellWidth > 0 ? cellWidth - 2 * facePadding - 4 : Infinity,
+  );
 
   useEffect(() => {
     if (step.audioId) {
@@ -157,6 +185,8 @@ export function SpatialPositionExercise({
                 setPicked(choice.id);
                 onSubmit({ kind: 'choice', choiceId: choice.id });
               }}
+              // Retouchée pendant la reprise : elle frémit, sans répondre.
+              onEcho={echo(picked === choice.id)}
               accessibilityLabel={choice.relation.replace('-', ' ')}
               state={cardState(picked === choice.id)}
               style={styles.cell}

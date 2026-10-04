@@ -8,12 +8,14 @@ import {
   useExerciseMetrics,
   useAnswerCardState,
 } from '@/design-system/primitives';
-import { answersRoom } from '@/design-system/primitives/ecolna-exercise-layout';
+import { useAnswerEcho } from '@/design-system/primitives/ecolna-answer-card';
+import { PANE_CARD_RATIO, answersRoom } from '@/design-system/primitives/ecolna-exercise-layout';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { a11y } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
+import { cardSound } from './card-sound';
 import { fitIllustration } from './illustration-fit';
 
 type ImageStep = Extract<ExerciseStep, { type: 'image_multiple_choice' }>;
@@ -22,24 +24,31 @@ type ImageStep = Extract<ExerciseStep, { type: 'image_multiple_choice' }>;
 const CARD_BORDER = 2;
 
 /**
- * La silhouette d'une carte-image, hauteur sur largeur : une seule rangée
- * prend des cartes un peu plus hautes que larges ; deux rangées se couchent,
- * pour tenir sous la consigne sans défiler. À côté du volet d'écoute (7"
- * couchée, peu de hauteur), presque carrées : l'image, bornée par la largeur,
- * n'y perd rien et la feuille de retour reste loin.
+ * La silhouette d'une carte-image, hauteur sur largeur : jamais un bandeau.
+ * Une seule rangée sous la bande prend des cartes un peu plus hautes que
+ * larges ; à côté du pavé d'écoute (tablette couchée), presque carrées — la
+ * hauteur commune du pavé ; deux rangées, presque carrées aussi, la place
+ * mesurée les resserrant au besoin.
  */
 export function imageCardRatio(rows: number, beside = false): number {
-  return rows > 1 ? 0.8 : beside ? 1.05 : 1.15;
+  return rows > 1 ? 0.95 : beside ? PANE_CARD_RATIO : 1.2;
 }
 
 /**
- * Cartes par rangée. Sous la bande d'écoute d'une tablette couchée, une seule
- * rangée (jusqu'à quatre) : elle prend toute la colonne. Ailleurs, deux ou
- * trois images sur une rangée, quatre deux par deux, cinq ou six par trois.
+ * Cartes par rangée. À côté du pavé d'écoute (tablette couchée), une seule
+ * rangée (jusqu'à quatre). Au téléphone, trois images en deux plus une : sur
+ * une rangée, elles n'y seraient que des vignettes. Ailleurs, deux ou trois
+ * images sur une rangée, quatre deux par deux, cinq ou six par trois.
  */
-export function imageColumns(count: number, wide: boolean): number {
-  if (wide && count <= 4) {
+export function imageColumns(
+  count: number,
+  { beside = false, compact = false }: { beside?: boolean; compact?: boolean } = {},
+): number {
+  if (beside && count <= 4) {
     return Math.max(1, count);
+  }
+  if (compact && count >= 3) {
+    return 2;
   }
   return count === 4 ? 2 : Math.max(1, Math.min(3, count));
 }
@@ -85,7 +94,8 @@ export function ImageChoiceExercise({
   const [cellWidth, setCellWidth] = useState(0);
   const metrics = useExerciseMetrics();
   const cardState = useAnswerCardState(interactive);
-  const { scale } = useResponsive();
+  const echo = useAnswerEcho(interactive);
+  const { scale, isTablet } = useResponsive();
   const audioId = step.audioId ?? null;
 
   useEffect(() => {
@@ -97,32 +107,36 @@ export function ImageChoiceExercise({
 
   // Des rangées explicites, pas un retour à la ligne : des pourcentages plus
   // les gouttières finissaient par passer à la ligne.
-  const wide = audioId !== null && metrics.listenLayout === 'band' && metrics.wide;
-  const columns = imageColumns(step.choices.length, wide);
+  const beside = audioId !== null && metrics.listenLayout === 'pane';
+  const columns = imageColumns(step.choices.length, { beside, compact: !isTablet });
   const rows: (typeof step.choices)[] = [];
   for (let start = 0; start < step.choices.length; start += columns) {
     rows.push(step.choices.slice(start, start + columns));
   }
 
-  // La place mesurée sous la bande d'écoute borne la hauteur des cartes : le
-  // bloc remplit ≈ 60 % du corps sur grande tablette, et la feuille de retour
-  // ne recouvre jamais une image.
-  const cardHeight = imageCardHeight({
-    cellWidth,
-    rows: rows.length,
-    beside: audioId !== null && metrics.listenLayout === 'pane',
-    gap: metrics.gap,
-    room: answersRoom(metrics, audioId !== null),
-    fallback: Math.round(metrics.objectSize * 1.6),
-    min: scaled(a11y.childTouchTarget + 8, scale),
-  });
+  // À côté du pavé, la rangée a la hauteur commune du pavé (presque carrée).
+  // Ailleurs, la place mesurée sous la bande borne les cartes : la feuille de
+  // retour ne recouvre jamais une image.
+  const cardHeight =
+    beside && rows.length === 1 && metrics.paneHeight > 0
+      ? metrics.paneHeight
+      : imageCardHeight({
+          cellWidth,
+          rows: rows.length,
+          beside,
+          gap: metrics.gap,
+          room: answersRoom(metrics, audioId !== null),
+          fallback: Math.round(metrics.objectSize * 1.6),
+          min: scaled(a11y.childTouchTarget + 8, scale),
+        });
   // L'air autour de l'image vient de la borne (76 % de l'intérieur), pas d'un
   // rembourrage : au téléphone, il ne resterait qu'une vignette.
   const imageSize = fitIllustration({
     preferred: Math.round(metrics.objectSize * 1.6),
     innerWidth: cellWidth > 0 ? cellWidth - 2 * CARD_BORDER : 0,
     innerHeight: cellWidth > 0 ? cardHeight - 2 * CARD_BORDER : 0,
-    fallback: metrics.objectSize,
+    // Avant la mesure : plus de cases sur la rangée, une image plus petite.
+    fallback: Math.round(metrics.objectSize * Math.min(1, 3 / columns)),
   });
   const measureCell = (event: LayoutChangeEvent) => {
     const width = Math.round(event.nativeEvent.layout.width);
@@ -133,11 +147,16 @@ export function ImageChoiceExercise({
     // Remontée à chaque changement de disposition : la case se remesure.
     <View key={`${metrics.listenLayout}-${columns}`} style={{ gap: metrics.gap }}>
       {rows.map((row, rowIndex) => (
-        <View key={rowIndex} style={[styles.row, { gap: metrics.gap }]}>
+        // Une rangée incomplète (téléphone : 2 + 1) se centre sous la
+        // précédente, ses cases à la largeur mesurée des autres.
+        <View
+          key={rowIndex}
+          style={[styles.row, { gap: metrics.gap }, row.length < columns && styles.centered]}
+        >
           {row.map((choice, index) => (
             <View
               key={choice.id}
-              style={styles.cell}
+              style={row.length < columns && cellWidth > 0 ? { width: cellWidth } : styles.cell}
               onLayout={rowIndex === 0 && index === 0 ? measureCell : undefined}
             >
               <EcolnaAnswerCard
@@ -147,15 +166,19 @@ export function ImageChoiceExercise({
                   setPressedId(choice.id);
                   onSubmit({ kind: 'choice', choiceId: choice.id });
                 }}
+                // Retouchée pendant la reprise : elle dit son mot (« maître »),
+                // face au mot à trouver — sans répondre.
+                onEcho={echo(pressedId === choice.id, () => {
+                  const sound = cardSound('mot', choice.label ?? choice.id);
+                  if (sound) {
+                    playAudio(sound);
+                  }
+                })}
                 contentStyle={{ minHeight: cardHeight, paddingHorizontal: 0, paddingVertical: 0 }}
               >
                 <ObjectIcon id={choice.illustrationId} size={imageSize} />
               </EcolnaAnswerCard>
             </View>
-          ))}
-          {/* Une rangée incomplète garde des cases de même largeur. */}
-          {Array.from({ length: columns - row.length }, (_, index) => (
-            <View key={`empty-${index}`} style={styles.cell} />
           ))}
         </View>
       ))}
@@ -177,5 +200,6 @@ export function ImageChoiceExercise({
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row' },
+  centered: { justifyContent: 'center' },
   cell: { flex: 1 },
 });
