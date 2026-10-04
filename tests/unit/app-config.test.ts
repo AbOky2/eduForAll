@@ -67,8 +67,8 @@ describe('configuration de l’application', () => {
     // programme Familles. Le blocage tient la promesse à la place de la
     // vigilance.
     expect(blocked).toContain('com.google.android.gms.permission.AD_ID');
-    // Glide (expo-image) la déclare : Play la montrerait sous « afficher les
-    // connexions réseau », en face d'une fiche qui promet « sans internet ».
+    // Une bibliothèque d'images ou de réseau la déclarerait : Play la montrerait
+    // sous « afficher les connexions réseau », face à une fiche « sans internet ».
     expect(blocked).toContain('android.permission.ACCESS_NETWORK_STATE');
     // Le retour haptique de fin d'exercice s'en sert : elle reste.
     expect(blocked).not.toContain('android.permission.VIBRATE');

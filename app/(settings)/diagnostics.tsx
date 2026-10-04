@@ -1,12 +1,13 @@
-import { useState } from 'react';
 import { ScrollView, Share, StyleSheet, View } from 'react-native';
 
 import { logSnapshot } from '@/core/logging/logger';
 import { getDatabase } from '@/database/connection/database';
 import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { colors, spacing } from '@/design-system/tokens';
+import { useParentSession } from '@/features/parent-space/application/parent-session-store';
 import { fr } from '@/localization/fr/strings';
 import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
+import { useFocusedData } from '@/shared/hooks/use-focused-data';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
 interface DiagnosticsInfo {
@@ -16,54 +17,44 @@ interface DiagnosticsInfo {
   attempts: number;
 }
 
+async function loadDiagnostics(): Promise<DiagnosticsInfo> {
+  const db = await getDatabase();
+  const migrations = await db.getFirstAsync<{ n: number }>(
+    'SELECT COUNT(*) AS n FROM migration_history',
+  );
+  const content = await db.getFirstAsync<{ content_version: string }>(
+    'SELECT content_version FROM content_versions ORDER BY imported_at DESC LIMIT 1',
+  );
+  const profiles = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM child_profiles');
+  const attempts = await db.getFirstAsync<{ n: number }>(
+    'SELECT COUNT(*) AS n FROM exercise_attempts',
+  );
+  return {
+    migrations: migrations?.n ?? 0,
+    contentVersion: content?.content_version ?? fr.settings.diagnosticsUnknown,
+    profiles: profiles?.n ?? 0,
+    attempts: attempts?.n ?? 0,
+  };
+}
+
 /**
  * Parent-triggered diagnostics. The export is a redacted text summary shared
  * voluntarily through the OS share sheet — no name, no voice, no location.
  */
 export default function DiagnosticsScreen() {
   const goBack = useSafeBack();
-  const [info, setInfo] = useState<DiagnosticsInfo | null>(null);
+  const info = useFocusedData(loadDiagnostics, 'diagnostics');
 
-  const load = async () => {
-    const db = await getDatabase();
-    const migrations = await db.getFirstAsync<{ n: number }>(
-      'SELECT COUNT(*) AS n FROM migration_history',
-    );
-    const content = await db.getFirstAsync<{ content_version: string }>(
-      'SELECT content_version FROM content_versions ORDER BY imported_at DESC LIMIT 1',
-    );
-    const profiles = await db.getFirstAsync<{ n: number }>(
-      'SELECT COUNT(*) AS n FROM child_profiles',
-    );
-    const attempts = await db.getFirstAsync<{ n: number }>(
-      'SELECT COUNT(*) AS n FROM exercise_attempts',
-    );
-    setInfo({
-      migrations: migrations?.n ?? 0,
-      contentVersion: content?.content_version ?? fr.settings.diagnosticsUnknown,
-      profiles: profiles?.n ?? 0,
-      attempts: attempts?.n ?? 0,
-    });
-  };
-
-  const exportDiagnostics = () => {
+  const exportDiagnostics = (info: DiagnosticsInfo) => {
     const logs = logSnapshot()
       .filter((entry) => entry.level === 'warn' || entry.level === 'error')
       .slice(-30)
       .map((entry) => `${entry.at} [${entry.level}] ${entry.scope}: ${entry.message}`)
       .join('\n');
-    void Share.share({
-      message:
-        `Diagnostic ECOLNA\n` +
-        `Contenu : ${info?.contentVersion}\nMigrations : ${info?.migrations}\n` +
-        `Profils : ${info?.profiles}\nRéponses enregistrées : ${info?.attempts}\n\n` +
-        `Derniers avertissements :\n${logs || 'aucun'}`,
-    });
+    // Android sort de l'app pour la feuille de partage : la session reste ouverte.
+    useParentSession.getState().beginExternalShare();
+    void Share.share({ message: fr.settings.diagnosticsExportText(info, logs) });
   };
-
-  if (!info) {
-    void load();
-  }
 
   return (
     <EcolnaScreen background="plain">
@@ -75,12 +66,15 @@ export default function DiagnosticsScreen() {
           <Row label={fr.settings.diagnosticsProfiles} value={String(info?.profiles ?? '…')} />
           <Row label={fr.settings.diagnosticsAttempts} value={String(info?.attempts ?? '…')} />
         </EcolnaCard>
-        <EcolnaButton
-          label={fr.settings.diagnosticsExport}
-          variant="accent"
-          size="md"
-          onPress={exportDiagnostics}
-        />
+        {/* L'export n'existe qu'une fois le diagnostic lu : jamais « undefined » dans le texte partagé. */}
+        {info ? (
+          <EcolnaButton
+            label={fr.settings.diagnosticsExport}
+            variant="accent"
+            size="md"
+            onPress={() => exportDiagnostics(info)}
+          />
+        ) : null}
         <EcolnaText variant="bodySm" color={colors.textSecondary} align="center">
           {fr.settings.diagnosticsNote}
         </EcolnaText>

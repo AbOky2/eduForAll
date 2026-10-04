@@ -28,8 +28,8 @@ paquet lui-même.
 C'est la différence entre « c'est vrai aujourd'hui » et « ça restera vrai ».
 
 `INTERNET` est arrivée dans le manifeste par les dépendances
-(`expo-file-system`, `expo-image`), sans que personne l'écrive, et
-`ACCESS_NETWORK_STATE` de la même façon (Glide, via `expo-image`). `AD_ID` peut
+(`expo-file-system`, et `expo-image` avant son retrait), sans que personne
+l'écrive, et `ACCESS_NETWORK_STATE` de la même façon (Glide, via `expo-image`). `AD_ID` peut
 arriver de la même façon, à la prochaine montée de version d'une dépendance :
 le manifeste fusionné la déclarerait, la déclaration « Non » deviendrait fausse,
 et une déclaration fausse sur l'identifiant publicitaire dans une app du

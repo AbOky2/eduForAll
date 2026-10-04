@@ -62,4 +62,31 @@ describe('la session de l’espace parents', () => {
     // Un seul écouteur actif : l'ancien a été retiré.
     expect(remove).toHaveBeenCalledTimes(1);
   });
+
+  it('reste ouverte pendant un partage, même si Android passe l’app en arrière-plan', () => {
+    useParentSession.getState().unlock();
+    useParentSession.getState().beginExternalShare();
+    listener?.('background');
+    expect(useParentSession.getState().unlocked).toBe(true);
+    // De retour dans l'app, un nouvel arrière-plan referme la porte.
+    listener?.('active');
+    listener?.('background');
+    expect(useParentSession.getState().unlocked).toBe(false);
+  });
+
+  it('se prolonge à chaque geste : un parent qui lit n’est pas renvoyé à la porte', () => {
+    useParentSession.getState().unlock();
+    jest.advanceTimersByTime(PARENT_SESSION_MS - 1000);
+    useParentSession.getState().touch();
+    jest.advanceTimersByTime(PARENT_SESSION_MS - 1000);
+    expect(useParentSession.getState().unlocked).toBe(true);
+    jest.advanceTimersByTime(1000);
+    expect(useParentSession.getState().unlocked).toBe(false);
+  });
+
+  it('ne rouvre rien par un geste ou un partage quand la porte est fermée', () => {
+    useParentSession.getState().touch();
+    useParentSession.getState().beginExternalShare();
+    expect(useParentSession.getState().unlocked).toBe(false);
+  });
 });

@@ -40,6 +40,11 @@ describe('la garde des routes adultes', () => {
     useParentSession.getState().lock();
   });
 
+  // Une session restée ouverte garderait son minuteur de 5 minutes en vie.
+  afterEach(() => {
+    useParentSession.getState().lock();
+  });
+
   it('laisse toujours la porte accessible', () => {
     renderRoute(ParentLayout, 'gate');
     expect(screen.getByText('écran gate')).toBeTruthy();

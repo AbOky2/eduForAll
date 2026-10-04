@@ -1,5 +1,6 @@
 import { Redirect } from 'expo-router';
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { useParentSession } from '../application/parent-session-store';
 
@@ -15,8 +16,22 @@ export const PARENT_GATE_ROUTE = 'gate';
  */
 export function ParentSessionGuard({ children }: { children: ReactElement }): ReactElement {
   const unlocked = useParentSession((state) => state.unlocked);
-  return unlocked ? children : <Redirect href="/(parent)/gate" />;
+  const touch = useParentSession((state) => state.touch);
+  // Arriver sur un écran adulte, ou y toucher quoi que ce soit, prolonge la
+  // session : un parent qui lit ou qui confirme n'est jamais renvoyé à la porte.
+  useEffect(() => {
+    touch();
+  }, [touch]);
+  return unlocked ? (
+    <View style={styles.fill} onTouchStart={touch}>
+      {children}
+    </View>
+  ) : (
+    <Redirect href="/(parent)/gate" />
+  );
 }
+
+const styles = StyleSheet.create({ fill: { flex: 1 } });
 
 /**
  * Le `screenLayout` des deux layouts adultes : chaque écran passe par la

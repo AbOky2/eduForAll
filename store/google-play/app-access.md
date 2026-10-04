@@ -17,7 +17,17 @@
 Pas d'identifiants à fournir, pas d'instructions de connexion, aucun compte de
 test à créer pour l'équipe d'examen.
 
-## Justification à recopier dans la console
+## Explication — aucun champ dans la console pour cette réponse
+
+Avec la réponse « Toutes les fonctionnalités sont disponibles sans accès
+spécial », la console n'offre aucun champ de texte : ce bloc sert de référence.
+L'examinateur voit l'opération à l'écran, et la description dit déjà que
+l'espace parent est protégé par une multiplication à écrire. Si la revue revient
+en demandant un accès, passer à « Tout ou partie des fonctionnalités de mon
+app sont soumises à des restrictions » avec une seule instruction :
+« Espace parent : écrire le résultat de la multiplication affichée ; aucun
+identifiant ni mot de passe. »
+
 
 ```
 ECOLNA ne comporte ni compte, ni identifiant, ni mot de passe, ni code d’accès, ni abonnement : les 308 leçons et les 1 625 exercices sont accessibles dès l’installation, hors connexion. L’espace parent est protégé par une multiplication tirée au hasard, à écrire au clavier, destinée à écarter un enfant de 6 à 8 ans. Ce n’est pas un identifiant : il n’y a rien à créer, rien à retenir, rien à récupérer, et cette question ne restreint aucun contenu pédagogique. Elle ne garde que le suivi des progrès, les paramètres (son, classe, diagnostic), le partage d’un résumé et la réinitialisation.

@@ -28,6 +28,7 @@ import { EcolnaIcon, type IconName } from '@/design-system/icons/ecolna-icon';
 import { SubjectArt } from '@/design-system/icons/subject-art';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
+import { useParentSession } from '@/features/parent-space/application/parent-session-store';
 import { fr } from '@/localization/fr/strings';
 import { useFocusedData } from '@/shared/hooks/use-focused-data';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
@@ -217,6 +218,8 @@ export default function ParentDashboardScreen() {
 
   const share = () => {
     // Local OS share sheet with a text summary — the app itself sends nothing.
+    // Android sort de l'app pour la feuille de partage : la session reste ouverte.
+    useParentSession.getState().beginExternalShare();
     void Share.share({
       message: fr.parent.shareMessage(profile.firstName, lessons.done, lessons.total, profile.level),
     });

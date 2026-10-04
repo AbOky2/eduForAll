@@ -77,9 +77,9 @@ ECOLNA est une publication indépendante. Elle n’est ni éditée ni validée p
   vrai des builds livrés, où `app.config.ts` bloque
   `android.permission.INTERNET` (`ECOLNA_RELEASE=1`, profils preview et
   production d'`eas.json`), ainsi que `android.permission.ACCESS_NETWORK_STATE`
-  (« afficher les connexions réseau », déclarée par Glide via expo-image) : la
+  (« afficher les connexions réseau », que déclarait Glide via `expo-image`, dépendance inutilisée retirée depuis) : la
   liste des autorisations affichée par Play ne parle donc pas de réseau. Il ne
-  doit rester que `VIBRATE` et `MODIFY_AUDIO_SETTINGS` dans le manifeste de
+  doit rester que `VIBRATE`, `MODIFY_AUDIO_SETTINGS` et la permission de signature `…DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` dans le manifeste de
   l'AAB (à contrôler au premier build : `bundletool dump manifest`). Un build
   de développement garde ces deux autorisations réseau : ne jamais vérifier
   cette phrase sur un build de développement.

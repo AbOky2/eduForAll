@@ -39,9 +39,13 @@ d'un fichier du dépôt, pas une intention.
   verrouillé par `tests/unit/app-config.test.ts` et par
   `scripts/tools/eas-release.sh`), comme `SYSTEM_ALERT_WINDOW` et le stockage
   externe.
-- [ ] **À contrôler sur le premier AAB** : il ne doit rester que `VIBRATE`
-  (retour haptique) et `MODIFY_AUDIO_SETTINGS` (lecture audio, aucun
-  enregistrement) — `bundletool dump manifest --bundle app.aab`, ou la page
+- [ ] **À contrôler sur le premier AAB** : il ne doit rester que `VIBRATE`
+  (retour haptique), `MODIFY_AUDIO_SETTINGS` (lecture audio, aucun
+  enregistrement) et `td.ecolna.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`
+  (niveau signature, ajoutée par androidx.core, invisible pour l'utilisateur).
+  Une `FOREGROUND_SERVICE` ou `FOREGROUND_SERVICE_MEDIA_PLAYBACK` venue des
+  bibliothèques media3 d'expo-audio est à bloquer dans `app.config.ts` (l'app
+  ne joue rien en arrière-plan) plutôt qu'à déclarer — `bundletool dump manifest --bundle app.aab`, ou la page
   « Autorisations » de l'app dans la Play Console.
 
 ## Confidentialité, visible et accessible

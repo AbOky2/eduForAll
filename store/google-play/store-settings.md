@@ -1,7 +1,7 @@
 <!-- Play Console → « Fiche Play Store » et « Paramètres de la fiche ».
      Limites de caractères : nom 30, description courte 80, description
      complète 4 000. Comptes réels (vérifiés par script) : nom 23, description
-     courte 78, description complète 3 407. Les tags et la catégorie sont des listes fermées.
+     courte 78, description complète 3 488. Les tags et la catégorie sont des listes fermées.
      Les coordonnées ne sont pas dupliquées ici : voir contact-details.md. -->
 
 # Paramètres de la fiche Play
@@ -12,7 +12,7 @@
 |---|---|---|
 | Nom de l'application | `ECOLNA : le CP tchadien` (23 car.) → `title-fr.md` | 30 |
 | Description courte | `short-description-fr.md` (78 car.) | 80 |
-| Description complète | `full-description-fr.md` (3 407 car., balises comprises) | 4 000 |
+| Description complète | `full-description-fr.md` (3 488 car., balises comprises) | 4 000 |
 | Icône | `graphics/icon-512.png` | 512 × 512 |
 | Image de mise en avant | `graphics/feature-graphic-1024x500.png` | 1024 × 500, sans transparence |
 | Captures téléphone et tablette | 8 plans de `../screenshots/plan.json` → `screenshot-plan.md` | 2 min. téléphone, 8 max. |

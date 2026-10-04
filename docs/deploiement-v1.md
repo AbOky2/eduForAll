@@ -363,7 +363,7 @@ ECOLNA_RELEASE=1 ECOLNA_ANDROID_PACKAGE=td.ecolna.app ECOLNA_IOS_BUNDLE_ID=td.ec
 |---|---|
 | Nom, version | `ECOLNA`, `1.0.0` (numéros de build gérés par EAS : `appVersionSource: remote`, `autoIncrement`) |
 | Identifiants | Android `td.ecolna.app`, iOS `td.ecolna.app` |
-| Permissions Android | `INTERNET`, `ACCESS_NETWORK_STATE`, `SYSTEM_ALERT_WINDOW`, `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` et `AD_ID` bloquées (revérifié le 4 octobre 2026 après l'ajout d'`ACCESS_NETWORK_STATE`) ; liste `permissions` vide au prebuild. Restent attendues dans l'AAB : `VIBRATE` et `MODIFY_AUDIO_SETTINGS` |
+| Permissions Android | `INTERNET`, `ACCESS_NETWORK_STATE`, `SYSTEM_ALERT_WINDOW`, `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` et `AD_ID` bloquées (revérifié le 4 octobre 2026 après l'ajout d'`ACCESS_NETWORK_STATE`) ; liste `permissions` vide au prebuild. Restent attendues dans l'AAB : `VIBRATE`, `MODIFY_AUDIO_SETTINGS` et `td.ecolna.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` (de niveau signature, ajoutée par androidx.core, invisible pour l'utilisateur) ; `expo-image` (inutilisée, qui apportait Glide et SDWebImage) est retirée. Si `FOREGROUND_SERVICE*` apparaît, la bloquer aussi |
 | Sauvegarde Android | `allowBackup: false` |
 | Orientation, tablette | `default` (les deux sens), `supportsTablet: true` |
 | Chiffrement | `ITSAppUsesNonExemptEncryption: false` (pas de question de conformité export à chaque build) |

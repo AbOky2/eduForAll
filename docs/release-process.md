@@ -48,7 +48,7 @@ build de développement :
 - [ ] **Tablette** : les deux orientations, en portrait et en paysage, sur les écrans accueil / carte / un exercice de chaque famille / résultat
 - [ ] `maestro test maestro/` sur appareil réel, y compris `06-tablet-rotation` (`appId` aligné sur le profil installé)
 - [ ] **Porte parentale** : deux ouvertures successives ne posent pas la même multiplication ; une erreur en affiche une autre ; un lien profond `ecolna:///dashboard`, app fermée puis rouverte, mène à la porte et non au tableau de bord
-- [ ] **Autorisations Android** du build livré : `bundletool dump manifest --bundle <app>.aab` (ou la page « Autorisations » de la Play Console) ne montre que `VIBRATE` et `MODIFY_AUDIO_SETTINGS` — ni `INTERNET`, ni `ACCESS_NETWORK_STATE`, ni `AD_ID`
+- [ ] **Autorisations Android** du build livré : `bundletool dump manifest --bundle <app>.aab` (ou la page « Autorisations » de la Play Console) ne montre que `VIBRATE`, `MODIFY_AUDIO_SETTINGS` et `td.ecolna.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` (de niveau signature, ajoutée par androidx.core, invisible pour l'utilisateur) — ni `INTERNET`, ni `ACCESS_NETWORK_STATE`, ni `AD_ID`, ni `FOREGROUND_SERVICE*` (à bloquer dans `app.config.ts` si elle apparaît : l'app ne joue rien en arrière-plan)
 - [ ] Comparaison visuelle avec `design/stitch/*.png` (docs/visual-qa.md)
 - [ ] **Captures de store comparées à l'app installée** : chacun des écrans de `store/screenshots/plan.json`, dans le même état ; tout écran qui diffère est remplacé par une capture d'appareil (`store/screenshots/README.md`, « La règle d'abord »)
 - [ ] Captures refaites si l’UI a changé depuis le dernier tournage (`scripts/tools/capture-store-screenshots.sh --composer`)

@@ -413,13 +413,16 @@ export const fr = {
     resetLastCheck: 'Dernière vérification : cette action supprime tout, définitivement.',
     /** Engagements de confidentialité, en français simple pour les parents. */
     privacyCommitments: [
-      'Toutes les données restent sur cet appareil. Rien n’est envoyé sur internet.',
+      'Les données sont enregistrées sur cet appareil. L’application n’envoie rien sur internet.',
       'Aucun compte, aucun e-mail, aucun mot de passe n’est demandé.',
       'Aucune publicité, aucun achat, aucun abonnement.',
       'Aucune géolocalisation, aucun accès aux contacts ni aux photos.',
-      'Le prénom et l’avatar servent uniquement à accueillir l’enfant dans l’application.',
-      'Supprimer l’application supprime toutes les données.',
+      'Le prénom et l’avatar servent à accueillir l’enfant. Seul un adulte peut partager un résumé ou un diagnostic, depuis l’espace parent.',
+      '« Réinitialiser la progression » ou supprimer l’application efface ces données.',
     ],
+    /** Sur iPhone et iPad seulement : la sauvegarde iCloud de l'appareil, que l'app ne contrôle pas. */
+    privacyIcloudNote:
+      'Sur iPhone et iPad, si la sauvegarde iCloud de l’appareil est activée, iOS peut y garder une copie de ces données. ECOLNA n’y a pas accès.',
     /**
      * Sous les engagements : l'adresse de la politique complète et le contact
      * de l'éditeur (store/shared/coordonnees-fiches.md), chacun sous son
@@ -438,6 +441,21 @@ export const fr = {
     diagnosticsNote:
       'L’export ne contient ni prénom, ni voix, ni position. Vous choisissez à qui l’envoyer.',
     diagnosticsUnknown: 'inconnue',
+    /** Le texte du diagnostic que l'adulte choisit de partager (aucun prénom, aucune réponse). */
+    diagnosticsExportText: (
+      info: { contentVersion: string; migrations: number; profiles: number; attempts: number },
+      warnings: string,
+    ) =>
+      [
+        'Diagnostic ECOLNA',
+        `Version du contenu : ${info.contentVersion}`,
+        `Migrations appliquées : ${info.migrations}`,
+        `Profils sur cet appareil : ${info.profiles}`,
+        `Réponses enregistrées : ${info.attempts}`,
+        '',
+        `Derniers avertissements :`,
+        warnings || 'aucun',
+      ].join('\n'),
   },
   errors: {
     genericTitle: 'Oups, quelque chose s’est mal passé.',

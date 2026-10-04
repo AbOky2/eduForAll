@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import { EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
@@ -8,7 +8,11 @@ import { fr } from '@/localization/fr/strings';
 import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
-const COMMITMENTS = fr.settings.privacyCommitments;
+// La sauvegarde iCloud n'existe que sur iPhone et iPad : la phrase ne s'affiche que là.
+const COMMITMENTS =
+  Platform.OS === 'ios'
+    ? [...fr.settings.privacyCommitments, fr.settings.privacyIcloudNote]
+    : fr.settings.privacyCommitments;
 
 /**
  * Les engagements de confidentialité, en français simple pour les parents,

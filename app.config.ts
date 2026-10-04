@@ -22,8 +22,8 @@ const EAS_PROJECT_ID =
  * Vrai pour tout build destiné à quelqu'un d'autre que le développeur
  * (profils preview, production, production-apk d'eas.json).
  *
- * INTERNET arrive par les manifestes d'`expo-file-system` et d'`expo-image`,
- * pas par React Native lui-même. La laisser dans une app pour enfants qui
+ * INTERNET arrive par le manifeste d'`expo-file-system` (et par ceux des
+ * bibliothèques qui s'y ajouteraient), pas par React Native lui-même. La laisser dans une app pour enfants qui
  * promet de ne jamais accéder au réseau serait une contradiction visible dans
  * la liste des autorisations du Play Store. Les trois autres ne sont plus
  * déclarées par les dépendances actuelles : les bloquer ne coûte rien et
@@ -61,10 +61,11 @@ const BLOCKED_PERMISSIONS = [
   // déclaration fausse — et une déclaration fausse démentie par le manifeste
   // est un retrait du programme Familles, pas un avertissement.
   'com.google.android.gms.permission.AD_ID',
-  // Déclarée par Glide (via expo-image) pour surveiller la connectivité :
-  // inutile dans une app sans réseau, et Play l'afficherait (« afficher les
-  // connexions réseau ») sous une fiche qui promet « sans internet ». Sans
-  // elle, Glide se passe simplement de cette surveillance.
+  // Déclarée par des bibliothèques d'images ou de réseau pour surveiller la
+  // connectivité (Glide, qui venait d'expo-image, retiré depuis) : inutile
+  // dans une app sans réseau, et Play l'afficherait (« afficher les connexions
+  // réseau ») sous une fiche qui promet « sans internet ». Bloquée par
+  // précaution, pour qu'une dépendance future ne la réintroduise pas.
   'android.permission.ACCESS_NETWORK_STATE',
 ];
 

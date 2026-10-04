@@ -20,6 +20,11 @@ chacun leur fichier ; ce document ne les recopie pas, il les situe.
 | SKU (100 car. max, interne, jamais affiché) | `ECOLNA-1000` |
 | Accès utilisateur | Accès complet (compte à un seul détenteur) |
 
+À la saisie du nom, vérifier que la console accepte l'espace insécable
+(U+00A0) devant les deux-points et l'affiche telle quelle. Si elle la refuse
+ou la remplace, taper une espace ordinaire : le nom fait toujours 30
+caractères, rien d'autre ne change.
+
 ### Pourquoi ce nom, et pas « ECOLNA » seul
 
 Le champ Nom est celui que la recherche App Store pondère le plus. « ECOLNA »
@@ -53,8 +58,7 @@ pour suivre le nom de la fiche.
 
 Le format du champ Copyright est celui demandé par Apple — l'année suivie du
 titulaire des droits, sans le symbole. La forme lisible
-« © 2026 Issa Oki ABDRAMANE » (25 caractères) sert partout ailleurs : écran
-« À propos », page de support, bannière. Selon les versions de la console, le
+« © 2026 Issa Oki ABDRAMANE » (25 caractères) peut servir ailleurs (bas de page de support, presse) ; elle n'est pas affichée dans l'app. Selon les versions de la console, le
 champ se trouve sur la page *Informations sur l'app* ou sur celle de la
 version — c'est le même champ, saisi une fois.
 
@@ -91,7 +95,7 @@ Les quatre valeurs que la console exige en même temps que les notes :
 | Téléphone | 🔴 À FOURNIR — format international, p. ex. `+33 6 XX XX XX XX`. **Non publié** : il ne sert qu'à joindre l'éditeur pendant l'examen |
 | E-mail | `issaokiabderamane@gmail.com` |
 | Connexion requise | **Non** — aucun compte, aucun identifiant de test à fournir |
-| Notes | le bloc de `review-notes-fr.md` (3 447 car. sur 4 000) |
+| Notes | le bloc de `review-notes-fr.md` (3 600 car. sur 4 000) |
 
 « Connexion requise : non » est le point à ne pas oublier : sans lui, un
 examinateur cherche un compte de démonstration qui n'existe pas, et la fiche

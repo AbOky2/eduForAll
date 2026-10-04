@@ -54,11 +54,15 @@ consoles, puis la vérification sur appareil, que personne n'a encore faite.
   recréée — une rotation en pleine leçon ne perd rien.
 - **Aucune autorisation réseau dans les builds livrés.** React Native déclare
   par défaut `INTERNET` (pour joindre Metro) et `SYSTEM_ALERT_WINDOW` (overlay
-  du menu dev), Glide (via expo-image) `ACCESS_NETWORK_STATE` : les trois sont
-  retirées des profils `preview` et `production`, avec les permissions de
+  du menu dev) ; `ACCESS_NETWORK_STATE` venait de Glide, via `expo-image`,
+  dépendance inutilisée retirée depuis : les trois sont retirées des profils `preview` et `production`, avec les permissions de
   stockage externe et `AD_ID`. Restent `VIBRATE` (retour haptique de fin
-  d'exercice) et `MODIFY_AUDIO_SETTINGS` (lecture audio), à confirmer sur le
-  manifeste du premier AAB. Une app pour enfants qui promet de ne jamais
+  d'exercice), `MODIFY_AUDIO_SETTINGS` (lecture audio) et
+  `td.ecolna.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` (niveau signature,
+  androidx.core, invisible pour l'utilisateur), à confirmer sur le manifeste
+  du premier AAB. Si `FOREGROUND_SERVICE` ou `FOREGROUND_SERVICE_MEDIA_PLAYBACK`
+  y apparaissent (bibliothèques media3 d'expo-audio), les bloquer aussi : l'app
+  ne joue rien en arrière-plan. Une app pour enfants qui promet de ne jamais
   accéder au réseau ne peut pas afficher « Accès Internet complet » ni
   « afficher les connexions réseau » dans la liste des autorisations du Play
   Store. Verrouillé par `tests/unit/app-config.test.ts` et par le script de
