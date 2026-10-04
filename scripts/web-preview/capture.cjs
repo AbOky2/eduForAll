@@ -10,6 +10,7 @@
 //   OUT=dossier   dossier des captures (défaut .cache/screens)
 //   REDUCED=1     préférence « mouvement réduit » du système
 //   WAIT=ms       attente avant chaque capture (défaut 1500)
+//   DPR=n         densité de pixels (défaut 1) : 3 pour l'iPhone, 2 pour l'iPad
 //
 // Playwright : `require('playwright')`, sinon PLAYWRIGHT_MODULE (chemin du
 // paquet). Chromium : celui de Playwright, ou CHROME_PATH.
@@ -30,6 +31,8 @@ const DEVICES = {
   'ipad-p': { width: 820, height: 1180 },
   'ipad13-l': { width: 1376, height: 1032 },
   phone: { width: 390, height: 844 },
+  // Les formats exacts des stores : iPhone 6,9" (×3 → 1320 × 2868).
+  iphone69: { width: 440, height: 956 },
   'phone-l': { width: 844, height: 390 },
   // Les tablettes Android du pilote : 7" et 10" en paysage, 7" en portrait.
   'tab7-l': { width: 1024, height: 600 },
@@ -123,6 +126,7 @@ async function seed(page) {
     ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}),
     args: process.getuid?.() === 0 ? ['--no-sandbox'] : [],
     viewport: DEVICES[list[0]],
+    deviceScaleFactor: Number(process.env.DPR ?? 1),
     // REDUCED=1 : mouvement réduit (les anneaux d'aide restent fixes 2 s).
     reducedMotion: process.env.REDUCED ? 'reduce' : 'no-preference',
   });
