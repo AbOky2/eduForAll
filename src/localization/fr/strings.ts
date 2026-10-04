@@ -42,13 +42,16 @@ export const fr = {
     welcomeTitle: 'Ton école t’accompagne partout.',
     /** Le mot du titre mis en couleur (il doit figurer dans `welcomeTitle`). */
     welcomeTitleHighlight: 't’accompagne',
+    // Espace insécable : « toi. » ne part jamais seul à la ligne.
+    welcomeSubtitle: 'Chaque jour, une petite leçon rien que pour toi.',
     subjectsTitle: 'Langage, lecture, écriture et calcul.',
     // Espace insécable : « t’amusant. » ne part jamais seul à la ligne.
     subjectsSubtitle: 'Tout ce dont tu as besoin pour apprendre en t’amusant.',
-    offlineTitle: 'Tout marche sans internet.',
+    // Espace insécable : « sans internet. » reste d'un tenant à la ligne.
+    offlineTitle: 'Tout marche sans internet.',
     offlineSubtitle: 'Apprends partout, tout le temps.',
     createProfile: 'Créer mon profil',
-    tagline: 'Apprendre partout, même sans internet',
+    tagline: 'Apprendre partout, même sans internet',
   },
   profile: {
     title: 'Crée ton profil',
@@ -74,9 +77,8 @@ export const fr = {
     adultNameHelp: 'Parent ou enseignant : écrivez le prénom de l’enfant (ou un surnom).',
     clearName: 'Effacer le prénom',
     slateIntro: 'Je m’appelle',
-    levelGloss: { CP1: '1re année', CP2: '2e année' },
     levelLabelA11y: { CP1: 'CP1, première année', CP2: 'CP2, deuxième année' },
-    levelAdultNote: 'Vous pourrez changer la classe plus tard dans l’espace parents.',
+    levelAdultNote: 'Vous pourrez changer la classe plus tard dans l’espace parents.',
     helpAvatar: 'Touche le personnage qui te ressemble.',
     helpName: 'Il manque ton prénom : demande à un adulte de t’aider.',
     helpLevel: 'Touche ta classe.',
@@ -146,6 +148,13 @@ export const fr = {
     lessonLockedHint: 'Commence d’abord la leçon du jour.',
     /** Le second volet du parcours, couché. */
     worldLessons: 'LES LEÇONS DE CE MONDE',
+    /** Lu sur le monde du jour, que coiffe le personnage de l'enfant. */
+    youAreHere: 'Tu es ici',
+    /** Ce que disent les points des mondes d'une porte, pour le lecteur d'écran. */
+    worldsDone: (done: number, total: number) =>
+      done === 0
+        ? `Aucun monde fini sur ${total}`
+        : `${done} monde${done > 1 ? 's' : ''} fini${done > 1 ? 's' : ''} sur ${total}`,
     /** Ce que fait un appui sur une porte ou un monde fermé. */
     lockedA11yHint: 'Explique pourquoi c’est fermé.',
     /** Ce qu'on fait dans chaque discipline, pour l'adulte qui lit l'écran. */
@@ -205,7 +214,11 @@ export const fr = {
     bravo: 'Bravo !',
     lessonDone: 'Tu as terminé la leçon.',
     perfect: 'Trois étoiles ! C’est parfait.',
-    oneMoreStar: 'Tu peux rejouer pour gagner plus d’étoiles.',
+    /**
+     * Deux étoiles : une louange, rien d'autre — l'invitation à rejouer est
+     * portée par le bouton « Rejouer », jamais par la première phrase après la fête.
+     */
+    oneMoreStar: 'Tu as bien travaillé !',
     // Espaces insécables : « tout va bien. » reste d'un seul tenant.
     needsReview: 'On reverra certaines notions ensemble, tout\u00a0va\u00a0bien.',
     nextLesson: 'Leçon suivante',
@@ -217,6 +230,8 @@ export const fr = {
     unlocked: 'Nouveau badge !',
     unlockedMany: 'Nouveaux badges !',
     lockedHint: 'Continue pour le découvrir.',
+    /** Le second rayon de l'étagère du profil : les médailles pas encore gagnées. */
+    toEarn: 'À gagner',
     countEarned: (earned: number, total: number) =>
       `${earned} badge${earned > 1 ? 's' : ''} sur ${total}`,
     /** Ce que voit l'enfant : ce qu'il a, jamais une fraction. */
@@ -290,7 +305,7 @@ export const fr = {
     gateEnter: 'Entrer',
     gateWrong: 'Ce n’est pas la bonne réponse.',
     dashboardTitle: (firstName: string) => `Tableau de bord ${of(firstName)}`,
-    dashboardSubtitle: 'Suivez sa progression et ses accomplissements récents.',
+    dashboardSubtitle: 'Suivez sa progression et ses réussites.',
     currentLevel: 'Niveau actuel',
     lessonsCompleted: 'Leçons terminées',
     timeToday: 'Temps aujourd’hui',
@@ -300,7 +315,6 @@ export const fr = {
     bySubject: 'Par discipline',
     subjectLessons: (done: number, total: number) =>
       `${done} leçon${done > 1 ? 's' : ''} sur ${total}`,
-    percent: (value: number) => `${value}\u00a0%`,
     recommendation: 'RECOMMANDATION',
     toReview: 'Notions à revoir',
     nothingToReview: 'Aucune notion en difficulté cette semaine.',
@@ -311,6 +325,8 @@ export const fr = {
     /** Ce que lit le lecteur d'écran pour chaque colonne. */
     weekDays: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
     weekDayLabel: (day: string, count: number) => `${day}\u00a0: ${count} min`,
+    /** Un jour pas encore vécu : ni « 0 min », ni colonne. */
+    weekDayUpcoming: (day: string) => `${day}\u00a0: à venir`,
     share: 'Partager',
     /** Le résumé que le parent partage (feuille de partage du système, rien n'est envoyé par l'app). */
     shareMessage: (firstName: string, done: number, total: number, level: string) =>
@@ -326,7 +342,15 @@ export const fr = {
     comingSoon: 'Bientôt disponible',
     offlineInfo: 'Sans internet',
     offlineStatus: 'Tout est téléchargé',
-    about: 'À propos du projet',
+    about: 'À propos',
+    /** La version de l'application, dans la carte « À propos ». */
+    aboutVersion: (version: string) => `Version ${version}`,
+    /**
+     * La source officielle : le titre EXACT de `OFFICIAL_SOURCE.title`
+     * (src/content/curriculum/official-program.ts) — un test le vérifie.
+     */
+    aboutCompliance: 'Conforme aux « Programmes Réactualisés de l’Enseignement Primaire »',
+    aboutSource: 'MEN / Centre national des curricula, N’Djaména, 2004',
     privacy: 'Confidentialité',
     diagnostics: 'Diagnostic',
     resetProgress: 'Réinitialiser la progression',

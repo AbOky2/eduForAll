@@ -3,8 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { BadgeArt, type BadgeArtId } from '../illustrations/badge-art';
 import { EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
-import { colors, radius, spacing } from '../tokens';
-import { typography } from '../tokens/typography';
+import { colors, spacing } from '../tokens';
+
+/** Les tailles de nom possibles : l'étagère (petit), la célébration (grand). */
+export type BadgeLabelVariant = 'labelSm' | 'labelMd' | 'labelLg';
 
 interface BadgeTileProps {
   id: BadgeArtId;
@@ -18,21 +20,27 @@ interface BadgeTileProps {
   onDark?: boolean | undefined;
   /**
    * Toute la largeur de sa cellule (étagère du profil) : le nom tient sur une
-   * ligne quand il le peut, et chaque tuile réserve deux lignes — les rangées
-   * de l'étagère gardent la même hauteur, quel que soit le nom.
+   * ligne quand il le peut. Les cases d'une rangée s'étirent à la plus haute
+   * et la médaille est en tête : les médailles d'une rangée restent alignées,
+   * sans ligne vide réservée sous les noms courts.
    */
   fill?: boolean | undefined;
-  /**
-   * `inline` : la médaille et son nom côte à côte, dans une puce de verre —
-   * la rangée compacte de la célébration.
-   */
-  layout?: 'stack' | 'inline' | undefined;
+  /** La taille du nom (défaut : `labelSm`, l'étagère). */
+  labelVariant?: BadgeLabelVariant | undefined;
+  /** Une largeur imposée (la case d'une rangée de médailles), plutôt que `badgeTileWidth`. */
+  width?: number | undefined;
+}
+
+/** La largeur d'une tuile libre : la médaille et un peu d'air, jamais moins de 96 dp. */
+export function badgeTileWidth(size: number): number {
+  return Math.max(96, size + 24);
 }
 
 /**
- * Une médaille de la collection (brief v2 § 9). Verrouillée, elle garde sa
- * forme, sa famille (en pâle) et son nom, et dit ce qu'il faut faire pour
- * l'obtenir : un badge est un objectif, jamais une boîte mystère.
+ * Une médaille de la collection (brief v2 § 9) : le médaillon, son nom
+ * dessous, deux lignes au plus. Verrouillée, elle garde sa forme, sa famille
+ * (en pâle) et son nom, et dit ce qu'il faut faire pour l'obtenir : un badge
+ * est un objectif, jamais une boîte mystère.
  */
 export function BadgeTile({
   id,
@@ -43,55 +51,29 @@ export function BadgeTile({
   size = 64,
   onDark = false,
   fill = false,
-  layout = 'stack',
+  labelVariant = 'labelSm',
+  width,
 }: BadgeTileProps) {
   const { scale } = useResponsive();
   const accessibilityLabel = `${label}. ${earned ? description : `${description} ${lockedHint}`}`;
 
-  if (layout === 'inline') {
-    return (
-      <View
-        style={[
-          styles.inline,
-          {
-            backgroundColor: onDark ? colors.onColorGlass : colors.fill,
-            gap: scaled(spacing.xs, scale),
-            paddingVertical: scaled(spacing.xxs, scale),
-            paddingLeft: scaled(spacing.xxs, scale),
-            paddingRight: scaled(spacing.md, scale),
-          },
-        ]}
-        accessibilityRole="image"
-        accessibilityLabel={accessibilityLabel}
-      >
-        <BadgeArt id={id} earned={earned} size={size} />
-        <EcolnaText variant="labelLg" color={onDark ? colors.white : colors.textPrimary} numberOfLines={1}>
-          {label}
-        </EcolnaText>
-      </View>
-    );
-  }
-
-  // Deux lignes réservées : « Premiers pas » et « Trois jours de suite » font
-  // des tuiles de même hauteur.
-  const twoLines = 2 * scaled(typography.labelSm.lineHeight, scale);
   return (
     <View
       // Jamais plus large que sa cellule : le nom passe sur deux lignes, jamais sur la voisine.
       style={[
         styles.tile,
-        fill ? styles.fill : { width: Math.max(96, size + 24), maxWidth: '100%' },
+        fill ? styles.fill : { width: width ?? badgeTileWidth(size), maxWidth: '100%' },
+        labelVariant === 'labelSm' ? undefined : { gap: scaled(spacing.xs, scale) },
       ]}
       accessibilityRole="image"
       accessibilityLabel={accessibilityLabel}
     >
       <BadgeArt id={id} earned={earned} size={size} />
       <EcolnaText
-        variant="labelSm"
+        variant={labelVariant}
         align="center"
         color={onDark ? colors.white : earned ? colors.textPrimary : colors.textSecondary}
         numberOfLines={2}
-        style={fill ? { minHeight: twoLines } : undefined}
       >
         {label}
       </EcolnaText>
@@ -102,5 +84,4 @@ export function BadgeTile({
 const styles = StyleSheet.create({
   tile: { alignItems: 'center', gap: spacing.xxs, paddingHorizontal: spacing.xxs, alignSelf: 'center' },
   fill: { width: '100%' },
-  inline: { flexDirection: 'row', alignItems: 'center', borderRadius: radius.pill },
 });

@@ -9,6 +9,7 @@ import {
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { spacing } from '@/design-system/tokens';
@@ -32,6 +33,7 @@ export function MiniStoryExercise({
   const [pressedId, setPressedId] = useState<string | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
+  const cardState = useAnswerCardState(interactive);
 
   useEffect(() => {
     playAudio(step.storyAudioId);
@@ -62,7 +64,7 @@ export function MiniStoryExercise({
           key={choice.id}
           label={choice.label}
           glyph={false}
-          state={interactive ? 'default' : pressedId === choice.id ? 'selected' : 'disabled'}
+          state={cardState(pressedId === choice.id)}
           onPress={() => {
             setPressedId(choice.id);
             onSubmit({ kind: 'choice', choiceId: choice.id });

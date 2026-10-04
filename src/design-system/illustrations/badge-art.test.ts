@@ -13,9 +13,9 @@ function luminance(hex: string): number {
 describe('médailles à gagner', () => {
   const greys: string[] = [colors.fill, colors.fillStrong, colors.inkDisabled];
 
-  it.each([...BADGE_ART_IDS])('%s garde sa famille, en pâle — jamais le gris', (id) => {
+  it.each([...BADGE_ART_IDS])('%s : couronne neutre, mais la famille vit dans son cœur — jamais tout gris', (id) => {
     const locked = badgeTone(id, false);
-    expect(greys).not.toContain(locked.ring);
+    expect(locked.ring).toBe(colors.fill);
     expect(greys).not.toContain(locked.core);
     expect(greys).not.toContain(locked.glyph);
     expect(locked.core).toMatch(/^#[0-9a-f]{6}$/i);
@@ -26,13 +26,23 @@ describe('médailles à gagner', () => {
     (id) => {
       const earned = badgeTone(id, true);
       const locked = badgeTone(id, false);
-      // Le cœur pâle est nettement plus clair que le cœur plein…
+      // Gagnée, la couronne est teintée de sa famille ; à gagner, elle est neutre…
+      expect(greys).not.toContain(earned.ring);
+      expect(earned.ring).not.toBe(locked.ring);
+      // … le cœur pâle est nettement plus clair que le cœur plein…
       expect(luminance(locked.core)).toBeGreaterThan(luminance(earned.core) + 0.1);
       // … et le pictogramme est atténué, quand celui de la médaille gagnée est franc.
       expect(earned.glyphOpacity).toBe(1);
       expect(locked.glyphOpacity).toBeLessThan(1);
     },
   );
+
+  it('même dans la famille soleil, le cœur à gagner ne se lit plus comme un or', () => {
+    // « Trois jours de suite » (gagnée) et « Cinq sans faute » (à gagner).
+    const earned = badgeTone('streak-three', true);
+    const locked = badgeTone('five-perfect', false);
+    expect(luminance(locked.core)).toBeGreaterThan(luminance(earned.core) + 0.25);
+  });
 });
 
 describe('points de palier', () => {

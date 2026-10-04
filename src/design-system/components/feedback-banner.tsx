@@ -24,9 +24,10 @@ interface FeedbackBannerProps {
 /**
  * La feuille de retour (v4) : elle monte du bas, sur toute la largeur, dans
  * la teinte du verdict ; son contenu reste borné à la colonne de lecture.
- * Juste : vert, une coche blanche dans un disque, le soleil « Continuer ». À
- * revoir : le bleu calme de la marque, une flèche de reprise, « Réessayer » —
- * jamais une croix rouge, jamais un son qui gronde. Elle monte d'un ressort
+ * Juste : vert, une coche blanche dans un disque, le soleil « Continuer » et
+ * sa flèche (avancer n'est pas écouter : ▶ reste à « Commencer »). À revoir :
+ * le bleu calme de la marque, une flèche de reprise, « Réessayer » — jamais
+ * une croix rouge, jamais un son qui gronde. Elle monte d'un ressort
  * court (instantanée en mouvement réduit).
  */
 export function FeedbackBanner({
@@ -145,13 +146,13 @@ export function FeedbackBanner({
         <EcolnaButton
           label={actionLabel}
           variant={forward ? 'primary' : 'accent'}
-          // Un pictogramme pour qui ne lit pas encore : avancer, ou recommencer.
+          // Un pictogramme pour qui ne lit pas encore : avancer (une flèche —
+          // ▶ voudrait dire « lire le son »), ou recommencer.
           icon={
             <EcolnaIcon
-              name={forward ? 'play' : 'replay'}
+              name={forward ? 'arrow-forward' : 'replay'}
               size={scaled(20, scale)}
               color={forward ? colors.onReward : colors.white}
-              filled={forward}
             />
           }
           onPress={onAction}

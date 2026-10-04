@@ -37,7 +37,7 @@ import { NudgeRing } from '@/design-system/components/nudge-ring';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { EcolnaButton, EcolnaIconButton, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { a11y, colors, fontFamilies, radius, spacing } from '@/design-system/tokens';
+import { colors, fontFamilies, radius, spacing } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 import { useKeyboardVisible } from '@/shared/hooks/use-keyboard-visible';
 
@@ -210,23 +210,35 @@ export default function CreateProfileScreen() {
     : Math.round(Math.min(stageHeight * (isTablet ? 0.52 : 0.44), isTablet ? 260 : 96));
   // Le bouton retour : même place et même taille que sur tous les écrans
   // (EcolnaScreenHeader) — la gouttière, en haut à gauche de l'écran.
-  const backSize = Math.max(a11y.minTouchTarget, scaled(52, scale));
   const backTop = (splitPanes ? insets.top : 0) + spacing.sm;
   const panelWidth = splitPanes ? width - stageWidth : width;
-  // Un demi-écran : sa propre marge, pas la gouttière de tout l'écran.
-  const panelPadding = splitPanes ? scaled(spacing.xl, scale) : screenPadding;
-  const panelInner = Math.min(panelWidth - panelPadding * 2, 760);
+  // À gauche, le volet s'écarte de la scène de sa propre marge ; à droite, il
+  // s'arrête sur la gouttière de l'écran : le bouton, la grille et les cartes
+  // de classe tombent sur la même verticale que « Passer » et le bouton de
+  // l'onboarding, l'écran d'avant.
+  const panelPadLeft = splitPanes ? scaled(spacing.xl, scale) : screenPadding;
+  const panelInner = Math.min(panelWidth - panelPadLeft - screenPadding, 760);
   const gap = scaled(spacing.lg, scale);
+  // L'indicateur d'étapes, au pied du volet au-dessus du bouton, comme dans
+  // l'onboarding ; masqué quand le clavier ou la hauteur manquent.
+  const showDots = !compact && step !== 'welcome';
+  const dotsRoom = scaled(10, scale) + scaled(spacing.md, scale);
 
   // Les douze personnages tiennent sans défiler, de la 7" couchée au
   // téléphone : la grille (trois rangées de quatre sur tablette, quatre de
   // trois au téléphone) prend la hauteur que laissent la scène ou le haut du
   // volet, le titre et le bouton — et pas davantage que sa colonne.
   const gridRows = isTablet ? 3 : 4;
-  const topRoom = splitPanes ? backTop + backSize : stageHeight + spacing.md + 10;
+  // En deux volets, le haut du volet est libre (le retour est sur la scène) :
+  // la colonne s'y centre, avec la même marge haute que le retour.
+  const topRoom = splitPanes ? backTop : stageHeight + spacing.md;
   const titleRoom = scaled(isTablet ? 40 : 34, scale);
   const footerRoom =
-    spacing.sm + scaled(60, scale) + Math.max(insets.bottom, spacing.md) + spacing.xs;
+    spacing.sm +
+    dotsRoom +
+    scaled(60, scale) +
+    Math.max(insets.bottom, spacing.md) +
+    spacing.xs;
   const gridRoom = usableHeight - topRoom - spacing.lg * 2 - titleRoom - gap - footerRoom;
   const tileExtra = 2 * (2 * scaled(4, scale) + 2);
   const fitAvatar = Math.floor(
@@ -366,13 +378,6 @@ export default function CreateProfileScreen() {
             ))}
           </View>
         </NudgeRing>
-        {/* Une phrase pour l'adulte, marquée comme telle (vouvoiement, pictogramme parents). */}
-        <View style={[styles.adultRow, styles.center]}>
-          <EcolnaIcon name="parents" size={20} color={colors.textSecondary} />
-          <EcolnaText variant="bodySm" color={colors.textSecondary}>
-            {fr.profile.levelAdultNote}
-          </EcolnaText>
-        </View>
       </View>
     ) : null;
 
@@ -380,14 +385,14 @@ export default function CreateProfileScreen() {
     <View
       style={[
         styles.panel,
-        { paddingHorizontal: panelPadding, paddingTop: splitPanes ? backTop : spacing.md },
+        {
+          paddingLeft: panelPadLeft,
+          paddingRight: screenPadding,
+          paddingTop: splitPanes ? backTop : spacing.md,
+        },
       ]}
       pointerEvents="box-none"
     >
-      {/* Les points d'étape, à la hauteur du bouton retour en deux volets. */}
-      <View style={[styles.topRow, { width: panelInner, minHeight: splitPanes ? backSize : 0 }]}>
-        {!compact && step !== 'welcome' ? <StepDots step={stepNumber} total={3} /> : null}
-      </View>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[styles.panelScroll, { gap }]}
@@ -414,10 +419,31 @@ export default function CreateProfileScreen() {
           </View>
         </FadeIn>
       </ScrollView>
-      {/* Le bouton d'étape reste au pied du panneau : il ne passe jamais sous
-          la grille, un enfant ne fait pas défiler pour le chercher. */}
+      {/* Le pied du volet : la phrase pour l'adulte (étape de la classe), les
+          points d'étape, puis le bouton — il ne passe jamais sous la grille,
+          un enfant ne fait pas défiler pour le chercher. */}
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, spacing.md) + spacing.xs }]}>
         <View style={{ width: panelInner }}>
+          {step === 'level' && !compact ? (
+            // Pour l'adulte, et marquée comme telle (vouvoiement, pictogramme
+            // parents) : loin du choix de l'enfant, en petit et en retrait.
+            <View
+              style={[
+                styles.adultRow,
+                { marginTop: scaled(spacing.xxl, scale), marginBottom: scaled(spacing.lg, scale) },
+              ]}
+            >
+              <EcolnaIcon name="parents" size={scaled(18, scale)} color={colors.inkTertiary} />
+              <EcolnaText variant="bodySm" color={colors.inkTertiary} style={styles.flex}>
+                {fr.profile.levelAdultNote}
+              </EcolnaText>
+            </View>
+          ) : null}
+          {showDots ? (
+            <View style={{ marginBottom: scaled(spacing.md, scale) }}>
+              <StepDots step={stepNumber} total={3} />
+            </View>
+          ) : null}
           {step !== 'welcome' || goVisible ? (
             <EcolnaButton label={action} onPress={advance} disabled={saving} />
           ) : null}
@@ -491,12 +517,10 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   row: { flexDirection: 'row' },
   panel: { flex: 1 },
-  topRow: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center' },
   back: { position: 'absolute', zIndex: 2 },
   panelScroll: { flexGrow: 1, justifyContent: 'center', paddingVertical: spacing.lg },
   stepColumn: { alignSelf: 'center' },
   adultRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  center: { alignSelf: 'center' },
   inputRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   input: {
     flex: 1,
@@ -508,6 +532,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     paddingHorizontal: spacing.lg,
   },
-  levelRow: { flexDirection: 'row', justifyContent: 'center' },
+  // Les cartes partent du bord gauche du titre, comme les points et le bouton.
+  levelRow: { flexDirection: 'row', justifyContent: 'flex-start' },
   footer: { alignItems: 'center', paddingTop: spacing.sm },
 });

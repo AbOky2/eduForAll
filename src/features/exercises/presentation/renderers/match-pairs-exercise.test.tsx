@@ -1,7 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import type { ReactTestInstance } from 'react-test-renderer';
+import { Circle } from 'react-native-svg';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
-import { AnswerVerdictContext } from '@/design-system/primitives';
+import { AnswerVerdictContext, ExerciseSubjectContext } from '@/design-system/primitives';
+import { colors, subjectColors } from '@/design-system/tokens';
 
 import {
   MatchPairsExercise,
@@ -126,6 +129,56 @@ describe('MatchPairsExercise', () => {
     fireEvent.press(screen.getByLabelText('o'));
     expect(playAudio).not.toHaveBeenCalled();
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+
+/** Les ancêtres d'une carte qui écoutent leur mise en page : case, colonne, rangée, ancre. */
+function measuredAncestors(card: ReactTestInstance): ReactTestInstance[] {
+  const found: ReactTestInstance[] = [];
+  for (let node = card.parent; node; node = node.parent) {
+    if (typeof node.type === 'string' && typeof node.props.onLayout === 'function') {
+      found.push(node);
+    }
+  }
+  return found;
+}
+
+function layout(node: ReactTestInstance, y: number, width: number, height: number): void {
+  fireEvent(node, 'layout', { nativeEvent: { layout: { x: 0, y, width, height } } });
+}
+
+describe('MatchPairsExercise — points d’accroche', () => {
+  it('shows a resting hook in the subject’s pale tint, ringed with its strong tint; blue when chosen', () => {
+    render(
+      <ExerciseSubjectContext.Provider value="reading">
+        <MatchPairsExercise
+          step={step}
+          interactive
+          onSubmit={jest.fn()}
+          playAudio={jest.fn()}
+          playingAudioId={null}
+        />
+      </ExerciseSubjectContext.Provider>,
+    );
+    const [, column, row] = measuredAncestors(screen.getByLabelText('o'));
+    layout(row!, 0, 1000, 420);
+    layout(column!, 0, 364, 420);
+    ['o', 'u', 'e', 'moto', 'lune', 'melon'].forEach((label, index) => {
+      const [cell] = measuredAncestors(screen.getByLabelText(label));
+      layout(cell!, (index % 3) * 150, 364, 124);
+    });
+
+    const dots = () => screen.UNSAFE_getAllByType(Circle).map((circle) => circle.props);
+    expect(dots()).toHaveLength(6);
+    for (const dot of dots()) {
+      expect(dot.fill).toBe(subjectColors.reading.tint);
+      expect(dot.stroke).toBe(subjectColors.reading.tintStrong);
+      // Bien visible au repos : environ 30 dp de diamètre sur tablette.
+      expect(2 * (dot.r as number)).toBeGreaterThanOrEqual(24);
+    }
+
+    fireEvent.press(screen.getByLabelText('o'));
+    expect(dots().filter((dot) => dot.fill === colors.brand)).toHaveLength(1);
   });
 });
 

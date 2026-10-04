@@ -9,6 +9,7 @@ import {
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
 import { QuantityCard, QuantityGroup } from '@/design-system/components/quantity-group';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
@@ -165,6 +166,7 @@ export function MathExercise({
   const [pressed, setPressed] = useState<number | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
+  const cardState = useAnswerCardState(interactive);
   // Objets à compter : suivent la classe de fenêtre comme la typographie.
   const iconSize = scaled(isTablet ? 52 : 38, scale);
   const cell = scaled(isTablet ? 72 : 56, scale);
@@ -266,7 +268,7 @@ export function MathExercise({
           key={`${option}-${index}`}
           label={String(option)}
           glyphVariant={metrics.answerGlyph}
-          state={interactive ? 'default' : pressed === option ? 'selected' : 'disabled'}
+          state={cardState(pressed === option)}
           onPress={() => submit(option)}
           style={[styles.numberCard, { maxWidth: metrics.tileWidth * 1.3 }]}
           contentStyle={{ minHeight: metrics.answerHeight }}

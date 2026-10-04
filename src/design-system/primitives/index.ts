@@ -2,7 +2,7 @@ export { EcolnaText } from './ecolna-text';
 export { EcolnaScreen } from './ecolna-screen';
 export { EcolnaButton } from './ecolna-button';
 export { EcolnaCard } from './ecolna-card';
-export { AnswerVerdictContext, EcolnaAnswerCard } from './ecolna-answer-card';
+export { AnswerVerdictContext, EcolnaAnswerCard, useAnswerCardState } from './ecolna-answer-card';
 export type { AnswerCardState } from './ecolna-answer-card';
 export { EcolnaProgressBar } from './ecolna-progress-bar';
 export { EcolnaSegmentedProgress } from './ecolna-segmented-progress';

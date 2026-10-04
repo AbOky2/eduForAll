@@ -6,11 +6,17 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   AnswerVerdictContext,
   EcolnaAnswerCard,
+  ExerciseSubjectContext,
   useExerciseMetrics,
   type AnswerCardState,
 } from '@/design-system/primitives';
-import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, pairTints, spacing } from '@/design-system/tokens';
+import {
+  ExerciseAnchor,
+  answersRoom,
+  fitAnswerHeight,
+} from '@/design-system/primitives/ecolna-exercise-layout';
+import { scaled, useResponsive, useTypography } from '@/design-system/responsive';
+import { a11y, colors, pairTints, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -25,6 +31,9 @@ export interface PairLink {
   matchedPairId: string;
   slot: number;
 }
+
+/** Filet d'une carte au repos, de chaque côté (voir `EcolnaAnswerCard`). */
+const CARD_BORDER = 2;
 
 /** Le choix en cours : le bleu du choix, comme toute réponse choisie. */
 const SELECTING = {
@@ -92,6 +101,7 @@ export function MatchPairsExercise({
   );
 
   const verdict = useContext(AnswerVerdictContext);
+  const subject = useContext(ExerciseSubjectContext);
   const [selected, setSelected] = useState<{ side: Side; id: string } | null>(null);
   const [links, setLinks] = useState<PairLink[]>([]);
 
@@ -104,20 +114,52 @@ export function MatchPairsExercise({
 
   const metrics = useExerciseMetrics();
   const { splitPanes, isTablet, scale, contentMaxWidth } = useResponsive();
-  // La gouttière où se tirent les traits : assez large pour qu'un trait se lise comme un geste.
+  // Le couloir où se tirent les traits : au moins cette largeur, et tout ce
+  // que les cartes laissent — plafonnées, elles élargissent le geste.
   const link = Math.round(metrics.gap * (splitPanes ? 7 : isTablet ? 5 : 3));
-  const dot = scaled(8, scale);
+  const cardMaxWidth = scaled(280, scale);
+  // Un point d'accroche bien visible au repos (≈ 30 dp sur tablette).
+  const dot = scaled(12, scale);
   const ring = 2;
   // Le calque des traits déborde d'un point de chaque côté : les points
   // d'accroche sont à cheval sur le filet des cartes.
   const reach = dot + ring;
   const stroke = Math.max(4, scaled(5, scale));
-  // Couchée, trois rangées tiennent au-dessus de la feuille de retour : le
-  // verdict de chaque paire reste visible pendant qu'elle est ouverte.
-  const cardHeight = splitPanes ? Math.round(metrics.answerHeight * 0.78) : metrics.answerHeight;
+  // Les rangées tiennent au-dessus de la feuille de retour : le verdict de
+  // chaque paire reste visible pendant qu'elle est ouverte. Trop bas (7"
+  // couchée), l'écart se resserre, puis le glyphe passe à sa petite taille.
+  const typography = useTypography();
+  const room = answersRoom(metrics, false, 'max');
+  const facePadding = scaled(spacing.xs, scale);
+  const minGap = scaled(spacing.sm, scale);
+  const glyphCard = (variant: typeof metrics.answerGlyph) =>
+    (typography[variant].lineHeight ?? 0) + 2 * (facePadding + CARD_BORDER);
+  const fits = (height: number) => !(room > 0) || total * height + (total - 1) * minGap <= room;
+  const glyphVariant = fits(glyphCard(metrics.answerGlyph))
+    ? metrics.answerGlyph
+    : 'displayGlyphSmall';
+  const cardHeight = Math.max(
+    glyphCard(glyphVariant),
+    fitAnswerHeight({
+      preferred: splitPanes ? Math.round(metrics.answerHeight * 0.78) : metrics.answerHeight,
+      room,
+      rows: total,
+      gap: minGap,
+      min: scaled(a11y.childTouchTarget + 8, scale),
+    }),
+  );
+  const rowGap =
+    room > 0
+      ? Math.max(
+          minGap,
+          Math.min(metrics.gap, Math.floor((room - total * cardHeight) / Math.max(1, total - 1))),
+        )
+      : metrics.gap;
   // Le centre vertical de chaque carte (dans sa colonne), pour tirer les traits.
   const [centers, setCenters] = useState<Record<string, number>>({});
   const [columnWidth, setColumnWidth] = useState(0);
+  const [rowWidth, setRowWidth] = useState(0);
+  const corridor = Math.max(link, rowWidth - 2 * columnWidth);
   const measure = (key: string) => (event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout;
     const center = Math.round(y + height / 2);
@@ -178,7 +220,7 @@ export function MatchPairsExercise({
     return {
       label: text,
       glyph: text.length <= 6,
-      glyphVariant: metrics.answerGlyph,
+      glyphVariant,
       state,
       tint: wrong ? undefined : pairLink ? tintOf(pairLink.slot) : SELECTING,
       mark: pairLink?.slot.toString(),
@@ -187,122 +229,128 @@ export function MatchPairsExercise({
         : pairLink
           ? fr.lesson.pairLabel(text, pairLink.slot)
           : text,
-      contentStyle: { minHeight: cardHeight, paddingVertical: scaled(spacing.xs, scale) },
+      contentStyle: { minHeight: cardHeight, paddingVertical: facePadding },
       onPress: () => press(side, id, text),
     };
   };
 
-  // Le point d'accroche : blanc et fileté au repos (le filet de la carte),
-  // bleu au choix et à revoir, teinte de la paire une fois relié.
+  // Le point d'accroche : la teinte pâle de la discipline cerclée de sa
+  // teinte soutenue au repos (il se voit sans crier), bleu au choix et à
+  // revoir, teinte de la paire une fois relié.
+  const rest = subject
+    ? { fill: subjectColors[subject].tint, ring: subjectColors[subject].tintStrong }
+    : { fill: colors.fill, ring: colors.borderStrong };
   const dotLook = (pairLink: PairLink | undefined, choosing: boolean) =>
     isWrong(pairLink) || (choosing && !pairLink)
       ? { fill: colors.brand, ring: colors.white }
       : pairLink
         ? { fill: tintOf(pairLink.slot).border, ring: colors.white }
-        : { fill: colors.white, ring: colors.borderStrong };
+        : rest;
 
   // Abscisses, dans le calque : le milieu du filet de 2 dp de chaque carte.
   const leftX = reach - 1;
-  const rightX = reach + link + 1;
+  const rightX = reach + corridor + 1;
 
   return (
-    // Ancré sous la consigne comme tout exercice : un tiers de l'air au-dessus,
-    // deux tiers au-dessous (EcolnaExerciseLayout).
+    // Ancré sous la consigne comme tout exercice (air 1:1,25, jamais sous la
+    // feuille de retour) ; le corps y est mesuré.
     <View style={[styles.container, { maxWidth: contentMaxWidth }]}>
-      <View style={styles.above} />
-      <View style={[styles.columns, { gap: link }]}>
+      <ExerciseAnchor onLayout={metrics.onBodyLayout}>
         <View
-          style={[styles.column, { gap: metrics.gap }]}
-          onLayout={(event) => setColumnWidth(Math.round(event.nativeEvent.layout.width))}
+          style={[styles.columns, { gap: link }]}
+          onLayout={(event) => setRowWidth(Math.round(event.nativeEvent.layout.width))}
         >
-          {step.pairs.map((pair) => (
-            <View key={pair.id} onLayout={measure(`l-${pair.id}`)}>
-              <EcolnaAnswerCard {...cardProps('left', pair.id, pair.left)} />
-            </View>
-          ))}
-        </View>
-        <View style={[styles.column, { gap: metrics.gap }]}>
-          {rightShuffled.map((pair) => (
-            <View key={pair.id} onLayout={measure(`r-${pair.id}`)}>
-              <EcolnaAnswerCard {...cardProps('right', pair.id, pair.right)} />
-            </View>
-          ))}
-        </View>
-        {/* Les traits et les points d'accroche, par-dessus le bord des cartes. */}
-        {columnWidth > 0 ? (
           <View
-            pointerEvents="none"
-            style={[styles.links, { left: columnWidth - reach, width: link + 2 * reach }]}
+            style={[styles.column, { gap: rowGap, maxWidth: cardMaxWidth }]}
+            onLayout={(event) => setColumnWidth(Math.round(event.nativeEvent.layout.width))}
           >
-            <Svg width="100%" height="100%">
-              {board.map((pairLink) => {
-                const from = centers[`l-${pairLink.pairId}`];
-                const to = centers[`r-${pairLink.matchedPairId}`];
-                const wrong = isWrong(pairLink);
-                return from !== undefined && to !== undefined ? (
-                  <Line
-                    key={pairLink.pairId}
-                    x1={leftX}
-                    y1={from}
-                    x2={rightX}
-                    y2={to}
-                    stroke={wrong ? colors.brand : tintOf(pairLink.slot).border}
-                    strokeWidth={stroke}
-                    strokeLinecap="round"
-                    {...(wrong ? { strokeDasharray: [stroke * 1.6, stroke * 1.8] } : {})}
-                  />
-                ) : null;
-              })}
-              {step.pairs.flatMap((pair) => {
-                const left = centers[`l-${pair.id}`];
-                const right = centers[`r-${pair.id}`];
-                const leftLook = dotLook(
-                  byLeft.get(pair.id),
-                  selected?.side === 'left' && selected.id === pair.id,
-                );
-                const rightLook = dotLook(
-                  byRight.get(pair.id),
-                  selected?.side === 'right' && selected.id === pair.id,
-                );
-                return [
-                  left !== undefined ? (
-                    <Circle
-                      key={`l-${pair.id}`}
-                      cx={leftX}
-                      cy={left}
-                      r={dot}
-                      fill={leftLook.fill}
-                      stroke={leftLook.ring}
-                      strokeWidth={ring}
-                    />
-                  ) : null,
-                  right !== undefined ? (
-                    <Circle
-                      key={`r-${pair.id}`}
-                      cx={rightX}
-                      cy={right}
-                      r={dot}
-                      fill={rightLook.fill}
-                      stroke={rightLook.ring}
-                      strokeWidth={ring}
-                    />
-                  ) : null,
-                ];
-              })}
-            </Svg>
+            {step.pairs.map((pair) => (
+              <View key={pair.id} onLayout={measure(`l-${pair.id}`)}>
+                <EcolnaAnswerCard {...cardProps('left', pair.id, pair.left)} />
+              </View>
+            ))}
           </View>
-        ) : null}
-      </View>
-      <View style={styles.below} />
+          <View style={[styles.column, { gap: rowGap, maxWidth: cardMaxWidth }]}>
+            {rightShuffled.map((pair) => (
+              <View key={pair.id} onLayout={measure(`r-${pair.id}`)}>
+                <EcolnaAnswerCard {...cardProps('right', pair.id, pair.right)} />
+              </View>
+            ))}
+          </View>
+          {/* Les traits et les points d'accroche, par-dessus le bord des cartes. */}
+          {columnWidth > 0 ? (
+            <View
+              pointerEvents="none"
+              style={[styles.links, { left: columnWidth - reach, width: corridor + 2 * reach }]}
+            >
+              <Svg width="100%" height="100%">
+                {board.map((pairLink) => {
+                  const from = centers[`l-${pairLink.pairId}`];
+                  const to = centers[`r-${pairLink.matchedPairId}`];
+                  const wrong = isWrong(pairLink);
+                  return from !== undefined && to !== undefined ? (
+                    <Line
+                      key={pairLink.pairId}
+                      x1={leftX}
+                      y1={from}
+                      x2={rightX}
+                      y2={to}
+                      stroke={wrong ? colors.brand : tintOf(pairLink.slot).border}
+                      strokeWidth={stroke}
+                      strokeLinecap="round"
+                      {...(wrong ? { strokeDasharray: [stroke * 1.6, stroke * 1.8] } : {})}
+                    />
+                  ) : null;
+                })}
+                {step.pairs.flatMap((pair) => {
+                  const left = centers[`l-${pair.id}`];
+                  const right = centers[`r-${pair.id}`];
+                  const leftLook = dotLook(
+                    byLeft.get(pair.id),
+                    selected?.side === 'left' && selected.id === pair.id,
+                  );
+                  const rightLook = dotLook(
+                    byRight.get(pair.id),
+                    selected?.side === 'right' && selected.id === pair.id,
+                  );
+                  return [
+                    left !== undefined ? (
+                      <Circle
+                        key={`l-${pair.id}`}
+                        cx={leftX}
+                        cy={left}
+                        r={dot}
+                        fill={leftLook.fill}
+                        stroke={leftLook.ring}
+                        strokeWidth={ring}
+                      />
+                    ) : null,
+                    right !== undefined ? (
+                      <Circle
+                        key={`r-${pair.id}`}
+                        cx={rightX}
+                        cy={right}
+                        r={dot}
+                        fill={rightLook.fill}
+                        stroke={rightLook.ring}
+                        strokeWidth={ring}
+                      />
+                    ) : null,
+                  ];
+                })}
+              </Svg>
+            </View>
+          ) : null}
+        </View>
+      </ExerciseAnchor>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, width: '100%', alignSelf: 'center' },
-  above: { flex: 1 },
-  below: { flex: 2 },
-  columns: { flexDirection: 'row' },
+  // Les cartes plafonnées partent des bords : le couloir prend le reste.
+  columns: { flexDirection: 'row', justifyContent: 'space-between' },
   links: { position: 'absolute', top: 0, bottom: 0 },
   column: { flex: 1 },
 });

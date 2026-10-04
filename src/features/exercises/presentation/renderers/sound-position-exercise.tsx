@@ -9,6 +9,7 @@ import {
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, spacing } from '@/design-system/tokens';
@@ -58,6 +59,7 @@ export function SoundPositionExercise({
   const [picked, setPicked] = useState<string | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
+  const cardState = useAnswerCardState(interactive);
 
   useEffect(() => {
     playAudio(step.audioId);
@@ -86,7 +88,7 @@ export function SoundPositionExercise({
   const answers = (
     <View style={[styles.options, { gap: metrics.gap }, !isTablet && styles.optionsRow]}>
       {POSITIONS.map((position, index) => {
-        const state = interactive ? 'default' : picked === position ? 'selected' : 'disabled';
+        const state = cardState(picked === position);
         return (
           <EcolnaAnswerCard
             key={position}

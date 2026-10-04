@@ -1,7 +1,7 @@
 import { scaled } from '../responsive';
 import { spacing } from '../tokens';
 import { typography } from '../tokens/typography';
-import { fitSubjectTile } from './subject-tile';
+import { fitSubjectTile, subjectTileHeight, subjectTileRoom } from './subject-tile';
 
 /** L'anneau de la tuile compacte en ligne (emblème 40 + 12, couché). */
 const COMPACT_RING = (scale: number) => scaled(40 + 12, scale);
@@ -57,5 +57,53 @@ describe('fitSubjectTile — les tuiles des matières remplissent la hauteur san
 
   it('plafonne l’emblème : il n’écrase jamais le nom', () => {
     expect(fitSubjectTile({ width: 900, height: 900 }, 1.3)?.emblem).toBe(scaled(104, 1.3));
+  });
+});
+
+describe('subjectTileRoom — une tuile ne s’étire plus en hauteur vide', () => {
+  it('la juste hauteur d’une grande tuile est celle qu’elle occupe vraiment', () => {
+    for (const [box, scale] of [
+      [{ width: 230, height: 195 }, 1.3],
+      [{ width: 347, height: 241 }, 1.15],
+      [{ width: 480, height: 400 }, 1.3],
+    ] as const) {
+      const fit = fitSubjectTile(box, scale);
+      expect(fit).not.toBeNull();
+      if (fit) {
+        expect(subjectTileHeight(fit, scale)).toBe(footprint(fit, scale).height);
+      }
+    }
+  });
+
+  it('iPad 11" debout : l’emblème plafonne avant la hauteur — la tuile s’arrête, le surplus est rendu', () => {
+    // La cellule mesurée sur l'accueil d'avant (347 × 217) : 61 dp de vide par tuile.
+    const room = subjectTileRoom({ width: 346, height: 217 }, 1.15);
+    expect(room.fit).toEqual({ layout: 'wide', emblem: scaled(104, 1.15) });
+    expect(room.height).toBe(scaled(104, 1.15) + 2 * scaled(spacing.md, 1.15));
+    expect(room.surplus).toBe(217 - (room.height ?? 0));
+    expect(room.surplus).toBeGreaterThanOrEqual(scaled(spacing.md, 1.15));
+  });
+
+  it('iPad 11" couché : c’est la hauteur qui limite l’emblème — la tuile garde toute sa cellule', () => {
+    const room = subjectTileRoom({ width: 226, height: 195 }, 1.3);
+    expect(room.fit?.layout).toBe('tall');
+    expect(room.height).toBeNull();
+    expect(room.surplus).toBe(0);
+  });
+
+  it('pas la place d’une grande tuile : rien à rendre', () => {
+    expect(subjectTileRoom({ width: 226, height: 124 }, 1.15)).toEqual({
+      fit: null,
+      height: null,
+      surplus: 0,
+    });
+  });
+
+  it('un surplus de quelques dp ne recompose pas l’écran', () => {
+    const fit = fitSubjectTile({ width: 346, height: 600 }, 1.15);
+    const natural = fit ? subjectTileHeight(fit, 1.15) : 0;
+    const room = subjectTileRoom({ width: 346, height: natural + 6 }, 1.15);
+    expect(room.height).toBeNull();
+    expect(room.surplus).toBe(0);
   });
 });

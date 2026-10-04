@@ -2,20 +2,42 @@ import { StyleSheet, View } from 'react-native';
 
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { SubjectArt, type SubjectArtId } from '../icons/subject-art';
-import { EcolnaGalet, EcolnaProgressBar, EcolnaProgressRing, EcolnaText } from '../primitives';
+import { EcolnaGalet, EcolnaProgressRing, EcolnaText } from '../primitives';
 import { scaled, useResponsive } from '../responsive';
 import { colors, radius, shadows, spacing, subjectColors } from '../tokens';
 import { fr } from '@/localization/fr/strings';
+
+/** Où en est un monde de la discipline : fini, celui du jour, ou à venir. */
+export type PortalWorldState = 'done' | 'current' | 'upcoming';
+
+/**
+ * L'état de chaque monde d'une discipline, dans l'ordre du parcours : les
+ * mondes finis d'abord, puis le premier qui ne l'est pas (le monde du jour,
+ * seulement si la discipline est commencée), puis ceux à venir. Une
+ * discipline pas encore commencée n'a pas de monde du jour : tous ses points
+ * sont à venir, sa porte garde la même structure.
+ */
+export function portalWorldStates(
+  worlds: readonly { done: boolean }[],
+  started: boolean,
+): PortalWorldState[] {
+  const current = started ? worlds.findIndex((world) => !world.done) : -1;
+  return worlds.map((world, index) =>
+    world.done ? 'done' : index === current ? 'current' : 'upcoming',
+  );
+}
 
 interface SubjectPortalProps {
   subject: SubjectArtId;
   label: string;
   /** Ce qu'on y fait, en quatre mots (« Les lettres et les sons »). */
   hint: string;
-  /** « Nouveau ! » pour une discipline pas encore commencée ; sinon la barre parle. */
-  status: string | null;
   completed: number;
   total: number;
+  /** Un point par monde de la discipline (voir `portalWorldStates`). */
+  worlds: readonly PortalWorldState[];
+  /** Ce que disent les points, pour le lecteur d'écran. */
+  worldsLabel: string;
   locked: boolean;
   /** `portal` : grande porte verticale ; `row` : carte en ligne (téléphone). */
   layout: 'portal' | 'row';
@@ -32,19 +54,68 @@ interface SubjectPortalProps {
 }
 
 /**
+ * La rangée des mondes d'une discipline : un point par monde. Fini : blanc
+ * plein ; celui du jour : un anneau blanc ; à venir : la piste sur la
+ * couleur. L'enfant voit où il en est sans un chiffre ni un mot à lire.
+ */
+function WorldDots({
+  worlds,
+  locked,
+  label,
+  align,
+}: {
+  worlds: readonly PortalWorldState[];
+  locked: boolean;
+  label: string;
+  align: 'center' | 'flex-start';
+}) {
+  const { scale } = useResponsive();
+  // Au-delà de six mondes (CP2, lecture), les points se resserrent pour tenir sur une ligne.
+  const many = worlds.length > 6;
+  const size = scaled(many ? 10 : 12, scale);
+  const gap = scaled(many ? 6 : 8, scale);
+  const ring = scaled(2, scale);
+  const full = locked ? colors.inkDisabled : colors.white;
+  const track = locked ? colors.track : colors.onColorTrack;
+  return (
+    <View
+      accessible
+      accessibilityLabel={label}
+      style={[styles.dots, { gap, justifyContent: align }]}
+    >
+      {worlds.map((state, index) => (
+        <View
+          key={index}
+          style={{
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            backgroundColor: state === 'done' ? full : state === 'upcoming' ? track : undefined,
+            borderWidth: state === 'current' ? ring : 0,
+            borderColor: full,
+          }}
+        />
+      ))}
+    </View>
+  );
+}
+
+/**
  * La porte d'une discipline sur l'écran « Apprendre » : une surface de sa
- * couleur profonde ; au centre, son emblème dans l'anneau de ses leçons
- * faites ; dessous, son nom, ce qu'on y fait et une puce d'état. En paysage,
- * quatre portes côte à côte ; en portrait, deux par deux ; au téléphone, une
- * carte par ligne (emblème, texte, barre).
+ * couleur profonde ; son emblème dans l'anneau de ses leçons faites, son nom,
+ * ce qu'on y fait, et la rangée de ses mondes (un point par monde) — l'écran
+ * ne répète pas l'accueil : il montre le chemin de chaque discipline. En
+ * paysage, quatre portes côte à côte ; en portrait, deux par deux ; au
+ * téléphone, une carte par ligne (emblème, texte, points).
  */
 export function SubjectPortal({
   subject,
   label,
   hint,
-  status,
   completed,
   total,
+  worlds,
+  worldsLabel,
   locked,
   layout,
   artSize = 136,
@@ -65,13 +136,6 @@ export function SubjectPortal({
   // profondes) : la hiérarchie passe par la taille et la graisse, jamais par
   // une transparence qu'on ne lit plus au soleil.
   const soft = locked ? colors.inkSecondary : colors.white;
-  const state = locked
-    ? fr.home.subjectState.locked
-    : completed === 0
-      ? fr.home.subjectState.new
-      : completed >= total
-        ? fr.home.subjectState.done
-        : fr.home.subjectState.started;
   const pad = scaled(portal ? spacing.xl : spacing.lg, scale);
 
   return (
@@ -85,12 +149,15 @@ export function SubjectPortal({
       style={portal ? styles.portalOuter : undefined}
       faceStyle={[
         portal ? styles.portalFace : styles.rowFace,
-        { padding: pad, gap: scaled(spacing.md, scale) },
+        portal ? { padding: pad } : { padding: pad, gap: scaled(spacing.md, scale) },
       ]}
     >
       {portal ? (
         <>
-          {/* L'emblème et les mots, centrés dans la hauteur de la porte ; la puce au pied. */}
+          {/* L'emblème, les mots et les mondes, ensemble un peu au-dessus du
+              milieu (le centre optique de la porte) — quand il y a de l'air
+              à partager ; sinon rien ne s'ajoute. */}
+          <View style={styles.airAbove} />
           <View style={[styles.portalBody, { gap: scaled(spacing.md, scale) }]}>
             {/* L'emblème au cœur de l'anneau de la discipline : plein, il passe au soleil. */}
             <View style={styles.center}>
@@ -128,21 +195,11 @@ export function SubjectPortal({
                 {explanation ?? hint}
               </EcolnaText>
             </View>
+            <View style={{ marginTop: scaled(spacing.xs, scale) }}>
+              <WorldDots worlds={worlds} locked={locked} label={worldsLabel} align="center" />
+            </View>
           </View>
-          {/* La puce d'état : blanche, le mot à l'encre de la discipline (≥ 6:1). */}
-          <View
-            style={[
-              styles.stateChip,
-              {
-                paddingHorizontal: scaled(spacing.sm, scale),
-                paddingVertical: scaled(spacing.xxs, scale),
-              },
-            ]}
-          >
-            <EcolnaText variant="labelMd" color={locked ? colors.inkSecondary : family.ink}>
-              {status ?? state}
-            </EcolnaText>
-          </View>
+          <View style={styles.airBelow} />
         </>
       ) : (
         <>
@@ -163,21 +220,8 @@ export function SubjectPortal({
             >
               {explanation ?? hint}
             </EcolnaText>
-            <View style={[styles.footer, { marginTop: scaled(spacing.xs, scale) }]}>
-              <EcolnaText variant="labelMd" color={soft}>
-                {status ?? state}
-              </EcolnaText>
-              {locked ? null : (
-                <View style={styles.bar}>
-                  <EcolnaProgressBar
-                    progress={progress}
-                    fill={colors.white}
-                    track={colors.onColorTrack}
-                    height={8}
-                    accessibilityLabel={fr.a11y.progress(label, completed, total)}
-                  />
-                </View>
-              )}
+            <View style={{ marginTop: scaled(spacing.xs, scale) }}>
+              <WorldDots worlds={worlds} locked={locked} label={worldsLabel} align="flex-start" />
             </View>
           </View>
           {locked ? <EcolnaIcon name="lock" size={scaled(24, scale)} color={colors.inkDisabled} filled /> : null}
@@ -189,14 +233,14 @@ export function SubjectPortal({
 
 const styles = StyleSheet.create({
   portalOuter: { flex: 1 },
-  portalFace: { alignItems: 'center', justifyContent: 'space-between' },
-  portalBody: { flexGrow: 1, alignItems: 'center', justifyContent: 'center' },
+  portalFace: { alignItems: 'center' },
+  airAbove: { flexGrow: 1 },
+  airBelow: { flexGrow: 1.5 },
+  portalBody: { alignItems: 'center' },
   center: { alignItems: 'center', justifyContent: 'center' },
   lockBadge: { position: 'absolute', right: -6, bottom: -6 },
   portalText: { alignItems: 'center' },
-  stateChip: { borderRadius: radius.pill, backgroundColor: colors.white },
   rowFace: { flexDirection: 'row', alignItems: 'center' },
   rowText: { flex: 1, gap: spacing.xxs },
-  footer: { gap: spacing.xs },
-  bar: { alignSelf: 'stretch' },
+  dots: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center' },
 });

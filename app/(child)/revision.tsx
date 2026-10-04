@@ -11,6 +11,7 @@ import {
 import { describeSkill } from '@/features/parent-space/application/parent-dashboard';
 import { REVISION_BATCH } from '@/features/revision/domain/revision-engine';
 import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
+import { EcolnaAvatar } from '@/design-system/avatars';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { SubjectArt, type SubjectArtId } from '@/design-system/icons/subject-art';
 import {
@@ -35,15 +36,17 @@ interface RevisionItem {
 
 /**
  * L'atelier de révision (direction v4). On ne dit pas « tu as échoué » : on
- * revoit ensemble ce qui est encore fragile. Les notions à revoir, une par
- * ligne avec l'emblème de leur discipline — un aperçu, qu'on ne touche pas —
- * et une seule action : le bouton soleil. Deux cibles qui ouvrent la même
- * leçon laisseraient l'enfant hésiter entre elles.
+ * revoit ensemble ce qui est encore fragile. La composition de l'écran hors
+ * connexion : couché, à gauche l'enfant, au calme, dans le bleu de la
+ * révision, la pastille de reprise à l'épaule ; à droite le titre, les leçons
+ * à revoir sur une carte blanche posée — un aperçu, qu'on ne touche pas — et
+ * une seule action : le bouton soleil. Deux cibles qui ouvrent la même leçon
+ * laisseraient l'enfant hésiter entre elles. Debout, le même ordre, centré.
  */
 export default function RevisionScreen() {
   const router = useRouter();
   const goBack = useSafeBack();
-  const { scale, isTablet, splitPanes, screenPadding } = useResponsive();
+  const { scale, isTablet, isLandscape, screenPadding, width, height } = useResponsive();
   const profile = useActiveProfile((state) => state.profile);
   const items: RevisionItem[] =
     useFocusedData(
@@ -79,38 +82,82 @@ export default function RevisionScreen() {
     ) ?? [];
 
   const firstLesson = items.find((item) => item.lessonId)?.lessonId ?? null;
-  const gap = scaled(spacing.lg, scale);
-  const disc = scaled(isTablet ? 120 : 96, scale);
+  // Côte à côte dès qu'on est couché et qu'il y a la place, comme l'écran
+  // hors connexion : l'enfant à gauche, les mots et l'action à droite.
+  const sideBySide = isLandscape && width >= 640;
+  const align = sideBySide ? 'left' : 'center';
+  // Le disque se règle sur la largeur ET la hauteur : couché, un téléphone
+  // n'a pas la place d'un grand portrait au-dessus des mots.
+  const disc = Math.round(
+    Math.min(
+      scaled(sideBySide ? 300 : isTablet ? 280 : 200, scale),
+      height * (sideBySide ? 0.56 : 0.28),
+      sideBySide ? width * 0.34 : width - screenPadding * 2,
+    ),
+  );
+  const portrait = Math.round(disc * 0.6);
+  const pip = Math.max(scaled(28, scale), Math.round(portrait * 0.24));
+  const emblem = scaled(40, scale);
 
-  const intro = (
-    <View style={[styles.intro, { gap: scaled(spacing.sm, scale) }]}>
-      <View style={[styles.sproutDisc, { width: disc, height: disc, borderRadius: disc / 2 }]}>
-        <EcolnaIcon name="replay" size={Math.round(disc * 0.5)} color={colors.brand} />
+  // L'enfant, au calme, sur son assiette blanche, dans le bleu de la révision ;
+  // à son épaule, la pastille de reprise — la même que dans la feuille « à
+  // revoir ». On revoit ensemble : l'écran commence par lui, pas par l'erreur.
+  const art = (
+    <View
+      style={[styles.disc, { width: disc, height: disc, borderRadius: disc / 2 }]}
+      aria-hidden
+      importantForAccessibility="no-hide-descendants"
+    >
+      <View>
+        <View
+          style={[
+            styles.plate,
+            { width: portrait, height: portrait, borderRadius: portrait / 2 },
+          ]}
+        />
+        <View style={styles.portrait}>
+          <EcolnaAvatar
+            avatarId={profile?.avatarId ?? 'avatar-1'}
+            size={portrait}
+            expression={items.length === 0 ? 'joy' : 'calm'}
+            backdrop={false}
+            popOut
+          />
+        </View>
+        {items.length > 0 ? (
+          <View
+            style={[
+              styles.pip,
+              {
+                width: pip,
+                height: pip,
+                borderRadius: pip / 2,
+                borderWidth: Math.max(3, Math.round(pip * 0.1)),
+              },
+            ]}
+          >
+            <EcolnaIcon name="replay" size={Math.round(pip * 0.56)} color={colors.white} />
+          </View>
+        ) : null}
       </View>
-      <EcolnaText variant={isTablet ? 'displayHero' : 'headlineLg'} align="center">
-        {fr.revision.title}
-      </EcolnaText>
-      <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
-        {fr.revision.subtitle}
-      </EcolnaText>
     </View>
   );
 
   const work =
     items.length === 0 ? (
-      <EcolnaCard rounded="xl" style={styles.emptyCard}>
+      <EcolnaCard rounded="xl" style={[styles.emptyCard, { gap: scaled(spacing.md, scale) }]}>
         <EcolnaIcon name="star" size={scaled(56, scale)} color={colors.reward} filled />
         <EcolnaText variant="headlineSm" align="center">
           {fr.revision.empty}
         </EcolnaText>
       </EcolnaCard>
     ) : (
-      <View style={{ gap }}>
-        {/* Une liste, comme une page de cahier : chaque notion sur sa ligne,
-            l'emblème de sa discipline devant. Un aperçu, pas un bouton : une
-            surface plate dans le bleu de la révision, sans filet ni ombre (ce
-            qu'on regarde), et une seule action, le bouton soleil. */}
-        <EcolnaCard rounded="xl" padded={false} backgroundColor={colors.brandTint}>
+      <View style={{ gap: scaled(spacing.lg, scale) }}>
+        {/* Une page de cahier posée : une carte blanche (filet, ombre douce),
+            chaque leçon sur sa ligne, l'emblème de sa discipline devant. Un
+            aperçu, pas un bouton — rien ne s'y touche ; une seule action, le
+            bouton soleil. */}
+        <EcolnaCard rounded="xl" padded={false}>
           {items.map((item, index) => (
             <View
               key={item.skillId}
@@ -119,15 +166,17 @@ export default function RevisionScreen() {
               style={[
                 styles.row,
                 index > 0 && styles.rowRule,
-                { gap: scaled(spacing.md, scale), padding: scaled(spacing.md, scale) },
+                {
+                  gap: scaled(spacing.md, scale),
+                  paddingVertical: scaled(spacing.md, scale),
+                  paddingHorizontal: scaled(spacing.lg, scale),
+                },
               ]}
             >
               {item.subject ? (
-                <SubjectArt subject={item.subject} size={scaled(40, scale)} />
+                <SubjectArt subject={item.subject} size={emblem} />
               ) : (
-                <View
-                  style={[styles.leaf, { width: scaled(40, scale), height: scaled(40, scale) }]}
-                >
+                <View style={[styles.leaf, { width: emblem, height: emblem }]}>
                   <EcolnaIcon
                     name="sprout"
                     size={scaled(24, scale)}
@@ -152,7 +201,7 @@ export default function RevisionScreen() {
           />
         ) : (
           // Aucune leçon ne cible encore ces notions : pas de bouton mort, une phrase.
-          <EcolnaText variant="bodyLg" color={colors.textSecondary} align="center">
+          <EcolnaText variant="bodyLg" color={colors.textSecondary} align={align}>
             {fr.revision.inLessons}
           </EcolnaText>
         )}
@@ -160,54 +209,74 @@ export default function RevisionScreen() {
     );
 
   return (
-    <EcolnaScreen background="default" fullWidth={splitPanes}>
+    <EcolnaScreen background="default" fullWidth>
       <View style={[styles.header, { paddingHorizontal: screenPadding }]}>
         <EcolnaIconButton icon="arrow-back" accessibilityLabel={fr.common.back} onPress={goBack} />
       </View>
-      {splitPanes && items.length > 2 ? (
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          {
+            paddingHorizontal: screenPadding,
+            paddingBottom: scaled(spacing.xxl, scale),
+            gap: scaled(sideBySide ? spacing.xxxl : spacing.xl, scale),
+          },
+          sideBySide && styles.split,
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        {art}
         <View
           style={[
-            styles.split,
-            { paddingHorizontal: screenPadding, gap: scaled(spacing.xxl, scale) },
+            styles.words,
+            {
+              gap: scaled(spacing.sm, scale),
+              maxWidth: scaled(isTablet ? 440 : 360, scale),
+            },
           ]}
         >
-          <View style={styles.pane}>{intro}</View>
-          <View style={styles.pane}>{work}</View>
+          <EcolnaText
+            variant={isTablet ? 'displayHero' : 'headlineLg'}
+            align={align}
+            accessibilityRole="header"
+          >
+            {fr.revision.title}
+          </EcolnaText>
+          <EcolnaText variant="bodyLg" color={colors.textSecondary} align={align}>
+            {fr.revision.subtitle}
+          </EcolnaText>
+          <View style={{ marginTop: scaled(spacing.lg, scale) }}>{work}</View>
         </View>
-      ) : (
-        <ScrollView
-          contentContainerStyle={[
-            styles.scroll,
-            { paddingHorizontal: screenPadding, gap: scaled(spacing.xl, scale) },
-          ]}
-          style={styles.column}
-          showsVerticalScrollIndicator={false}
-        >
-          {intro}
-          {work}
-        </ScrollView>
-      )}
+      </ScrollView>
     </EcolnaScreen>
   );
 }
 
 const styles = StyleSheet.create({
   header: { paddingVertical: spacing.sm },
-  split: { flex: 1, flexDirection: 'row', alignItems: 'center' },
-  pane: { flex: 1 },
-  scroll: { paddingBottom: spacing.xxl, flexGrow: 1, justifyContent: 'center' },
-  // Une ou deux notions : une seule colonne centrée, lisible d'un coup d'œil.
-  column: { width: '100%', maxWidth: 720, alignSelf: 'center' },
-  intro: { alignItems: 'center' },
-  sproutDisc: {
-    backgroundColor: colors.brandTint,
+  container: { flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
+  split: { flexDirection: 'row' },
+  words: { flexShrink: 1, width: '100%' },
+  disc: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.sm,
+    backgroundColor: colors.brandTint,
   },
-  emptyCard: { alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xl },
+  plate: { backgroundColor: colors.white },
+  // Le portrait se pose sur l'assiette ; sa coiffure peut en sortir par le haut.
+  portrait: { position: 'absolute', left: 0, bottom: 0 },
+  pip: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.brand,
+    borderColor: colors.brandTint,
+  },
+  emptyCard: { alignItems: 'center' },
   row: { flexDirection: 'row', alignItems: 'center' },
-  rowRule: { borderTopWidth: 1, borderTopColor: colors.brandTintStrong },
+  rowRule: { borderTopWidth: 1, borderTopColor: colors.border },
   leaf: {
     alignItems: 'center',
     justifyContent: 'center',

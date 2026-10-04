@@ -104,7 +104,9 @@ trait blanc, partout la même.
   la discipline ; le segment en cours se remplit à demi sur un ressort.
 - **Discipline** : un anneau autour de son emblème ; plein, il passe au soleil.
 - **Parcours** (`level-map.tsx`) : un fil net de 8 dp relie les mondes en
-  courbes tendues — gris ce qui reste, vert ce qui est parcouru. Monde fini :
+  courbes tendues — vert plein ce qui est parcouru, pointillé rond sur `track`
+  ce qui reste (la forme dit « pas encore »). Le portrait de l'enfant est posé
+  sur l'anneau du monde du jour : « tu es ici ». Monde fini :
   disque vert, coche blanche, ses étoiles sous son nom. Monde du jour : disque
   à la couleur de la discipline, emblème blanc, cerclé de l'anneau de ses
   leçons faites, et le bouton soleil « Commencer » sous son nom. Fermé :
@@ -124,7 +126,11 @@ trait blanc, partout la même.
 ## 8. Les douze enfants
 
 Redessinés sur une construction mesurée (`avatars/portrait.tsx`, repère
-120) : tête ovale 54 × 58, oreilles, cou et buste ; coiffures construites par
+120) : quatre têtes (ovale 54 × 58, ronde 58 × 55, longue 51 × 61, joufflue
+57 × 57) dont le crâne est l'image affine de l'ovale — la coiffure s'y pose
+par une seule mise à l'échelle —, trois regards (ronds, en amande, grands),
+trois bouches au calme ; deux voisins de la grille (3, 4 ou 6 colonnes) ne
+partagent jamais ni tête ni disque. Oreilles, cou et buste ; coiffures construites par
 des fonctions (festons, nattes en chaîne, natte relevée effilée), calculées
 une fois au chargement. Yeux pleins avec un point de lumière, sourcils de la
 couleur des cheveux, nez par personnage, joues prémélangées (aucune
@@ -142,9 +148,10 @@ servi que de références de proportions : aucun tracé n'en provient.
 - **Médailles** (`illustrations/badge-art.tsx`) : un médaillon plat en deux
   disques — couronne claire, cœur plein — cerclé d'un filet blanc, et un
   pictogramme Phosphor ; les jalons de leçons portent 1 à 4 points, liserés
-  de blanc. À gagner : la même forme dans la version pâle de sa famille
-  (couronne tint, cœur tintStrong, pictogramme atténué) avec une pastille
-  cadenas — jamais une grille grise ; les gagnées d'abord sur l'étagère.
+  de blanc. À gagner : couronne neutre (`fill`), cœur pâle de sa famille,
+  pictogramme atténué, pastille cadenas — jamais une grille grise, et la
+  différence avec une médaille gagnée (couronne teintée, cœur plein) saute
+  aux yeux. Sur l'étagère : les gagnées, puis « À gagner ».
 - **Illustrations « orbite »** (`illustrations/orbit.tsx`) : deux cercles
   concentriques (la vannerie de la carte du jour et de la célébration), un
   sujet au centre, des satellites — les personnages de l'app, ou des
@@ -155,10 +162,14 @@ servi que de références de proportions : aucun tracé n'en provient.
   profil s'ouvre sur une invitation (disque cerclé d'un pointillé bleu, une
   main qui salue) que le personnage choisi remplace ; l'écran hors connexion
   montre la tablette, ses quatre disciplines à l'écran.
-- **Célébration** : la nuit, l'enfant en joie cerclé de la vannerie, ses
-  trois étoiles qui éclosent au-dessus de lui, une pluie de confettis unique
-  (aucune en mouvement réduit) ; à droite, sur le même axe, la discipline et
-  le titre de la leçon, « Bravo ! », les médailles gagnées, la suite.
+- **Célébration** : la nuit ; l'enfant en joie sur un disque `nightSoft`
+  cerclé d'une vannerie en pointillé rond ; ses trois grandes étoiles (celle
+  du milieu ≈ 125 dp) éclosent l'une après l'autre au-dessus de lui, puis les
+  mots entrent ; une pluie de confettis unique. À droite, sur le même axe :
+  la discipline et le titre de la leçon, « Bravo ! », une louange (jamais
+  « ce n'est pas assez »), les médailles gagnées en médaillons nommés qui
+  entrent sur un ressort, la suite (flèche « avancer », pas ▶). Rien ne
+  bouge en mouvement réduit.
 - **Marque** : le livre ouvert de l'icône passe aux couleurs v4 — fond bleu
   marque, page blanche, page soleil (`assets/icons/*.svg`, `npm run
   brand:assets`) ; `brand/ecolna-mark.tsx` en est la même géométrie dans
@@ -177,11 +188,18 @@ servi que de références de proportions : aucun tracé n'en provient.
   mesurée (`illustration-fit.ts`).
 - **Le verdict sur la carte** : pendant la feuille de retour, la carte choisie
   devient verte et cochée (juste) ou bleue avec la flèche de reprise (à
-  revoir) ; les autres restent blanches, inertes — jamais grisées
-  (`AnswerVerdictContext`).
+  revoir) ; les autres restent blanches — jamais grisées
+  (`AnswerVerdictContext`, `useAnswerCardState`). Au premier essai manqué
+  d'un exercice à choix unique, les autres cartes se rouvrent après 0,9 s :
+  en toucher une vaut « Réessayer » et cette réponse (la carte choisie garde
+  sa marque) ; le décompte des essais reste le même.
 - **La consigne est dite d'elle-même** à chaque exercice, puis le son de
-  l'exercice (`playSequence`) ; le bouton de consigne porte une bulle de
-  parole, le haut-parleur est réservé au son à trouver.
+  l'exercice (`playSequence`) ; le bouton de consigne — la bouée du
+  non-lecteur — porte une bulle de parole, sur un disque bleu fileté plus
+  grand que la croix ; le haut-parleur est réservé au son à trouver.
+- **Écouter seul** : quand le stimulus n'est qu'un son, une seule grammaire —
+  sur grande tablette, une bande d'écoute pleine largeur au-dessus des
+  réponses ; sur 7", un pavé de largeur fixe à côté. Tout le pavé se touche.
 - **Tracer** : l'ardoise est de nuit ; la lettre modèle dans une pastille en
   haut à gauche ; le modèle à la craie (`slateChalk`, bouts francs posés sur
   les lignes) porte une ligne médiane tiretée ; une bille soleil court le
@@ -195,6 +213,9 @@ servi que de références de proportions : aucun tracé n'en provient.
   seules elles s'effacent.
 - **Le personnage réagit** : dans la feuille de retour, l'enfant (joie si
   c'est juste, calme sinon) porte la pastille du verdict.
+- **L'ampoule ne s'offre qu'après un premier essai manqué** (disque soleil,
+  ressort, une pulsation) : avant, elle volerait le premier regard et
+  priverait l'enfant de ses trois étoiles.
 - **L'aide monte d'elle-même** : au deuxième essai manqué, l'indice s'ouvre et
   se dit ; au troisième, « On reverra ça ensemble. » et l'on avance — l'étape
   part en révision. Un enfant ne tourne jamais en rond.
@@ -203,9 +224,11 @@ servi que de références de proportions : aucun tracé n'en provient.
 - **Les lignes du cahier** : sur l'ardoise, la ligne de base (pleine), la
   hauteur d'x et les hampes (tiretées) ; les lettres courtes sont posées sur
   la même hauteur d'x.
-- **Plus grand sur grande tablette** : au-delà de 780 dp de haut, réponses et
-  images grandissent ; le contenu s'ancre sous la consigne (un tiers de l'air
-  au-dessus, deux tiers au-dessous).
+- **Plus grand sur grande tablette** : le bloc d'exercice vise 50 à 60 % de
+  la hauteur mesurée du corps, sans jamais passer sous la feuille de retour ;
+  l'air se répartit 1 : 1,25 au-dessus et au-dessous de la consigne.
+- **Relier** (suite) : au repos, les points d'accroche (≈ 30 dp) prennent la
+  teinte pâle de la discipline ; les cartes plafonnées élargissent le couloir.
 
 ## 8 quater. Mise en page
 
@@ -218,11 +241,18 @@ servi que de références de proportions : aucun tracé n'en provient.
   bleue, la série de jours est un soleil. « Sans internet » n'est plus une
   puce sur l'accueil de l'enfant (un adulte y lisait une alerte) : la
   promesse vit dans l'onboarding, l'écran hors connexion et les réglages.
-- L'accueil remplit sa hauteur : la carte du jour grandit sur grand écran et
-  les tuiles des matières prennent la place jusqu'à la barre d'onglets
-  (mesurée, `fitSubjectTile`) ; « Apprendre » s'ancre en haut au même rythme.
-- L'espace parent : un en-tête sur une rangée, des chiffres de même hauteur,
-  « Cette semaine » (minutes par jour, du lundi au dimanche).
+- L'accueil remplit sa hauteur, mesurée : couché, les tuiles des matières
+  grandissent jusqu'à la barre d'onglets ; debout, elles gardent leur juste
+  hauteur et la carte du jour prend le surplus. La révision a son emblème et
+  un vrai bouton bleu, la seule action bleue de l'accueil.
+- « Apprendre » s'ancre en haut au même rythme ; chaque porte montre ses
+  mondes en points (finis pleins, du jour cerclé, à venir voilés) : où l'on
+  en est, sans un chiffre.
+- L'espace parent : un en-tête sur une rangée, des colonnes aux coutures
+  communes, des chiffres de même hauteur, « Cette semaine » (minutes par
+  jour ; un jour passé sans séance a son amorce, un jour à venir n'en a pas).
+  Les réglages portent une carte « À propos » : conformité aux *Programmes
+  réactualisés de l'enseignement primaire* (MEN / CNC, 2004) et version.
 
 ## 9. Mouvement
 

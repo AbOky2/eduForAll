@@ -63,31 +63,56 @@ function CardHeader({ icon, title, detail }: { icon: IconName; title: string; de
   );
 }
 
+/** La marque d'un jour vécu sans séance : une amorce sur la ligne de base (dp avant échelle). */
+const WEEK_STUB = 4;
+
+/** Ce que montre la colonne d'un jour : une barre, une amorce (vécu, sans séance), ou rien (à venir). */
+function weekColumnMark(entry: Pick<WeekDay, 'minutes' | 'future'>): 'bar' | 'stub' | 'none' {
+  if (entry.minutes > 0) {
+    return 'bar';
+  }
+  return entry.future ? 'none' : 'stub';
+}
+
 /**
  * Cette semaine : sept colonnes, du lundi au dimanche, à la hauteur des
  * minutes passées à apprendre. Le jour même en bleu plein, les autres en bleu
- * clair, leurs minutes au-dessus ; un jour sans séance ne laisse que la ligne
- * de base. Ce que cherche d'abord un parent : est-ce qu'il apprend, et quand.
+ * clair, leurs minutes au-dessus. Un jour vécu sans séance pose une amorce
+ * grise sur la ligne de base (ce n'est pas un graphe cassé) ; un jour à venir
+ * n'a rien, et son initiale s'efface. Ce que cherche d'abord un parent : est-ce
+ * qu'il apprend, et quand. `grow` : la carte prend la hauteur de sa rangée,
+ * le graphique posé en bas.
  */
-function WeekChart({ week }: { week: WeekDay[] }) {
+function WeekChart({ week, grow = false }: { week: WeekDay[]; grow?: boolean }) {
   const { scale } = useResponsive();
   const chart = scaled(WEEK_HEIGHT, scale);
   const column = scaled(28, scale);
   const peak = Math.max(WEEK_FLOOR_MINUTES, ...week.map((entry) => entry.minutes));
   const total = week.reduce((sum, entry) => sum + entry.minutes, 0);
   return (
-    <EcolnaCard rounded="xl" style={styles.cardGap}>
+    <EcolnaCard rounded="xl" style={[styles.cardGap, grow && styles.weekGrow]}>
       <CardHeader icon="calendar-check" title={fr.parent.weekTitle} detail={fr.parent.weekTotal(total)} />
       <View style={[styles.weekRow, { marginTop: scaled(spacing.xs, scale) }]}>
         {week.map((entry, index) => {
           const name = fr.parent.weekDays[index] ?? '';
-          const bar = entry.minutes > 0 ? Math.max(column / 2, Math.round((chart * entry.minutes) / peak)) : 0;
+          const mark = weekColumnMark(entry);
+          const bar =
+            mark === 'bar'
+              ? Math.max(column / 2, Math.round((chart * entry.minutes) / peak))
+              : mark === 'stub'
+                ? scaled(WEEK_STUB, scale)
+                : 0;
+          const corner = Math.min(mark === 'bar' ? radius.sm : bar / 2, column / 2);
           return (
             <View
               key={entry.day}
               style={styles.weekColumn}
               accessible
-              accessibilityLabel={fr.parent.weekDayLabel(name, entry.minutes)}
+              accessibilityLabel={
+                entry.future
+                  ? fr.parent.weekDayUpcoming(name)
+                  : fr.parent.weekDayLabel(name, entry.minutes)
+              }
             >
               <View style={[styles.weekPlot, { height: chart + scaled(22, scale) }]}>
                 {entry.minutes > 0 ? (
@@ -106,9 +131,14 @@ function WeekChart({ week }: { week: WeekDay[] }) {
                       height: bar,
                       marginTop: scaled(spacing.xxs, scale),
                       // Arrondie en haut, posée à plat sur la ligne de base.
-                      borderTopLeftRadius: Math.min(radius.sm, column / 2),
-                      borderTopRightRadius: Math.min(radius.sm, column / 2),
-                      backgroundColor: entry.today ? colors.brand : colors.brandTintStrong,
+                      borderTopLeftRadius: corner,
+                      borderTopRightRadius: corner,
+                      backgroundColor:
+                        mark === 'stub'
+                          ? colors.track
+                          : entry.today
+                            ? colors.brand
+                            : colors.brandTintStrong,
                     }}
                   />
                 ) : null}
@@ -117,7 +147,13 @@ function WeekChart({ week }: { week: WeekDay[] }) {
               <View style={[styles.baseline, { height: scaled(2, scale) }]} />
               <EcolnaText
                 variant="labelMd"
-                color={entry.today ? colors.brandInk : colors.textSecondary}
+                color={
+                  entry.today
+                    ? colors.brandInk
+                    : entry.future
+                      ? colors.inkTertiary
+                      : colors.textSecondary
+                }
                 style={styles.weekLabel}
               >
                 {fr.parent.weekDaysShort[index] ?? ''}
@@ -135,8 +171,9 @@ function WeekChart({ week }: { week: WeekDay[] }) {
  * sobre et précis : un en-tête d'une seule rangée (l'enfant, partager,
  * paramètres), quatre chiffres de même hauteur, une ligne par discipline du
  * programme, la semaine en sept colonnes, puis des phrases humaines plutôt
- * que des métriques brutes. Couché : les chiffres et les disciplines à
- * gauche, la semaine et la lecture à droite.
+ * que des métriques brutes. Couché : deux rangées qui partagent leurs
+ * coutures — les chiffres et la semaine, puis les disciplines et la lecture —,
+ * chaque paire de cartes à la même hauteur.
  */
 export default function ParentDashboardScreen() {
   const router = useRouter();
@@ -239,9 +276,10 @@ export default function ParentDashboardScreen() {
     statRows.push(stats.slice(start, start + statColumns));
   }
 
-  // Une ligne par discipline : son emblème, ses leçons faites, sa barre.
+  // Une ligne par discipline : son emblème, ses leçons faites, sa barre —
+  // « 12 leçons sur 45 » suffit, sans pourcentage qui le répète.
   const subjects = (
-    <EcolnaCard rounded="xl" style={styles.subjectsCard}>
+    <EcolnaCard rounded="xl" style={[styles.subjectsCard, splitPanes && styles.grow]}>
       <CardHeader icon="learn" title={fr.parent.bySubject} />
       {(summary?.subjects ?? []).map((entry) => {
         const ratio = entry.total > 0 ? entry.completed / entry.total : 0;
@@ -263,16 +301,13 @@ export default function ParentDashboardScreen() {
               </View>
               <EcolnaProgressBar progress={ratio} fill={subjectColors[entry.subject].solid} height={BAR} />
             </View>
-            <EcolnaText variant="labelLg" style={{ minWidth: scaled(52, scale) }} align="right">
-              {fr.parent.percent(Math.round(ratio * 100))}
-            </EcolnaText>
           </View>
         );
       })}
     </EcolnaCard>
   );
 
-  const weekCard = week ? <WeekChart week={week} /> : null;
+  const weekCard = week ? <WeekChart week={week} grow={splitPanes} /> : null;
 
   const analysis = (
     <EcolnaCard rounded="xl" style={[styles.cardGap, splitPanes && styles.grow]}>
@@ -341,21 +376,25 @@ export default function ParentDashboardScreen() {
           </View>
         )}
         {splitPanes ? (
-          // Couché : les chiffres et les disciplines à gauche, la semaine et la lecture à droite.
-          <View style={[styles.row, { gap }]}>
-            <View style={[styles.flex2, { gap }]}>
-              {statRows.map((row, index) => (
-                <View key={index} style={[styles.row, { gap }]}>
-                  {row}
-                </View>
-              ))}
-              {subjects}
+          // Couché : deux rangées étirées (alignItems: 'stretch'), pas deux
+          // piles indépendantes — les coutures horizontales tombent à la même
+          // hauteur des deux côtés.
+          <>
+            <View style={[styles.row, { gap }]}>
+              <View style={[styles.flex2, { gap }]}>
+                {statRows.map((row, index) => (
+                  <View key={index} style={[styles.row, styles.flex, { gap }]}>
+                    {row}
+                  </View>
+                ))}
+              </View>
+              <View style={styles.flex}>{weekCard}</View>
             </View>
-            <View style={[styles.flex, { gap }]}>
-              {weekCard}
-              {analysis}
+            <View style={[styles.row, { gap }]}>
+              <View style={styles.flex2}>{subjects}</View>
+              <View style={styles.flex}>{analysis}</View>
             </View>
-          </View>
+          </>
         ) : (
           <>
             {statRows.map((row, index) => (
@@ -380,6 +419,8 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   flex2: { flex: 1.6 },
   grow: { flexGrow: 1 },
+  // La semaine étirée à la hauteur des chiffres : le graphique se pose en bas.
+  weekGrow: { flexGrow: 1, justifyContent: 'space-between' },
   cardGap: { gap: spacing.sm },
   cardHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   subjectsCard: { gap: spacing.md },

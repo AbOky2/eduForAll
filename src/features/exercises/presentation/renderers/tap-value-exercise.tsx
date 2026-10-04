@@ -9,7 +9,11 @@ import {
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
+import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
+import { scaled, useResponsive } from '@/design-system/responsive';
+import { a11y } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import type { ExerciseRendererProps } from '../exercise-props';
@@ -18,6 +22,18 @@ type TapStep = Extract<
   ExerciseStep,
   { type: 'tap_letter' } | { type: 'tap_syllable' } | { type: 'fill_missing_letter' }
 >;
+
+/**
+ * Tuiles par rangée : une seule rangée sous la bande d'écoute d'une tablette
+ * couchée (jusqu'à quatre) ; ailleurs, quatre deux par deux, sinon trois au
+ * plus par rangée.
+ */
+export function tapColumns(count: number, wide: boolean): number {
+  if (wide && count <= 4) {
+    return Math.max(1, count);
+  }
+  return count === 4 ? 2 : Math.max(1, Math.min(3, count));
+}
 
 /** Tap the right letter/syllable, or complete a masked word. */
 export function TapValueExercise({
@@ -29,7 +45,25 @@ export function TapValueExercise({
 }: ExerciseRendererProps<TapStep>) {
   const [pressed, setPressed] = useState<string | null>(null);
   const metrics = useExerciseMetrics();
+  const cardState = useAnswerCardState(interactive);
+  const { scale } = useResponsive();
   const audioId = step.audioId ?? null;
+  // Le mot à compléter se regarde : seul le cas sans mot est une écoute seule.
+  const listenOnly = audioId !== null && step.type !== 'fill_missing_letter';
+  const wide = listenOnly && metrics.listenLayout === 'band' && metrics.wide;
+  const columns = tapColumns(step.options.length, wide);
+  const rows: string[][] = [];
+  for (let start = 0; start < step.options.length; start += columns) {
+    rows.push(step.options.slice(start, start + columns));
+  }
+  const answerHeight = fitAnswerHeight({
+    preferred: metrics.answerHeight,
+    room: answersRoom(metrics, listenOnly),
+    rows: rows.length,
+    gap: metrics.gap,
+    grow: wide,
+    min: scaled(a11y.childTouchTarget + 8, scale),
+  });
 
   useEffect(() => {
     if (audioId) {
@@ -38,26 +72,55 @@ export function TapValueExercise({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
 
+  const answers = (
+    <View style={{ gap: metrics.gap }}>
+      {rows.map((row, rowIndex) => (
+        <View key={rowIndex} style={[styles.row, { gap: metrics.gap }]}>
+          {row.map((option) => (
+            <EcolnaAnswerCard
+              key={option}
+              label={option}
+              glyphVariant={metrics.answerGlyph}
+              state={cardState(pressed === option)}
+              onPress={() => {
+                setPressed(option);
+                onSubmit({ kind: 'value', value: option });
+              }}
+              style={styles.cell}
+              contentStyle={{ minHeight: answerHeight }}
+            />
+          ))}
+          {/* Une rangée incomplète garde des cases de même largeur. */}
+          {Array.from({ length: columns - row.length }, (_, index) => (
+            <View key={`empty-${index}`} style={styles.cell} />
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+
+  if (listenOnly && audioId) {
+    return (
+      <EcolnaExerciseLayout
+        metrics={metrics}
+        answers={answers}
+        listen={{ playing: playingAudioId === audioId, onPress: () => playAudio(audioId) }}
+      />
+    );
+  }
+
   const prompt =
-    step.type === 'fill_missing_letter' || audioId ? (
+    step.type === 'fill_missing_letter' ? (
       <EcolnaStimulus
         style={[styles.stage, { minHeight: metrics.listenSize * 1.8, gap: metrics.gap }]}
       >
-        {step.type === 'fill_missing_letter' ? (
-          <EcolnaText
-            variant="displayGlyph"
-            align="center"
-            accessibilityLabel={fr.lesson.maskedWord}
-          >
-            {step.maskedWord.replace('_', ' _ ')}
-          </EcolnaText>
-        ) : null}
+        <EcolnaText variant="displayGlyph" align="center" accessibilityLabel={fr.lesson.maskedWord}>
+          {step.maskedWord.replace('_', ' _ ')}
+        </EcolnaText>
         {audioId ? (
           <EcolnaAudioButton
-            size={
-              step.type === 'fill_missing_letter' ? metrics.listenSize * 0.6 : metrics.listenSize
-            }
-            variant={step.type === 'fill_missing_letter' ? 'sky' : 'sand'}
+            size={metrics.listenSize * 0.6}
+            variant="sky"
             playing={playingAudioId === audioId}
             onPress={() => playAudio(audioId)}
           />
@@ -65,30 +128,11 @@ export function TapValueExercise({
       </EcolnaStimulus>
     ) : null;
 
-  const answers = (
-    <View style={[styles.grid, { gap: metrics.gap }]}>
-      {step.options.map((option) => (
-        <EcolnaAnswerCard
-          key={option}
-          label={option}
-          glyphVariant={metrics.answerGlyph}
-          state={interactive ? 'default' : pressed === option ? 'selected' : 'disabled'}
-          onPress={() => {
-            setPressed(option);
-            onSubmit({ kind: 'value', value: option });
-          }}
-          style={[styles.tile, { minWidth: metrics.tileWidth }]}
-          contentStyle={{ minHeight: metrics.answerHeight }}
-        />
-      ))}
-    </View>
-  );
-
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} />;
+  return <EcolnaExerciseLayout metrics={metrics} prompt={prompt} answers={answers} />;
 }
 
 const styles = StyleSheet.create({
   stage: { alignItems: 'center', justifyContent: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-  tile: { flexGrow: 1, maxWidth: '46%' },
+  row: { flexDirection: 'row' },
+  cell: { flex: 1 },
 });

@@ -175,17 +175,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: { width: '100%', maxWidth: 480 },
-  // Au repos, un puits sans filet ; au focus (ou après une erreur), le filet bleu de 2 dp.
+  // Le même champ que le prénom (création de profil) : blanc, filet de 2 dp
+  // (« 2 dp sur ce qui se touche ») ; au focus ou après une erreur, le filet
+  // passe au bleu. Jamais un puits gris, qui se lirait « désactivé ».
   input: {
     borderRadius: radius.lg,
     borderWidth: 2,
-    borderColor: colors.fill,
-    backgroundColor: colors.fill,
+    borderColor: colors.borderStrong,
+    backgroundColor: colors.white,
     textAlign: 'center',
     color: colors.textPrimary,
     paddingHorizontal: spacing.md,
     // Le filet bleu dit le focus ; aucun contour de navigateur par-dessus.
     outlineWidth: 0,
   },
-  inputFocused: { borderColor: colors.brand, backgroundColor: colors.white },
+  inputFocused: { borderColor: colors.brand },
 });

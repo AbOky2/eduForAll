@@ -30,6 +30,9 @@ const ICONS = {
   close: 'x',
   lock: 'lock-key',
   'arrow-back': 'arrow-left',
+  // Avancer (« Continuer », « Leçon suivante ») : une flèche, pas ▶ — ▶ veut
+  // dire « lire le son » sur une tablette ou une radio.
+  'arrow-forward': 'arrow-right',
   'chevron-right': 'caret-right',
   book: 'book-open',
   pencil: 'pencil-simple',

@@ -52,6 +52,41 @@ export function fitSubjectTile(
   return best.emblem >= scaled(FIT_MIN, scale) ? { ...best, emblem: Math.floor(best.emblem) } : null;
 }
 
+/** La hauteur d'une grande tuile à sa juste taille : l'emblème (et le nom dessous en `tall`) plus ses marges. */
+export function subjectTileHeight(fit: SubjectTileFit, scale: number): number {
+  const pad = scaled(spacing.md, scale);
+  if (fit.layout === 'wide') {
+    return fit.emblem + 2 * pad;
+  }
+  const gap = scaled(spacing.xs, scale);
+  const words =
+    scaled(typography.headlineMd.lineHeight, scale) + scaled(typography.labelMd.lineHeight, scale) + 2;
+  return fit.emblem + gap + words + 2 * pad;
+}
+
+/**
+ * Les grandes tuiles d'une cellule de grille (`box`, en dp) : la disposition
+ * (`fitSubjectTile`), et, quand l'emblème a atteint son plafond avant la
+ * hauteur de la cellule, la hauteur à laquelle s'arrêter et le surplus par
+ * rangée. Une tuile ne s'étire plus en hauteur vide : l'écran donne ce
+ * surplus à ce qui en a l'usage (la carte du jour). Un surplus de moins de
+ * 16 dp ne vaut pas qu'on recompose : la tuile s'étire.
+ */
+export function subjectTileRoom(
+  box: { width: number; height: number },
+  scale: number,
+): { fit: SubjectTileFit | null; height: number | null; surplus: number } {
+  const fit = fitSubjectTile(box, scale);
+  if (!fit) {
+    return { fit, height: null, surplus: 0 };
+  }
+  const height = subjectTileHeight(fit, scale);
+  const surplus = Math.floor(box.height - height);
+  return surplus >= scaled(spacing.md, scale)
+    ? { fit, height, surplus }
+    : { fit, height: null, surplus: 0 };
+}
+
 interface SubjectTileProps {
   subject: SubjectArtId;
   label: string;

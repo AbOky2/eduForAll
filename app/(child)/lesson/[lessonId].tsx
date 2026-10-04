@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { createElement, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Animated, Modal, ScrollView, StyleSheet, View } from 'react-native';
 
 import { resolveAudioSource } from '@/content/audio-registry.generated';
 import { asId } from '@/core/ids/ids';
@@ -17,9 +17,15 @@ import {
   lessonReducer,
   willMoveOn,
 } from '@/features/lesson-session/domain/lesson-machine';
+import { isHintOffered } from '@/features/lesson-session/domain/hint-offer';
+import {
+  answerAgainEvents,
+  canAnswerAgainByCard,
+} from '@/features/lesson-session/domain/retry-by-card';
 import { recordLessonCompletion } from '@/features/progress/application/record-lesson-completion';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import { useSettings } from '@/features/settings/application/settings-store';
+import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { EcolnaAvatar } from '@/design-system/avatars';
 import { FeedbackBanner } from '@/design-system/components/feedback-banner';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
@@ -35,13 +41,21 @@ import {
   EcolnaText,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { a11y, colors, spacing, subjectColors } from '@/design-system/tokens';
+import { a11y, colors, shadows, spacing, subjectColors } from '@/design-system/tokens';
 import { fr, pickFeedback } from '@/localization/fr/strings';
 
 const log = createLogger('lesson-session');
 
 /** Des étapes sans réponse à juger : on les enchaîne sans verdict. */
 const QUIET_STEPS = new Set(['listen', 'listen_and_repeat', 'trace_letter', 'trace_graphism']);
+
+/**
+ * Après un premier essai manqué, la carte choisie montre « à revoir » le
+ * temps que la feuille monte ; ensuite les cartes se rouvrent, et en toucher
+ * une vaut « Réessayer » puis cette réponse. Le délai écarte aussi le double
+ * appui d'un petit doigt, qui compterait sinon comme un deuxième essai.
+ */
+const RETRY_BY_CARD_DELAY_MS = 900;
 
 /**
  * L'étape fait-elle entendre quelque chose (un son, un mot, une histoire) ?
@@ -255,8 +269,24 @@ function SessionBody({
     });
   }, [state.phase, profileId, lesson, state.outcomes, router]);
 
+  // « À revoir » au premier essai : les cartes se rouvrent après un instant.
+  // La fenêtre est nommée par l'étape et l'essai — rien à remettre à zéro.
+  const retryEligible = canAnswerAgainByCard(state);
+  const feedbackKey = `${state.stepIndex}:${state.attemptsOnCurrentStep}`;
+  const [retryOpenKey, setRetryOpenKey] = useState<string | null>(null);
+  useEffect(() => {
+    if (!retryEligible) {
+      return undefined;
+    }
+    const timer = setTimeout(() => setRetryOpenKey(feedbackKey), RETRY_BY_CARD_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [retryEligible, feedbackKey]);
+  const retryByCard = retryEligible && retryOpenKey === feedbackKey;
+
   const step = state.phase === 'completed' ? null : currentStep(state);
   const renderer = step ? rendererFor(step) : null;
+  // L'indice n'est offert qu'après un premier essai manqué (hint-offer.ts).
+  const hintOffered = isHintOffered(state);
 
   return (
     <EcolnaScreen background="exercise" fullWidth>
@@ -281,17 +311,12 @@ function SessionBody({
             accessibilityLabel={fr.lesson.exerciseCount(state.stepIndex + 1, lesson.steps.length)}
           />
         </View>
-        {step?.hint ? (
-          // Un disque soleil, l'ampoule à l'encre : l'aide se voit en plein soleil (9,6:1).
-          <EcolnaIconButton
-            icon="lightbulb"
-            tone="sun"
-            accessibilityLabel={fr.lesson.hint}
-            onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
-          />
-        ) : (
-          <View style={{ width: Math.max(48, scaled(52, scale)) }} />
-        )}
+        {/* key : une apparition (et sa pulsation) par étape. */}
+        <HintButton
+          key={step?.id ?? 'done'}
+          visible={hintOffered}
+          onPress={() => dispatch({ type: 'HINT_REQUESTED' })}
+        />
       </View>
 
       {/* La consigne, une seule fois, et toujours réécoutable. */}
@@ -303,10 +328,11 @@ function SessionBody({
           ]}
         >
           <EcolnaAudioButton
-            variant="sky"
+            variant="instruction"
             icon="speech"
-            // Le diamètre du bouton « fermer » : consigne et barre partent du même bord.
-            size={Math.max(a11y.childTouchTarget, scaled(52, scale))}
+            // La bouée de qui ne lit pas : un peu plus grande que la croix sur
+            // tablette ; elle part du même bord.
+            size={Math.max(a11y.childTouchTarget, scaled(isTablet ? 60 : 52, scale))}
             accessibilityLabel={fr.lesson.replayInstruction}
             playing={playingAudioId === step.instruction.audioId}
             onPress={() => playAudio(step.instruction.audioId)}
@@ -350,8 +376,16 @@ function SessionBody({
                 createElement(renderer, {
                   key: step.id,
                   step,
-                  interactive: state.phase === 'awaiting_answer',
-                  onSubmit: (answer) => dispatch({ type: 'ANSWER_SUBMITTED', answer }),
+                  // Pendant la feuille « à revoir » du premier essai, toucher une
+                  // carte vaut « Réessayer » puis cette réponse (retry-by-card.ts).
+                  interactive: state.phase === 'awaiting_answer' || retryByCard,
+                  onSubmit: (answer) => {
+                    if (retryByCard) {
+                      answerAgainEvents(answer).forEach((event) => dispatch(event));
+                    } else {
+                      dispatch({ type: 'ANSWER_SUBMITTED', answer });
+                    }
+                  },
                   playAudio,
                   playingAudioId,
                 })
@@ -412,8 +446,10 @@ function SessionBody({
                 {fr.lesson.hint}
               </EcolnaText>
               {step.hint.audioId ? (
+                // L'indice est une phrase dite : la même bouée que la consigne.
                 <EcolnaAudioButton
-                  variant="sky"
+                  variant="instruction"
+                  icon="speech"
                   size={scaled(48, scale)}
                   playing={playingAudioId === step.hint.audioId}
                   onPress={() => step.hint?.audioId && playAudio(step.hint.audioId)}
@@ -465,7 +501,74 @@ function SessionBody({
   );
 }
 
+/**
+ * L'ampoule d'indice. Cachée, elle garde sa place : la barre ne saute pas.
+ * Offerte (après un premier essai manqué), c'est la bonne action : un disque
+ * soleil qui arrive d'un ressort (0,9 → 1) et d'une seule pulsation de halo —
+ * rien de tout cela en mouvement réduit.
+ */
+function HintButton({ visible, onPress }: { visible: boolean; onPress: () => void }) {
+  const { scale } = useResponsive();
+  const reducedMotion = useReducedMotion();
+  const diameter = Math.max(48, scaled(52, scale));
+  // 0,9 dès le départ : la première image de l'ampoule est déjà celle du ressort.
+  const [pop] = useState(() => new Animated.Value(0.9));
+  const [glow] = useState(() => new Animated.Value(0));
+  const announced = useRef(false);
+
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+    if (reducedMotion) {
+      pop.setValue(1);
+      glow.setValue(0);
+      return;
+    }
+    if (announced.current) {
+      return;
+    }
+    announced.current = true;
+    Animated.parallel([
+      Animated.spring(pop, { toValue: 1, useNativeDriver: true, speed: 14, bounciness: 9 }),
+      Animated.sequence([
+        Animated.timing(glow, { toValue: 1, duration: 240, useNativeDriver: true }),
+        Animated.timing(glow, { toValue: 0, duration: 560, useNativeDriver: true }),
+      ]),
+    ]).start();
+  }, [visible, reducedMotion, pop, glow]);
+
+  if (!visible) {
+    return <View style={{ width: diameter, height: diameter }} />;
+  }
+  return (
+    <Animated.View style={{ transform: [{ scale: pop }] }}>
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.glow,
+          shadows.glowReward,
+          {
+            borderRadius: diameter / 2,
+            opacity: glow,
+            transform: [
+              { scale: glow.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) },
+            ],
+          },
+        ]}
+      />
+      <EcolnaIconButton
+        icon="lightbulb"
+        tone="sun"
+        accessibilityLabel={fr.lesson.hint}
+        onPress={onPress}
+      />
+    </Animated.View>
+  );
+}
+
 const styles = StyleSheet.create({
+  glow: { ...StyleSheet.absoluteFill, backgroundColor: colors.reward },
   header: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   progressWrap: { flex: 1 },
   instruction: {

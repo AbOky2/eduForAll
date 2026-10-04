@@ -5,7 +5,12 @@ import type { ReactTestInstance } from 'react-test-renderer';
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 
-import { ImageChoiceExercise, imageCardRatio } from './image-choice-exercise';
+import {
+  ImageChoiceExercise,
+  imageCardHeight,
+  imageCardRatio,
+  imageColumns,
+} from './image-choice-exercise';
 
 jest.mock('react-native/Libraries/Utilities/useWindowDimensions');
 const mockedDimensions = useWindowDimensions as unknown as jest.Mock;
@@ -52,11 +57,12 @@ function imageSizes(): number[] {
 }
 
 describe('ImageChoiceExercise — l’image reste dans sa carte', () => {
-  // Largeur extérieure réelle d'une case, filets compris, sur l'appareil de démonstration.
+  // Largeur extérieure réelle d'une case, filets compris, sur l'appareil de
+  // démonstration : couchée, une rangée sous la bande d'écoute (colonne de 1000).
   it.each([
-    ['1180×820', 2, 1180, 820, 317],
-    ['1180×820', 3, 1180, 820, 203],
-    ['1180×820', 4, 1180, 820, 317],
+    ['1180×820', 2, 1180, 820, 487],
+    ['1180×820', 3, 1180, 820, 316],
+    ['1180×820', 4, 1180, 820, 230],
     ['820×1180', 2, 820, 1180, 349],
     ['820×1180', 3, 820, 1180, 225],
     ['820×1180', 4, 820, 1180, 349],
@@ -81,7 +87,7 @@ describe('ImageChoiceExercise — l’image reste dans sa carte', () => {
     });
 
     const inner = cell - 4;
-    const rows = count === 4 ? 2 : 1;
+    const rows = Math.ceil(count / imageColumns(count, width > height));
     const cardHeight = Math.round(cell * imageCardRatio(rows));
     for (const size of imageSizes()) {
       expect(size).toBeLessThanOrEqual(inner * 0.8);
@@ -90,5 +96,40 @@ describe('ImageChoiceExercise — l’image reste dans sa carte', () => {
       expect(size).toBeGreaterThanOrEqual(inner * 0.45);
     }
     expect(before[0]).toBeLessThanOrEqual(inner * 0.8 + 1);
+  });
+});
+
+describe('ImageChoiceExercise — une seule grammaire pour l’écoute', () => {
+  it('lays the answers on one row under the band of a landscape tablet', () => {
+    expect(imageColumns(3, true)).toBe(3);
+    expect(imageColumns(4, true)).toBe(4);
+    expect(imageColumns(4, false)).toBe(2);
+    expect(imageColumns(6, true)).toBe(3);
+  });
+
+  it('bounds the card by the measured room, never under the touch target', () => {
+    const common = { rows: 1, gap: 26, fallback: 245, min: 94 };
+    // Sans place mesurée : la silhouette de la carte.
+    expect(imageCardHeight({ ...common, cellWidth: 316, room: 0 })).toBe(Math.round(316 * 1.15));
+    // Sous la bande d'écoute : la place restante.
+    expect(imageCardHeight({ ...common, cellWidth: 316, room: 179 })).toBe(179);
+    expect(imageCardHeight({ ...common, cellWidth: 316, room: 40 })).toBe(94);
+  });
+
+  it('plays the word from anywhere on the listen pad', () => {
+    mockedDimensions.mockReturnValue({ width: 1180, height: 820, scale: 2, fontScale: 1 });
+    const playAudio = jest.fn();
+    render(
+      <ImageChoiceExercise
+        step={stepWith(3)}
+        interactive
+        onSubmit={jest.fn()}
+        playAudio={playAudio}
+        playingAudioId={null}
+      />,
+    );
+    playAudio.mockClear();
+    fireEvent.press(screen.getByTestId('exercise-listen-pad'));
+    expect(playAudio).toHaveBeenCalledWith('mot-e1cole');
   });
 });

@@ -1,9 +1,11 @@
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import * as Haptics from 'expo-haptics';
+import { StyleSheet } from 'react-native';
 import { State, type PanGesture } from 'react-native-gesture-handler';
 import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
 
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
+import { colors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
 import { TraceLetterExercise } from './trace-letter-exercise';
@@ -63,6 +65,21 @@ describe('TraceLetterExercise — the slate', () => {
     await renderSlate('i');
     expect(screen.getByText('1')).toBeTruthy();
     expect(screen.getByText('2')).toBeTruthy();
+  });
+
+  it('sets each stroke number in white, on a glass pill readable on the night slate', async () => {
+    await renderSlate('i');
+    const number = screen.getByText('1');
+    expect(StyleSheet.flatten(number.props.style)).toMatchObject({ color: colors.white });
+    // La pastille : le premier ancêtre qui porte un fond.
+    let node = number.parent;
+    while (node && !StyleSheet.flatten(node.props.style)?.backgroundColor) {
+      node = node.parent;
+    }
+    const pill = StyleSheet.flatten(node?.props.style) ?? {};
+    expect(pill).toMatchObject({ backgroundColor: colors.onColorGlass });
+    expect(pill.width).toBe(pill.height);
+    expect(pill.borderRadius).toBe(Number(pill.width) / 2);
   });
 
   it('does not number a letter written in one stroke', async () => {

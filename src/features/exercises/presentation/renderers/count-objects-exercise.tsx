@@ -7,6 +7,7 @@ import {
   EcolnaStimulus,
   EcolnaExerciseLayout,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { EmptyQuantityScene } from '@/design-system/illustrations/school-art';
@@ -22,6 +23,24 @@ type CountStep = Extract<ExerciseStep, { type: 'count_objects' }>;
 export const NUMBER_CARD_RATIO = 1.2;
 /** Côte à côte, la scène dépasse les cartes d'un peu, sans les écraser. */
 const SCENE_OVER_CARDS = 1.3;
+/**
+ * Sur grande tablette couchée, le bloc vise la hauteur mesurée (`block`) : la
+ * scène grandit jusqu'à ce rapport de la hauteur des nombres ; quand elle n'a
+ * que peu d'objets, elle leur cède un peu de largeur (au-delà, il lui faut
+ * toute la sienne pour ranger ses objets sans s'allonger).
+ */
+const ROOMY_PROMPT_WEIGHT = 0.7;
+const ROOMY_SCENE_OVER_CARDS = 1.5;
+
+/** La hauteur de la scène côte à côte : au-dessus des cartes, bornée par le bloc visé. */
+export function sideSceneHeight(cardHeight: number, block: number): number {
+  return block > 0
+    ? Math.max(
+        Math.round(cardHeight * SCENE_OVER_CARDS),
+        Math.min(block, Math.round(cardHeight * ROOMY_SCENE_OVER_CARDS)),
+      )
+    : Math.round(cardHeight * SCENE_OVER_CARDS);
+}
 
 /** Peu d'objets : plus grands, pour qu'un seul ne se perde pas dans la scène. */
 function boostOf(count: number): number {
@@ -49,6 +68,7 @@ export function CountObjectsExercise({
   const [sceneWidth, setSceneWidth] = useState(0);
   const { isTablet, scale, splitPanes } = useResponsive();
   const metrics = useExerciseMetrics();
+  const cardState = useAnswerCardState(interactive);
 
   const options = step.options.length;
   const cardWidth =
@@ -58,12 +78,14 @@ export function CountObjectsExercise({
   const cardHeight = Math.max(metrics.answerHeight, Math.round(cardWidth * NUMBER_CARD_RATIO));
 
   const scenePadding = scaled(spacing.lg, scale);
+  // Le bloc visé n'existe que mesuré, sur grande tablette.
+  const roomy = splitPanes && metrics.block > 0;
+  const boosted = step.count <= 4;
   const sceneMinHeight = splitPanes
-    ? Math.round(cardHeight * SCENE_OVER_CARDS)
+    ? sideSceneHeight(cardHeight, roomy ? metrics.block : 0)
     : scaled(isTablet ? 260 : 190, scale);
   const objectGap = scaled(spacing.sm, scale);
   const baseSize = scaled(isTablet ? 76 : 56, scale);
-  const boosted = step.count <= 4;
   // Grossis, les objets restent dans 76 % de la scène — comme une image dans
   // sa carte ; côte à côte, ils tiennent aussi dans sa hauteur.
   const packing = packObjects({
@@ -134,7 +156,7 @@ export function CountObjectsExercise({
           key={option}
           label={String(option)}
           glyphVariant={metrics.answerGlyph}
-          state={interactive ? 'default' : pressed === option ? 'selected' : 'disabled'}
+          state={cardState(pressed === option)}
           onPress={() => {
             setPressed(option);
             onSubmit({ kind: 'number', value: option });
@@ -146,7 +168,14 @@ export function CountObjectsExercise({
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={1} />;
+  return (
+    <EcolnaExerciseLayout
+      metrics={metrics}
+      prompt={prompt}
+      answers={answers}
+      promptWeight={roomy && boosted ? ROOMY_PROMPT_WEIGHT : 1}
+    />
+  );
 }
 
 const styles = StyleSheet.create({

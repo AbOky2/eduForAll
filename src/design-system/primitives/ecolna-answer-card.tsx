@@ -41,8 +41,8 @@ const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string
   correct: { face: colors.successTint, edge: colors.success, border: colors.success, ink: colors.successInk },
   // Doux : le bleu de la marque, jamais rouge (le programme et la direction l'interdisent).
   incorrect: { face: colors.brandTint, edge: colors.brand, border: colors.brand, ink: colors.brandInk },
-  // Inerte pendant le retour, mais jamais grisée : un enfant lit le gris
-  // comme « c'est cassé ». Elle garde son aspect, sans ombre.
+  // Inerte pendant le retour, mais jamais grisée ni éteinte : un enfant lit
+  // le gris comme « c'est cassé ». Elle garde sa face et son ombre posée.
   disabled: { face: colors.white, edge: colors.border, border: colors.border, ink: colors.ink },
 };
 
@@ -53,6 +53,22 @@ const LOOK: Record<AnswerCardState, { face: string; edge: string; border: string
  * teintée (relier) garde sa teinte.
  */
 export const AnswerVerdictContext = createContext<'correct' | 'incorrect' | null>(null);
+
+/**
+ * L'état d'une carte d'un exercice à choix unique. Inerte (feuille de retour) :
+ * la carte choisie porte le verdict, les autres attendent. Rouverte pendant la
+ * feuille « à revoir » (toucher une autre carte vaut « Réessayer ») : la carte
+ * choisie GARDE sa marque — elle reste inerte —, les autres se touchent.
+ */
+export function useAnswerCardState(interactive: boolean): (picked: boolean) => AnswerCardState {
+  const verdict = useContext(AnswerVerdictContext);
+  return (picked) => {
+    if (!interactive) {
+      return picked ? 'selected' : 'disabled';
+    }
+    return picked && verdict ? 'selected' : 'default';
+  };
+}
 
 /**
  * Une réponse qu'on touche (v4) : une surface blanche, un filet de 2 dp, une
@@ -88,7 +104,8 @@ export function EcolnaAnswerCard({
       border={look.border}
       borderWidth={shown === 'default' || shown === 'disabled' ? 2 : 3}
       radius={radius.xl}
-      shadow={shown === 'default' ? shadows.card : undefined}
+      // Une carte inerte garde son ombre : elle attend, elle n'est pas éteinte.
+      shadow={shown === 'default' || shown === 'disabled' ? shadows.card : undefined}
       onPress={onPress}
       disabled={disabled}
       pressedLook={sunk}

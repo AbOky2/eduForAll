@@ -19,9 +19,11 @@ import { colors, subjectColors } from '../tokens';
  * couleur.
  *
  * Verrouillé ≠ caché : un badge non gagné garde sa forme, son pictogramme et
- * sa famille, en pâle (couronne teintée, cœur clair, pictogramme atténué),
- * avec une pastille cadenas — une collection qui donne envie, pas une grille
- * grise. Un badge est un objectif, jamais une boîte mystère.
+ * sa famille — mais la famille ne vit plus que dans son cœur pâle. Gagnée :
+ * couronne teintée, cœur plein ; à gagner : couronne NEUTRE, cœur pâle,
+ * pictogramme atténué, pastille cadenas. La différence se voit d'un coup
+ * d'œil, même dans la famille soleil — et ce n'est jamais une grille grise.
+ * Un badge est un objectif, jamais une boîte mystère.
  *
  * Grille 96 × 96. N'importe que react, react-native-svg et les jetons : la
  * planche le rend hors appareil.
@@ -100,22 +102,26 @@ function mix(a: string, b: string, t: number): string {
 }
 
 /**
- * La même famille, pas encore gagnée : la couronne dans la teinte, le cœur
- * dans la teinte soutenue, le pictogramme dans la couleur de la famille,
- * atténué (`LOCKED_GLYPH_OPACITY`). À côté d'une médaille gagnée (pleine,
- * saturée, pictogramme blanc), le « pas encore » se lit sans hésiter.
+ * La même famille, pas encore gagnée : la couronne neutre (`fill`), commune
+ * à toutes les familles — la couleur ne vit plus que dans le cœur pâle (la
+ * teinte soutenue) et dans le pictogramme atténué (`LOCKED_GLYPH_OPACITY`).
+ * À côté d'une médaille gagnée (couronne teintée, cœur plein, pictogramme
+ * blanc), le « pas encore » se lit sans hésiter.
  */
+const LOCKED_RING = colors.fill;
 const PALE = {
-  success: { ring: colors.successTint, core: colors.feedbackCorrectShade, glyph: colors.success },
-  brand: { ring: colors.brandTint, core: colors.brandTintStrong, glyph: colors.brand },
-  // Le soleil n'a pas de teinte soutenue : on la prend entre la teinte et le plein.
-  gold: { ring: colors.rewardTint, core: mix(colors.reward, colors.rewardTint, 0.24), glyph: colors.rewardDeep },
+  success: { ring: LOCKED_RING, core: colors.feedbackCorrectShade, glyph: colors.success },
+  brand: { ring: LOCKED_RING, core: colors.brandTintStrong, glyph: colors.brand },
+  // Le soleil n'a pas de teinte soutenue : on la prend tout près de la teinte,
+  // pour que le cœur pâle ne se lise plus comme un or (« Trois jours de suite »
+  // gagnée à côté de « Cinq sans faute » à gagner).
+  gold: { ring: LOCKED_RING, core: mix(colors.reward, colors.rewardTint, 0.12), glyph: colors.rewardDeep },
   // La nuit, en pâle, rejoint le bleu : un cœur nuit éclairci virerait au gris.
-  night: { ring: colors.brandTint, core: colors.brandTintStrong, glyph: colors.night },
-  language: { ring: subjectColors.language.tint, core: subjectColors.language.tintStrong, glyph: subjectColors.language.solid },
-  reading: { ring: subjectColors.reading.tint, core: subjectColors.reading.tintStrong, glyph: subjectColors.reading.solid },
-  writing: { ring: subjectColors.writing.tint, core: subjectColors.writing.tintStrong, glyph: subjectColors.writing.solid },
-  math: { ring: subjectColors.math.tint, core: subjectColors.math.tintStrong, glyph: subjectColors.math.solid },
+  night: { ring: LOCKED_RING, core: colors.brandTintStrong, glyph: colors.night },
+  language: { ring: LOCKED_RING, core: subjectColors.language.tintStrong, glyph: subjectColors.language.solid },
+  reading: { ring: LOCKED_RING, core: subjectColors.reading.tintStrong, glyph: subjectColors.reading.solid },
+  writing: { ring: LOCKED_RING, core: subjectColors.writing.tintStrong, glyph: subjectColors.writing.solid },
+  math: { ring: LOCKED_RING, core: subjectColors.math.tintStrong, glyph: subjectColors.math.solid },
 } as const satisfies Record<keyof typeof FAMILY, Family>;
 
 const LOCKED_GLYPH_OPACITY = 0.5;

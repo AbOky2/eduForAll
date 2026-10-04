@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { useReducedMotion } from '../accessibility/use-reduced-motion';
 import { fr } from '@/localization/fr/strings';
@@ -7,7 +7,7 @@ import { a11y, colors, shadows } from '../tokens';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { EcolnaGalet } from './ecolna-galet';
 
-type AudioButtonVariant = 'sand' | 'sky' | 'bordered';
+type AudioButtonVariant = 'sand' | 'sky' | 'bordered' | 'instruction';
 
 interface EcolnaAudioButtonProps {
   onPress: () => void;
@@ -28,18 +28,47 @@ interface EcolnaAudioButtonProps {
  * son haut-parleur. Les variantes ne changent que l'insistance :
  * - `sand`     le grand bouton d'un exercice (nom historique des maquettes) ;
  * - `sky`      un petit bouton posé à côté d'un mot ;
- * - `bordered` un galet blanc, pour une consigne qu'on peut réentendre.
+ * - `bordered` un galet blanc, pour une consigne qu'on peut réentendre ;
+ * - `instruction` la consigne d'un exercice, en tête : la bouée de qui ne lit
+ *   pas encore — le contrôle le plus visible de l'en-tête après l'action.
  */
 const VARIANTS: Record<
   AudioButtonVariant,
-  { face: string; edge: string; ink: string; border?: string }
+  {
+    face: string;
+    edge: string;
+    ink: string;
+    border?: string;
+    borderWidth?: number;
+    shadow?: ViewStyle;
+    /** Part du diamètre occupée par le pictogramme (défaut 0,48). */
+    iconRatio?: number;
+  }
 > = {
   // Le grand bouton d'un exercice : le disque plein de la marque.
-  sand: { face: colors.brand, edge: colors.brand, ink: colors.white },
+  sand: { face: colors.brand, edge: colors.brand, ink: colors.white, shadow: shadows.glowBrand },
   // Posé à côté d'un mot : un disque bleuté.
   sky: { face: colors.brandTint, edge: colors.brandTint, ink: colors.brand },
   // Réentendre une consigne : un disque blanc fileté.
-  bordered: { face: colors.white, edge: colors.border, ink: colors.brand, border: colors.border },
+  bordered: {
+    face: colors.white,
+    edge: colors.border,
+    ink: colors.brand,
+    border: colors.border,
+    shadow: shadows.card,
+  },
+  // La consigne en tête d'exercice : un disque bleu franc cerclé de la marque,
+  // posé d'une ombre — il se voit au soleil (le filet brand fait 5,8:1 sur la
+  // page) et passe avant « quitter » et « indice ».
+  instruction: {
+    face: colors.brandTintStrong,
+    edge: colors.brand,
+    ink: colors.brand,
+    border: colors.brand,
+    borderWidth: 2,
+    shadow: shadows.card,
+    iconRatio: 0.52,
+  },
 };
 
 /**
@@ -99,8 +128,8 @@ export function EcolnaAudioButton({
       <EcolnaGalet
         face={palette.face}
         border={palette.border}
-        borderWidth={1}
-        shadow={variant === 'sand' ? shadows.glowBrand : variant === 'bordered' ? shadows.card : undefined}
+        borderWidth={palette.borderWidth ?? 1}
+        shadow={palette.shadow}
         radius={size / 2}
         onPress={onPress}
         disabled={disabled}
@@ -109,7 +138,12 @@ export function EcolnaAudioButton({
         hitSlop={6}
         faceStyle={[styles.face, { width: size, height: size }]}
       >
-        <EcolnaIcon name={icon} size={Math.round(size * 0.48)} color={palette.ink} filled={icon === 'speech'} />
+        <EcolnaIcon
+          name={icon}
+          size={Math.round(size * (palette.iconRatio ?? 0.48))}
+          color={palette.ink}
+          filled={icon === 'speech'}
+        />
       </EcolnaGalet>
     </View>
   );

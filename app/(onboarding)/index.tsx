@@ -8,20 +8,21 @@ import {
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SubjectArt, type SubjectArtId } from '@/design-system/icons/subject-art';
 import { EcolnaAvatar } from '@/design-system/avatars';
 import { EcolnaLogo } from '@/design-system/brand/ecolna-mark';
+import { OfflineTabletArt } from '@/design-system/illustrations/offline-tablet';
 import {
   Orbit,
   OrbitChip,
-  OrbitTile,
   orbitInsets,
   type OrbitSatellite,
 } from '@/design-system/illustrations/orbit';
 import { EcolnaButton, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { heroTitleStyle } from '@/features/onboarding/presentation/ceremony-parts';
+import { StepDots, heroTitleStyle } from '@/features/onboarding/presentation/ceremony-parts';
 import { colors, radius, spacing, subjectColors } from '@/design-system/tokens';
 import { fr } from '@/localization/fr/strings';
 
@@ -37,21 +38,31 @@ const SUBJECTS: { id: SubjectArtId; label: string }[] = [
   { id: 'math', label: fr.subjects.math },
 ];
 
+/** Les libellés du bouton, page par page (les parcours Maestro les touchent). */
+const ACTIONS = [fr.common.start, fr.common.next, fr.onboarding.createProfile] as const;
+const PAGES = ACTIONS.length;
+
 /**
  * Onboarding — direction v4. Trois pages qu'on fait glisser ou qu'on avance
  * au bouton : l'école qui accompagne chaque enfant (les personnages de l'app
  * en orbite), les quatre disciplines du programme, et la promesse « sans
- * connexion » (tout est déjà dans la tablette). En paysage, deux volets :
- * l'image posée sur la gouttière, la colonne de mots centrée en face, et le
- * pied (points, bouton) dans cette colonne ; ailleurs, l'image au-dessus.
+ * connexion » (la tablette de l'écran hors connexion : une seule image de la
+ * promesse dans toute l'app). En paysage, deux volets : l'image posée sur la
+ * gouttière, et en face la colonne des mots — titre, phrase, puis les points
+ * et le bouton —, le tout centré en hauteur face à l'image, comme l'écran
+ * hors connexion. Ailleurs, l'image au-dessus des mots et le pied en bas.
  * Les pages prennent la largeur RÉELLE du conteneur, pas celle de la fenêtre.
  */
 export default function OnboardingScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { splitPanes, isTablet, scale, screenPadding } = useResponsive();
   const scrollRef = useRef<ScrollView>(null);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  // La hauteur de la rangée du logo : en deux volets, la même marge en bas
+  // centre la composition sur l'écran, pas sous le logo.
+  const [barHeight, setBarHeight] = useState(0);
 
   const onLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -79,27 +90,52 @@ export default function OnboardingScreen() {
   };
 
   const finish = () => router.push('/(onboarding)/create-profile');
+  const advanceFrom = (index: number) => (index < PAGES - 1 ? goTo(index + 1) : finish());
 
   // ── Mise en page ─────────────────────────────────────────────────────
+  // De l'air en haut et en bas, à la mesure des marges latérales : le logo
+  // et le bouton ne collent plus aux bords.
+  const bottomPad = Math.max(insets.bottom, scaled(spacing.xxl, scale));
   // En deux volets, la ligne se partage exactement : image (un carré posé sur
   // la gouttière), l'air, la colonne de mots — jusqu'à la gouttière de droite.
+  // Le bas des pages répond au haut (la rangée du logo) : l'ensemble est
+  // centré sur l'écran.
   const inner = Math.max(0, size.width - screenPadding * 2);
   const gap = scaled(splitPanes ? spacing.xxxl : spacing.xl, scale);
+  const pageBottom = splitPanes ? Math.max(bottomPad, insets.top + barHeight) : 0;
   const orbit = splitPanes
-    ? Math.round(Math.min(inner * 0.46, size.height * 0.86))
+    ? Math.round(Math.min(inner * 0.46, (size.height - pageBottom) * 0.86))
     : Math.round(Math.min(inner, size.height * 0.5, scaled(isTablet ? 440 : 300, scale)));
   const wordsWidth = splitPanes
     ? inner - orbit - gap
     : Math.min(inner, scaled(isTablet ? 600 : 520, scale));
-  // Les mots commencent ici (deux volets) : le pied s'y aligne.
-  const wordsLeft = screenPadding + orbit + gap;
 
-  const pageOf = (art: ReactNode, words: ReactNode) => (
+  /** Les points et le bouton d'une page. */
+  const footerOf = (index: number) => (
+    <View style={[styles.footerBody, { gap: scaled(spacing.md, scale) }]}>
+      <View style={splitPanes ? styles.dotsSplit : styles.dots}>
+        <StepDots
+          step={index + 1}
+          total={PAGES}
+          accessibilityLabel={fr.a11y.page(index + 1, PAGES)}
+        />
+      </View>
+      <EcolnaButton
+        label={ACTIONS[index] ?? fr.common.next}
+        onPress={() => advanceFrom(index)}
+        style={splitPanes ? styles.ctaSplit : styles.cta}
+      />
+    </View>
+  );
+
+  const pageOf = (index: number, art: ReactNode, words: ReactNode) => (
     <View
       style={[
         styles.page,
         { width: size.width, paddingHorizontal: screenPadding },
-        splitPanes ? [styles.pageSplit, { gap }] : { gap: scaled(spacing.xxl, scale) },
+        splitPanes
+          ? [styles.pageSplit, { gap, paddingBottom: pageBottom }]
+          : { gap: scaled(spacing.xxl, scale) },
       ]}
     >
       <View style={splitPanes ? [styles.artPane, { width: orbit, height: orbit }] : styles.artStack}>
@@ -107,6 +143,12 @@ export default function OnboardingScreen() {
       </View>
       <View style={[styles.words, { width: wordsWidth, gap: scaled(spacing.md, scale) }]}>
         {words}
+        {/* En deux volets, les points et le bouton suivent les mots. */}
+        {splitPanes ? (
+          <View style={{ marginTop: scaled(spacing.xxl, scale) - scaled(spacing.md, scale) }}>
+            {footerOf(index)}
+          </View>
+        ) : null}
       </View>
     </View>
   );
@@ -122,7 +164,6 @@ export default function OnboardingScreen() {
   const chip = Math.round(orbit * 0.15);
   const friend = Math.round(orbit * 0.19);
   const hero = Math.round(orbit * 0.38);
-  const offlineTile = Math.round(orbit * 0.32);
 
   /**
    * Une orbite posée à l'œil : son bord VISIBLE (le satellite le plus à
@@ -161,26 +202,20 @@ export default function OnboardingScreen() {
     },
   ];
 
-  // Page 3 : tout est déjà dans la tablette — les quatre disciplines, avec
-  // leurs emblèmes de partout, et l'étoile.
-  const offlineSatellites: OrbitSatellite[] = [
-    ...SUBJECTS.map((subject, index) => ({
-      node: <SubjectArt subject={subject.id} size={chip} />,
-      size: chip,
-      angle: -90 + index * 72,
-      ring: 1 as const,
-    })),
-    {
-      node: <OrbitChip icon="star" color={colors.reward} tint={colors.white} size={chip} />,
-      size: chip,
-      angle: 198,
-      ring: 1,
-    },
-  ];
-
   return (
-    <EcolnaScreen background="default" fullWidth>
-      <View style={[styles.topBar, { paddingHorizontal: screenPadding }]}>
+    <EcolnaScreen background="default" withBottomInset={false}>
+      <View
+        style={[
+          styles.topBar,
+          { paddingHorizontal: screenPadding, paddingTop: scaled(spacing.lg, scale) },
+        ]}
+        onLayout={(event) => {
+          const next = Math.round(event.nativeEvent.layout.height);
+          if (next !== barHeight) {
+            setBarHeight(next);
+          }
+        }}
+      >
         <EcolnaLogo size={scaled(36, scale)} />
         {/* La place de « Passer » reste réservée à la dernière page : le logo ne saute pas. */}
         <View style={{ opacity: page < 2 ? 1 : 0 }} pointerEvents={page < 2 ? 'auto' : 'none'}>
@@ -205,22 +240,29 @@ export default function OnboardingScreen() {
           >
             {/* Page 1 — Ton école t'accompagne partout (S02) */}
             {pageOf(
+              0,
               orbitArt(
                 hero,
                 <EcolnaAvatar avatarId="avatar-2" size={hero} expression="joy" />,
                 welcomeSatellites,
               ),
-              <EcolnaText variant="displayHero" align={align} style={titleStyle}>
-                {welcomeBefore}
-                <EcolnaText variant="displayHero" color={colors.brand} style={titleStyle}>
-                  {fr.onboarding.welcomeTitleHighlight}
+              <>
+                <EcolnaText variant="displayHero" align={align} style={titleStyle}>
+                  {welcomeBefore}
+                  <EcolnaText variant="displayHero" color={colors.brand} style={titleStyle}>
+                    {fr.onboarding.welcomeTitleHighlight}
+                  </EcolnaText>
+                  {welcomeAfter}
                 </EcolnaText>
-                {welcomeAfter}
-              </EcolnaText>,
+                <EcolnaText variant="bodyLg" color={colors.textSecondary} align={align}>
+                  {fr.onboarding.welcomeSubtitle}
+                </EcolnaText>
+              </>,
             )}
 
             {/* Page 2 — Les quatre disciplines du programme (S03) */}
             {pageOf(
+              1,
               <View
                 style={[styles.subjectGrid, { width: tile * 2 + gridGap, gap: gridGap }]}
               >
@@ -255,13 +297,11 @@ export default function OnboardingScreen() {
               </>,
             )}
 
-            {/* Page 3 — Fonctionne sans connexion (S04) */}
+            {/* Page 3 — Fonctionne sans connexion (S04) : la tablette de
+                l'écran hors connexion, ses quatre disciplines à l'écran. */}
             {pageOf(
-              orbitArt(
-                offlineTile,
-                <OrbitTile icon="offline-ok" color={colors.success} size={offlineTile} />,
-                offlineSatellites,
-              ),
+              2,
+              <OfflineTabletArt size={orbit} />,
               <>
                 <EcolnaText variant="displayHero" align={align} style={titleStyle}>
                   {fr.onboarding.offlineTitle}
@@ -275,41 +315,14 @@ export default function OnboardingScreen() {
         ) : null}
       </View>
 
-      {/* Le pied : en deux volets, dans la colonne des mots ; sinon centré. */}
-      <View
-        style={[
-          styles.footer,
-          { gap: scaled(spacing.md, scale) },
-          splitPanes
-            ? [styles.footerSplit, { paddingLeft: wordsLeft, paddingRight: screenPadding }]
-            : { paddingHorizontal: screenPadding },
-        ]}
-      >
+      {/* Le pied, hors des deux volets : centré sous l'image et les mots. */}
+      {splitPanes ? null : (
         <View
-          style={[styles.dots, splitPanes && styles.dotsSplit]}
-          accessible
-          accessibilityLabel={fr.a11y.page(page + 1, 3)}
+          style={[styles.footer, { paddingHorizontal: screenPadding, paddingBottom: bottomPad }]}
         >
-          {[0, 1, 2].map((index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                index === page
-                  ? { backgroundColor: colors.brand, width: 28 }
-                  : { backgroundColor: index < page ? colors.brandTintStrong : colors.fillStrong },
-              ]}
-            />
-          ))}
+          {footerOf(page)}
         </View>
-        <EcolnaButton
-          label={
-            page === 0 ? fr.common.start : page === 1 ? fr.common.next : fr.onboarding.createProfile
-          }
-          onPress={() => (page < 2 ? goTo(page + 1) : finish())}
-          style={splitPanes ? styles.ctaSplit : styles.cta}
-        />
-      </View>
+      )}
     </EcolnaScreen>
   );
 }
@@ -319,8 +332,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: spacing.sm,
-    minHeight: 64,
+    paddingBottom: spacing.sm,
   },
   pager: { flex: 1 },
   page: { flex: 1, alignItems: 'center', justifyContent: 'center' },
@@ -336,10 +348,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footer: { paddingTop: spacing.md, alignItems: 'center' },
-  footerSplit: { alignItems: 'stretch' },
-  dots: { flexDirection: 'row', justifyContent: 'center', gap: spacing.xs },
-  dotsSplit: { justifyContent: 'flex-start' },
-  dot: { height: 10, width: 10, borderRadius: 5 },
+  footerBody: { alignSelf: 'stretch', alignItems: 'center' },
+  dots: { alignItems: 'center' },
+  dotsSplit: { alignSelf: 'flex-start' },
   cta: { maxWidth: 560, width: '100%' },
   ctaSplit: { width: '100%' },
 });

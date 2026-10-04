@@ -4,13 +4,14 @@ import { StyleSheet, View } from 'react-native';
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
-  EcolnaAudioButton,
   EcolnaExerciseLayout,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
+import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, radius } from '@/design-system/tokens';
+import { a11y, colors, radius, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -117,7 +118,24 @@ export function SpatialPositionExercise({
   const [picked, setPicked] = useState<string | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
-  const stage = scaled(isTablet ? 168 : 112, scale);
+  const cardState = useAnswerCardState(interactive);
+  const audioId = step.audioId ?? null;
+  // Trois scènes sur une rangée sur tablette ; au téléphone, deux par rangée.
+  const columns = isTablet ? Math.min(4, step.choices.length) : 2;
+  const rows: (typeof step.choices)[] = [];
+  for (let start = 0; start < step.choices.length; start += columns) {
+    rows.push(step.choices.slice(start, start + columns));
+  }
+  const facePadding = scaled(spacing.xs, scale);
+  // La scène se règle sur la place mesurée : jamais sous la feuille de retour.
+  const faceHeight = fitAnswerHeight({
+    preferred: scaled(isTablet ? 168 : 112, scale) + 2 * facePadding,
+    room: answersRoom(metrics, audioId !== null),
+    rows: rows.length,
+    gap: metrics.gap,
+    min: scaled(a11y.childTouchTarget + 8, scale),
+  });
+  const stage = faceHeight - 2 * facePadding;
 
   useEffect(() => {
     if (step.audioId) {
@@ -126,51 +144,55 @@ export function SpatialPositionExercise({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
 
-  // La consigne est dite par l'en-tête de leçon ; ici, seulement la réécoute.
-  const prompt = step.audioId ? (
-    <View style={styles.prompt}>
-      <EcolnaAudioButton
-        size={metrics.listenSize}
-        playing={playingAudioId === step.audioId}
-        onPress={() => step.audioId && playAudio(step.audioId)}
-      />
-    </View>
-  ) : null;
-
   const answers = (
-    <View style={[styles.grid, { gap: metrics.gap }]}>
-      {step.choices.map((choice) => {
-        const selected = picked === choice.id;
-        return (
-          <EcolnaAnswerCard
-            key={choice.id}
-            onPress={() => {
-              setPicked(choice.id);
-              onSubmit({ kind: 'choice', choiceId: choice.id });
-            }}
-            accessibilityLabel={choice.relation.replace('-', ' ')}
-            state={interactive ? 'default' : selected ? 'selected' : 'disabled'}
-            contentStyle={styles.cellFace}
-          >
-            <Scene
-              relation={choice.relation}
-              objectId={step.objectIllustrationId}
-              referenceId={step.referenceIllustrationId}
-              size={stage}
-            />
-          </EcolnaAnswerCard>
-        );
-      })}
+    <View style={{ gap: metrics.gap }}>
+      {rows.map((row, rowIndex) => (
+        <View key={rowIndex} style={[styles.row, { gap: metrics.gap }]}>
+          {/* Une rangée incomplète (téléphone : 2 + 1) se centre sous la précédente. */}
+          {row.length < columns ? <View style={{ flex: (columns - row.length) / 2 }} /> : null}
+          {row.map((choice) => (
+            <EcolnaAnswerCard
+              key={choice.id}
+              onPress={() => {
+                setPicked(choice.id);
+                onSubmit({ kind: 'choice', choiceId: choice.id });
+              }}
+              accessibilityLabel={choice.relation.replace('-', ' ')}
+              state={cardState(picked === choice.id)}
+              style={styles.cell}
+              contentStyle={{ padding: facePadding, minHeight: faceHeight }}
+            >
+              <Scene
+                relation={choice.relation}
+                objectId={step.objectIllustrationId}
+                referenceId={step.referenceIllustrationId}
+                size={stage}
+              />
+            </EcolnaAnswerCard>
+          ))}
+          {row.length < columns ? <View style={{ flex: (columns - row.length) / 2 }} /> : null}
+        </View>
+      ))}
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.6} />;
+  // La consigne est dite par l'en-tête de leçon ; ici, seulement la réécoute.
+  return (
+    <EcolnaExerciseLayout
+      metrics={metrics}
+      answers={answers}
+      listen={
+        audioId
+          ? { playing: playingAudioId === audioId, onPress: () => playAudio(audioId) }
+          : undefined
+      }
+    />
+  );
 }
 
 const styles = StyleSheet.create({
-  prompt: { alignItems: 'center', justifyContent: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-  cellFace: { padding: 10 },
+  row: { flexDirection: 'row' },
+  cell: { flex: 1 },
   stage: { borderRadius: radius.md, backgroundColor: colors.surfaceContainerLow },
   placed: { position: 'absolute' },
 });

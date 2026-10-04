@@ -6,7 +6,7 @@ import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import { ObjectIcon } from '@/design-system/illustrations/object-icons';
 import { EcolnaAnswerCard } from '@/design-system/primitives';
 
-import { CountObjectsExercise } from './count-objects-exercise';
+import { CountObjectsExercise, sideSceneHeight } from './count-objects-exercise';
 import { ILLUSTRATION_FILL } from './illustration-fit';
 
 jest.mock('react-native/Libraries/Utilities/useWindowDimensions');
@@ -88,5 +88,18 @@ describe('CountObjectsExercise', () => {
     const size = sizes[0] ?? 0;
     // Quatre par rangée, écarts compris, dans la largeur de la scène.
     expect(size * 4 + 3 * 16).toBeLessThanOrEqual(427);
+  });
+});
+
+describe('sideSceneHeight', () => {
+  it('keeps the scene just above the number cards until the block is measured', () => {
+    expect(sideSceneHeight(200, 0)).toBe(260);
+  });
+
+  it('grows the scene toward the measured block on a large tablet, without crushing the cards', () => {
+    // Le bloc visé borne la scène ; elle ne dépasse jamais 1,5 fois les cartes.
+    expect(sideSceneHeight(200, 345)).toBe(300);
+    expect(sideSceneHeight(200, 280)).toBe(280);
+    expect(sideSceneHeight(200, 120)).toBe(260);
   });
 });

@@ -21,6 +21,7 @@ import {
 } from '@/features/curriculum/application/curriculum-catalog';
 import { createProgressRepository } from '@/features/progress/infrastructure/progress-repository';
 import type { Subject } from '@/content/schemas/curriculum-schema';
+import { EcolnaAvatar } from '@/design-system/avatars';
 import { useReducedMotion } from '@/design-system/accessibility/use-reduced-motion';
 import { JourneyPath, type JourneyPoint } from '@/design-system/components/journey-path';
 import { NudgeRing } from '@/design-system/components/nudge-ring';
@@ -81,18 +82,21 @@ function averageStars(node: WorldNode): number {
 }
 
 /**
- * Le parcours (direction v4) : un fil net relie les mondes en courbes
- * tendues. Ce qui est fait est vert et coché ; le monde du jour porte
- * l'emblème de sa discipline, l'anneau de ses leçons faites et, sous son
- * nom, le bouton « Commencer » ; ce qui reste est fermé mais visible. Aucune fraction :
- * l'anneau et les étoiles disent où en est l'enfant. L'écran s'ouvre déjà
- * centré sur l'étape du jour.
+ * Le parcours (direction v4) : un fil relie les mondes en courbes tendues,
+ * plein et vert jusqu'au monde du jour, en pointillé sur la piste neutre
+ * ensuite (« pas encore »). Ce qui est fait est vert et coché ; le monde du
+ * jour porte l'emblème de sa discipline, l'anneau de ses leçons faites, le
+ * personnage de l'enfant à cheval sur l'anneau (« tu es ici ») et, sous son
+ * nom, le bouton « Commencer » ; ce qui reste est fermé mais visible. Aucune
+ * fraction : l'anneau et les étoiles disent où en est l'enfant. L'écran
+ * s'ouvre déjà centré sur l'étape du jour.
  *
- * Couché, deux volets : à gauche le chemin, resserré (disques plus petits,
- * zigzag court, noms toujours à droite, sans sous-titre) pour montrer quatre
- * à cinq mondes ; à droite, le monde du jour ouvert comme un sommaire. Une
- * liste qui défile se termine toujours par un fondu, jamais par une rangée
- * tranchée net.
+ * Couché, deux volets qui partent de la même ligne : à gauche le chemin,
+ * resserré (disques plus petits, zigzag court, noms toujours à droite, sans
+ * sous-titre) pour montrer quatre à cinq mondes ; à droite, le monde du jour
+ * ouvert comme un sommaire, où la leçon du jour porte le même personnage.
+ * Une liste qui défile se termine toujours par un fondu, jamais par une
+ * rangée tranchée net.
  */
 export default function LevelMapScreen() {
   const router = useRouter();
@@ -184,7 +188,30 @@ export default function LevelMapScreen() {
   const currentOuter = currentNode + 2 * (ringGap + ringStroke);
   const step = scaled(splitPanes ? 118 : isTablet ? 176 : 160, scale);
   const bubble = scaled(isTablet ? 48 : 44, scale);
-  const top = Math.round(currentOuter / 2 + scaled(splitPanes ? spacing.md : spacing.xl, scale));
+  // « Tu es ici » : le personnage de l'enfant, à cheval sur l'anneau du monde
+  // du jour, en haut à gauche, à dix heures : l'arc des leçons faites part de
+  // midi et tourne à droite (il n'y passe qu'aux trois quarts du monde), et
+  // le fil arrive à midi et repart à six heures (il ne le croise jamais).
+  const here = {
+    avatarId: profile?.avatarId ?? '',
+    size: scaled(44, scale),
+    rim: scaled(3, scale),
+    // Son centre sur le bord extérieur de l'anneau : à moitié dehors, il
+    // laisse de l'air à l'emblème.
+    radius: currentOuter / 2,
+  };
+  // Ce que le personnage dépasse au-dessus de l'anneau, et à sa gauche.
+  const hereBox = hereMarkerBox(currentOuter, here);
+  const hereOverflow = Math.max(0, -hereBox.top);
+  const hereOverflowLeft = Math.max(0, -hereBox.left);
+  const currentIndex = nodes.findIndex((entry) => entry.state === 'current');
+  // Couché, le haut de la première étape (ou du personnage qui la coiffe)
+  // s'aligne sur le haut de la carte du volet voisin : les deux volets
+  // partent de la même ligne. Debout, l'air sous l'en-tête.
+  const paneTop = scaled(spacing.sm, scale);
+  const top = splitPanes
+    ? Math.round((currentIndex === 0 ? currentOuter / 2 + hereOverflow : node / 2) + paneTop)
+    : Math.round(currentOuter / 2 + Math.max(scaled(spacing.xl, scale), hereOverflow + paneTop));
   // Couché : un zigzag court collé à la gouttière, chaque nom à droite de son
   // disque. Tablette debout : gauche, centre, droite, centre ; téléphone :
   // gauche, droite — le nom du côté libre.
@@ -211,7 +238,6 @@ export default function LevelMapScreen() {
   // Sous la dernière étape : son nom, ses étoiles, puis le fondu.
   const contentHeight =
     top + Math.max(0, nodes.length - 1) * step + currentOuter / 2 + fade + scaled(spacing.xl, scale);
-  const currentIndex = nodes.findIndex((entry) => entry.state === 'current');
   const reached = currentIndex === -1 ? nodes.length : currentIndex + 1;
 
   // Ouvrir la carte sur l'étape du jour, une seule fois par monde affiché.
@@ -344,14 +370,19 @@ export default function LevelMapScreen() {
                   const labelOnRight =
                     splitPanes || offset < 0 || (offset === 0 && index % 4 === 1);
                   const outer = entry.state === 'current' ? currentOuter : node;
+                  // À gauche du monde du jour, l'étiquette s'écarte aussi du personnage.
+                  const gapHere =
+                    !labelOnRight && entry.state === 'current'
+                      ? labelGap + hereOverflowLeft + scaled(spacing.xxs, scale)
+                      : labelGap;
                   // L'étiquette prend la place libre de son côté, sans déborder.
                   const room = labelOnRight
                     ? width - (point.x + outer / 2 + labelGap) - labelEdge
-                    : point.x - outer / 2 - labelGap - screenPadding;
+                    : point.x - outer / 2 - gapHere - screenPadding;
                   const labelWidth = Math.max(0, Math.min(labelMax, room));
                   const labelLeft = labelOnRight
                     ? point.x + outer / 2 + labelGap
-                    : point.x - outer / 2 - labelGap - labelWidth;
+                    : point.x - outer / 2 - gapHere - labelWidth;
                   const nodeSubject = subjectId ?? entry.world.subject;
                   const action = entry.nextLessonStarted ? fr.common.continue : fr.common.start;
                   const align = labelOnRight ? 'left' : 'right';
@@ -367,6 +398,7 @@ export default function LevelMapScreen() {
                         subject={nodeSubject}
                         size={entry.state === 'current' ? currentNode : node}
                         ring={{ gap: ringGap, stroke: ringStroke }}
+                        here={here}
                         style={{
                           position: 'absolute',
                           left: point.x - outer / 2,
@@ -460,11 +492,64 @@ export default function LevelMapScreen() {
             key={nodes[currentIndex].world.id}
             entry={nodes[currentIndex]}
             subject={subjectId ?? nodes[currentIndex].world.subject}
+            avatarId={profile.avatarId}
+            top={paneTop}
             onOpen={(lessonId) => router.push(`/(child)/lesson/${lessonId}`)}
           />
         ) : null}
       </View>
     </EcolnaScreen>
+  );
+}
+
+interface HereSpec {
+  avatarId: string;
+  /** Diamètre du portrait, en dp. */
+  size: number;
+  /** Le filet blanc qui le détoure. */
+  rim: number;
+  /** Distance du centre du disque porteur au centre du personnage. */
+  radius: number;
+}
+
+/** Dix heures : 60° de midi vers la gauche. */
+const HERE_ANGLE = Math.PI / 3;
+
+/**
+ * La place du personnage « tu es ici » sur un disque de diamètre `box` : son
+ * centre à `radius` du centre du disque, à dix heures. Coordonnées relatives
+ * au coin haut gauche du disque (négatives : il en déborde).
+ */
+function hereMarkerBox(box: number, here: Omit<HereSpec, 'avatarId'>) {
+  const outer = here.size + 2 * here.rim;
+  const left = Math.round(box / 2 - here.radius * Math.sin(HERE_ANGLE) - outer / 2);
+  const top = Math.round(box / 2 - here.radius * Math.cos(HERE_ANGLE) - outer / 2);
+  return { left, top, outer };
+}
+
+/**
+ * « Tu es ici » : le portrait de l'enfant, détouré d'un filet blanc et levé
+ * d'une ombre, posé à cheval sur l'étape où il en est. Il ne se touche pas :
+ * l'appui passe à l'étape dessous.
+ */
+function HereMarker({ here, box }: { here: HereSpec; box: number }) {
+  const place = hereMarkerBox(box, here);
+  return (
+    <View
+      pointerEvents="none"
+      style={[
+        styles.here,
+        shadows.raised,
+        {
+          left: place.left,
+          top: place.top,
+          padding: here.rim,
+          borderRadius: place.outer / 2,
+        },
+      ]}
+    >
+      <EcolnaAvatar avatarId={here.avatarId} size={here.size} />
+    </View>
   );
 }
 
@@ -633,18 +718,25 @@ function NextPill({
 /**
  * Couché, le second volet : le monde du jour ouvert comme un sommaire. Son
  * emblème dans l'anneau de ses leçons, son nom, puis chaque leçon — faite
- * (coche verte, étoiles), la prochaine (son titre entier, la pilule soleil
- * dessous), les suivantes (fermées, la même grammaire que les mondes fermés).
+ * (coche verte, étoiles), la prochaine (le personnage de l'enfant cerclé de
+ * la discipline, son titre entier, la pilule soleil dessous), les suivantes
+ * (fermées, la même grammaire que les mondes fermés).
  * Toucher une leçon à venir n'est jamais un appui mort : la pilule du jour se
  * balance pour montrer où commencer.
  */
 function WorldPanel({
   entry,
   subject,
+  avatarId,
+  top,
   onOpen,
 }: {
   entry: WorldNode;
   subject: Subject;
+  /** Le personnage de l'enfant, posé sur la leçon du jour. */
+  avatarId: string;
+  /** Le haut de la carte : la ligne où part aussi le chemin. */
+  top: number;
   onOpen: (lessonId: string) => void;
 }) {
   const { scale } = useResponsive();
@@ -654,6 +746,9 @@ function WorldPanel({
   const fade = scaled(FADE, scale);
   const edgeFade = scaled(FADE_TOP, scale);
   const pill = scaled(40, scale);
+  // Le même « tu es ici » que sur le chemin : sur la leçon du jour, le disque
+  // est le personnage de l'enfant, cerclé de la couleur de la discipline.
+  const hereRing = scaled(3, scale);
   const [listScrolled, setListScrolled] = useState(false);
   // Combien de fois l'enfant a touché une leçon à venir : chaque appui
   // remonte la pilule du jour, qui se balance de nouveau.
@@ -697,7 +792,7 @@ function WorldPanel({
       style={[
         styles.panel,
         shadows.card,
-        { padding: scaled(spacing.lg, scale), gap: scaled(spacing.md, scale) },
+        { marginTop: top, padding: scaled(spacing.lg, scale), gap: scaled(spacing.md, scale) },
       ]}
     >
       <View style={[styles.panelHead, { gap: scaled(spacing.md, scale) }]}>
@@ -750,6 +845,7 @@ function WorldPanel({
                       : next
                         ? family.solid
                         : colors.white,
+                    padding: next ? hereRing : 0,
                     // À venir : la grammaire du monde fermé — disque blanc,
                     // anneau de la discipline, cadenas à son encre.
                     borderWidth: upcoming ? scaled(3, scale) : 0,
@@ -760,9 +856,7 @@ function WorldPanel({
                 {lesson.done ? (
                   <EcolnaIcon name="check" size={Math.round(disc * 0.56)} color={colors.white} />
                 ) : next ? (
-                  <EcolnaText variant="labelLg" color={colors.white}>
-                    {String(index + 1)}
-                  </EcolnaText>
+                  <EcolnaAvatar avatarId={avatarId} size={disc - 2 * hereRing} />
                 ) : (
                   <EcolnaIcon name="lock" size={Math.round(disc * 0.42)} color={family.ink} filled />
                 )}
@@ -854,6 +948,7 @@ function JourneyNode({
   subject,
   size,
   ring,
+  here,
   style,
   onPress,
 }: {
@@ -861,6 +956,8 @@ function JourneyNode({
   subject: Subject;
   size: number;
   ring: { gap: number; stroke: number };
+  /** Le personnage « tu es ici », posé sur l'anneau du monde du jour. */
+  here: HereSpec;
   style: object;
   onPress: () => void;
 }) {
@@ -868,7 +965,9 @@ function JourneyNode({
   const family = subjectColors[subject];
   const current = entry.state === 'current';
   const locked = entry.state === 'locked';
-  const a11y = `${entry.world.title} : ${entry.world.subtitle}${locked ? `. ${fr.learn.lockedHint}` : ''}`;
+  const a11y = `${current ? `${fr.learn.youAreHere}. ` : ''}${entry.world.title} : ${entry.world.subtitle}${
+    locked ? `. ${fr.learn.lockedHint}` : ''
+  }`;
   const disc = (
     <EcolnaGalet
       face={entry.state === 'completed' ? colors.success : current ? family.solid : colors.white}
@@ -913,6 +1012,7 @@ function JourneyNode({
         >
           {disc}
         </EcolnaProgressRing>
+        {here.avatarId ? <HereMarker here={here} box={outer} /> : null}
       </View>
     );
   }
@@ -926,6 +1026,7 @@ const styles = StyleSheet.create({
   label: { position: 'absolute', gap: 2 },
   nodeFace: { alignItems: 'center', justifyContent: 'center' },
   ringBed: { position: 'absolute', backgroundColor: colors.background },
+  here: { position: 'absolute', backgroundColor: colors.white },
   flex: { flex: 1 },
   fade: { position: 'absolute', left: 0, right: 0 },
   fadeBottom: { bottom: 0 },
@@ -935,7 +1036,6 @@ const styles = StyleSheet.create({
     flex: 0.72,
     backgroundColor: colors.white,
     borderRadius: radius.xxl,
-    marginTop: spacing.sm,
   },
   panelHead: { flexDirection: 'row', alignItems: 'center' },
   lessonRow: { flexDirection: 'row', alignItems: 'center' },

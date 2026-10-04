@@ -5,13 +5,14 @@ import Svg, { Circle, Polygon, Rect } from 'react-native-svg';
 import type { ExerciseStep } from '@/content/schemas/exercise-schema';
 import {
   EcolnaAnswerCard,
-  EcolnaAudioButton,
   EcolnaExerciseLayout,
   EcolnaText,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
+import { answersRoom, fitAnswerHeight } from '@/design-system/primitives/ecolna-exercise-layout';
 import { scaled, useResponsive } from '@/design-system/responsive';
-import { colors, illustration, spacing } from '@/design-system/tokens';
+import { a11y, colors, illustration, spacing } from '@/design-system/tokens';
 
 import type { ExerciseRendererProps } from '../exercise-props';
 
@@ -113,7 +114,26 @@ export function AttributeExercise({
   const [picked, setPicked] = useState<string | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
-  const cell = scaled(isTablet ? 104 : 84, scale);
+  const cardState = useAnswerCardState(interactive);
+  const audioId = step.audioId ?? null;
+  const wide = audioId !== null && metrics.listenLayout === 'band' && metrics.wide;
+  // Une rangée de deux ou trois ; quatre, deux par deux.
+  const columns = step.choices.length === 4 ? 2 : Math.max(1, Math.min(3, step.choices.length));
+  const rows: (typeof step.choices)[] = [];
+  for (let start = 0; start < step.choices.length; start += columns) {
+    rows.push(step.choices.slice(start, start + columns));
+  }
+  // La carte se règle sur la place mesurée (sous la bande d'écoute) : jamais
+  // sous la feuille de retour, et toute la place sur une tablette couchée.
+  const faceHeight = fitAnswerHeight({
+    preferred: Math.round(scaled(isTablet ? 104 : 84, scale) * 1.4),
+    room: answersRoom(metrics, audioId !== null),
+    rows: rows.length,
+    gap: metrics.gap,
+    grow: wide,
+    min: scaled(a11y.childTouchTarget + 8, scale),
+  });
+  const cell = Math.min(scaled(isTablet ? 104 : 84, scale), Math.round(faceHeight / 1.4));
 
   useEffect(() => {
     if (step.audioId) {
@@ -127,60 +147,64 @@ export function AttributeExercise({
     onSubmit({ kind: 'choice', choiceId });
   };
 
-  // La consigne est dite par l'en-tête de leçon ; ici, seulement la réécoute.
-  const prompt = step.audioId ? (
-    <View style={styles.prompt}>
-      <EcolnaAudioButton
-        size={metrics.listenSize}
-        playing={playingAudioId === step.audioId}
-        onPress={() => step.audioId && playAudio(step.audioId)}
-      />
-    </View>
-  ) : null;
-
   const answers = (
-    <View style={[styles.grid, { gap: metrics.gap }]}>
-      {step.choices.map((choice) => {
-        const selected = picked === choice.id;
-        return (
-          <EcolnaAnswerCard
-            key={choice.id}
-            onPress={() => submit(choice.id)}
-            accessibilityLabel={choice.label ?? `${choice.shape} ${choice.color}`}
-            state={interactive ? 'default' : selected ? 'selected' : 'disabled'}
-            style={styles.cell}
-            contentStyle={[styles.cellFace, { minHeight: cell * 1.4 }]}
-          >
-            <View style={[styles.shapeRow, { maxWidth: cell * 1.6 }]}>
-              {Array.from({ length: Math.max(1, choice.count) }, (_, index) => (
-                <AttributeShape
-                  key={index}
-                  shape={choice.shape}
-                  color={OFFICIAL_COLORS[choice.color]}
-                  size={cell}
-                  // A repeated quantity is drawn smaller so the group still fits.
-                  scale={choice.count > 1 ? choice.scale * 0.34 : choice.scale}
-                />
-              ))}
-            </View>
-            {choice.label ? (
-              <EcolnaText variant="labelMd" align="center" color={colors.textSecondary}>
-                {choice.label}
-              </EcolnaText>
-            ) : null}
-          </EcolnaAnswerCard>
-        );
-      })}
+    <View style={{ gap: metrics.gap }}>
+      {rows.map((row, rowIndex) => (
+        <View key={rowIndex} style={[styles.row, { gap: metrics.gap }]}>
+          {row.map((choice) => (
+            <EcolnaAnswerCard
+              key={choice.id}
+              onPress={() => submit(choice.id)}
+              accessibilityLabel={choice.label ?? `${choice.shape} ${choice.color}`}
+              state={cardState(picked === choice.id)}
+              style={styles.cell}
+              contentStyle={[styles.cellFace, { minHeight: faceHeight }]}
+            >
+              <View style={[styles.shapeRow, { maxWidth: cell * 1.6 }]}>
+                {Array.from({ length: Math.max(1, choice.count) }, (_, index) => (
+                  <AttributeShape
+                    key={index}
+                    shape={choice.shape}
+                    color={OFFICIAL_COLORS[choice.color]}
+                    size={cell}
+                    // A repeated quantity is drawn smaller so the group still fits.
+                    scale={choice.count > 1 ? choice.scale * 0.34 : choice.scale}
+                  />
+                ))}
+              </View>
+              {choice.label ? (
+                <EcolnaText variant="labelMd" align="center" color={colors.textSecondary}>
+                  {choice.label}
+                </EcolnaText>
+              ) : null}
+            </EcolnaAnswerCard>
+          ))}
+          {/* Une rangée incomplète garde des cases de même largeur. */}
+          {Array.from({ length: columns - row.length }, (_, index) => (
+            <View key={`empty-${index}`} style={styles.cell} />
+          ))}
+        </View>
+      ))}
     </View>
   );
 
-  return <EcolnaExerciseLayout prompt={prompt} answers={answers} promptWeight={0.6} />;
+  // La consigne est dite par l'en-tête de leçon ; ici, seulement la réécoute.
+  return (
+    <EcolnaExerciseLayout
+      metrics={metrics}
+      answers={answers}
+      listen={
+        audioId
+          ? { playing: playingAudioId === audioId, onPress: () => playAudio(audioId) }
+          : undefined
+      }
+    />
+  );
 }
 
 const styles = StyleSheet.create({
-  prompt: { alignItems: 'center', justifyContent: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-  cell: { flexBasis: '42%', flexGrow: 1, maxWidth: 300 },
+  row: { flexDirection: 'row' },
+  cell: { flex: 1 },
   cellFace: { alignItems: 'center', justifyContent: 'center', gap: spacing.xs },
   shapeRow: {
     flexDirection: 'row',

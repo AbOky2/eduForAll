@@ -4,13 +4,16 @@ import { createElement } from 'react';
 import { AVATAR_IDS } from '@/features/child-profile/domain/child-profile';
 import { fr } from '@/localization/fr/strings';
 
-import { AVATAR_ART_IDS, AVATAR_CAST, avatarArt } from './avatar-cast';
+import { AVATAR_ART_IDS, AVATAR_CAST, avatarArt, type AvatarArt } from './avatar-cast';
 import { colors } from '@/design-system/tokens';
 
 import {
   HAIR_COVERAGE,
   PORTRAIT_FABRICS as FABRICS,
   PORTRAIT_GARMENTS as GARMENTS,
+  PORTRAIT_HEADS,
+  eyeCenters,
+  type PortraitHeadShape,
   type PortraitSkin as SkinTone,
 } from './portrait';
 import { EcolnaAvatar } from './ecolna-avatar';
@@ -109,6 +112,103 @@ describe('les douze enfants', () => {
     expect(avatarArt('avatar-99').id).toBe('avatar-1');
     expect(avatarArt('').id).toBe('avatar-1');
     expect(() => render(createElement(EcolnaAvatar, { avatarId: 'inconnu', size: 40 }))).not.toThrow();
+  });
+});
+
+/**
+ * Les voisins d'une grille de douze en `columns` colonnes, dans l'ordre
+ * d'affichage d'`AvatarGrid` : à côté sur la même rangée, ou l'un au-dessus
+ * de l'autre.
+ */
+function gridNeighbours(columns: number): [number, number][] {
+  const pairs: [number, number][] = [];
+  for (let i = 0; i < AVATAR_CAST.length; i += 1) {
+    if ((i + 1) % columns !== 0 && i + 1 < AVATAR_CAST.length) {
+      pairs.push([i, i + 1]);
+    }
+    if (i + columns < AVATAR_CAST.length) {
+      pairs.push([i, i + columns]);
+    }
+  }
+  return pairs;
+}
+
+/**
+ * Les colonnes réellement employées : 4 en paysage et 3 en portrait ou sur
+ * téléphone (création de profil), 4 ou 6 sur le profil. Deux colonnes
+ * n'arrivent sur aucune fenêtre prise en charge.
+ */
+const GRID_COLUMNS = [3, 4, 6] as const;
+
+/** Direction v4 § 8 et critique de la ronde 4 : chaque enfant a son visage. */
+describe('les visages des douze enfants', () => {
+  it.each(GRID_COLUMNS)('deux voisins de grille n’ont jamais la même tête (%i colonnes)', (columns) => {
+    for (const [a, b] of gridNeighbours(columns)) {
+      const [first, second] = [AVATAR_CAST[a], AVATAR_CAST[b]] as [AvatarArt, AvatarArt];
+      expect({ pair: [first.id, second.id], same: first.head === second.head }).toEqual({
+        pair: [first.id, second.id],
+        same: false,
+      });
+    }
+  });
+
+  it.each(GRID_COLUMNS)('deux voisins de grille n’ont jamais le même disque (%i colonnes)', (columns) => {
+    for (const [a, b] of gridNeighbours(columns)) {
+      const [first, second] = [AVATAR_CAST[a], AVATAR_CAST[b]] as [AvatarArt, AvatarArt];
+      expect({ pair: [first.id, second.id], same: first.backdrop === second.backdrop }).toEqual({
+        pair: [first.id, second.id],
+        same: false,
+      });
+    }
+  });
+
+  it('ne partagent jamais à deux la même combinaison tête + yeux + bouche', () => {
+    const faces = new Set(AVATAR_CAST.map((art) => `${art.head}|${art.eyes}|${art.mouth}`));
+    expect(faces.size).toBe(AVATAR_CAST.length);
+  });
+
+  it('répartissent également les têtes, les regards et les bouches', () => {
+    const count = (key: 'head' | 'eyes' | 'mouth') =>
+      AVATAR_CAST.reduce<Record<string, number>>((acc, art) => ({ ...acc, [art[key]]: (acc[art[key]] ?? 0) + 1 }), {});
+    expect(count('head')).toEqual({ oval: 3, round: 3, long: 3, cheeky: 3 });
+    expect(count('eyes')).toEqual({ round: 4, almond: 4, wide: 4 });
+    expect(count('mouth')).toEqual({ smile: 4, small: 4, crescent: 4 });
+  });
+
+  it('dessinent les têtes aux proportions décidées', () => {
+    const size = (shape: PortraitHeadShape) => {
+      const { spec, edgeAt } = PORTRAIT_HEADS[shape];
+      return { width: Math.round(2 * (edgeAt(56) - 60)), height: spec.chin - spec.top };
+    };
+    expect(size('oval')).toEqual({ width: 54, height: 58 });
+    expect(size('round')).toEqual({ width: 58, height: 55 });
+    expect(size('long')).toEqual({ width: 51, height: 61 });
+    // La joufflue s'évase sous les tempes : plus large aux joues qu'au crâne.
+    const cheeky = PORTRAIT_HEADS.cheeky;
+    expect(cheeky.edgeAt(66.5)).toBeGreaterThan(cheeky.edgeAt(56) + 1.5);
+  });
+
+  it.each(['oval', 'round', 'long', 'cheeky'] as const)('raccordent oreilles et cou à la tête %s, sans jour', (shape) => {
+    const head = PORTRAIT_HEADS[shape];
+    // L'oreille est centrée sur le bord du visage, symétrique.
+    expect(Math.abs(head.ear.right - head.edgeAt(head.ear.y))).toBeLessThan(0.3);
+    expect(head.ear.left + head.ear.right).toBeCloseTo(120, 5);
+    // Le haut du cou (y = 76, x de 51,5 à 68,5) est caché sous la tête…
+    expect(head.edgeAt(76)).toBeGreaterThan(68.5);
+    // … et le menton s'arrête au-dessus des épaules (92,6) : le cou se voit.
+    expect(head.spec.chin).toBeLessThan(92.6 - 4);
+    // Les yeux restent dans le visage, oreilles exclues.
+    for (const eyes of ['round', 'almond', 'wide'] as const) {
+      const c = eyeCenters(shape, eyes);
+      expect(c.right + 5).toBeLessThan(head.edgeAt(c.y));
+    }
+  });
+
+  it('posent la coiffure sur l’ovale telle quelle, et la mettent à l’échelle des autres crânes', () => {
+    expect(PORTRAIT_HEADS.oval.hairTransform).toBeUndefined();
+    for (const shape of ['round', 'long', 'cheeky'] as const) {
+      expect(PORTRAIT_HEADS[shape].hairTransform).toMatch(/^matrix\(/);
+    }
   });
 });
 

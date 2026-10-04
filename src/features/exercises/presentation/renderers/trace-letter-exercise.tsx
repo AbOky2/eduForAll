@@ -89,7 +89,9 @@ export function TraceLetterExercise({
   const bandHalf = guideWidth / 2;
   const startRadius = scaled(17, scale);
   const stepRadius = Math.max(4, scaled(4.5, scale));
-  const labelRadius = scaled(12, scale);
+  // Une pastille de verre de 28 dp : le numéro se lit d'un coup d'œil, sans rivaliser avec la bille.
+  const labelRadius = scaled(14, scale);
+  const labelGap = scaled(4, scale);
   const chipSize = scaled(isTablet ? 50 : 42, scale);
   const chipInset = scaled(isTablet ? 14 : 10, scale);
   const chipWidth = chipSize + Math.max(0, step.letter.length - 1) * Math.round(chipSize * 0.42);
@@ -136,7 +138,8 @@ export function TraceLetterExercise({
     return placeStrokeLabels({
       strokes: sampled,
       bandHalf,
-      startRadius,
+      // La bille et son anneau blanc, plus un souffle : la pastille ne la touche pas.
+      startRadius: startRadius + labelGap,
       labelRadius,
       bounds: boardSize,
       keepOut: [{ x: 0, y: 0, width: chipInset * 2 + chipWidth, height: chipInset * 2 + chipSize }],
@@ -148,6 +151,7 @@ export function TraceLetterExercise({
     bandHalf,
     startRadius,
     labelRadius,
+    labelGap,
     boardSize,
     chipInset,
     chipWidth,
@@ -528,10 +532,11 @@ export function TraceLetterExercise({
                           top: y - labelRadius,
                           width: labelRadius * 2,
                           height: labelRadius * 2,
+                          borderRadius: labelRadius,
                         },
                       ]}
                     >
-                      <EcolnaText variant="labelLg" color={SOFT} align="center">
+                      <EcolnaText variant="headlineSm" color={CHALK} align="center">
                         {index + 1}
                       </EcolnaText>
                     </View>
@@ -689,7 +694,12 @@ const styles = StyleSheet.create({
   board: { alignSelf: 'stretch', flexGrow: 1, flexShrink: 1, minHeight: 180 },
   canvas: { flex: 1 },
   fill: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
-  label: { position: 'absolute', alignItems: 'center', justifyContent: 'center' },
+  label: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.onColorGlass,
+  },
   bead: {
     position: 'absolute',
     left: 0,

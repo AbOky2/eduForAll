@@ -6,15 +6,25 @@
  *
  * Les quatre premiers descendent des anciens avatars (même genre, même
  * couleur dominante) : un profil créé avant la refonte garde un enfant
- * proche de celui qu'il avait choisi. Les invariants sont verrouillés par
+ * proche de celui qu'il avait choisi.
+ *
+ * Chacun a son visage (tête, yeux, bouche) et son disque, répartis selon
+ * l'ordre d'affichage de la grille (3, 4 ou 6 colonnes) : deux voisins n'ont
+ * jamais ni la même tête ni le même disque. Avec trois formes de tête, c'est
+ * impossible à la fois en 3 et en 4 colonnes (la contrainte forme un graphe
+ * qui n'est pas 3-coloriable) — d'où la quatrième, la tête joufflue, chaque
+ * forme servant trois fois. Les invariants sont verrouillés par
  * `avatar-cast.test.ts`.
  */
 import type {
   PortraitAccessory as AccessoryId,
   PortraitBackdrop as BackdropName,
   PortraitBrow as BrowShape,
+  PortraitEyes as EyeShape,
   PortraitGarment as GarmentId,
   PortraitHair as HairStyleId,
+  PortraitHeadShape as HeadShape,
+  PortraitMouth as MouthShape,
   PortraitNose as NoseShape,
   PortraitSkin as SkinTone,
 } from './portrait';
@@ -45,7 +55,15 @@ export interface AvatarArt {
   readonly garment: GarmentId;
   readonly backdrop: BackdropName;
   readonly accessories: readonly AccessoryId[];
-  /** La forme du visage varie aussi, pas seulement la couleur (sourcils, nez). */
+  /**
+   * Le visage propre de chacun : forme de tête, regard, bouche au calme.
+   * Deux voisins de la grille n'ont jamais la même tête, et aucun couple ne
+   * partage la même combinaison tête + yeux + bouche.
+   */
+  readonly head: HeadShape;
+  readonly eyes: EyeShape;
+  readonly mouth: MouthShape;
+  /** Sourcils et nez varient aussi. */
   readonly brows: BrowShape;
   readonly nose: NoseShape;
 }
@@ -57,8 +75,11 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'cacao',
     hair: 'side-part',
     garment: 'school-shirt',
-    backdrop: 'sand',
+    backdrop: 'rose',
     accessories: [],
+    head: 'oval',
+    eyes: 'round',
+    mouth: 'small',
     brows: 'straight',
     nose: 'broad',
   },
@@ -70,6 +91,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'pagne-dress',
     backdrop: 'sky',
     accessories: ['stud-earrings'],
+    head: 'round',
+    eyes: 'wide',
+    mouth: 'smile',
     brows: 'arch',
     nose: 'round',
   },
@@ -79,8 +103,11 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'miel',
     hair: 'mini-afro',
     garment: 'jalabiya',
-    backdrop: 'rose',
+    backdrop: 'sand',
     accessories: [],
+    head: 'oval',
+    eyes: 'almond',
+    mouth: 'smile',
     brows: 'lifted',
     nose: 'broad',
   },
@@ -90,8 +117,11 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'miel',
     hair: 'cornrow-braids',
     garment: 'plain-top',
-    backdrop: 'sun',
+    backdrop: 'sky',
     accessories: [],
+    head: 'cheeky',
+    eyes: 'round',
+    mouth: 'smile',
     brows: 'round',
     nose: 'button',
   },
@@ -103,6 +133,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'claudine-dress',
     backdrop: 'lavender',
     accessories: ['hoop-earrings'],
+    head: 'long',
+    eyes: 'almond',
+    mouth: 'crescent',
     brows: 'arch',
     nose: 'button',
   },
@@ -114,6 +147,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'polo',
     backdrop: 'rose',
     accessories: ['glasses'],
+    head: 'cheeky',
+    eyes: 'wide',
+    mouth: 'crescent',
     brows: 'arch',
     nose: 'round',
   },
@@ -125,6 +161,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'school-dress',
     backdrop: 'sun',
     accessories: ['bead-necklace'],
+    head: 'round',
+    eyes: 'almond',
+    mouth: 'crescent',
     brows: 'round',
     nose: 'round',
   },
@@ -134,8 +173,11 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'acajou',
     hair: 'bucket-hat',
     garment: 'striped-tshirt',
-    backdrop: 'sky',
+    backdrop: 'mint',
     accessories: [],
+    head: 'oval',
+    eyes: 'wide',
+    mouth: 'crescent',
     brows: 'straight',
     nose: 'broad',
   },
@@ -145,8 +187,11 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     skin: 'ebene',
     hair: 'side-loops',
     garment: 'embroidered-dress',
-    backdrop: 'mint',
+    backdrop: 'sun',
     accessories: [],
+    head: 'round',
+    eyes: 'round',
+    mouth: 'small',
     brows: 'lifted',
     nose: 'broad',
   },
@@ -158,6 +203,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'checked-shirt',
     backdrop: 'mint',
     accessories: ['hearing-aid'],
+    head: 'long',
+    eyes: 'wide',
+    mouth: 'small',
     brows: 'lifted',
     nose: 'round',
   },
@@ -169,6 +217,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'boubou-top',
     backdrop: 'sand',
     accessories: [],
+    head: 'cheeky',
+    eyes: 'almond',
+    mouth: 'small',
     brows: 'arch',
     nose: 'broad',
   },
@@ -180,6 +231,9 @@ export const AVATAR_CAST: readonly AvatarArt[] = [
     garment: 'pocket-tshirt',
     backdrop: 'lavender',
     accessories: [],
+    head: 'long',
+    eyes: 'round',
+    mouth: 'smile',
     brows: 'round',
     nose: 'broad',
   },

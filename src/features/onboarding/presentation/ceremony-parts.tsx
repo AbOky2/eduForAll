@@ -23,19 +23,39 @@ export function heroTitleStyle(isTablet: boolean, scale: number): TextStyle {
   };
 }
 
-/** Trois points de 10 dp, l'actif en pilule de 28 × 10 ; « Étape 2 sur 3 ». */
-export function StepDots({ step, total }: { step: number; total: number }) {
+/**
+ * L'indicateur d'étapes, le même dans l'onboarding et la création de profil :
+ * des points de ≈ 10 dp, l'actif en pilule bleue de ≈ 28 dp. Les autres sont
+ * en `inkDisabled` (2,2:1 sur la toile) — un adulte voit combien d'étapes
+ * restent, même au soleil. Lu « Étape 2 sur 3 » (ou le libellé donné).
+ */
+export function StepDots({
+  step,
+  total,
+  accessibilityLabel,
+}: {
+  step: number;
+  total: number;
+  accessibilityLabel?: string | undefined;
+}) {
+  const { scale } = useResponsive();
+  const dot = scaled(10, scale);
   return (
-    <View style={styles.dots} accessible accessibilityLabel={fr.profile.stepCount(step, total)}>
+    <View
+      style={[styles.dots, { gap: scaled(spacing.xs, scale) }]}
+      accessible
+      accessibilityLabel={accessibilityLabel ?? fr.profile.stepCount(step, total)}
+    >
       {Array.from({ length: total }, (_, index) => (
         <View
           key={index}
-          style={[
-            styles.dot,
-            index + 1 === step
-              ? { width: 28, backgroundColor: colors.brand }
-              : { backgroundColor: index + 1 < step ? colors.brandTintStrong : colors.fillStrong },
-          ]}
+          testID={index + 1 === step ? 'step-dot-active' : 'step-dot'}
+          style={{
+            height: dot,
+            borderRadius: dot / 2,
+            width: index + 1 === step ? scaled(28, scale) : dot,
+            backgroundColor: index + 1 === step ? colors.brand : colors.inkDisabled,
+          }}
         />
       ))}
     </View>
@@ -52,8 +72,9 @@ interface LevelCardProps {
 
 /**
  * Une grande carte de classe : le chiffre, la même pousse qui grandit (deux
- * feuilles en CP1, quatre et un bouton de fleur en CP2), « CP1 » et la glose
- * pour l'adulte. Choisie : filet bleu, fond bleuté, pastille cochée.
+ * feuilles en CP1, quatre et un bouton de fleur en CP2) et « CP1 » — le
+ * niveau dit deux fois, pas trois. Choisie : filet bleu, fond bleuté,
+ * pastille cochée.
  */
 export function LevelCard({ level, selected, onSelect, width, height }: LevelCardProps) {
   const { scale } = useResponsive();
@@ -88,9 +109,6 @@ export function LevelCard({ level, selected, onSelect, width, height }: LevelCar
       <EcolnaText variant="headlineMd" color={selected ? colors.brandInk : colors.textPrimary}>
         {level}
       </EcolnaText>
-      <EcolnaText variant="labelMd" color={colors.textSecondary}>
-        {fr.profile.levelGloss[level]}
-      </EcolnaText>
       {selected ? (
         <View style={[styles.check, { width: check, height: check, borderRadius: check / 2 }]}>
           <EcolnaIcon name="check" size={Math.round(check * 0.56)} color={colors.white} />
@@ -101,8 +119,7 @@ export function LevelCard({ level, selected, onSelect, width, height }: LevelCar
 }
 
 const styles = StyleSheet.create({
-  dots: { flexDirection: 'row', gap: spacing.xs, alignItems: 'center' },
-  dot: { width: 10, height: 10, borderRadius: 5 },
+  dots: { flexDirection: 'row', alignItems: 'center' },
   levelFace: { alignItems: 'center', justifyContent: 'center', gap: 2, padding: spacing.md },
   check: {
     position: 'absolute',

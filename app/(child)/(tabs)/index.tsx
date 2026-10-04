@@ -2,19 +2,29 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { AccessibilityInfo, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import type { ChildProfileId } from '@/core/ids/ids';
+import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
-import { findWorld, lessonOrWorldCover } from '@/features/curriculum/application/curriculum-catalog';
+import {
+  findWorld,
+  lessonForSkill,
+  lessonOrWorldCover,
+  worldOfLesson,
+} from '@/features/curriculum/application/curriculum-catalog';
 import {
   loadHomeSummary,
   type HomeSummary,
   type SubjectProgress,
 } from '@/features/learning-path/application/home-summary';
+import { REVISION_BATCH } from '@/features/revision/domain/revision-engine';
+import { createRevisionRepository } from '@/features/revision/infrastructure/revision-repository';
 import type { Subject } from '@/content/schemas/curriculum-schema';
 import { EcolnaAvatar } from '@/design-system/avatars';
 import { EcolnaPill } from '@/design-system/components/ecolna-pill';
 import { LessonHeroCard } from '@/design-system/components/lesson-hero-card';
-import { SubjectTile, fitSubjectTile } from '@/design-system/components/subject-tile';
+import { SubjectTile, subjectTileRoom } from '@/design-system/components/subject-tile';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
+import { SubjectArt } from '@/design-system/icons/subject-art';
 import { EcolnaGalet, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { colors, radius, shadows, spacing } from '@/design-system/tokens';
@@ -27,6 +37,33 @@ const SUBJECT_LABELS: Record<Subject, string> = {
   writing: fr.subjects.writing,
   math: fr.subjects.math,
 };
+
+/**
+ * La discipline de la première notion à revoir (dans l'ordre où l'atelier de
+ * révision les montrera) : la carte « On revoit ensemble ? » porte son
+ * emblème, une image pour l'enfant qui ne lit pas encore.
+ */
+async function firstRevisionSubject(childProfileId: ChildProfileId): Promise<Subject | null> {
+  const db = await getDatabase();
+  const open = await createRevisionRepository(db).findOpen(
+    childProfileId,
+    REVISION_BATCH,
+    new Date().toISOString(),
+  );
+  for (const { skillId } of open) {
+    const lessonId = lessonForSkill(skillId);
+    const subject = lessonId ? worldOfLesson(lessonId)?.subject : undefined;
+    if (subject) {
+      return subject;
+    }
+  }
+  return null;
+}
+
+interface HomeData {
+  summary: HomeSummary;
+  revisionSubject: Subject | null;
+}
 
 function chunk<T>(items: readonly T[], size: number): T[][] {
   const rows: T[][] = [];
@@ -46,7 +83,10 @@ function chunk<T>(items: readonly T[], size: number): T[][] {
  * L'écran occupe toute la hauteur utile : sur une tablette qui a la place,
  * les tuiles des matières grandissent jusqu'à la barre d'onglets, à la taille
  * mesurée de ce qui reste (`fitSubjectTile`) ; une tablette 7" couchée et un
- * téléphone gardent des tuiles compactes.
+ * téléphone gardent des tuiles compactes. Quand l'emblème des tuiles atteint
+ * son plafond avant la barre (grande tablette debout), les tuiles s'arrêtent
+ * à leur juste hauteur et c'est la carte du jour qui prend le surplus : le
+ * héros, pas des tuiles vides, occupe la place.
  */
 export default function ChildHomeScreen() {
   const router = useRouter();
@@ -54,10 +94,17 @@ export default function ChildHomeScreen() {
   // Une tablette 7" couchée n'a que 600 dp : on resserre plutôt que de faire défiler.
   const short = height < 700;
   const profile = useActiveProfile((state) => state.profile);
-  const summary = useFocusedData<HomeSummary>(
-    () => (profile ? loadHomeSummary(profile.id, profile.level) : null),
+  const data = useFocusedData<HomeData>(
+    () =>
+      profile
+        ? Promise.all([
+            loadHomeSummary(profile.id, profile.level),
+            firstRevisionSubject(profile.id),
+          ]).then(([summary, revisionSubject]) => ({ summary, revisionSubject }))
+        : null,
     profile?.id ?? null,
   );
+  const summary = data?.summary ?? null;
   // Discipline verrouillée dont l'enfant vient de demander pourquoi.
   const [explained, setExplained] = useState<Subject | null>(null);
   // Ce qui reste pour les matières : la hauteur visible de l'écran, le haut de
@@ -75,6 +122,12 @@ export default function ChildHomeScreen() {
         : { ...previous, [key]: rounded, window: windowKey },
     );
   };
+  // Le bloc « aujourd'hui » à sa hauteur propre, mesuré seulement quand il
+  // ne reçoit pas de surplus : ce que les tuiles ont pour elles n'en dépend
+  // donc jamais (sans quoi chaque mesure rapetisserait la suivante). Il porte
+  // la fenêtre et la carte où il a été pris.
+  const todayKey = `${windowKey}|${summary?.recommendation?.lessonId ?? ''}|${summary?.revisionCount ?? 0}`;
+  const [today, setToday] = useState({ key: '', top: 0, height: 0 });
 
   if (!profile) {
     return null;
@@ -92,16 +145,19 @@ export default function ChildHomeScreen() {
   const bottomPad = scaled(short ? spacing.xs : spacing.sm, scale);
   const subjects = summary?.subjects ?? [];
   const rows = chunk(subjects, columns);
+  // Le haut des matières, le bloc du jour à sa hauteur propre.
+  const sectionTop =
+    today.key === todayKey && today.height > 0 ? today.top + today.height + sectionGap : room.section;
   // Grande tuile : l'emblème devient la plus grande chose de la tuile —
   // l'enfant qui ne lit pas encore choisit sa matière à son dessin.
-  const fit =
+  const tiles =
     isTablet && room.window === windowKey && room.viewport > 0 && room.width > 0 && rows.length > 0
-      ? fitSubjectTile(
+      ? subjectTileRoom(
           {
             width: (room.width - (columns - 1) * gap) / columns,
             // Deux dp de marge : les arrondis des mesures ne font jamais défiler l'écran.
             height: Math.floor(
-              (room.viewport - room.section - room.grid - bottomPad - (rows.length - 1) * gap) /
+              (room.viewport - sectionTop - room.grid - bottomPad - (rows.length - 1) * gap) /
                 rows.length -
                 2,
             ),
@@ -109,6 +165,12 @@ export default function ChildHomeScreen() {
           scale,
         )
       : null;
+  const fit = tiles?.fit ?? null;
+  // L'emblème a son plafond avant la barre d'onglets : les tuiles s'arrêtent
+  // à leur juste hauteur et la carte du jour reçoit tout le surplus.
+  const heroExtra =
+    recommendation && tiles?.height && today.key === todayKey ? tiles.surplus * rows.length : 0;
+  const tileHeight = heroExtra > 0 ? tiles?.height : undefined;
 
   const greeting = (
     <View style={styles.greeting}>
@@ -139,21 +201,26 @@ export default function ChildHomeScreen() {
     router.push(`/(child)/level-map?subject=${subject.subject}`);
   };
 
-  // La révision : son titre, son compte, et une pilule bleue « Revoir » —
-  // le bleu dit « on revoit », la pilule dit qu'on la touche.
+  // La révision : l'emblème de la discipline à revoir, son titre, son compte,
+  // et le bouton bleu plein « Revoir » — la seule action bleue de l'accueil :
+  // le bleu dit « on revoit ». Il fait partie de la carte, qui se touche
+  // tout entière (comme le bouton soleil de la carte du jour).
+  const revisionSubject = data?.revisionSubject ?? null;
+  const reviseArt = scaled(short ? 40 : 48, scale);
   const reviseAction = (
     <View
       style={[
-        styles.revisePill,
+        styles.reviseButton,
+        shadows.glowBrand,
         {
-          height: scaled(short ? 36 : 40, scale),
-          paddingHorizontal: scaled(spacing.md, scale),
-          gap: scaled(spacing.xxs, scale),
+          height: scaled(short ? 40 : 48, scale),
+          paddingHorizontal: scaled(short ? spacing.md : spacing.lg, scale),
+          gap: scaled(spacing.xs, scale),
         },
       ]}
     >
-      <EcolnaIcon name="replay" size={scaled(18, scale)} color={colors.brandInk} />
-      <EcolnaText variant="buttonSm" color={colors.brandInk}>
+      <EcolnaIcon name="replay" size={scaled(20, scale)} color={colors.white} />
+      <EcolnaText variant="buttonSm" color={colors.white}>
         {fr.home.reviseAction}
       </EcolnaText>
     </View>
@@ -177,13 +244,21 @@ export default function ChildHomeScreen() {
           },
         ]}
       >
-        <View style={[styles.revisionText, !splitPanes && styles.grow]}>
-          <EcolnaText variant={splitPanes && !short ? 'headlineMd' : 'headlineSm'}>
-            {fr.home.reviseTitle}
-          </EcolnaText>
-          <EcolnaText variant="bodyMd" color={colors.textSecondary}>
-            {fr.home.reviseCount(revisionCount)}
-          </EcolnaText>
+        <View style={[styles.revisionHead, !splitPanes && styles.grow, { gap: scaled(spacing.sm, scale) }]}>
+          {revisionSubject ? (
+            // Une boîte à sa taille : le titre qui passe à la ligne ne la serre jamais.
+            <View style={{ width: reviseArt, height: reviseArt }}>
+              <SubjectArt subject={revisionSubject} size={reviseArt} />
+            </View>
+          ) : null}
+          <View style={styles.revisionText}>
+            <EcolnaText variant={splitPanes && !short ? 'headlineMd' : 'headlineSm'}>
+              {fr.home.reviseTitle}
+            </EcolnaText>
+            <EcolnaText variant="bodyMd" color={colors.textSecondary}>
+              {fr.home.reviseCount(revisionCount)}
+            </EcolnaText>
+          </View>
         </View>
         {reviseAction}
       </EcolnaGalet>
@@ -232,12 +307,35 @@ export default function ChildHomeScreen() {
 
         {/* Aujourd'hui */}
         {recommendation ? (
-          <View style={splitPanes ? [styles.heroRow, { gap }] : { gap }}>
-            <View style={splitPanes ? styles.heroMain : undefined}>
+          <View
+            onLayout={(event) => {
+              // Mesuré à sa hauteur propre seulement (voir `today`).
+              if (heroExtra === 0) {
+                const { y, height: blockHeight } = event.nativeEvent.layout;
+                const next = { key: todayKey, top: Math.round(y), height: Math.round(blockHeight) };
+                setToday((previous) =>
+                  previous.key === next.key && previous.top === next.top && previous.height === next.height
+                    ? previous
+                    : next,
+                );
+              }
+            }}
+            style={[
+              splitPanes ? [styles.heroRow, { gap }] : { gap },
+              heroExtra > 0 && { minHeight: today.height + heroExtra },
+            ]}
+          >
+            {/* Debout, la carte du jour prend la hauteur reçue ; couché, la rangée l'étire déjà. */}
+            <View style={splitPanes ? styles.heroMain : heroExtra > 0 && styles.grow}>
               <LessonHeroCard
                 subject={world?.subject ?? null}
                 eyebrow={
-                  world ? fr.home.todayEyebrow(SUBJECT_LABELS[world.subject], world.title) : fr.home.startLesson
+                  world
+                    ? isTablet
+                      ? fr.home.todayEyebrow(SUBJECT_LABELS[world.subject], world.title)
+                      : // Au téléphone, la discipline seule : le parcours nomme déjà le monde.
+                        SUBJECT_LABELS[world.subject]
+                    : fr.home.startLesson
                 }
                 title={recommendation.title}
                 meta={lesson ? fr.home.lessonMeta(lesson.stepCount, lesson.estimatedDurationMinutes) : ''}
@@ -247,8 +345,9 @@ export default function ChildHomeScreen() {
                   recommendation.reason === 'resume' ? fr.home.continueLesson : fr.home.startLesson
                 } : ${recommendation.title}`}
                 onPress={() => router.push(`/(child)/lesson/${recommendation.lessonId}`)}
-                style={splitPanes ? styles.grow : undefined}
+                style={splitPanes || heroExtra > 0 ? styles.grow : undefined}
                 cover={lessonOrWorldCover(recommendation.lessonId)}
+                fill={heroExtra > 0}
               />
             </View>
             {revision}
@@ -260,8 +359,12 @@ export default function ChildHomeScreen() {
         {/* Mes matières */}
         <View
           onLayout={(event) => measure('section', event.nativeEvent.layout.y)}
-          // Tablette : la section descend jusqu'à la barre d'onglets.
-          style={[isTablet && styles.grow, { gap: scaled(isTablet ? spacing.sm : spacing.md, scale) }]}
+          // Tablette : la section descend jusqu'à la barre d'onglets (sauf
+          // quand la carte du jour a pris le surplus).
+          style={[
+            isTablet && heroExtra === 0 && styles.grow,
+            { gap: scaled(isTablet ? spacing.sm : spacing.md, scale) },
+          ]}
         >
           {/* Jamais plus petit que les noms des tuiles qu'il annonce. */}
           <EcolnaText variant={short && isTablet ? 'headlineSm' : 'headlineMd'}>
@@ -272,10 +375,17 @@ export default function ChildHomeScreen() {
               measure('grid', event.nativeEvent.layout.y);
               measure('width', event.nativeEvent.layout.width);
             }}
-            style={[isTablet && styles.grow, { gap }]}
+            style={[isTablet && heroExtra === 0 && styles.grow, { gap }]}
           >
             {rows.map((row, rowIndex) => (
-              <View key={rowIndex} style={[styles.gridRow, isTablet && styles.grow, { gap }]}>
+              <View
+                key={rowIndex}
+                style={[
+                  styles.gridRow,
+                  tileHeight ? { height: tileHeight } : isTablet && styles.grow,
+                  { gap },
+                ]}
+              >
                 {row.map((subject) => (
                   <SubjectTile
                     key={subject.subject}
@@ -313,12 +423,13 @@ const styles = StyleSheet.create({
   revisionSide: { flex: 1 },
   revisionRow: { flexDirection: 'row', alignItems: 'center' },
   revisionColumn: { justifyContent: 'center', alignItems: 'flex-start' },
+  revisionHead: { flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch', flexShrink: 1 },
   revisionText: { flexShrink: 1, gap: 2 },
-  revisePill: {
+  reviseButton: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: radius.pill,
-    backgroundColor: colors.brandTint,
+    backgroundColor: colors.brand,
   },
   gridRow: { flexDirection: 'row', alignItems: 'stretch' },
 });

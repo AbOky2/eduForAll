@@ -88,11 +88,13 @@ export const colors = {
   onColorSoft: 'rgba(255,255,255,0.55)',
   onColorTrack: 'rgba(255,255,255,0.28)',
   /**
-   * La craie du modèle sur l'ardoise : du blanc à 22 % posé sur `night`,
-   * rendu opaque — deux traits qui se croisent (b, k, x, 4) ne doublent pas
-   * leur voile.
+   * La craie du modèle sur l'ardoise : un voile clair posé sur `night`, rendu
+   * opaque — deux traits qui se croisent (b, k, x, 4) ne doublent pas leur
+   * voile. 3,3:1 sur la nuit (lisible au soleil, WCAG 1.4.11) et encore
+   * 4,4:1 sous la craie blanche de l'enfant : ce qui est écrit reste
+   * distinct de ce qui reste à écrire.
    */
-  slateChalk: '#4e557a',
+  slateChalk: '#6f769b',
   /** Une surface de verre sur la nuit : bouton second, puce. */
   onColorGlass: 'rgba(255,255,255,0.12)',
   /** Texte second sur la nuit (7:1). */

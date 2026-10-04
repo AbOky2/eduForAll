@@ -1,4 +1,4 @@
-import { BadgeTile } from '@/design-system/components/badge-tile';
+import { BadgeTile, type BadgeLabelVariant } from '@/design-system/components/badge-tile';
 import { fr } from '@/localization/fr/strings';
 
 import type { AchievementId } from '../domain/achievements';
@@ -10,8 +10,10 @@ interface AchievementBadgeProps {
   onDark?: boolean | undefined;
   /** Toute la largeur de sa cellule, deux lignes de nom réservées (étagère du profil). */
   fill?: boolean | undefined;
-  /** `inline` : médaille et nom côte à côte (rangée compacte de la célébration). */
-  layout?: 'stack' | 'inline' | undefined;
+  /** La taille du nom : petit sur l'étagère, grand sur la célébration. */
+  labelVariant?: BadgeLabelVariant | undefined;
+  /** Une largeur imposée (la case d'une rangée de médailles). */
+  width?: number | undefined;
 }
 
 /** Un badge du domaine, dessiné par sa médaille (brief v2 § 9.2). */
@@ -21,7 +23,8 @@ export function AchievementBadge({
   size,
   onDark,
   fill,
-  layout,
+  labelVariant,
+  width,
 }: AchievementBadgeProps) {
   return (
     <BadgeTile
@@ -33,18 +36,23 @@ export function AchievementBadge({
       size={size}
       onDark={onDark}
       fill={fill}
-      layout={layout}
+      labelVariant={labelVariant}
+      width={width}
     />
   );
 }
 
 /**
- * L'étagère : les médailles gagnées d'abord, puis celles à gagner, chaque
- * groupe dans l'ordre du catalogue — ce qu'on a se voit en premier.
+ * L'étagère en deux rayons : les médailles gagnées d'abord, puis celles à
+ * gagner (sous leur titre), chaque rayon dans l'ordre du catalogue — ce
+ * qu'on a se voit en premier.
  */
-export function shelfOrder(
+export function shelfGroups(
   ids: readonly AchievementId[],
   earned: ReadonlySet<string>,
-): AchievementId[] {
-  return [...ids.filter((id) => earned.has(id)), ...ids.filter((id) => !earned.has(id))];
+): { earned: AchievementId[]; toEarn: AchievementId[] } {
+  return {
+    earned: ids.filter((id) => earned.has(id)),
+    toEarn: ids.filter((id) => !earned.has(id)),
+  };
 }

@@ -6,9 +6,13 @@
  * - à plat : une couleur par matière ; la seule ombre est le cou, dans le ton
  *   d'ombre de la peau ; ni contour, ni reflet, ni dégradé, ni accessoire
  *   d'écolier, ni motif dans le disque ;
- * - une tête commune (54 × 58), les yeux sous le milieu (proportions d'enfant),
- *   des yeux pleins avec un point de lumière, un nez d'un trait, une bouche
- *   d'un trait (calme) ou ouverte avec la langue (joie, yeux plissés) ;
+ * - un visage propre à chacun, sur une seule construction : quatre têtes
+ *   (ovale 54 × 58, ronde 58 × 55, longue 51 × 61, joufflue 57 × 57) dont le
+ *   crâne est l'image affine de l'ovale — les coiffures s'y posent toutes —,
+ *   trois regards (ronds et rapprochés, en amande, grands et écartés) et trois
+ *   bouches au calme (sourire, petit sourire, croissant fermé) ; les yeux sous
+ *   le milieu (proportions d'enfant), pleins avec un point de lumière, un nez
+ *   d'un trait ; la joie plisse les yeux et ouvre une bouche accordée au visage ;
  * - la texture des cheveux crépus portée par le seul contour : un bord
  *   festonné (arcs dont la flèche vaut 0,42 à 0,5 demi-corde) ;
  * - six peaux tenues de 25 à 62 % de luminosité, réchauffées en s'éclaircissant ;
@@ -17,7 +21,7 @@
  *   (60, 66) ; rien n'est coupé par le bord sauf les épaules.
  */
 import type { ReactElement } from 'react';
-import { Circle, Ellipse, G, Path, Rect } from 'react-native-svg';
+import { Circle, G, Path, Rect } from 'react-native-svg';
 
 export type PortraitExpression = 'calm' | 'joy';
 export type PortraitLod = 'full' | 'small';
@@ -118,8 +122,210 @@ export type PortraitBackdrop = keyof typeof PORTRAIT_BACKDROPS;
 
 const r1 = (value: number) => Math.round(value * 10) / 10;
 
-export const HEAD_D = 'M60 28C76 28 87 39.5 87 56C87 73.5 75.5 86 60 86C44.5 86 33 73.5 33 56C33 39.5 44 28 60 28Z';
-const EARS_D = 'M28 62A5.6 5.6 0 1 0 39.2 62A5.6 5.6 0 1 0 28 62ZM80.8 62A5.6 5.6 0 1 0 92 62A5.6 5.6 0 1 0 80.8 62Z';
+/** Un disque plein en un sous-tracé (deux demi-arcs) : plusieurs tiennent dans un seul `Path`. */
+const dot = (x: number, y: number, r: number) =>
+  `M${r1(x - r)} ${r1(y)}A${r1(r)} ${r1(r)} 0 1 0 ${r1(x + r)} ${r1(y)}A${r1(r)} ${r1(r)} 0 1 0 ${r1(x - r)} ${r1(y)}Z`;
+
+// ── Têtes : quatre visages, une seule construction ──────────────────────
+//
+// Les coiffures sont dessinées sur la tête de référence (l'ovale 54 × 58).
+// Chaque tête garde un crâne qui en est l'image affine — même courbure,
+// autre largeur, autre hauteur —, si bien qu'une coiffure s'y pose par une
+// simple mise à l'échelle autour de la ligne des tempes. Sous les tempes, la
+// mâchoire est libre : c'est elle qui donne au visage sa forme.
+
+export type PortraitHeadShape = 'oval' | 'round' | 'long' | 'cheeky';
+export type PortraitEyes = 'round' | 'almond' | 'wide';
+export type PortraitMouth = 'smile' | 'small' | 'crescent';
+
+type Pt = readonly [number, number];
+type Cubic = readonly [Pt, Pt, Pt, Pt];
+
+/** La ligne des tempes : le crâne y est au plus large, les coiffures s'y raccordent. */
+const TEMPLE_Y = 56;
+/** La tête de référence des coiffures : l'ovale. */
+const REF_HALF_WIDTH = 27;
+const REF_CROWN = 28;
+
+interface HeadSpec {
+  /** Demi-largeur à la ligne des tempes. */
+  hw: number;
+  top: number;
+  chin: number;
+  /** Mâchoire : poignée verticale le long de la joue, horizontale au menton (fractions). */
+  jawSide: number;
+  jawChin: number;
+  /** Joues pleines : le visage s'évase sous les tempes jusqu'à `hw` à la hauteur `y`. */
+  cheek?: { hw: number; y: number };
+  /** Les traits suivent la hauteur du visage. */
+  eyeY: number;
+  noseY: number;
+  mouthY: number;
+  blushDx: number;
+  /** Bouche ouverte de la joie : demi-largeur et profondeur, accordées au visage. */
+  joy: { hw: number; depth: number };
+}
+
+/**
+ * Ovale 54 × 58 (la référence), rond 58 × 55 (pommettes hautes, menton
+ * court), long 51 × 61 (menton étiré), joufflu 57 × 57 (crâne étroit, joues
+ * pleines sous les tempes, mâchoire large).
+ */
+const HEADS: Record<PortraitHeadShape, HeadSpec> = {
+  oval: {
+    hw: 27,
+    top: 28,
+    chin: 86,
+    jawSide: 0.583,
+    jawChin: 0.574,
+    eyeY: 61,
+    noseY: 68.4,
+    mouthY: 75,
+    blushDx: 17.5,
+    joy: { hw: 7, depth: 8.2 },
+  },
+  round: {
+    hw: 29,
+    top: 29,
+    chin: 84,
+    jawSide: 0.56,
+    jawChin: 0.56,
+    eyeY: 60.6,
+    noseY: 67.8,
+    mouthY: 74.2,
+    blushDx: 19.4,
+    joy: { hw: 7.8, depth: 7.4 },
+  },
+  long: {
+    hw: 25.5,
+    top: 26.5,
+    chin: 87.5,
+    jawSide: 0.56,
+    jawChin: 0.46,
+    eyeY: 61.6,
+    noseY: 69.6,
+    mouthY: 76.6,
+    blushDx: 16,
+    joy: { hw: 6.2, depth: 8.6 },
+  },
+  cheeky: {
+    hw: 26.4,
+    top: 28.5,
+    chin: 85.5,
+    cheek: { hw: 28.5, y: 66.5 },
+    jawSide: 0.66,
+    jawChin: 0.62,
+    eyeY: 61.2,
+    noseY: 68.8,
+    mouthY: 75.4,
+    blushDx: 18.8,
+    joy: { hw: 7.6, depth: 7.8 },
+  },
+};
+
+/** La moitié droite de la tête, du sommet au menton, en courbes de Bézier cubiques. */
+function headRightHalf(h: HeadSpec): Cubic[] {
+  const crown = TEMPLE_Y - h.top;
+  const temple: Pt = [60 + h.hw, TEMPLE_Y];
+  // Les poignées du crâne sont celles de la référence (0,593 et 0,589) : l'image affine.
+  const segments: Cubic[] = [[[60, h.top], [60 + h.hw * 0.593, h.top], [60 + h.hw, TEMPLE_Y - crown * 0.589], temple]];
+  let [x, y] = temple;
+  if (h.cheek) {
+    const [cx, cy] = [60 + h.cheek.hw, h.cheek.y];
+    // La joue part des tempes déjà vers l'extérieur : un contour convexe, sans taille marquée.
+    segments.push([[x, y], [x + (cx - x) * 0.6, y + (cy - y) * 0.3], [cx, cy - (cy - y) * 0.45], [cx, cy]]);
+    [x, y] = [cx, cy];
+  }
+  segments.push([[x, y], [x, y + (h.chin - y) * h.jawSide], [60 + (x - 60) * h.jawChin, h.chin], [60, h.chin]]);
+  return segments;
+}
+
+/** La tête entière : la moitié droite, puis son miroir parcouru à rebours. */
+function headPath(segments: readonly Cubic[]): string {
+  const f = (p: Pt) => `${r1(p[0])} ${r1(p[1])}`;
+  const m = (p: Pt): Pt => [120 - p[0], p[1]];
+  const [first] = segments;
+  let d = first ? `M${f(first[0])}` : '';
+  for (const [, c1, c2, end] of segments) {
+    d += `C${f(c1)} ${f(c2)} ${f(end)}`;
+  }
+  for (const [start, c1, c2] of [...segments].reverse()) {
+    d += `C${f(m(c2))} ${f(m(c1))} ${f(m(start))}`;
+  }
+  return `${d}Z`;
+}
+
+/** Abscisse du bord droit de la tête à la hauteur `y` (chaque courbe y est monotone). */
+function headEdgeAt(segments: readonly Cubic[], y: number): number {
+  for (const [p0, p1, p2, p3] of segments) {
+    if (y < Math.min(p0[1], p3[1]) || y > Math.max(p0[1], p3[1])) {
+      continue;
+    }
+    const at = (t: number, i: 0 | 1) => {
+      const u = 1 - t;
+      return u * u * u * p0[i] + 3 * u * u * t * p1[i] + 3 * u * t * t * p2[i] + t * t * t * p3[i];
+    };
+    let lo = 0;
+    let hi = 1;
+    for (let k = 0; k < 32; k += 1) {
+      const mid = (lo + hi) / 2;
+      if ((at(mid, 1) - y) * (p3[1] - p0[1]) > 0) {
+        hi = mid;
+      } else {
+        lo = mid;
+      }
+    }
+    return at((lo + hi) / 2, 0);
+  }
+  return 60;
+}
+
+export interface HeadGeometry {
+  readonly spec: HeadSpec;
+  readonly d: string;
+  /** Oreilles : centres (gauche, droite), hauteur, rayon — et leur tracé. */
+  readonly ear: { readonly left: number; readonly right: number; readonly y: number; readonly r: number };
+  readonly ears: string;
+  /** Mise à l'échelle des coiffures autour de la ligne des tempes (absente pour l'ovale). */
+  readonly hairTransform: string | undefined;
+  /** Bord droit de la tête à une hauteur donnée (tests : cou, oreilles). */
+  readonly edgeAt: (y: number) => number;
+}
+
+const EAR_R = 5.6;
+
+function buildHead(spec: HeadSpec): HeadGeometry {
+  const segments = headRightHalf(spec);
+  // L'oreille garde sa place par rapport aux yeux ; son centre sur le bord du visage.
+  const earY = r1(62 + (spec.eyeY - 61));
+  const right = r1(headEdgeAt(segments, earY) - 0.1);
+  const left = r1(120 - right);
+  const sx = spec.hw / REF_HALF_WIDTH;
+  const sy = (TEMPLE_Y - spec.top) / (TEMPLE_Y - REF_CROWN);
+  const identity = Math.abs(sx - 1) < 1e-6 && Math.abs(sy - 1) < 1e-6;
+  return {
+    spec,
+    d: headPath(segments),
+    ear: { left, right, y: earY, r: EAR_R },
+    ears: dot(left, earY, EAR_R) + dot(right, earY, EAR_R),
+    hairTransform: identity
+      ? undefined
+      : `matrix(${+sx.toFixed(4)} 0 0 ${+sy.toFixed(4)} ${+(60 - 60 * sx).toFixed(3)} ${+(TEMPLE_Y - TEMPLE_Y * sy).toFixed(3)})`,
+    edgeAt: (y) => headEdgeAt(segments, y),
+  };
+}
+
+/** Les quatre têtes, calculées une fois au chargement du module. */
+export const PORTRAIT_HEADS: Record<PortraitHeadShape, HeadGeometry> = {
+  oval: buildHead(HEADS.oval),
+  round: buildHead(HEADS.round),
+  long: buildHead(HEADS.long),
+  cheeky: buildHead(HEADS.cheeky),
+};
+
+/** La tête de référence des coiffures (ovale 54 × 58). */
+export const HEAD_D = PORTRAIT_HEADS.oval.d;
+
 const NECKS = {
   crew: 'M51.5 76H68.5V99H51.5Z',
   vee: 'M51.5 76H68.5V92L60 104L51.5 92Z',
@@ -435,23 +641,104 @@ export const HAIR_COVERAGE: Record<PortraitHair, { hairline: boolean; ears: bool
 
 // ── Visage ──────────────────────────────────────────────────────────────
 
-/** Sourcils : la forme varie d'un enfant à l'autre (la tête, elle, est commune). */
-const BROWS: Record<PortraitBrow, string> = {
-  arch: 'M44.8 52.8Q49 49.4 53.2 51.6M66.8 51.6Q71 49.4 75.2 52.8',
-  straight: 'M44.8 52.2Q49 50.6 53.2 51.4M66.8 51.4Q71 50.6 75.2 52.2',
-  round: 'M44.8 52.8Q49 49.8 53.2 51.6M66.8 51.6Q71 49.8 75.2 52.8',
-  lifted: 'M44.8 52.4Q49 50.2 53.2 50.6M66.8 50.6Q71 50.2 75.2 52.4',
+/**
+ * Yeux : trois regards. Ronds et rapprochés, en amande (plus larges que
+ * hauts, le coin extérieur relevé), grands et écartés. Le point de lumière
+ * suit chaque œil ; la joie les plisse en arcs accordés à leur forme.
+ */
+interface EyeSpec {
+  /** Demi-écart entre les centres. */
+  dx: number;
+  rx: number;
+  ry: number;
+  /** Inclinaison (degrés), coin extérieur vers le haut. */
+  tilt: number;
+  /** Arc de la joie : demi-largeur et flèche. */
+  joy: { hw: number; rise: number };
+  /** Les sourcils se rapprochent d'un œil moins haut. */
+  browDy: number;
+  /** Point de lumière : décalage horizontal, en fraction de `rx` (près du centre sur un œil large). */
+  glint: number;
+}
+
+const EYES: Record<PortraitEyes, EyeSpec> = {
+  round: { dx: 10, rx: 3.6, ry: 3.8, tilt: 0, joy: { hw: 3.6, rise: 2.6 }, browDy: -0.2, glint: 0.38 },
+  almond: { dx: 11, rx: 4.3, ry: 3.2, tilt: 4, joy: { hw: 4.3, rise: 2.1 }, browDy: 0.7, glint: 0.26 },
+  wide: { dx: 12.5, rx: 3.5, ry: 4.5, tilt: 0, joy: { hw: 4.2, rise: 3 }, browDy: -0.5, glint: 0.38 },
 };
 
-/** Nez : un seul trait, plus ou moins large. */
-const NOSES: Record<PortraitNose, string> = {
-  broad: 'M56.2 68.4Q60 71.2 63.8 68.4',
-  round: 'M56.6 68.4Q60 71 63.4 68.4',
-  button: 'M57.2 68.6Q60 70.6 62.8 68.6',
+/** Sourcils, le gauche, relatifs au centre de l'œil : départ, contrôle, arrivée ; le droit en miroir. */
+const BROWS: Record<PortraitBrow, readonly [number, number, number, number, number, number]> = {
+  arch: [-4.2, -8.2, 0, -11.6, 4.2, -9.4],
+  straight: [-4.2, -8.8, 0, -10.4, 4.2, -9.6],
+  round: [-4.2, -8.2, 0, -11.2, 4.2, -9.4],
+  lifted: [-4.2, -8.6, 0, -10.8, 4.2, -10.4],
 };
+
+/** Nez : un seul trait, plus ou moins large — demi-largeur, creux, décalage vertical. */
+const NOSES: Record<PortraitNose, readonly [number, number, number]> = {
+  broad: [3.8, 2.8, 0],
+  round: [3.4, 2.6, 0],
+  button: [2.8, 2, 0.2],
+};
+
+/** Les centres des deux yeux pour une tête et un regard. */
+export function eyeCenters(head: PortraitHeadShape, eyes: PortraitEyes): { left: number; right: number; y: number } {
+  const { dx } = EYES[eyes];
+  return { left: 60 - dx, right: 60 + dx, y: HEADS[head].eyeY };
+}
+
+function eyesPath(e: EyeSpec, y: number, k: number): string {
+  let d = '';
+  for (const side of [-1, 1] as const) {
+    const cx = 60 + side * e.dx;
+    const theta = -side * e.tilt;
+    const rad = (theta * Math.PI) / 180;
+    const [ux, uy] = [Math.cos(rad) * e.rx * k, Math.sin(rad) * e.rx * k];
+    const [rx, ry] = [r1(e.rx * k), r1(e.ry * k)];
+    const a = `A${rx} ${ry} ${theta} 1 0`;
+    d += `M${r1(cx - ux)} ${r1(y - uy)}${a} ${r1(cx + ux)} ${r1(y + uy)}${a} ${r1(cx - ux)} ${r1(y - uy)}Z`;
+  }
+  return d;
+}
+
+function mouthPaths(
+  head: HeadSpec,
+  mouth: PortraitMouth,
+  joy: boolean,
+  full: boolean,
+): { line?: string; fill?: string; tongue?: string } {
+  const y = head.mouthY;
+  if (joy) {
+    // La bouche ouverte suit le visage : large et courte sur un visage rond, étroite et haute sur un long.
+    const { hw: w, depth } = head.joy;
+    const top = y - 1.4;
+    const bottom = top + depth;
+    const sx = w / 7;
+    const sy = depth / 8.2;
+    const t = (dx: number) => r1(60 + dx * sx);
+    const u = (dy: number) => r1(bottom - dy * sy);
+    return {
+      fill: `M${t(-7)} ${r1(top)}H${t(7)}C${t(7)} ${r1(top + depth * 0.634)} ${t(4)} ${r1(bottom)} 60 ${r1(bottom)}C${t(-4)} ${r1(bottom)} ${t(-7)} ${r1(top + depth * 0.634)} ${t(-7)} ${r1(top)}Z`,
+      tongue: `M${t(-4)} ${u(1.7)}C${t(-2.4)} ${u(3.2)} ${t(2.4)} ${u(3.2)} ${t(4)} ${u(1.7)}C${t(3)} ${u(0.6)} ${t(1.6)} ${u(0)} 60 ${u(0)}C${t(-1.6)} ${u(0)} ${t(-3)} ${u(0.6)} ${t(-4)} ${u(1.7)}Z`,
+    };
+  }
+  if (mouth === 'crescent') {
+    // Le sourire fermé : un croissant plein, effilé aux commissures.
+    const belly = full ? 7 : 8.4;
+    return { fill: `M54.4 ${r1(y - 0.4)}Q60 ${r1(y + 2)} 65.6 ${r1(y - 0.4)}Q60 ${r1(y + belly)} 54.4 ${r1(y - 0.4)}Z` };
+  }
+  if (mouth === 'small') {
+    return { line: `M56.2 ${r1(y + 0.3)}Q60 ${r1(y + 3.6)} 63.8 ${r1(y + 0.3)}` };
+  }
+  return { line: `M55 ${r1(y)}Q60 ${r1(y + 4.2)} 65 ${r1(y)}` };
+}
 
 export function PortraitFace({
   skin,
+  head,
+  eyes,
+  mouth,
   brow,
   nose,
   expression,
@@ -459,6 +746,9 @@ export function PortraitFace({
   brows = true,
 }: {
   skin: PortraitSkin;
+  head: PortraitHeadShape;
+  eyes: PortraitEyes;
+  mouth: PortraitMouth;
   brow: PortraitBrow;
   nose: PortraitNose;
   expression: PortraitExpression;
@@ -469,48 +759,64 @@ export function PortraitFace({
   const tone = PORTRAIT_SKINS[skin];
   const full = lod === 'full';
   const joy = expression === 'joy';
+  const h = HEADS[head];
+  const e = EYES[eyes];
+  const y = h.eyeY;
+  const blushY = h.mouthY - 5;
+  const [bx0, by0, bcx, bcy, bx1, by1] = BROWS[brow];
+  // Joie : les sourcils se lèvent.
+  const lift = e.browDy + (joy ? -1.4 : 0);
+  const browD = ([-1, 1] as const)
+    .map((side) => {
+      const cx = 60 + side * e.dx;
+      // Le sourcil gauche est décrit tel quel ; le droit en est le miroir.
+      const p = (dx: number, dy: number) => `${r1(cx - side * dx)} ${r1(y + dy + lift)}`;
+      return `M${p(bx0, by0)}Q${p(bcx, bcy)} ${p(bx1, by1)}`;
+    })
+    .join('');
+  const [nw, ndip, ndy] = NOSES[nose];
+  const ny = h.noseY + ndy;
+  const k = full ? 1 : 1.16;
+  const m = mouthPaths(h, mouth, joy, full);
   return (
     <>
       <Path
-        d="M37.7 70A4.8 3.2 0 1 0 47.3 70A4.8 3.2 0 1 0 37.7 70ZM72.7 70A4.8 3.2 0 1 0 82.3 70A4.8 3.2 0 1 0 72.7 70Z"
+        d={`M${r1(60 - h.blushDx - 4.8)} ${blushY}A4.8 3.2 0 1 0 ${r1(60 - h.blushDx + 4.8)} ${blushY}A4.8 3.2 0 1 0 ${r1(60 - h.blushDx - 4.8)} ${blushY}ZM${r1(60 + h.blushDx - 4.8)} ${blushY}A4.8 3.2 0 1 0 ${r1(60 + h.blushDx + 4.8)} ${blushY}A4.8 3.2 0 1 0 ${r1(60 + h.blushDx - 4.8)} ${blushY}Z`}
         fill={tone.blush}
       />
-      {brows ? (
-        <G transform={joy ? 'translate(0 -1.4)' : undefined}>
-          <Path d={BROWS[brow]} stroke={HAIR} strokeWidth={full ? 2.2 : 3.2} {...round} />
-        </G>
-      ) : null}
+      {brows ? <Path d={browD} stroke={HAIR} strokeWidth={full ? 2.2 : 3.2} {...round} /> : null}
       {joy ? (
         <Path
-          d="M45.2 62.6Q49 57.4 52.8 62.6M67.2 62.6Q71 57.4 74.8 62.6"
+          d={([-1, 1] as const)
+            .map((side) => {
+              const cx = 60 + side * e.dx;
+              const base = r1(y + 1.6);
+              return `M${r1(cx - e.joy.hw)} ${base}Q${r1(cx)} ${r1(base - 2 * e.joy.rise)} ${r1(cx + e.joy.hw)} ${base}`;
+            })
+            .join('')}
           stroke={EYE}
           strokeWidth={full ? 2.7 : 3.4}
           {...round}
         />
       ) : (
         <>
-          <Ellipse cx={49} cy={61} rx={full ? 3.1 : 3.6} ry={full ? 3.9 : 4.4} fill={EYE} />
-          <Ellipse cx={71} cy={61} rx={full ? 3.1 : 3.6} ry={full ? 3.9 : 4.4} fill={EYE} />
+          <Path d={eyesPath(e, y, k)} fill={EYE} />
           {full ? (
             <Path
-              d="M49.05 59.4A1.15 1.15 0 1 0 51.35 59.4A1.15 1.15 0 1 0 49.05 59.4ZM71.05 59.4A1.15 1.15 0 1 0 73.35 59.4A1.15 1.15 0 1 0 71.05 59.4Z"
+              d={([-1, 1] as const)
+                .map((side) => dot(60 + side * e.dx + e.rx * e.glint, y - e.ry * 0.42, Math.min(e.rx, e.ry) * 0.37))
+                .join('')}
               fill={WHITE}
             />
           ) : null}
         </>
       )}
-      {full ? <Path d={NOSES[nose]} stroke={tone.shade} strokeWidth={2} {...round} /> : null}
-      {joy ? (
-        <>
-          <Path d="M53 73.6H67C67 78.8 64 81.8 60 81.8C56 81.8 53 78.8 53 73.6Z" fill={MOUTH} />
-          <Path
-            d="M56 80.1C57.6 78.6 62.4 78.6 64 80.1C63 81.2 61.6 81.8 60 81.8C58.4 81.8 57 81.2 56 80.1Z"
-            fill={TONGUE}
-          />
-        </>
-      ) : (
-        <Path d="M55 75Q60 79.2 65 75" stroke={MOUTH} strokeWidth={full ? 2.4 : 3} {...round} />
-      )}
+      {full ? (
+        <Path d={`M${r1(60 - nw)} ${r1(ny)}Q60 ${r1(ny + ndip)} ${r1(60 + nw)} ${r1(ny)}`} stroke={tone.shade} strokeWidth={2} {...round} />
+      ) : null}
+      {m.fill ? <Path d={m.fill} fill={MOUTH} /> : null}
+      {m.tongue ? <Path d={m.tongue} fill={TONGUE} /> : null}
+      {m.line ? <Path d={m.line} stroke={MOUTH} strokeWidth={full ? 2.4 : 3} {...round} /> : null}
     </>
   );
 }
@@ -624,24 +930,32 @@ export const PORTRAIT_GARMENTS: Record<PortraitGarment, GarmentSpec> = {
 
 // ── Accessoires (la personne, jamais l'écolier) ─────────────────────────
 
+/** Les accessoires suivent la tête (oreilles) et le regard (lunettes). */
 function Accessories({
   accessories,
   lod,
   layer,
+  head,
+  eyes,
 }: {
   accessories: readonly PortraitAccessory[];
   lod: PortraitLod;
   layer: 'ears' | 'face';
+  head: PortraitHeadShape;
+  eyes: PortraitEyes;
 }) {
   const full = lod === 'full';
+  const { ear } = PORTRAIT_HEADS[head];
   return (
     <>
       {accessories.map((accessory) => {
         if (layer === 'face' && accessory === 'glasses') {
+          const c = eyeCenters(head, eyes);
+          const r = 7;
           return (
             <Path
               key={accessory}
-              d="M42 61A7 7 0 1 0 56 61A7 7 0 1 0 42 61ZM64 61A7 7 0 1 0 78 61A7 7 0 1 0 64 61ZM56 60Q60 58 64 60"
+              d={`${dot(c.left, c.y, r)}${dot(c.right, c.y, r)}M${r1(c.left + r)} ${r1(c.y - 1)}Q60 ${r1(c.y - 3)} ${r1(c.right - r)} ${r1(c.y - 1)}`}
               stroke={FAB.indigo.base}
               strokeWidth={full ? 2.4 : 3.2}
               fill="none"
@@ -649,10 +963,12 @@ function Accessories({
           );
         }
         if (layer === 'ears' && accessory === 'hearing-aid') {
+          const x = ear.right;
+          const y = ear.y;
           return (
             <Path
               key={accessory}
-              d="M88 53.5C93.5 53.5 94.8 61 91.6 66.4"
+              d={`M${r1(x + 1.6)} ${r1(y - 8.5)}C${r1(x + 7.1)} ${r1(y - 8.5)} ${r1(x + 8.4)} ${r1(y - 1)} ${r1(x + 5.2)} ${r1(y + 4.4)}`}
               stroke={FAB.sky.base}
               strokeWidth={full ? 3.6 : 4.4}
               {...round}
@@ -663,7 +979,7 @@ function Accessories({
           return (
             <Path
               key={accessory}
-              d="M31.5 68.4A2.1 2.1 0 1 0 35.7 68.4A2.1 2.1 0 1 0 31.5 68.4ZM84.3 68.4A2.1 2.1 0 1 0 88.5 68.4A2.1 2.1 0 1 0 84.3 68.4Z"
+              d={dot(ear.left, ear.y + 6.4, 2.1) + dot(ear.right, ear.y + 6.4, 2.1)}
               fill={FAB.saffron.base}
             />
           );
@@ -672,7 +988,7 @@ function Accessories({
           return (
             <Path
               key={accessory}
-              d="M33.6 66.4A3.8 3.8 0 1 0 33.6 74A3.8 3.8 0 1 0 33.6 66.4ZM86.4 66.4A3.8 3.8 0 1 0 86.4 74A3.8 3.8 0 1 0 86.4 66.4Z"
+              d={dot(ear.left, ear.y + 8.2, 3.8) + dot(ear.right, ear.y + 8.2, 3.8)}
               stroke={FAB.saffron.base}
               strokeWidth={1.8}
               fill="none"
@@ -689,6 +1005,9 @@ function Accessories({
 
 export interface PortraitSpec {
   skin: PortraitSkin;
+  head: PortraitHeadShape;
+  eyes: PortraitEyes;
+  mouth: PortraitMouth;
   hair: PortraitHair;
   garment: PortraitGarment;
   accessories: readonly PortraitAccessory[];
@@ -702,11 +1021,15 @@ const frameOf = (lod: PortraitLod) => `translate(60 66) scale(${lod === 'full' ?
 function Figure({ spec, expression, lod, bust }: { spec: PortraitSpec; expression: PortraitExpression; lod: PortraitLod; bust: boolean }) {
   const tone = PORTRAIT_SKINS[spec.skin];
   const full = lod === 'full';
+  const head = PORTRAIT_HEADS[spec.head];
   const hair = HAIRS[spec.hair](full, tone.shade);
   const garment = PORTRAIT_GARMENTS[spec.garment];
+  // La coiffure, dessinée sur l'ovale, se pose sur chaque crâne par une mise à l'échelle.
+  const fit = (layer: ReactElement | undefined) =>
+    layer && head.hairTransform ? <G transform={head.hairTransform}>{layer}</G> : (layer ?? null);
   return (
     <>
-      {hair.back}
+      {fit(hair.back)}
       {bust ? (
         <>
           <Path d={NECKS[garment.neck]} fill={tone.shade} />
@@ -714,19 +1037,22 @@ function Figure({ spec, expression, lod, bust }: { spec: PortraitSpec; expressio
           {garment.detail ? garment.detail(full) : null}
         </>
       ) : null}
-      <Path d={EARS_D} fill={tone.base} />
-      <Path d={HEAD_D} fill={tone.base} />
-      <Accessories accessories={spec.accessories} lod={lod} layer="ears" />
+      <Path d={head.ears} fill={tone.base} />
+      <Path d={head.d} fill={tone.base} />
+      <Accessories accessories={spec.accessories} lod={lod} layer="ears" head={spec.head} eyes={spec.eyes} />
       <PortraitFace
         skin={spec.skin}
+        head={spec.head}
+        eyes={spec.eyes}
+        mouth={spec.mouth}
         brow={spec.brow}
         nose={spec.nose}
         expression={expression}
         lod={lod}
         brows={spec.hair !== 'bucket-hat'}
       />
-      {hair.front}
-      <Accessories accessories={spec.accessories} lod={lod} layer="face" />
+      {fit(hair.front)}
+      <Accessories accessories={spec.accessories} lod={lod} layer="face" head={spec.head} eyes={spec.eyes} />
     </>
   );
 }

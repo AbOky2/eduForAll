@@ -1,4 +1,5 @@
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { EcolnaIcon } from '../icons/ecolna-icon';
 import { ObjectIcon } from '../illustrations/object-icons';
 import { SubjectArt, type SubjectArtId } from '../icons/subject-art';
@@ -22,13 +23,19 @@ interface LessonHeroCardProps {
   style?: StyleProp<ViewStyle>;
   /** Le pictogramme du thème de la leçon : chaque carte du jour a son image. */
   cover?: string | null;
+  /**
+   * La carte reçoit de son écran plus de hauteur que son contenu n'en
+   * demande (l'accueil d'une grande tablette debout) : elle la remplit, et
+   * l'image grandit avec elle (voir `heroFillArt`).
+   */
+  fill?: boolean;
 }
 
 /**
  * Taille de l'image de la leçon (avant mise à l'échelle). Elle est la plus
  * grande chose de l'accueil : grande tablette debout 160, couchée 132 ;
- * tablette 7" couchée (600 dp de haut) 76, pour que tout tienne au-dessus de
- * la barre d'onglets ; téléphone 96.
+ * tablette 7" couchée (600 dp de haut) 108 — c'est la colonne du texte qui
+ * fixe la hauteur de la carte, l'image y tient sans l'agrandir ; téléphone 96.
  */
 export function heroArtSize({
   isTablet,
@@ -43,9 +50,37 @@ export function heroArtSize({
     return 96;
   }
   if (isLandscape) {
-    return height < 700 ? 76 : height < 780 ? 112 : 132;
+    return height < 700 ? 108 : height < 780 ? 112 : 132;
   }
   return height < 1000 ? 136 : 160;
+}
+
+/** L'image d'une carte qui remplit sa hauteur ne dépasse jamais cette taille (avant mise à l'échelle). */
+export const HERO_ART_MAX = 240;
+/** La place que garde le texte à côté d'une image agrandie (avant mise à l'échelle). */
+const HERO_TEXT_MIN = 300;
+
+/**
+ * L'image d'une carte du jour qui remplit la hauteur que l'écran lui donne
+ * (`fill`) : toute la hauteur intérieure, jamais moins que sa taille
+ * ordinaire (`base`), jamais plus de `HERO_ART_MAX`, et toujours assez de
+ * largeur pour le titre et le bouton. Mesures en dp, déjà mises à l'échelle.
+ */
+export function heroFillArt({
+  base,
+  face,
+  pad,
+  scale,
+}: {
+  base: number;
+  /** La surface de la carte, mesurée. */
+  face: { width: number; height: number };
+  pad: number;
+  scale: number;
+}): number {
+  const byHeight = face.height - 2 * pad;
+  const byWidth = face.width - 3 * pad - scaled(HERO_TEXT_MIN, scale);
+  return Math.max(base, Math.floor(Math.min(byHeight, byWidth, scaled(HERO_ART_MAX, scale))));
 }
 
 /**
@@ -66,18 +101,31 @@ export function LessonHeroCard({
   accessibilityLabel,
   style,
   cover = null,
+  fill = false,
 }: LessonHeroCardProps) {
   const { scale, isTablet, isLandscape, height } = useResponsive();
+  // Remplir : la surface mesurée dit jusqu'où l'image peut grandir.
+  const [face, setFace] = useState({ width: 0, height: 0 });
   // Une tablette 7" couchée (600 dp) : titre et bouton resserrés.
   const short = height < 700;
   // Une grande tablette (iPad 11", 10" Android) : la carte prend de la hauteur.
   const tall = isTablet && height >= 780;
-  const art = scaled(heroArtSize({ isTablet, isLandscape, height }), scale);
+  const baseArt = scaled(heroArtSize({ isTablet, isLandscape, height }), scale);
   const pad = scaled(
     isTablet && !isLandscape ? spacing.xl : short ? spacing.md : spacing.lg,
     scale,
   );
-  const badge = Math.round(art * 0.3);
+  const art =
+    fill && face.height > 0 ? heroFillArt({ base: baseArt, face, pad, scale }) : baseArt;
+  const onFaceLayout = (event: LayoutChangeEvent) => {
+    const width = Math.round(event.nativeEvent.layout.width);
+    const next = Math.round(event.nativeEvent.layout.height);
+    if (width !== face.width || next !== face.height) {
+      setFace({ width, height: next });
+    }
+  };
+  // La pastille de la discipline suit l'image, sans devenir un second sujet.
+  const badge = Math.min(Math.round(art * 0.3), scaled(56, scale));
   const badgeRim = scaled(3, scale);
   const minHeight = scaled(
     !isTablet ? 168 : isLandscape ? (short ? 128 : tall ? 204 : 176) : tall ? 230 : 200,
@@ -98,8 +146,11 @@ export function LessonHeroCard({
         { padding: pad, gap: pad, minHeight },
       ]}
     >
+      {/* La surface entière, mesurée (sans rien déplacer) quand la carte remplit sa hauteur. */}
+      {fill ? <View pointerEvents="none" style={StyleSheet.absoluteFill} onLayout={onFaceLayout} /> : null}
       <View style={[styles.text, { gap: scaled(spacing.xxs, scale) }]}>
-        <EcolnaText variant="labelMd" color={colors.onColorSoft} numberOfLines={1}>
+        {/* Jamais tronqué : un contexte long passe sur deux lignes. */}
+        <EcolnaText variant="labelMd" color={colors.onColorSoft} numberOfLines={2}>
           {eyebrow}
         </EcolnaText>
         <EcolnaText

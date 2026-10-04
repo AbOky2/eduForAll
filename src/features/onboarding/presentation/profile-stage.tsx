@@ -16,6 +16,7 @@ interface ProfileStageProps {
   height: number;
   avatarId: string | null;
   firstName: string;
+  /** La classe choisie : lue par le lecteur d'écran (« Ta carte : Amina, CP1 »). */
   level: LevelId | null;
   /** Diamètre du médaillon du personnage (dp), cadre compris. */
   characterSize: number;
@@ -220,9 +221,9 @@ function Character({ avatarId, size, joy }: { avatarId: string; size: number; jo
  * étape à l'autre. Un panneau bleu très clair ; au centre, la place de
  * l'enfant : d'abord une invitation (pointillé, main qui salue), puis le
  * personnage choisi dans son médaillon ; devant lui, comme un écolier montre
- * son ardoise, le prénom qui s'écrit à la craie, première lettre au soleil ;
- * la classe qui se pose dans le coin. Lue comme un tout : « Ta carte :
- * Amina, CP1 ».
+ * son ardoise, le prénom qui s'écrit à la craie, première lettre au soleil.
+ * La classe se lit à droite, sur les cartes CP1/CP2 : pas d'étiquette collée
+ * sur l'ardoise. Lue comme un tout : « Ta carte : Amina, CP1 ».
  */
 export function ProfileStage({
   width,
@@ -309,13 +310,6 @@ export function ProfileStage({
                 </View>
               )}
             </View>
-            {level ? (
-              <View style={styles.levelPill}>
-                <EcolnaText variant="buttonSm" color={colors.brandInk}>
-                  {level}
-                </EcolnaText>
-              </View>
-            ) : null}
           </View>
         ) : null}
       </View>
@@ -344,15 +338,4 @@ const styles = StyleSheet.create({
   emptyRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
   dotted: { flexDirection: 'row', gap: 6, paddingBottom: 6 },
   dash: { width: 10, height: 3, borderRadius: 2, backgroundColor: colors.onNightSecondary },
-  levelPill: {
-    position: 'absolute',
-    top: -12,
-    right: -10,
-    backgroundColor: colors.brandTintStrong,
-    borderRadius: radius.pill,
-    borderWidth: 3,
-    borderColor: colors.brandTint,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
-  },
 });

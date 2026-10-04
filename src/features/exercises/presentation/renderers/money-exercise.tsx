@@ -8,6 +8,7 @@ import {
   EcolnaStimulus,
   EcolnaExerciseLayout,
   useExerciseMetrics,
+  useAnswerCardState,
 } from '@/design-system/primitives';
 import { scaled, useResponsive } from '@/design-system/responsive';
 import { illustration, spacing } from '@/design-system/tokens';
@@ -65,6 +66,7 @@ export function MoneyExercise({ step, interactive, onSubmit }: ExerciseRendererP
   const [picked, setPicked] = useState<number | null>(null);
   const { scale, isTablet } = useResponsive();
   const metrics = useExerciseMetrics();
+  const cardState = useAnswerCardState(interactive);
   const coin = scaled(isTablet ? 84 : 64, scale);
 
   const prompt = (
@@ -85,7 +87,7 @@ export function MoneyExercise({ step, interactive, onSubmit }: ExerciseRendererP
           // Espace insécable : « 10 F » ne se coupe jamais en deux lignes.
           label={`${option}\u00a0F`}
           glyphVariant={isTablet ? 'displayGlyphSmall' : 'headlineLg'}
-          state={interactive ? 'default' : picked === option ? 'selected' : 'disabled'}
+          state={cardState(picked === option)}
           onPress={() => {
             setPicked(option);
             onSubmit({ kind: 'number', value: option });

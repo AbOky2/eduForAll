@@ -7,8 +7,9 @@ import { loadAchievementBoard } from '@/features/achievements/application/sync-a
 import { ACHIEVEMENT_IDS } from '@/features/achievements/domain/achievements';
 import {
   AchievementBadge,
-  shelfOrder,
+  shelfGroups,
 } from '@/features/achievements/presentation/achievement-badge';
+import type { AchievementId } from '@/features/achievements/domain/achievements';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
 import { AVATAR_IDS, type AvatarId } from '@/features/child-profile/domain/child-profile';
 import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
@@ -81,6 +82,9 @@ function SubjectRings({ subjects }: { subjects: HomeSummary['subjects'] }) {
                 size={ring}
                 stroke={stroke}
                 color={subjectColors[entry.subject].solid}
+                // La piste dans la teinte de la discipline, comme à l'accueil et
+                // au parcours : un même objet, un même aspect (le gris dirait « fermé »).
+                track={subjectColors[entry.subject].tintStrong}
                 accessibilityLabel={label}
               >
                 <SubjectArt subject={entry.subject} size={art} />
@@ -137,8 +141,8 @@ export default function ChildProfileScreen() {
     profile ? `${profile.id}:${profile.level}` : null,
   );
   const earnedSet = useMemo(() => new Set<string>(board?.earned ?? []), [board]);
-  // Ce qu'on a d'abord : les médailles gagnées en tête de l'étagère.
-  const shelf = useMemo(() => shelfOrder(ACHIEVEMENT_IDS, earnedSet), [earnedSet]);
+  // Ce qu'on a d'abord : les médailles gagnées, puis le rayon « À gagner ».
+  const shelf = useMemo(() => shelfGroups(ACHIEVEMENT_IDS, earnedSet), [earnedSet]);
 
   if (!profile) {
     return null;
@@ -159,7 +163,11 @@ export default function ChildProfileScreen() {
   // pour que la carte d'identité tienne entière avec ses chiffres et ses anneaux.
   const shortPane = splitPanes && height < 720;
   const hero = shortPane ? scaled(88, scale) : scaled(isTablet ? 136 : 112, scale);
-  const badgeColumns = splitPanes ? 4 : isTablet ? 5 : 3;
+  // Trois colonnes en deux volets : des cases d'environ 155 dp où les noms
+  // tiennent sur une ligne ; cinq sur une tablette debout, trois au téléphone.
+  const badgeColumns = splitPanes ? 3 : isTablet ? 5 : 3;
+  const badgeSize = scaled(splitPanes ? 76 : isTablet ? 68 : 60, scale);
+  const cardPadding = scaled(spacing.lg, scale);
   const gap = scaled(spacing.lg, scale);
   const fade = scaled(FADE, scale);
 
@@ -209,33 +217,53 @@ export default function ChildProfileScreen() {
     </EcolnaCard>
   );
 
+  /** Un rayon de l'étagère : colonnes fixes et rangées de même hauteur. */
+  const shelfRow = (ids: readonly AchievementId[]) => (
+    <View style={[styles.badgeGrid, { rowGap: scaled(spacing.md, scale) }]}>
+      {ids.map((id) => (
+        <View key={id} style={[styles.badgeCell, { width: `${100 / badgeColumns}%` }]}>
+          <AchievementBadge id={id} earned={earnedSet.has(id)} size={badgeSize} fill />
+        </View>
+      ))}
+    </View>
+  );
+
   const collection = (
     <View style={{ gap }}>
-      <View style={styles.sectionHead}>
-        <EcolnaText variant="headlineMd">{fr.achievements.title}</EcolnaText>
-        <EcolnaPill
-          tone="sun"
-          variant="labelMd"
-          icon={<EcolnaIcon name="medal" size={scaled(16, scale)} color={colors.rewardDeep} filled />}
-          label={fr.achievements.earnedCount(earnedSet.size)}
-        />
-      </View>
-      <EcolnaText variant="bodyMd" color={colors.textSecondary}>
-        {fr.achievements.subtitle}
-      </EcolnaText>
-      <EcolnaCard rounded="xl">
-        {/* Colonnes fixes et rangées de même hauteur : une étagère bien rangée. */}
-        <View style={[styles.badgeGrid, { rowGap: scaled(spacing.md, scale) }]}>
-          {shelf.map((id) => (
-            <View key={id} style={[styles.badgeCell, { width: `${100 / badgeColumns}%` }]}>
-              <AchievementBadge
-                id={id}
-                earned={earnedSet.has(id)}
-                size={scaled(isTablet ? 68 : 60, scale)}
-                fill
-              />
+      {/* La collection est une carte entière, son titre en tête : elle part du
+          même haut que la carte d'identité, avec le même rayon et la même ombre. */}
+      <EcolnaCard rounded="xl" padded={false}>
+        <View
+          style={[
+            styles.cardHead,
+            { padding: cardPadding, gap: scaled(spacing.xxs, scale) },
+          ]}
+        >
+          <View style={styles.sectionHead}>
+            <EcolnaText variant="headlineMd" accessibilityRole="header">
+              {fr.achievements.title}
+            </EcolnaText>
+            <EcolnaPill
+              tone="sun"
+              variant="labelMd"
+              icon={<EcolnaIcon name="medal" size={scaled(16, scale)} color={colors.rewardDeep} filled />}
+              label={fr.achievements.earnedCount(earnedSet.size)}
+            />
+          </View>
+          <EcolnaText variant="bodySm" color={colors.textSecondary}>
+            {fr.achievements.subtitle}
+          </EcolnaText>
+        </View>
+        <View style={{ padding: cardPadding, gap: scaled(spacing.lg, scale) }}>
+          {shelf.earned.length > 0 ? shelfRow(shelf.earned) : null}
+          {shelf.toEarn.length > 0 ? (
+            <View style={{ gap: scaled(spacing.sm, scale) }}>
+              <EcolnaText variant="labelLg" color={colors.inkSecondary}>
+                {fr.achievements.toEarn}
+              </EcolnaText>
+              {shelfRow(shelf.toEarn)}
             </View>
-          ))}
+          ) : null}
         </View>
       </EcolnaCard>
 
@@ -324,6 +352,8 @@ const styles = StyleSheet.create({
   stat: { flex: 1, alignItems: 'center', gap: 2, paddingHorizontal: spacing.xs },
   rings: { flex: 1, flexDirection: 'row', justifyContent: 'space-around' },
   ringCell: { flex: 1, alignItems: 'center' },
+  // L'en-tête de la carte des médailles, séparé de l'étagère d'un filet.
+  cardHead: { borderBottomWidth: 1, borderBottomColor: colors.border },
   sectionHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   badgeGrid: { flexDirection: 'row', flexWrap: 'wrap' },
   badgeCell: { alignItems: 'center', paddingHorizontal: spacing.xxs },

@@ -52,6 +52,9 @@ export function portraitSpecOf(avatarId: string): PortraitSpec {
   const art = avatarArt(avatarId);
   return {
     skin: art.skin,
+    head: art.head,
+    eyes: art.eyes,
+    mouth: art.mouth,
     hair: art.hair,
     garment: art.garment,
     accessories: art.accessories,
