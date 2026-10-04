@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ECOLNA — Aide et support</title>
-<meta name="description" content="Aide d'ECOLNA : réinitialiser la progression, ouvrir l'espace parent, utiliser l'application sans connexion. Contact de l'éditeur.">
+<meta name="description" content="Aide d’ECOLNA : réinitialiser la progression, ouvrir l’espace parent, changer de classe, utiliser l’application sans connexion. Licences des polices, des icônes et des voix. Contact de l’éditeur.">
 <style>
   :root {
     --sand:#d4a373; --brown:#7d562d; --ink:#161a32; --muted:#50453b;
@@ -34,6 +34,14 @@
   ul, ol { padding-left:20px; }
   footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; }
   a { color:var(--blue); }
+  nav ul { list-style:none; padding:0; margin:0 0 8px; display:flex; flex-wrap:wrap; gap:6px 16px; font-size:15px; }
+  table { width:100%; border-collapse:collapse; margin:8px 0 16px; font-size:15px; }
+  th, td { text-align:left; vertical-align:top; padding:8px 10px; border-top:1px solid var(--line); color:var(--muted); }
+  th { color:var(--ink); font-weight:600; }
+  details { margin:8px 0 16px; }
+  summary { cursor:pointer; color:var(--blue); }
+  pre { white-space:pre-wrap; font-size:12.5px; line-height:1.5; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; color:var(--ink); overflow-wrap:anywhere; }
+  .todo { color:var(--brown); }
 </style>
 </head>
 <body>
@@ -54,47 +62,242 @@
 
   <div class="headline">
     <p style="margin:0"><strong>ECOLNA accompagne les enfants de CP1 et CP2</strong>
-    en langage, lecture, écriture et calcul, en suivant le programme officiel de
+    en langage, lecture, écriture et calcul, d’après le programme de
     l’enseignement primaire de la République du Tchad. L’application fonctionne
-    entièrement hors connexion : il n’y a ni compte, ni mot de passe, ni
+    entièrement hors connexion : il n’y a ni compte, ni mot de passe, ni
     publicité, ni achat.</p>
   </div>
 
-  <h2>Comment réinitialiser la progression</h2>
-  <p>Dans l’espace parent, l’action <strong>« Réinitialiser progression »</strong>
-  efface l’ensemble des données enregistrées sur l’appareil : prénom, avatar,
-  leçons terminées, étoiles, notions à revoir. Désinstaller l’application produit
-  le même effet. Il n’existe aucune copie ailleurs, puisque rien n’est envoyé
-  nulle part — cette action est donc définitive.</p>
+  <nav aria-label="Sommaire">
+    <ul>
+      <li><a href="#reinitialiser">Réinitialiser la progression</a></li>
+      <li><a href="#espace-parent">Ouvrir l’espace parent</a></li>
+      <li><a href="#classe">Passer du CP1 au CP2</a></li>
+      <li><a href="#connexion">Sans connexion</a></li>
+      <li><a href="#contact">Écrire à l’éditeur</a></li>
+      <li><a href="#licences">Licences</a></li>
+    </ul>
+  </nav>
 
-  <h2>Comment ouvrir l’espace parent</h2>
-  <p>L’espace parent est protégé par une <strong>question de multiplication</strong>
-  qu’un enfant de 6 à 8 ans ne sait pas encore résoudre. Ce n’est pas un mot de
-  passe : il n’y a rien à créer, rien à retenir, et rien à récupérer en cas
-  d’oubli. Il suffit de calculer le résultat demandé pour entrer. L’espace parent
-  donne accès à la progression, aux réglages et à la réinitialisation.</p>
+  <h2 id="reinitialiser">Comment réinitialiser la progression</h2>
+  <p>Dans l’espace parent, ouvrir les <strong>Paramètres</strong>, puis toucher
+  <strong>« Réinitialiser la progression »</strong> et confirmer deux fois.
+  Cette action efface l’ensemble des données enregistrées sur l’appareil :
+  prénom, avatar, classe, leçons terminées, étoiles, badges, notions à revoir.
+  Désinstaller l’application produit le même effet. ECOLNA n’envoie rien
+  nulle part : l’effacement est donc définitif. Seule exception, sur iPhone et
+  iPad : si la sauvegarde iCloud de l’appareil est activée, une sauvegarde
+  faite auparavant peut encore contenir ces données, jusqu’à ce qu’une
+  sauvegarde plus récente la remplace (voir la
+  <a href="./">politique de confidentialité</a>, points 2 et 7).</p>
 
-  <h2>L’application ne demande pas de connexion : est-ce normal ?</h2>
+  <h2 id="espace-parent">Comment ouvrir l’espace parent</h2>
+  <p>Toucher l’onglet <strong>« Parents »</strong>, en bas de l’écran. Une
+  <strong>multiplication tirée au hasard</strong> s’affiche (deux nombres de 6
+  à 9) : écrire le résultat au clavier, puis toucher « Entrer ». Après une
+  erreur, une autre multiplication s’affiche. Ce n’est pas un mot de passe : il
+  n’y a rien à créer, rien à retenir, et rien à récupérer en cas d’oubli ; un
+  enfant de 6 à 8 ans ne sait pas encore la résoudre.</p>
+  <p>L’espace parent donne accès au suivi des progrès, au partage d’un résumé,
+  et aux paramètres : son, classe, confidentialité, diagnostic et
+  réinitialisation. Il se referme de lui-même quand l’application passe en
+  arrière-plan, ou au bout de quelques minutes.</p>
+
+  <h2 id="classe">Comment passer du CP1 au CP2</h2>
+  <p>Dans l’espace parent, ouvrir les <strong>Paramètres</strong>. La rubrique
+  <strong>« Classe »</strong> propose CP1 et CP2 : choisir la nouvelle classe,
+  puis confirmer. Les leçons terminées, les étoiles et les badges sont gardés ;
+  l’accueil propose ensuite les leçons de la nouvelle classe.</p>
+
+  <h2 id="connexion">L’application ne demande pas de connexion : est-ce normal ?</h2>
   <p>Oui. ECOLNA <strong>n’effectue aucun appel réseau</strong>. Les 308 leçons,
   les 824 enregistrements audio et les images sont déjà dans l’application au
   moment de l’installation. Elle fonctionne donc en mode avion, sans carte SIM et
   sans forfait, dès le premier lancement, et ne consomme aucune donnée mobile.
-  Si une leçon ne se lance pas, ce n’est jamais un problème de connexion : écrire
+  Si une leçon ne se lance pas, ce n’est jamais un problème de connexion : écrire
   à l’adresse ci-dessous en indiquant l’écran concerné.</p>
 
-  <h2>Écrire à l’éditeur</h2>
-  <p>Pour une question, un problème technique ou une remarque pédagogique :
+  <h2 id="contact">Écrire à l’éditeur</h2>
+  <p>Pour une question, un problème technique ou une remarque pédagogique :
   <a href="mailto:issaokiabderamane@gmail.com">issaokiabderamane@gmail.com</a>.</p>
-  <p>Pour qu’une réponse soit utile, indiquer : le modèle de l’appareil, le
+  <p>Pour qu’une réponse soit utile, indiquer : le modèle de l’appareil, le
   niveau choisi (CP1 ou CP2), l’écran où le problème apparaît, et ce qui était
   attendu.</p>
   <!-- Engagement public, modifiable par l'éditeur : voir store/shared/contact-support.md -->
   <p>Les messages reçoivent une réponse <strong>sous 7 jours</strong>. Le support
   se fait uniquement par e-mail, en français.</p>
 
-  <h2>Confidentialité</h2>
+  <h2 id="confidentialite">Confidentialité</h2>
   <p>ECOLNA ne collecte aucune donnée. Le détail est dans la
   <a href="./">politique de confidentialité</a>.</p>
+
+  <h2 id="licences">Licences</h2>
+  <p>ECOLNA n’appelle aucun service : tout ce qu’elle utilise est embarqué
+  dans l’application. Voici les éléments qui ne sont pas l’œuvre de l’éditeur,
+  leurs auteurs et leurs licences. L’écran « À propos » des paramètres de
+  l’application renvoie à cette section.</p>
+
+  <h3>Polices de caractères — SIL Open Font License 1.1</h3>
+  <table>
+    <tr><th>Police</th><th>Origine et droits</th></tr>
+    <tr><td><strong>Ecolna Sans</strong><br>(textes de l’application)</td>
+        <td>Version modifiée de Figtree : le « a » à un seul étage y devient la
+        forme par défaut, et la police est renommée.
+        Copyright 2022 The Figtree Project Authors
+        (<a href="https://github.com/erikdkennedy/figtree" rel="noopener">github.com/erikdkennedy/figtree</a>).
+        Distribuée sous SIL Open Font License 1.1.</td></tr>
+    <tr><td><strong>Andika</strong><br>(lettres à apprendre)</td>
+        <td>Copyright (c) 2004-2022 SIL International
+        (<a href="https://www.sil.org/" rel="noopener">sil.org</a>), avec les noms
+        de police réservés « Andika » et « SIL ». Embarquée sans modification.
+        Distribuée sous SIL Open Font License 1.1.</td></tr>
+  </table>
+  <details>
+    <summary>Texte de la SIL Open Font License 1.1 (en anglais)</summary>
+    <pre>-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded,
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION &amp; CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.</pre>
+  </details>
+
+  <h3>Pictogrammes d’interface — licence MIT</h3>
+  <p>Les pictogrammes des boutons, des onglets et des médailles sont tirés de
+  <strong>Phosphor Icons</strong>
+  (<a href="https://phosphoricons.com" rel="noopener">phosphoricons.com</a>),
+  embarqués sous forme de tracés.</p>
+  <details>
+    <summary>Licence MIT de Phosphor Icons (en anglais)</summary>
+    <pre>MIT License
+
+Copyright (c) 2023 Phosphor Icons
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre>
+  </details>
+
+  <h3>Voix de synthèse</h3>
+  <p>Les 824 enregistrements de l’application ont été produits par synthèse
+  vocale, sur l’ordinateur de l’éditeur, avant la publication : l’application
+  ne fait aucune synthèse et n’appelle aucun service.</p>
+  <table>
+    <tr><th>Élément</th><th>Licence</th></tr>
+    <tr><td><strong>Kokoro</strong>, voix « ff_siwis » — phrases, mots et consignes (665 sons)</td>
+        <td>Apache 2.0</td></tr>
+    <tr><td><strong>Piper</strong>, modèle « fr_FR-siwis-medium » — sons isolés, syllabes, lettres et nombres (159 sons)</td>
+        <td>MIT</td></tr>
+    <tr><td>Jeu de données vocales <strong>SIWIS</strong>, voix française d’origine du locuteur « siwis » des deux modèles</td>
+        <td class="todo">Licence à attribution. L’intitulé exact de la licence et
+        la formule d’attribution qu’elle demande sont en cours de vérification ;
+        ils seront repris ici tels quels.</td></tr>
+  </table>
+
+  <h3>Contenu pédagogique</h3>
+  <p>Les leçons et les exercices sont une création de l’éditeur, construite
+  d’après les <em>Programmes Réactualisés de l’Enseignement Primaire</em>,
+  République du Tchad, Ministère de l’Éducation Nationale — Centre National
+  des Curricula, N’Djaména, septembre 2004, cité leçon par leçon.
+  ECOLNA est une publication indépendante. Elle n’est ni éditée ni validée par le Ministère de l’Éducation Nationale du Tchad, auquel elle n’est pas affiliée.</p>
+
+  <h3>Illustrations</h3>
+  <p>Les illustrations, l’icône et le logo sont des créations originales du
+  projet ECOLNA.</p>
 
   <h2>Éditeur</h2>
   <p>
@@ -103,7 +306,7 @@
   </p>
 
   <footer>
-    Dernière mise à jour : <time datetime="2026-10-03">3 octobre 2026</time> ·
+    Dernière mise à jour : <time datetime="2026-10-04">4 octobre 2026</time> ·
     Version 1.0.0 de l’application.
   </footer>
 </main>
