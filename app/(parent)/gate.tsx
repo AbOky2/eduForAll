@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,6 +10,11 @@ import {
 } from 'react-native';
 
 import { EcolnaScreenHeader } from '@/design-system/components/ecolna-screen-header';
+import { useParentSession } from '@/features/parent-space/application/parent-session-store';
+import {
+  drawGateChallenge,
+  gateAnswer,
+} from '@/features/parent-space/domain/parent-gate-challenge';
 import { EcolnaButton, EcolnaCard, EcolnaScreen, EcolnaText } from '@/design-system/primitives';
 import { EcolnaIcon } from '@/design-system/icons/ecolna-icon';
 import { scaled, useResponsive } from '@/design-system/responsive';
@@ -19,58 +24,53 @@ import { fr } from '@/localization/fr/strings';
 import { useKeyboardVisible } from '@/shared/hooks/use-keyboard-visible';
 import { useSafeBack } from '@/shared/hooks/use-safe-back';
 
-interface GateChallenge {
-  question: string;
-  answer: number;
-}
-
 /**
  * Porte parentale : une multiplication qu'un enfant de six à huit ans ne sait
- * pas encore poser, à SAISIR et non à choisir.
+ * pas encore poser, à SAISIR et non à choisir, tirée au hasard à chaque
+ * ouverture (deux facteurs de 6 à 9).
  *
  * Trois réponses proposées laissaient une chance sur trois par essai, sans
  * limite de tentatives : un enfant qui tape au hasard entrait en trois coups.
- * Ce n'est pas une porte parentale au sens de la catégorie Enfants d'Apple,
- * et neuf fiches de store affirment pourtant qu'elle en est une. La saisie
- * libre rend le hasard inopérant.
+ * Une liste fixe, elle, posait toujours « 7 × 6 » en premier : il suffisait
+ * d'avoir vu taper 42 une fois. Après chaque erreur, une AUTRE opération
+ * (autre résultat) : ni le hasard ni la mémoire ne mènent à l'intérieur.
  *
- * Bloque l'accès aux actions réservées aux adultes : réinitialisation,
- * partage, diagnostic. Un code local pourra se superposer sans toucher aux
- * appelants.
+ * La bonne réponse ouvre la session parent (éphémère, voir
+ * `parent-session-store`) : sans elle, les layouts `(parent)` et `(settings)`
+ * renvoient ici, lien profond compris. Bloque l'accès aux actions réservées
+ * aux adultes : réinitialisation, partage, diagnostic, changement de classe.
+ *
+ * `testID` stables (`parent-gate-question`, `parent-gate-answer`) : les
+ * parcours Maestro lisent l'opération et calculent la réponse.
  */
-const CHALLENGES: GateChallenge[] = [
-  { question: '7 × 6', answer: 42 },
-  { question: '8 × 7', answer: 56 },
-  { question: '9 × 6', answer: 54 },
-  { question: '7 × 8', answer: 56 },
-  { question: '6 × 8', answer: 48 },
-];
-
 export default function ParentGateScreen() {
   const router = useRouter();
   const goBack = useSafeBack();
-  const [attempt, setAttempt] = useState(0);
+  const unlock = useParentSession((state) => state.unlock);
+  // Tirée une fois à l'ouverture (initialiseur, hors du rendu), puis dans le
+  // gestionnaire après chaque erreur.
+  const [challenge, setChallenge] = useState(() => drawGateChallenge());
   const [wrong, setWrong] = useState(false);
   const [saisie, setSaisie] = useState('');
   const [focused, setFocused] = useState(false);
   const { scale, screenPadding } = useResponsive();
   const keyboard = useKeyboardVisible();
-  const challenge = useMemo(() => CHALLENGES[attempt % CHALLENGES.length]!, [attempt]);
 
   const valider = () => {
     // Champ vide : rien à vérifier (le bouton n'est jamais grisé pour autant).
     if (saisie.trim().length === 0) {
       return;
     }
-    if (Number(saisie.trim()) === challenge.answer) {
+    if (Number(saisie.trim()) === gateAnswer(challenge)) {
+      unlock();
       router.replace('/(parent)/dashboard');
       return;
     }
     setWrong(true);
     setSaisie('');
-    // Une opération différente à chaque échec : retenir la bonne réponse par
-    // répétition ne mène nulle part.
-    setAttempt((current) => current + 1);
+    // Une autre opération, d'un autre résultat : réessayer au hasard ou
+    // retenir un nombre vu par-dessus l'épaule ne mène nulle part.
+    setChallenge(drawGateChallenge(challenge));
   };
 
   // Le texte indicatif est une invitation, en romain gris ; la réponse saisie
@@ -119,10 +119,11 @@ export default function ParentGateScreen() {
             <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
               {fr.parent.gateQuestion}
             </EcolnaText>
-            <EcolnaText variant="displayGlyphSmall" align="center">
-              {`${challenge.question} =\u00a0?`}
+            <EcolnaText variant="displayGlyphSmall" align="center" testID="parent-gate-question">
+              {fr.parent.gateOperation(challenge.left, challenge.right)}
             </EcolnaText>
             <TextInput
+              testID="parent-gate-answer"
               accessibilityLabel={fr.parent.gateQuestion}
               value={saisie}
               onChangeText={(texte) => {
@@ -148,7 +149,12 @@ export default function ParentGateScreen() {
               ]}
             />
             {wrong ? (
-              <EcolnaText variant="bodyMd" color={colors.brand} align="center">
+              <EcolnaText
+                variant="bodyMd"
+                color={colors.brand}
+                align="center"
+                accessibilityLiveRegion="polite"
+              >
                 {fr.parent.gateWrong}
               </EcolnaText>
             ) : null}

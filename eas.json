@@ -47,10 +47,12 @@
   "submit": {
     "production": {
       "android": {
+        "applicationId": "td.ecolna.app",
         "track": "internal",
         "releaseStatus": "draft"
       },
       "ios": {
+        "bundleIdentifier": "td.ecolna.app",
         "language": "fr-FR"
       }
     }

@@ -1,0 +1,21 @@
+# Sous-parcours : franchir la porte parentale, depuis l'écran de la porte.
+# L'opération est tirée au hasard (deux facteurs de 6 à 9) : on la lit à
+# l'écran (testID « parent-gate-question »), on en calcule le produit, on
+# l'écrit (testID « parent-gate-answer »).
+# Rangé dans un sous-dossier : `maestro test maestro/` ne le lance pas seul ;
+# les parcours l'appellent par `runFlow: subflows/passer-la-porte-parentale.yaml`.
+# appId : le même que les parcours qui l'appellent.
+appId: td.ecolna.app.dev
+---
+- assertVisible: 'Espace parents'
+- copyTextFrom:
+    id: 'parent-gate-question'
+# « 7 × 6 = ? » donne 42 : on ne garde que les deux nombres (les espaces de
+# l'opération sont insécables).
+- evalScript: ${output.reponsePorte = String(maestro.copiedText.match(/\d+/g)[0] * maestro.copiedText.match(/\d+/g)[1])}
+- tapOn:
+    id: 'parent-gate-answer'
+- inputText: ${output.reponsePorte}
+- hideKeyboard
+- tapOn: 'Entrer'
+- assertVisible: 'Tableau de bord.*'

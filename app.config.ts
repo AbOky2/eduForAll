@@ -61,6 +61,11 @@ const BLOCKED_PERMISSIONS = [
   // déclaration fausse — et une déclaration fausse démentie par le manifeste
   // est un retrait du programme Familles, pas un avertissement.
   'com.google.android.gms.permission.AD_ID',
+  // Déclarée par Glide (via expo-image) pour surveiller la connectivité :
+  // inutile dans une app sans réseau, et Play l'afficherait (« afficher les
+  // connexions réseau ») sous une fiche qui promet « sans internet ». Sans
+  // elle, Glide se passe simplement de cette surveillance.
+  'android.permission.ACCESS_NETWORK_STATE',
 ];
 
 const config: ExpoConfig = {

@@ -16,11 +16,11 @@ pas recopiées ici : `plan.json` est la seule source, et c'est lui que lit
 | 1 | `01-accueil` | la promesse : le CP tchadien, sans internet |
 | 2 | `02-image` | la voix : écouter le mot, trouver l'image |
 | 3 | `03-ecriture` | le geste : tracer la lettre du doigt |
-| 4 | `04-parcours` | l'année entière, semaine après semaine |
+| 4 | `04-parcours` | l'année entière, pas à pas |
 | 5 | `05-lecture` | les sons et les syllabes, dits à voix haute |
 | 6 | `06-calcul` | compter avec des objets familiers |
 | 7 | `07-reussite` | des encouragements, jamais de pression |
-| 8 | `10-parent` | l'adulte : ses progrès expliqués simplement |
+| 8 | `10-parent` | l'adulte : ses progrès expliqués simplement, derrière la porte parentale |
 
 Écartés : `08-matieres` (les quatre disciplines se lisent déjà sur
 l'accueil) et `09-badges` (les badges apparaissent sur l'écran de réussite).
@@ -37,7 +37,7 @@ ni émoji en série. Aucune légende ne nomme le ministère ni ne dit
 | Cible | Dimensions produites | Nombre |
 |---|---|---|
 | Téléphone | 1080 × 1920 (9:16) | 2 minimum, 8 maximum |
-| Tablette 7" | 1920 × 1200, paysage | 8 maximum — nécessaire pour la fiche tablette |
+| Tablette 7" | 1920 × 1080, paysage (16:9) | 8 maximum — nécessaire pour la fiche tablette |
 | Tablette 10" | même rendu que la 7" | 8 maximum — nécessaire pour la fiche tablette |
 | Image de mise en avant | 1024 × 500, sans transparence | 1, obligatoire |
 | Icône | 512 × 512 PNG | 1 |
@@ -49,8 +49,11 @@ présente la fiche comme une « application téléphone » sur les tablettes.
 
 Les captures brutes (`store/screenshots/raw/`) sont le rendu du **vrai code**
 de l'app par le banc web (`scripts/web-preview/capture.cjs`, react-native-web),
-profil de démonstration « Amina », aux résolutions exactes des appareils ;
-aucun pixel n'est dessiné. Le script ne fait qu'encadrer et légender :
+profil de démonstration « Amina » (badges calculés par les règles de l'app),
+aux résolutions exactes des appareils : iPhone 6,9" pour le téléphone,
+tablette Android 10" paysage (2560 × 1600) pour la tablette. L'espace parent
+(`10-parent`) est photographié après avoir franchi la porte, comme un parent.
+Aucun pixel n'est dessiné. Le script ne fait qu'encadrer et légender :
 
 ```bash
 npm run store:screenshots -- --format play-telephone

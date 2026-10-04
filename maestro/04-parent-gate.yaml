@@ -1,13 +1,27 @@
-# L'espace parent est protégé : une mauvaise réponse ne passe pas.
+# L'espace parent est protégé : une mauvaise réponse ne passe pas, l'opération
+# change après l'erreur, et seule la bonne réponse ouvre le tableau de bord.
 appId: td.ecolna.app.dev
 ---
 - launchApp
 - tapOn: 'Parents'
 - assertVisible: 'Espace parents'
 - assertVisible: 'Pour entrer, écrivez le résultat de cette opération.:'
-# 7 × 6 : la réponse se saisit, elle ne se choisit plus
-- tapOn: 'Pour entrer, écrivez le résultat de cette opération.:'
-- inputText: '36'
+# L'opération est tirée au hasard : on la note avant de se tromper.
+- copyTextFrom:
+    id: 'parent-gate-question'
+- evalScript: ${output.operationAvant = maestro.copiedText}
+# 0 n'est jamais le produit de deux facteurs de 6 à 9 : la réponse se saisit,
+# elle ne se choisit pas.
+- tapOn:
+    id: 'parent-gate-answer'
+- inputText: '0'
+- hideKeyboard
 - tapOn: 'Entrer'
-- assertVisible: 'Ce n’est pas la bonne réponse.'
-- assertNotVisible: 'Tableau de bord'
+- assertVisible: 'Ce n’est pas la bonne réponse.*'
+- assertNotVisible: 'Tableau de bord.*'
+# Après l'erreur, une autre opération : ni le hasard ni la mémoire ne suffisent.
+- copyTextFrom:
+    id: 'parent-gate-question'
+- assertTrue: ${maestro.copiedText != output.operationAvant}
+# La bonne réponse, calculée sur l'opération affichée, ouvre le tableau de bord.
+- runFlow: subflows/passer-la-porte-parentale.yaml

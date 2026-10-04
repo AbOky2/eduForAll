@@ -43,34 +43,86 @@ règles, non négociables :
 
 **1. Tourner les captures brutes.** Le banc de rendu web exécute le vrai code
 de l'app (react-native-web, `docs/visual-qa.md`) avec le profil de
-démonstration « Amina » — CP1, douze leçons, cinq badges, aucune donnée réelle
-d'enfant — aux résolutions exactes des appareils : iPhone 6,9" (440 × 956
-×3 = 1320 × 2868) et iPad 13" **en paysage** (1376 × 1032 ×2 = 2752 × 2064),
-l'orientation où l'enfant tient la tablette et où les écrans passent en deux
-volets.
+démonstration « Amina » — CP1, douze leçons, aucune donnée réelle d'enfant —
+aux résolutions exactes de trois appareils :
+
+| appareil | points × densité | fichier brut | sert à |
+| --- | --- | --- | --- |
+| iPhone 6,9" (`iphone69`) | 440 × 956 ×3 = 1320 × 2868 | `raw/<id>.png` | App Store iPhone, Play téléphone |
+| iPad 13" paysage (`ipad13-l`) | 1376 × 1032 ×2 = 2752 × 2064 | `raw/<id>@tablette.png` | App Store iPad |
+| tablette Android 10" paysage (`tab10-l`) | 1280 × 800 ×2 = 2560 × 1600 | `raw/<id>@tablette-android.png` | Play tablette (plans `"play": true` seulement) |
+
+Les tablettes en **paysage** : c'est ainsi que l'enfant les tient, et les
+écrans y passent en deux volets. La fiche Play tablette a sa propre capture,
+aux proportions d'une tablette Android (16:10), et non plus celle de l'iPad
+(4:3).
+
+**Les badges du profil ne sont pas choisis à la main.** Après chaque leçon
+semée, `capture.cjs` et `scripts/tools/seed-demo-profile.mjs` rejouent le
+calcul de l'app (mêmes requêtes que `achievements-repository.ts`, règles lues
+dans `achievements.ts`) : Amina a 7 badges (`first-lesson`, `five-lessons`,
+`first-perfect`, `five-perfect`, `first-world`, `speaker`, `streak-three`),
+datés du jour de la leçon qui les a débloqués, et chaque écran les montre
+tels que l'app les compterait. L'écran de réussite (`07`) est celui de la
+10ᵉ leçon, « Ma famille : je parle », qui ferme le monde « Moi et mon école »
+et fait dix leçons de langage : « Monde terminé » et « Belle parole », trois
+étoiles. Avec `SEED=1`, `capture.cjs` **refuse** un écran de réussite que le
+profil n'a pas vécu (leçon non terminée, étoiles ou badges différents).
+
+Tout le tournage, depuis le serveur du banc :
 
 ```bash
-ECOLNA_WEB_PREVIEW=1 npx expo start --web     # le banc, sur localhost:8081
+ECOLNA_WEB_PREVIEW=1 EXPO_NO_TELEMETRY=1 BROWSER=none npx expo start --web --port 8081
+scripts/tools/capture-store-screenshots.sh                       # 28 captures → raw/
+scripts/tools/capture-store-screenshots.sh --only 07-reussite    # un plan, trois appareils
+scripts/tools/capture-store-screenshots.sh --appareil android    # la tablette Play seule
+scripts/tools/capture-store-screenshots.sh --liste               # plans et réglages, sans tourner
+scripts/tools/capture-store-screenshots.sh --sortie /tmp/essai   # essai hors de raw/
+```
+
+Une capture isolée, à la main :
+
+```bash
 SEED=1 DPR=3 node scripts/web-preview/capture.cjs / 01-accueil iphone69
 SEED=1 DPR=2 node scripts/web-preview/capture.cjs / 01-accueil ipad13-l
+SEED=1 DPR=2 node scripts/web-preview/capture.cjs / 01-accueil tab10-l
+SEED=1 CLICK=gate SCROLL=fin DPR=3 node scripts/web-preview/capture.cjs /gate 10-parent iphone69
 ```
 
 | plan | route | variables en plus de `SEED=1` |
 | --- | --- | --- |
-| `01-accueil` | `/` | — |
+| `01-accueil` | `/` | iPhone : `SCROLL=fin` |
 | `02-image` | `/(child)/lesson/cp1-langage-fetes-1` | `STEP=cp1-langage-fetes-1:0 WAIT=2600` |
 | `03-ecriture` | `/(child)/lesson/cp1-ecriture-lettres-3` | `STEP=cp1-ecriture-lettres-3:2 WAIT=2300` |
 | `04-parcours` | `/level-map` | `WAIT=2200` |
 | `05-lecture` | `/(child)/lesson/cp1-lecture-l-2` | `STEP=cp1-lecture-l-2:3 WAIT=2600` |
 | `06-calcul` | `/(child)/lesson/cp1-calcul-nombres-11-15` | `STEP=cp1-calcul-nombres-11-15:1 WAIT=2600` |
-| `07-reussite` | `/(child)/lesson/result?stars=3&lessonId=cp1-langage-ecole-2&badges=first-lesson,reader` | `WAIT=3200` |
+| `07-reussite` | `/(child)/lesson/result?stars=3&lessonId=cp1-langage-famille-2&badges=first-world,speaker` | `WAIT=3200` |
 | `08-matieres` | `/learn` | — |
-| `09-badges` | `/profile` | — |
-| `10-parent` | `/dashboard` | — |
+| `09-badges` | `/profile` | iPhone : `SCROLL="bas:Belle lecture@52"` |
+| `10-parent` | `/gate` | `CLICK=gate` ; iPhone : `SCROLL=fin` |
 
-**2. Déposer les fichiers bruts dans `raw/`**, sans les toucher :
-`<id>-iphone69.png` devient `raw/<id>.png`, `<id>-ipad13-l.png` devient
-`raw/<id>@tablette.png`.
+- `CLICK=gate` franchit la **porte parentale** comme un parent : le banc lit
+  l'opération affichée (« a × b = ? », tirée au hasard), écrit le produit et
+  valide. L'espace parent ne s'ouvre que par là.
+- `SCROLL` fait défiler le contenu avant la photo : `n` pixels, `fin`,
+  `haut:texte@m` (le haut de ce texte à m px du haut de son conteneur) ou
+  `bas:texte@m` (le bas de ce texte à m px du bas). Sur iPhone, `01` finit
+  sur la rangée Écriture · Calcul entière au-dessus de la barre d'onglets,
+  `09` sur une rangée de badges entière au-dessus du fondu, `10` montre « Par
+  discipline », « Cette semaine » et « Analyse de progression ».
+
+Sur simulateur iOS, la même mise en scène :
+`node scripts/tools/seed-demo-profile.mjs` (il affiche les badges que chaque
+leçon a débloqués), puis `node scripts/tools/capture-ios-screenshots.mjs`
+(iPhone) ou `… --suffixe @tablette` (iPad) : mêmes routes, par liens
+profonds ; la porte parentale et les défilements iPhone se font à la main,
+le script attend Entrée.
+
+**2. Déposer les fichiers bruts dans `raw/`**, sans les toucher (le script
+de tournage le fait) : `<id>-iphone69.png` devient `raw/<id>.png`,
+`<id>-ipad13-l.png` devient `raw/<id>@tablette.png`, `<id>-tab10-l.png`
+devient `raw/<id>@tablette-android.png`.
 
 **3. Composer.**
 
@@ -78,14 +130,14 @@ SEED=1 DPR=2 node scripts/web-preview/capture.cjs / 01-accueil ipad13-l
 export PLAYWRIGHT_MODULE=<chemin>/node_modules/playwright   # hors du dépôt
 npm run store:screenshots                                   # les 36 images
 npm run store:screenshots -- --only 07-reussite             # un plan, tous les formats
-npm run store:screenshots -- --format play-telephone        # un format
+npm run store:screenshots -- --format play-tablette         # un format
 npm run store:screenshots -- --planche /tmp/planche.png     # + planche de contrôle
 ```
 
-Playwright n'est pas une dépendance du dépôt : `PLAYWRIGHT_MODULE` désigne un
+Playwright n'est pas une dépendance du dépôt : `PLAYWRIGHT_MODULE` désigne un
 paquet installé ailleurs, `CHROME_PATH` un autre Chromium au besoin. La
 planche montre chaque sortie en vignette de 300 px de haut, la taille d'une
-fiche de store : la légende doit s'y lire. `--plan <fichier>` et
+fiche de store : la légende doit s'y lire. `--plan <fichier>` et
 `--sortie <dossier>` servent aux essais de mise en page, hors de la série
 livrée.
 
@@ -123,8 +175,12 @@ couleur (`accentCouleurs`) ; `09` nuit ; `10` toile, sobre, pour l'adulte.
 
 Le script **échoue** (code 1) sur une dimension fausse, un PNG qui n'est pas
 RVB 8 bits sans alpha, un fichier de plus de 8 Mo, une légende de plus de deux
-lignes, une capture brute manquante ou de mauvaise taille, un nombre de
-captures hors des limites d'une console, un `fond` inconnu. Il **avertit**
+lignes (d'une ligne pour `tablette-large`), une capture brute manquante ou qui
+n'a pas les dimensions exactes déclarées dans `plan.json` (`"capture"`), un
+format qui viole ses `"contraintes"` de console (rapport 16:9 ou 9:16, côtés
+minimal et maximal, rapport long/court), une capture à moins de 75 % de la
+largeur en `tablette-large`, un nombre de captures hors des limites d'une
+console, un `fond` ou un `gabarit` inconnu. Il **avertit**
 quand un accent ne figure plus dans sa légende (elle est alors rendue sans
 accent), quand un contraste passe sous 4,5:1, ou quand un coin arrondi
 masquerait autre chose que le fond. Une série complète retire de `out/` les
@@ -132,21 +188,25 @@ fichiers qui ne sont plus au plan.
 
 ## Formats produits
 
-| dossier | dimensions | captures | console |
-| --- | --- | --- | --- |
-| `app-store-iphone` | 1320 × 2868 | 10 (`01` à `10`) | App Store, iPhone 6,9" — 1 minimum, 10 maximum |
-| `app-store-ipad` | 2752 × 2064 | 10 (`01` à `10`) | App Store, iPad 13" paysage — **obligatoire**, l'app déclare `supportsTablet` |
-| `play-telephone` | 1080 × 1920 | 8 (sans `08` ni `09`) | Play, téléphone — 2 minimum, 8 maximum |
-| `play-tablette` | 1920 × 1200 | 8 (sans `08` ni `09`) | Play, tablettes 7" et 10" paysage — 8 maximum |
+| dossier | dimensions | capture encadrée | captures | console |
+| --- | --- | --- | --- | --- |
+| `app-store-iphone` | 1320 × 2868 | iPhone 6,9" | 10 (`01` à `10`) | App Store, iPhone 6,9" — 1 minimum, 10 maximum |
+| `app-store-ipad` | 2752 × 2064 | iPad 13" paysage | 10 (`01` à `10`) | App Store, iPad 13" paysage — **obligatoire**, l'app déclare `supportsTablet` |
+| `play-telephone` | 1080 × 1920 (9:16) | iPhone 6,9" | 8 (sans `08` ni `09`) | Play, téléphone — 2 minimum, 8 maximum |
+| `play-tablette` | 1920 × 1080 (16:9) | tablette Android 10" paysage, à 75 % de la largeur | 8 (sans `08` ni `09`) | Play, tablettes 7" et 10" (même jeu dans les deux emplacements) — 8 maximum |
 
-La capture iPhone sert aux deux formats téléphone, la capture iPad aux deux
-formats tablette. Toutes les sorties sont des PNG RVB 24 bits, sans
-transparence (exigé par Play, sûr pour Apple), de 0,1 à 1,1 Mo pour une
-limite de 8 Mo. `"play": false` dans `plan.json` écarte un plan des fiches
-Play.
+Chaque format déclare dans `plan.json` sa capture brute (`"capture"` :
+suffixe et dimensions exactes), son gabarit et, pour Play, ses contraintes
+de console (`"contraintes"` : 9:16 ou 16:9, côtés de 320 à 3 840 px pour le
+téléphone, de 1 080 à 7 680 px pour la tablette 10", rapport long/court ≤ 2).
+Le 16:9 de la tablette est celui qu'annonce la Play Console, et celui qu'il
+faut pour la mise en avant sur grand écran (au moins 4 captures paysage).
+Toutes les sorties sont des PNG RVB 24 bits, sans transparence (exigé par
+Play, sûr pour Apple), loin sous la limite de 8 Mo. `"play": false` dans
+`plan.json` écarte un plan des fiches Play.
 
-Sans captures tablette, Play présente la fiche comme une « application
-téléphone » sur les tablettes — exactement le contraire du message.
+Sans captures tablette, Play présente la fiche comme une « application
+téléphone » sur les tablettes — exactement le contraire du message.
 
 ## Les autres images de fiche
 

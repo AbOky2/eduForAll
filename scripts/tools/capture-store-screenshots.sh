@@ -4,16 +4,19 @@
 # Ce script ne dessine rien. Il pilote le banc de rendu web
 # (scripts/web-preview/capture.cjs, docs/visual-qa.md) : l'app réelle tourne
 # dans Chromium via react-native-web, avec sa vraie base SQLite et le profil de
-# démonstration « Amina » (CP1, 12 leçons terminées, 5 badges), et chaque plan
-# de store/screenshots/plan.json est photographié aux résolutions exactes des
-# appareils exigés par App Store Connect :
+# démonstration « Amina » (CP1, 12 leçons terminées ; ses 7 badges sont
+# calculés par les règles de l'app), et chaque plan de
+# store/screenshots/plan.json est photographié aux résolutions exactes des
+# appareils :
 #
-#   iPhone 6,9"       440 × 956  points × 3  →  1320 × 2868  →  raw/<id>.png
-#   iPad 13" paysage  1376 × 1032 points × 2  →  2752 × 2064  →  raw/<id>@tablette.png
+#   iphone   iPhone 6,9"            440 × 956  ×3 → 1320 × 2868 → raw/<id>.png
+#   ipad     iPad 13" paysage      1376 × 1032 ×2 → 2752 × 2064 → raw/<id>@tablette.png
+#   android  tablette Android 10"  1280 × 800  ×2 → 2560 × 1600 → raw/<id>@tablette-android.png
+#            (plans « play » de plan.json seulement)
 #
-# Les fiches Play sont composées à partir des mêmes fichiers bruts
-# (scripts/tools/compose-store-screenshots.mjs) : un seul tournage pour les
-# deux stores.
+# La capture iPhone sert aux fiches iPhone et Play téléphone, la capture iPad
+# à la fiche iPad, la capture Android à la fiche Play tablette
+# (scripts/tools/compose-store-screenshots.mjs).
 #
 # ⚠️ Rendu web ≠ app installée. Avant de soumettre, comparer chaque capture à
 # l'app installée par TestFlight / test interne Play ; si un écran diffère
@@ -34,7 +37,8 @@
 #
 #   --only <regex>      ne tourner que les plans dont l'id correspond
 #                       (ex. --only '01-accueil|07-reussite')
-#   --appareil <a>      iphone | ipad | tous (défaut : tous)
+#   --appareil <a>      iphone | ipad | android | tous (défaut : tous) ;
+#                       plusieurs : --appareil iphone,android
 #   --sortie <dossier>  où écrire les PNG (défaut : store/screenshots/raw) ;
 #                       utile pour un essai sans toucher à la série livrée
 #   --composer          enchaîner sur compose-store-screenshots.mjs
@@ -78,15 +82,18 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-case "$APPAREIL" in
-  iphone) APPAREILS=(iphone) ;;
-  ipad) APPAREILS=(ipad) ;;
-  tous) APPAREILS=(iphone ipad) ;;
-  *) echo "--appareil : iphone, ipad ou tous (reçu : $APPAREIL)" >&2; exit 2 ;;
-esac
+APPAREILS=()
+for a in ${APPAREIL//,/ }; do
+  case "$a" in
+    iphone|ipad|android) APPAREILS+=("$a") ;;
+    tous) APPAREILS+=(iphone ipad android) ;;
+    *) echo "--appareil : iphone, ipad, android ou tous (reçu : $a)" >&2; exit 2 ;;
+  esac
+done
+[ ${#APPAREILS[@]} -gt 0 ] || { echo "--appareil : aucun appareil" >&2; exit 2; }
 
 # ── Les plans ──────────────────────────────────────────────────────────────
-# id | route | variables d'environnement de capture.cjs (séparées par des espaces)
+# id | route | variables d'environnement de capture.cjs, séparées par « ; »
 #
 # Les légendes et l'ordre vivent dans plan.json ; ici, seulement COMMENT mettre
 # l'app dans l'état du plan. Le script refuse de tourner si plan.json contient
@@ -94,24 +101,51 @@ esac
 #   SEED=1       profil « Amina » semé avant chaque capture
 #   STEP=l:n     la leçon l ouverte à l'étape n (n à partir de 0)
 #   WAIT=ms      attente avant la photo (animations d'entrée terminées)
+#   CLICK=gate   franchir la porte parentale (lit l'opération, entre la réponse)
+#   SCROLL=…     faire défiler avant la photo (n px, haut:texte@m, bas:texte@m)
+# Une variable préfixée « iphone: », « ipad: » ou « android: » ne vaut que
+# pour cet appareil.
+#
+# 07 : la 10ᵉ leçon du profil, qui ferme « Moi et mon école » et fait dix
+# leçons de langage — elle a réellement débloqué « Monde terminé » et « Belle
+# parole ». capture.cjs refuse un écran de réussite que le profil semé n'a
+# pas vécu (leçon, étoiles et badges sont vérifiés).
+# 10 : l'espace parent passe par sa porte, comme dans l'app.
+# iPhone, défilement : 01 et 10 jusqu'au bout (01 finit sur la rangée
+# Écriture · Calcul entière au-dessus de la barre d'onglets ; 10 montre « Par
+# discipline », « Cette semaine » et « Analyse de progression ») ; 09 finit
+# sur une rangée de badges entière, au-dessus du fondu de défilement.
 PLANS=(
-  "01-accueil|/|SEED=1"
-  "02-image|$LECON/cp1-langage-fetes-1|SEED=1 STEP=cp1-langage-fetes-1:0 WAIT=2600"
-  "03-ecriture|$LECON/cp1-ecriture-lettres-3|SEED=1 STEP=cp1-ecriture-lettres-3:2 WAIT=2300"
-  "04-parcours|/level-map|SEED=1 WAIT=2200"
-  "05-lecture|$LECON/cp1-lecture-l-2|SEED=1 STEP=cp1-lecture-l-2:3 WAIT=2600"
-  "06-calcul|$LECON/cp1-calcul-nombres-11-15|SEED=1 STEP=cp1-calcul-nombres-11-15:1 WAIT=2600"
-  "07-reussite|$LECON/result?stars=3&lessonId=cp1-langage-ecole-2&badges=first-lesson,reader|SEED=1 WAIT=3200"
+  "01-accueil|/|SEED=1;iphone:SCROLL=fin"
+  "02-image|$LECON/cp1-langage-fetes-1|SEED=1;STEP=cp1-langage-fetes-1:0;WAIT=2600"
+  "03-ecriture|$LECON/cp1-ecriture-lettres-3|SEED=1;STEP=cp1-ecriture-lettres-3:2;WAIT=2300"
+  "04-parcours|/level-map|SEED=1;WAIT=2200"
+  "05-lecture|$LECON/cp1-lecture-l-2|SEED=1;STEP=cp1-lecture-l-2:3;WAIT=2600"
+  "06-calcul|$LECON/cp1-calcul-nombres-11-15|SEED=1;STEP=cp1-calcul-nombres-11-15:1;WAIT=2600"
+  "07-reussite|$LECON/result?stars=3&lessonId=cp1-langage-famille-2&badges=first-world,speaker|SEED=1;WAIT=3200"
   "08-matieres|/learn|SEED=1"
-  "09-badges|/profile|SEED=1"
-  "10-parent|/dashboard|SEED=1"
+  "09-badges|/profile|SEED=1;iphone:SCROLL=bas:Belle lecture@52"
+  "10-parent|/gate|SEED=1;CLICK=gate;iphone:SCROLL=fin"
 )
 
 # appareil → périphérique de capture.cjs, densité, suffixe, dimensions attendues
-device_de() { case "$1" in iphone) echo iphone69 ;; ipad) echo ipad13-l ;; esac; }
-dpr_de() { case "$1" in iphone) echo 3 ;; ipad) echo 2 ;; esac; }
-suffixe_de() { case "$1" in iphone) echo "" ;; ipad) echo "@tablette" ;; esac; }
-dims_de() { case "$1" in iphone) echo 1320x2868 ;; ipad) echo 2752x2064 ;; esac; }
+device_de() { case "$1" in iphone) echo iphone69 ;; ipad) echo ipad13-l ;; android) echo tab10-l ;; esac; }
+dpr_de() { case "$1" in iphone) echo 3 ;; ipad) echo 2 ;; android) echo 2 ;; esac; }
+suffixe_de() { case "$1" in iphone) echo "" ;; ipad) echo "@tablette" ;; android) echo "@tablette-android" ;; esac; }
+dims_de() { case "$1" in iphone) echo 1320x2868 ;; ipad) echo 2752x2064 ;; android) echo 2560x1600 ;; esac; }
+
+# Les variables d'un plan pour un appareil : « ; » sépare, « appareil: » filtre.
+vars_de() { # vars appareil → une affectation VAR=valeur par ligne
+  local IFS=';' v
+  for v in $1; do
+    case "$v" in
+      iphone:*|ipad:*|android:*) [ "${v%%:*}" = "$2" ] && printf '%s\n' "${v#*:}" ;;
+      '') ;;
+      *) printf '%s\n' "$v" ;;
+    esac
+  done
+  return 0
+}
 
 ids_script() { for p in "${PLANS[@]}"; do echo "${p%%|*}"; done; }
 
@@ -120,6 +154,11 @@ verifier_plans() {
   attendus="$(node -e '
     const p = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
     for (const plan of p.plans) console.log(plan.id);
+  ' "$PLAN")"
+  # Les plans des fiches Play : seuls tournés sur la tablette Android.
+  PLANS_PLAY="$(node -e '
+    const p = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+    for (const plan of p.plans) if (plan.play !== false) console.log(plan.id);
   ' "$PLAN")"
   manquants="$(comm -23 <(echo "$attendus" | sort) <(ids_script | sort))"
   if [ -n "$manquants" ]; then
@@ -157,11 +196,19 @@ dimensions_png() { # fichier → LxH (lu dans l'en-tête IHDR, sans dépendance)
 
 verifier_plans
 
+pour_appareil() { # id appareil → vrai si ce plan se tourne sur cet appareil
+  [ "$2" != android ] || echo "$PLANS_PLAY" | grep -qx "$1"
+}
+
 if [ "$LISTE" = 1 ]; then
   echo "Plans à tourner (${#PLANS_ACTIFS[@]}) × appareils (${APPAREILS[*]}) → $SORTIE"
-  for p in "${PLANS_ACTIFS[@]}"; do
-    IFS='|' read -r id route vars <<<"$p"
-    printf '  %-12s %-70s %s\n' "$id" "$route" "$vars"
+  for appareil in "${APPAREILS[@]}"; do
+    echo "  $appareil ($(device_de "$appareil") ×$(dpr_de "$appareil") → $(dims_de "$appareil"), raw/<id>$(suffixe_de "$appareil").png)"
+    for p in "${PLANS_ACTIFS[@]}"; do
+      IFS='|' read -r id route vars <<<"$p"
+      pour_appareil "$id" "$appareil" || continue
+      printf '    %-12s %-82s %s\n' "$id" "$route" "$(vars_de "$vars" "$appareil" | paste -sd ' ' -)"
+    done
   done
   exit 0
 fi
@@ -220,12 +267,14 @@ for appareil in "${APPAREILS[@]}"; do
   attendu="$(dims_de "$appareil")"
   for p in "${PLANS_ACTIFS[@]}"; do
     IFS='|' read -r id route vars <<<"$p"
+    pour_appareil "$id" "$appareil" || continue
     journal="$TRAVAIL/$id-$device.log"
     produit="$TRAVAIL/$id-$device.png"
     cible="$SORTIE/$id$suffixe.png"
+    ENV_PLAN=()
+    while IFS= read -r v; do [ -n "$v" ] && ENV_PLAN+=("$v"); done < <(vars_de "$vars" "$appareil")
     printf '  %-12s %-9s … ' "$id" "$appareil"
-    # shellcheck disable=SC2086 # $vars est une liste VAR=valeur voulue éclatée
-    if env $vars DPR="$dpr" OUT="$TRAVAIL" PREVIEW_URL="$PREVIEW_URL" \
+    if env ${ENV_PLAN[@]+"${ENV_PLAN[@]}"} DPR="$dpr" OUT="$TRAVAIL" PREVIEW_URL="$PREVIEW_URL" \
         ${AVEC_TIMEOUT[@]+"${AVEC_TIMEOUT[@]}"} node scripts/web-preview/capture.cjs "$route" "$id" "$device" \
         >"$journal" 2>&1 && [ -s "$produit" ]; then
       dims="$(dimensions_png "$produit")"

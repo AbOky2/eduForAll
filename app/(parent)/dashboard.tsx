@@ -206,15 +206,19 @@ export default function ParentDashboardScreen() {
     return null;
   }
 
+  // Les leçons de SA classe, comptées comme dans « Par discipline » (une seule
+  // source pour l'écran). Après un changement de classe (Paramètres), les
+  // leçons finies de l'autre classe restent gardées, mais ne gonflent pas le
+  // compte de celle-ci : pas de « 12 / 161 » au-dessus de quatre « 0 leçon ».
+  const lessons = (summary?.subjects ?? []).reduce(
+    (sum, entry) => ({ done: sum.done + entry.completed, total: sum.total + entry.total }),
+    { done: 0, total: 0 },
+  );
+
   const share = () => {
     // Local OS share sheet with a text summary — the app itself sends nothing.
     void Share.share({
-      message: fr.parent.shareMessage(
-        profile.firstName,
-        data?.completedLessons ?? 0,
-        data?.totalLessons ?? 0,
-        profile.level,
-      ),
+      message: fr.parent.shareMessage(profile.firstName, lessons.done, lessons.total, profile.level),
     });
   };
 
@@ -237,14 +241,14 @@ export default function ParentDashboardScreen() {
       key="lessons"
       icon="book"
       label={fr.parent.lessonsCompleted}
-      value={`${data?.completedLessons ?? 0} / ${data?.totalLessons ?? 0}`}
+      value={`${lessons.done} / ${lessons.total}`}
       container={colors.brandTint}
       tint={colors.brandInk}
       style={styles.flex}
     >
       <View style={{ marginTop: scaled(spacing.xxs, scale) }}>
         <EcolnaProgressBar
-          progress={data && data.totalLessons > 0 ? data.completedLessons / data.totalLessons : 0}
+          progress={lessons.total > 0 ? lessons.done / lessons.total : 0}
           fill={colors.brand}
           height={BAR}
         />

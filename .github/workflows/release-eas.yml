@@ -1,0 +1,102 @@
+name: Release EAS
+
+# Build de production EAS d'ECOLNA, puis envoi EN TEST — jamais en revue :
+#   Android → Play Console, piste « Test interne », statut brouillon
+#   iOS     → App Store Connect / TestFlight
+#
+# Déclenchement MANUEL uniquement : Actions → « Release EAS » → Run workflow.
+# Aucun push, aucune étiquette, aucune planification ne le lance. Les runners
+# de GitHub joignent expo.dev (ce que le conteneur de développement ne peut
+# pas faire) : c'est le chemin le plus simple pour le propriétaire.
+#
+# Le travail est fait par scripts/tools/eas-release.sh, le même qu'en local :
+# identité de release, arbre git propre, aucun secret suivi, configuration
+# Expo de release, profils eas.json, jeton, domaines, projet @okimy/alifa,
+# npm run validate:release, puis build et envoi par identifiant de build.
+#
+# Prérequis (docs/deploiement-v1.md § 2.4) :
+#   - le secret du dépôt EXPO_TOKEN : jeton d'accès d'un utilisateur robot du
+#     compte Expo « okimy » (expo.dev → Settings → Access tokens) ;
+#   - les clés de signature dans EAS : un premier passage
+#     `scripts/tools/eas-release.sh --interactive` depuis un poste, ou une clé
+#     API App Store Connect enregistrée dans EAS pour iOS ;
+#   - pour envoyer : le compte de service Google enregistré dans EAS
+#     (Android) et submit.production.ios.ascAppId dans eas.json (iOS). Sans
+#     ascAppId, le script s'arrête AVANT de construire ; choisir alors
+#     « android », ou « soumettre : non ».
+
+on:
+  workflow_dispatch:
+    inputs:
+      plateforme:
+        description: 'Plateforme à construire'
+        type: choice
+        options:
+          - android
+          - ios
+          - all
+        default: android
+        required: true
+      soumettre:
+        description: 'Envoyer en test après le build (piste interne Play, TestFlight) ?'
+        type: choice
+        options:
+          - 'oui'
+          - 'non'
+        default: 'oui'
+        required: true
+
+permissions:
+  contents: read
+
+# Une seule release à la fois ; une release en cours n'est jamais annulée.
+concurrency:
+  group: release-eas
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release EAS (${{ inputs.plateforme }}, envoi en test ${{ inputs.soumettre }})
+    runs-on: ubuntu-latest
+    # validate:release (une dizaine de minutes), puis 15 à 40 minutes de build
+    # par plateforme et l'envoi. Si le job expire, les builds continuent sur
+    # EAS : les envoyer ensuite avec `eas-release.sh --submit-only <id>`.
+    timeout-minutes: 240
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_NO_TELEMETRY: '1'
+      DISABLE_EAS_ANALYTICS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Installation verrouillée
+        run: npm ci
+      - name: Secret EXPO_TOKEN présent
+        run: |
+          if [ -z "${EXPO_TOKEN:-}" ]; then
+            echo "::error::Secret EXPO_TOKEN absent. Dépôt GitHub → Settings → Secrets and variables → Actions → New repository secret, nom EXPO_TOKEN (docs/deploiement-v1.md § 2.4)."
+            exit 1
+          fi
+      - name: Build de production et envoi en test
+        # Les entrées passent par l'environnement, jamais interpolées dans le
+        # script : rien de ce qui est saisi dans le formulaire ne s'exécute.
+        env:
+          PLATEFORME: ${{ inputs.plateforme }}
+          SOUMETTRE: ${{ inputs.soumettre }}
+        run: |
+          args=()
+          case "$PLATEFORME" in
+            android) args+=(--android) ;;
+            ios) args+=(--ios) ;;
+            all) ;;
+            *) echo "::error::Plateforme inconnue : $PLATEFORME"; exit 2 ;;
+          esac
+          case "$SOUMETTRE" in
+            oui) ;;
+            non) args+=(--no-submit) ;;
+            *) echo "::error::Réponse inconnue pour « soumettre » : $SOUMETTRE"; exit 2 ;;
+          esac
+          scripts/tools/eas-release.sh "${args[@]}"

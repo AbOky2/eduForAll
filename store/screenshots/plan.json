@@ -1,30 +1,40 @@
 {
-  "_lisezMoi": "Un plan = une capture brute du VRAI code de l'app (store/screenshots/raw/), encadrée par scripts/tools/compose-store-screenshots.mjs. Les captures brutes sont tournées par le banc de rendu web (scripts/web-preview/capture.cjs, profil de démonstration « Amina ») aux résolutions exactes des appareils : iPhone 6,9\" (440 × 956 ×3) et iPad 13\" paysage (1376 × 1032 ×2). « play » : false = absent des fiches Play (8 captures au plus par type d'appareil).",
+  "_lisezMoi": "Un plan = une capture brute du VRAI code de l'app (store/screenshots/raw/), encadrée par scripts/tools/compose-store-screenshots.mjs. Les captures brutes sont tournées par le banc de rendu web (scripts/web-preview/capture.cjs, profil de démonstration « Amina ») aux résolutions exactes des appareils : iPhone 6,9\" (440 × 956 ×3), iPad 13\" paysage (1376 × 1032 ×2) et tablette Android 10\" paysage (1280 × 800 ×2, plans Play seulement). « play » : false = absent des fiches Play (8 captures au plus par type d'appareil). Pour chaque format : « capture » = la capture brute qu'il encadre (suffixe du fichier dans raw/, dimensions exigées), « gabarit » = sa mise en page, « contraintes » = règles de la console vérifiées par le compositeur.",
   "_miseEnPage": "Champs de mise en page, lus par le compositeur (le texte des légendes n'en dépend pas). « fond » : nuit, toile, bleu, soleil, langage, lecture, ecriture, calcul — un fond de la palette v4, qui fixe aussi la couleur du texte, de l'accent et du cadre. « accent » : un groupe de mots (ou une liste) de la légende, mis en couleur ; s'il n'y figure plus, la légende est rendue sans accent et le compositeur le signale. « accentCouleurs » (facultatif) : un jeton par accent, ex. subjectColors.language.deep.",
   "formats": {
     "app-store-iphone": {
       "w": 1320,
       "h": 2868,
       "console": "App Store — iPhone 6,9\"",
-      "min": 1
+      "min": 1,
+      "capture": { "suffixe": "", "w": 1320, "h": 2868 },
+      "gabarit": "telephone"
     },
     "app-store-ipad": {
       "w": 2752,
       "h": 2064,
       "console": "App Store — iPad 13\" (paysage)",
-      "min": 1
+      "min": 1,
+      "capture": { "suffixe": "@tablette", "w": 2752, "h": 2064 },
+      "gabarit": "tablette"
     },
     "play-telephone": {
       "w": 1080,
       "h": 1920,
       "console": "Play — téléphone",
-      "min": 2
+      "min": 2,
+      "capture": { "suffixe": "", "w": 1320, "h": 2868 },
+      "gabarit": "telephone",
+      "contraintes": { "ratio": "9:16", "coteMin": 320, "coteMax": 3840, "rapportMax": 2 }
     },
     "play-tablette": {
       "w": 1920,
-      "h": 1200,
-      "console": "Play — tablette 7\" et 10\" (paysage)",
-      "min": 1
+      "h": 1080,
+      "console": "Play — tablette 7\" et 10\" (paysage 16:9)",
+      "min": 1,
+      "capture": { "suffixe": "@tablette-android", "w": 2560, "h": 1600 },
+      "gabarit": "tablette-large",
+      "contraintes": { "ratio": "16:9", "coteMin": 1080, "coteMax": 7680, "rapportMax": 2 }
     }
   },
   "plans": [
@@ -55,7 +65,7 @@
     {
       "id": "04-parcours",
       "ecran": "Parcours CP1 : les mondes de l'année, « tu es ici »",
-      "legende": "Toute l'année du CP, semaine après semaine.",
+      "legende": "Toute l'année du CP, pas à pas.",
       "play": true,
       "fond": "bleu",
       "accent": "Toute l'année"
@@ -96,7 +106,7 @@
     {
       "id": "09-badges",
       "ecran": "Mon profil : chiffres, anneaux des matières, étagère de badges",
-      "legende": "Des badges qui récompensent un vrai progrès.",
+      "legende": "Chaque vrai progrès a son badge.",
       "play": false,
       "fond": "nuit",
       "accent": "vrai progrès"

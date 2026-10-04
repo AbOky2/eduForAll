@@ -1,0 +1,31 @@
+# La création de profil promet « Vous pourrez changer la classe plus tard dans
+# l'espace parents » : Paramètres → Classe, avec une confirmation qui dit que
+# la progression est gardée. Le parcours remet la classe de départ (CP1).
+appId: td.ecolna.app.dev
+---
+- launchApp
+- tapOn: 'Parents'
+- runFlow: subflows/passer-la-porte-parentale.yaml
+- tapOn: 'Paramètres'
+- assertVisible: 'Classe .*'
+
+# Passer en CP2 : rien ne change avant la confirmation.
+- tapOn: 'CP2, deuxième année'
+- assertVisible: 'Passer .* en CP2.*'
+- assertVisible: 'Ses leçons terminées, ses étoiles et ses badges sont gardés.*'
+- tapOn: 'Annuler'
+- assertNotVisible: 'Passer .* en CP2.*'
+
+- tapOn: 'CP2, deuxième année'
+- tapOn: 'Oui, passer en CP2'
+- assertNotVisible: 'Passer .* en CP2.*'
+# Le tableau de bord suit la nouvelle classe.
+- tapOn: 'Retour'
+- assertVisible: 'Tableau de bord.*'
+- assertVisible: 'CP2'
+
+# Remettre la classe de départ pour les autres parcours.
+- tapOn: 'Paramètres'
+- tapOn: 'CP1, première année'
+- tapOn: 'Oui, passer en CP1'
+- assertNotVisible: 'Passer .* en CP1.*'

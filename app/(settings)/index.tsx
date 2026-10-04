@@ -13,8 +13,10 @@ import {
   type SwitchProps,
 } from 'react-native';
 
+import { levelIdSchema, type LevelId } from '@/content/schemas/curriculum-schema';
 import { getDatabase } from '@/database/connection/database';
 import { useActiveProfile } from '@/features/child-profile/application/active-profile-store';
+import { createChildProfileRepository } from '@/features/child-profile/infrastructure/child-profile-repository';
 import { useSettings } from '@/features/settings/application/settings-store';
 import { createSettingsRepository } from '@/features/settings/infrastructure/settings-repository';
 import { EcolnaLogo } from '@/design-system/brand/ecolna-mark';
@@ -42,23 +44,34 @@ const ThemedSwitch = Switch as ComponentType<WebSwitchProps>;
 /** La version de l'application, lue dans sa configuration (aucun réseau). */
 const APP_VERSION = Constants.expoConfig?.version;
 
+/** Les classes du programme, dans l'ordre (CP1, CP2). */
+const LEVELS = levelIdSchema.options;
+
 /**
  * Paramètres — maquette S19, depuis l'espace parent seulement. Le titre sur
  * la rangée du bouton retour, comme au tableau de bord d'où l'on vient, et la
  * colonne des réglages qui part de la gouttière (720 dp au plus) : l'intitulé
  * et son interrupteur restent à portée d'œil. La zone sensible (tout effacer)
  * est un simple lien sous la carte, doublement confirmé — jamais une action
- * aussi massive que les autres. Couché, la place de droite reçoit « À
- * propos » (la marque, la version, la source officielle du programme), aux
- * proportions des colonnes du tableau de bord ; debout, elle passe dessous.
+ * aussi massive que les autres. La classe de l'enfant actif se change ici,
+ * comme promis à la création du profil, après une confirmation qui dit que
+ * rien n'est perdu. Couché, la place de droite reçoit « À propos » (la
+ * marque, la version, la source du programme et la mention d'indépendance),
+ * aux proportions des colonnes du tableau de bord ; debout, elle passe dessous.
+ *
+ * Rien d'inachevé à l'écran (Apple 2.1) : une seule langue existe, il n'y a
+ * donc pas de rubrique « Langue ».
  */
 export default function SettingsScreen() {
   const router = useRouter();
   const goBack = useSafeBack();
   const soundEnabled = useSettings((state) => state.soundEnabled);
   const setSoundEnabled = useSettings((state) => state.setSoundEnabled);
+  const profile = useActiveProfile((state) => state.profile);
   const setActiveProfile = useActiveProfile((state) => state.setProfile);
   const [resetStep, setResetStep] = useState<0 | 1 | 2>(0);
+  /** La classe choisie, en attente de confirmation. */
+  const [pendingLevel, setPendingLevel] = useState<LevelId | null>(null);
   const { screenPadding, scale, splitPanes } = useResponsive();
   const icon = scaled(22, scale);
   const chevron = scaled(20, scale);
@@ -69,6 +82,20 @@ export default function SettingsScreen() {
     void getDatabase().then((db) =>
       createSettingsRepository(db).set('sound_enabled', enabled ? 'true' : 'false'),
     );
+  };
+
+  const changeLevel = async (level: LevelId) => {
+    if (!profile) {
+      return;
+    }
+    const repository = createChildProfileRepository(await getDatabase());
+    await repository.updateLevel(profile.id, level);
+    // Le profil en mémoire suit la base : l'accueil, le parcours et le tableau
+    // de bord rechargent la nouvelle classe en reprenant le focus. La
+    // progression (leçons, étoiles, badges) est rattachée à l'enfant, pas à
+    // sa classe : elle reste intacte.
+    setActiveProfile((await repository.findById(profile.id)) ?? { ...profile, level });
+    setPendingLevel(null);
   };
 
   const resetEverything = async () => {
@@ -115,30 +142,47 @@ export default function SettingsScreen() {
               </View>
               <View style={styles.divider} />
 
-              {/* Language */}
-              <View style={styles.rowColumn}>
-                <View style={styles.rowInner}>
-                  <EcolnaIcon name="speech" size={icon} color={colors.inkSecondary} />
-                  <EcolnaText variant="bodyLg" style={styles.rowLabel}>
-                    {fr.settings.language}
-                  </EcolnaText>
-                </View>
-                <View style={styles.radioGroup}>
-                  <View style={styles.radioRow}>
-                    <View style={[styles.radio, styles.radioActive]}>
-                      <View style={styles.radioDot} />
+              {/* Classe de l'enfant actif */}
+              {profile ? (
+                <>
+                  <View style={styles.rowColumn}>
+                    <View style={styles.rowInner}>
+                      <EcolnaIcon name="level" size={icon} color={colors.inkSecondary} />
+                      <EcolnaText variant="bodyLg" style={styles.rowLabel}>
+                        {fr.settings.levelTitle(profile.firstName)}
+                      </EcolnaText>
                     </View>
-                    <EcolnaText variant="bodyMd">{fr.settings.french}</EcolnaText>
+                    <View style={styles.radioGroup} accessibilityRole="radiogroup">
+                      {LEVELS.map((level) => {
+                        const selected = profile.level === level;
+                        return (
+                          <Pressable
+                            key={level}
+                            accessibilityRole="radio"
+                            accessibilityState={{ checked: selected }}
+                            accessibilityLabel={fr.settings.levelChoice[level]}
+                            testID={`settings-level-${level}`}
+                            onPress={() => (selected ? undefined : setPendingLevel(level))}
+                            style={({ pressed }) => [
+                              styles.radioRow,
+                              { minHeight: a11y.minTouchTarget, opacity: pressed && !selected ? 0.6 : 1 },
+                            ]}
+                          >
+                            <View style={[styles.radio, selected && styles.radioActive]}>
+                              {selected ? <View style={styles.radioDot} /> : null}
+                            </View>
+                            <EcolnaText variant="bodyMd">{fr.settings.levelChoice[level]}</EcolnaText>
+                          </Pressable>
+                        );
+                      })}
+                      <EcolnaText variant="bodySm" color={colors.textSecondary} style={styles.levelNote}>
+                        {fr.settings.levelNote}
+                      </EcolnaText>
+                    </View>
                   </View>
-                  <View style={[styles.radioRow, { opacity: 0.5 }]}>
-                    <View style={styles.radio} />
-                    <EcolnaText variant="bodyMd">
-                      {fr.settings.chadianArabic} — {fr.settings.comingSoon}
-                    </EcolnaText>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.divider} />
+                  <View style={styles.divider} />
+                </>
+              ) : null}
 
               {/* Offline info */}
               <View style={styles.row}>
@@ -201,6 +245,42 @@ export default function SettingsScreen() {
         </View>
       </ScrollView>
 
+      {/* Changement de classe : une confirmation, qui dit que rien n'est perdu. */}
+      <Modal
+        transparent
+        visible={pendingLevel !== null}
+        animationType="fade"
+        onRequestClose={() => setPendingLevel(null)}
+      >
+        <View style={[styles.modalBackdrop, { padding: screenPadding }]}>
+          {pendingLevel && profile ? (
+            <EcolnaCard rounded="xl" style={styles.modalCard}>
+              <View style={[styles.modalIcon, styles.modalIconBrand]}>
+                <EcolnaIcon name="level" size={28} color={colors.brand} />
+              </View>
+              <EcolnaText variant="headlineSm" align="center">
+                {fr.settings.levelConfirmTitle(profile.firstName, pendingLevel)}
+              </EcolnaText>
+              <EcolnaText variant="bodyMd" color={colors.textSecondary} align="center">
+                {fr.settings.levelConfirmMessage(pendingLevel)}
+              </EcolnaText>
+              <EcolnaButton
+                label={fr.settings.levelConfirm(pendingLevel)}
+                variant="accent"
+                size="md"
+                onPress={() => void changeLevel(pendingLevel)}
+              />
+              <EcolnaButton
+                label={fr.common.cancel}
+                variant="secondary"
+                size="md"
+                onPress={() => setPendingLevel(null)}
+              />
+            </EcolnaCard>
+          ) : null}
+        </View>
+      </Modal>
+
       {/* Double confirmation */}
       <Modal
         transparent
@@ -234,9 +314,12 @@ export default function SettingsScreen() {
 }
 
 /**
- * « À propos » : la marque et sa promesse, la source officielle du programme
- * (le titre exact du document du ministère) et la version de l'application.
- * Ce qu'un cadre du ministère cherche d'abord : d'où vient ce qu'on enseigne.
+ * « À propos » : la marque et sa promesse, la source du programme (le titre
+ * exact du document du ministère) suivie de la mention d'indépendance, puis
+ * la version et les licences. Ce qu'un cadre du ministère cherche d'abord :
+ * d'où vient ce qu'on enseigne — et que l'app ne se donne pas pour sienne.
+ * Une icône neutre (un livre, pas un sceau) : rien qui se lise comme une
+ * certification. Les licences sont une adresse en texte simple, sans lien.
  */
 function AboutCard() {
   const { scale } = useResponsive();
@@ -259,18 +342,27 @@ function AboutCard() {
       </View>
       <View style={styles.divider} />
       <View style={[styles.aboutRow, { gap: scaled(spacing.sm, scale) }]}>
-        <EcolnaIcon name="seal-check" size={scaled(24, scale)} color={colors.success} />
+        <EcolnaIcon name="book" size={scaled(24, scale)} color={colors.inkSecondary} />
         <View style={[styles.rowLabel, { gap: scaled(spacing.xxs, scale) }]}>
           <EcolnaText variant="labelLg">{fr.settings.aboutCompliance}</EcolnaText>
           <EcolnaText variant="bodySm" color={colors.textSecondary}>
             {fr.settings.aboutSource}
           </EcolnaText>
+          <EcolnaText variant="bodySm" color={colors.textSecondary}>
+            {fr.settings.aboutIndependence}
+          </EcolnaText>
         </View>
       </View>
       <View style={styles.divider} />
-      <View style={styles.aboutBlock}>
+      <View style={[styles.aboutBlock, { gap: scaled(spacing.xxs, scale) }]}>
         <EcolnaText variant="bodySm" color={colors.textSecondary}>
           {fr.settings.aboutVersion(APP_VERSION ?? fr.settings.diagnosticsUnknown)}
+        </EcolnaText>
+        <EcolnaText variant="bodySm" color={colors.textSecondary}>
+          {fr.settings.aboutLicences}
+        </EcolnaText>
+        <EcolnaText variant="bodySm" color={colors.textSecondary} selectable>
+          {fr.settings.aboutLicencesAddress}
         </EcolnaText>
       </View>
     </EcolnaCard>
@@ -307,7 +399,9 @@ const styles = StyleSheet.create({
   rowInner: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   rowLabel: { flex: 1 },
   divider: { height: 1.5, backgroundColor: colors.fill, marginHorizontal: spacing.lg },
-  radioGroup: { gap: spacing.sm, paddingLeft: spacing.xl + spacing.sm },
+  // Chaque choix a déjà sa cible tactile (48 dp) : pas d'écart en plus entre eux.
+  radioGroup: { paddingLeft: spacing.xl + spacing.sm },
+  levelNote: { paddingTop: spacing.xxs },
   radioRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   radio: {
     width: 22,
@@ -331,4 +425,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  modalIconBrand: { backgroundColor: colors.brandTint },
 });

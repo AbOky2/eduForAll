@@ -18,6 +18,31 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
+# Secrets de signature et de store — ils vivent dans EAS (expo.dev →
+# Credentials) ou dans les secrets GitHub, jamais dans le dépôt.
+# scripts/tools/eas-release.sh refuse aussi de construire si l'un d'eux est suivi.
+*.keystore
+*.cer
+*.certSigningRequest
+AuthKey_*.p8
+# Clé JSON d'un compte de service Google (Play Console, envoi par EAS Submit)
+*service-account*.json
+*service_account*.json
+*serviceaccount*.json
+*play-console*.json
+*play_console*.json
+*play-store*.json
+*play_store*.json
+google-play-key*.json
+pc-api-*.json
+api-*-*-*.json
+# Identifiants locaux d'EAS (mode « credentials.json »)
+credentials.json
+credentials/
+# Jetons écrits par erreur dans un fichier
+.expo-token
+*.token
+
 # Metro
 .metro-health-check*
 

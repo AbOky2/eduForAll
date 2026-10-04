@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Lancement à la main (Actions → CI → Run workflow) : rejoue la qualité et,
+  # seulement dans ce cas, le build preview ci-dessous. Sans ce déclencheur, le
+  # job preview-build ne pouvait jamais tourner. Builds de production et envoi
+  # en test : workflow « Release EAS » (release-eas.yml).
+  workflow_dispatch:
 
 jobs:
   quality:
@@ -57,3 +62,5 @@ jobs:
         run: npx eas-cli build --profile preview --platform android --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_NO_TELEMETRY: '1'
+          DISABLE_EAS_ANALYTICS: '1'

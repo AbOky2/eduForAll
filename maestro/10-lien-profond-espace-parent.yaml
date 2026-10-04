@@ -1,0 +1,18 @@
+# Apple 1.3 (catégorie Enfants) : un lien profond ne contourne pas la porte
+# parentale. Le tableau de bord et les paramètres renvoient à la porte tant
+# qu'elle n'a pas été franchie ; la porte, elle, y mène bien.
+appId: td.ecolna.app.dev
+---
+- launchApp
+- assertVisible: 'Tes activités'
+
+- openLink: 'ecolna:///dashboard'
+- assertVisible: 'Espace parents'
+- assertVisible: 'Pour entrer, écrivez le résultat de cette opération.:'
+- assertNotVisible: 'Tableau de bord.*'
+
+- openLink: 'ecolna:///(settings)'
+- assertVisible: 'Espace parents'
+- assertNotVisible: 'Son'
+
+- runFlow: subflows/passer-la-porte-parentale.yaml

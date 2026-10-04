@@ -4,19 +4,15 @@
 appId: td.ecolna.app.dev
 ---
 - launchApp
-- assertVisible: 'Bonjour'
+- assertVisible: 'Bonjour.*'
 
 - tapOn: 'Parents'
 - assertVisible: 'Espace parents'
-# 7 × 6 = 42
-- tapOn: 'Pour entrer, écrivez le résultat de cette opération.:'
-- inputText: '42'
-- hideKeyboard
-- tapOn: 'Entrer'
-- assertVisible: 'Tableau de bord'
+# L'opération est tirée au hasard : le sous-parcours la lit et la calcule.
+- runFlow: subflows/passer-la-porte-parentale.yaml
 
 # Le retour doit ramener à l'accueil enfant, en un seul geste
 - tapOn: 'Retour'
-- assertVisible: 'Bonjour'
+- assertVisible: 'Bonjour.*'
 - assertNotVisible: 'Espace parents'
 - assertVisible: 'Tes activités'

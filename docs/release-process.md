@@ -47,6 +47,8 @@ build de développement :
 - [ ] Réduction des animations : aucune pulsation ni entrée animée
 - [ ] **Tablette** : les deux orientations, en portrait et en paysage, sur les écrans accueil / carte / un exercice de chaque famille / résultat
 - [ ] `maestro test maestro/` sur appareil réel, y compris `06-tablet-rotation` (`appId` aligné sur le profil installé)
+- [ ] **Porte parentale** : deux ouvertures successives ne posent pas la même multiplication ; une erreur en affiche une autre ; un lien profond `ecolna:///dashboard`, app fermée puis rouverte, mène à la porte et non au tableau de bord
+- [ ] **Autorisations Android** du build livré : `bundletool dump manifest --bundle <app>.aab` (ou la page « Autorisations » de la Play Console) ne montre que `VIBRATE` et `MODIFY_AUDIO_SETTINGS` — ni `INTERNET`, ni `ACCESS_NETWORK_STATE`, ni `AD_ID`
 - [ ] Comparaison visuelle avec `design/stitch/*.png` (docs/visual-qa.md)
 - [ ] **Captures de store comparées à l'app installée** : chacun des écrans de `store/screenshots/plan.json`, dans le même état ; tout écran qui diffère est remplacé par une capture d'appareil (`store/screenshots/README.md`, « La règle d'abord »)
 - [ ] Captures refaites si l’UI a changé depuis le dernier tournage (`scripts/tools/capture-store-screenshots.sh --composer`)
@@ -68,16 +70,25 @@ brouillon, iOS vers TestFlight. Options : `--android`, `--ios`, `--no-submit`,
 `--submit-only <id>`, `--interactive` (premier passage, création des clés).
 Mode d'emploi complet et prérequis des consoles : `docs/deploiement-v1.md` § 2.
 
+**Depuis GitHub, sans poste configuré** : *Actions → Release EAS → Run
+workflow* (`.github/workflows/release-eas.yml`), entrées *plateforme*
+(android, ios, all) et *soumettre* (oui, non). Déclenchement manuel
+uniquement ; il exige le secret de dépôt `EXPO_TOKEN` (jeton d'un utilisateur
+robot Expo) et lance le même script, avec les mêmes garde-fous
+(`docs/deploiement-v1.md` § 2.4).
+
 Identifiants par profil dans `eas.json` : `td.ecolna.app` en production,
-`.preview` et `.dev` pour les autres. Clés de signature et clés de soumission
+`.preview` et `.dev` pour les autres ; le profil de soumission `production`
+porte lui aussi `td.ecolna.app` (`applicationId`, `bundleIdentifier`), et
+attend l'`ascAppId` de la fiche App Store Connect. Clés de signature et clés de soumission
 gérées par EAS, **jamais commitées** ; `EXPO_TOKEN` vit dans l'environnement,
 jamais dans un fichier.
 
-⚠️ Ne pas lancer `eas submit` à la main sans précaution : il évalue
-`app.config.ts` sans l'environnement du profil de build et retombe sur
-`td.ecolna.app.dev`, et `--latest` peut prendre un autre build que celui
-qu'on vient de vérifier. Le script règle les deux (`docs/deploiement-v1.md`
-§ 2.1).
+⚠️ Ne pas lancer `eas submit --latest` à la main : il peut prendre un autre
+build que celui qu'on vient de vérifier. Le script envoie par identifiant de
+build. (L'autre piège, `app.config.ts` évalué sans l'environnement du profil
+de build, est neutralisé par les identifiants inscrits dans le profil de
+soumission d'`eas.json` ; `docs/deploiement-v1.md` § 2.1.)
 
 `npm run build:preview` (APK interne et iOS interne) reste la voie des essais
 du développeur ; `npm run build:production` lance le même build que le script,
@@ -90,7 +101,11 @@ Jamais automatisée. Uniquement quand :
 1. toutes les gates automatisées passent (exception acceptée comprise) ;
 2. le build envoyé en test a été installé et vérifié sur appareil, et les
    gates manuelles ci-dessus sont cochées ;
-3. les fiches sont remplies et les deux URL publiques répondent.
+3. les fiches sont remplies et les deux URL publiques répondent ;
+4. côté Play, l'accès à la production est ouvert : si la console affiche
+   « Demander l'accès à la production », le test fermé (12 testeurs, 14 jours
+   consécutifs) est terminé et la demande acceptée (`docs/deploiement-v1.md`
+   § 0).
 
 Alors : App Store Connect → *Ajouter pour vérification* avec le build
 TestFlight vérifié ; Play Console → promouvoir **le même** AAB du test interne

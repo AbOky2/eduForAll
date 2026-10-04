@@ -28,6 +28,9 @@
 # Variables facultatives : EAS_CLI_VERSION (défaut latest), EAS_CLI (ex. « eas »
 # pour un eas-cli installé globalement au lieu de npx).
 #
+# Depuis GitHub : Actions → « Release EAS » → Run workflow
+# (.github/workflows/release-eas.yml), avec le secret EXPO_TOKEN du dépôt.
+#
 # CE QUI DOIT EXISTER AVANT (rien de tout cela n'est dans le dépôt, et rien ne
 # doit y entrer) :
 #   EXPO_TOKEN               jeton d'accès Expo (expo.dev → Settings → Access
@@ -60,7 +63,8 @@
 #
 # Garde-fous, dans l'ordre : identité de release lue dans eas.json, Node, arbre
 # git propre, aucun secret suivi par git, configuration Expo de release
-# (identifiants, permissions bloquées, tablette, versions), profil de soumission,
+# (identifiants, INTERNET / ACCESS_NETWORK_STATE / AD_ID bloquées, tablette,
+# versions), profil de soumission (identifiants égaux à ceux du build),
 # EXPO_TOKEN, domaines joignables, eas-cli, `eas whoami`, `eas project:info` =
 # @okimy/alifa, `npm run validate:release`. Le premier qui échoue arrête tout.
 set -euo pipefail
@@ -209,7 +213,14 @@ CONFIG_RESUME="$(node -e '
   const a = c.android || {}, i = c.ios || {}, x = c.extra || {};
   if (a.package !== androidId) err.push(`android.package = ${a.package}, attendu ${androidId}`);
   if (i.bundleIdentifier !== iosId) err.push(`ios.bundleIdentifier = ${i.bundleIdentifier}, attendu ${iosId}`);
-  for (const p of ["android.permission.INTERNET", "com.google.android.gms.permission.AD_ID"])
+  // INTERNET et ACCESS_NETWORK_STATE : la fiche Play promet une app sans réseau,
+  // et Play afficherait « accès Internet complet » / « afficher les connexions
+  // réseau ». AD_ID : la déclaration « aucun identifiant publicitaire ».
+  for (const p of [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "com.google.android.gms.permission.AD_ID",
+  ])
     if (!(a.blockedPermissions || []).includes(p)) err.push(`permission non bloquée : ${p}`);
   if (a.allowBackup !== false) err.push("android.allowBackup doit valoir false");
   if (i.supportsTablet !== true) err.push("ios.supportsTablet doit valoir true (app pensée pour la tablette)");
@@ -224,7 +235,7 @@ CONFIG_RESUME="$(node -e '
   stop "Configuration de release incorrecte :" "$(cat "$TRAVAIL/config-check.err")"
 read -r VERSION CONTENU PROJECT_ID OWNER SLUG <<<"$CONFIG_RESUME"
 ok "ECOLNA $VERSION · contenu $CONTENU · projet EAS $PROJECT_ID ($OWNER/$SLUG)"
-ok "INTERNET et AD_ID bloquées · sauvegarde Android coupée · iPad pris en charge · deux orientations"
+ok "INTERNET, ACCESS_NETWORK_STATE et AD_ID bloquées · sauvegarde Android coupée · iPad pris en charge · deux orientations"
 
 # ── 4. Profils eas.json ────────────────────────────────────────────────────
 etape "Profils de build et de soumission (eas.json)"
@@ -260,8 +271,23 @@ if [ "$SUBMIT" = 1 ] && [ "$VEUT_IOS" = 1 ]; then
     ok "iOS : TestFlight, fiche App Store Connect $ASC_APP_ID"
   fi
 fi
-[ "$SUB_ANDROID_ID" != "-" ] || info "submit.production.android.applicationId absent : compensé par l'export d'ECOLNA_ANDROID_PACKAGE (à ajouter dans eas.json)."
-[ "$SUB_IOS_ID" != "-" ] || info "submit.production.ios.bundleIdentifier absent : compensé par l'export d'ECOLNA_IOS_BUNDLE_ID (à ajouter dans eas.json)."
+# Les identifiants du profil de soumission priment, dans eas-cli, sur ceux
+# d'app.config.ts : ils doivent être ceux du profil de build, sinon eas submit
+# chercherait la fiche et les clés d'une autre app.
+if [ "$SUB_ANDROID_ID" = "-" ]; then
+  info "submit.production.android.applicationId absent : compensé par l'export d'ECOLNA_ANDROID_PACKAGE (à ajouter dans eas.json)."
+elif [ "$SUB_ANDROID_ID" != "$ANDROID_ID" ]; then
+  stop "submit.production.android.applicationId = $SUB_ANDROID_ID, mais le profil de build construit $ANDROID_ID."
+else
+  ok "Soumission Android sous $SUB_ANDROID_ID"
+fi
+if [ "$SUB_IOS_ID" = "-" ]; then
+  info "submit.production.ios.bundleIdentifier absent : compensé par l'export d'ECOLNA_IOS_BUNDLE_ID (à ajouter dans eas.json)."
+elif [ "$SUB_IOS_ID" != "$IOS_ID" ]; then
+  stop "submit.production.ios.bundleIdentifier = $SUB_IOS_ID, mais le profil de build construit $IOS_ID."
+else
+  ok "Soumission iOS sous $SUB_IOS_ID"
+fi
 
 if [ "$DRY" = 1 ]; then
   etape "Commandes qui seraient lancées (--dry-run : aucun appel réseau)"

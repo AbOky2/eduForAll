@@ -1,86 +1,67 @@
-<!-- Réponse à la question « Content Rights » d'App Store Connect
-     (Informations sur l'app → Droits sur le contenu) : « Votre app
-     contient-elle, affiche-t-elle ou utilise-t-elle du contenu de tiers ? »
-     Champ à deux réponses possibles, sans texte libre : aucune limite de
-     caractères. L'inventaire détaillé est dans
-     store/shared/licences-tierces.md. -->
+<!-- Réponse à la question « Content Rights » d'App Store Connect
+     (Informations sur l'app → Droits sur le contenu) : « Votre app
+     contient-elle, affiche-t-elle ou utilise-t-elle du contenu de tiers ? »
+     Champ à deux réponses possibles, sans texte libre : aucune limite de
+     caractères. L'inventaire détaillé, source unique, est
+     store/shared/licences-tierces.md ; ce fichier n'en garde que ce qui
+     décide de la réponse. -->
 
 # Droits sur le contenu (Content Rights)
 
-## Réponse à cocher : **Oui**
+## Réponse à cocher : **Oui**
 
-« Cette app contient, affiche ou utilise du contenu de tiers » — et l'éditeur
+« Cette app contient, affiche ou utilise du contenu de tiers » — et l'éditeur
 dispose des droits nécessaires pour chacun.
 
-Répondre **Non** serait inexact : trois éléments tiers sont embarqués dans le
-bundle, dont des citations d'une publication officielle, qui sont du contenu
-affiché à l'utilisateur. Apple ne demande pas la liste dans ce champ ; en
-cocher « Oui » engage seulement à pouvoir la produire sur demande. C'est
-l'objet de ce fichier.
+Répondre **Non** serait inexact : des polices, des pictogrammes et des voix de
+synthèse tiers sont embarqués dans le bundle, et l'app cite une publication
+officielle. Apple ne demande pas la liste dans ce champ ; cocher « Oui »
+engage à pouvoir la produire sur demande, et à respecter chaque licence.
+C'est l'objet de ce fichier.
 
-## Les trois sources tierces, et leur régime
+**Où les attributions sont visibles** : sur la page de support,
+`https://aboky2.github.io/eduForAll/support.html#licences` (section
+« Licences », avec le texte complet de l'OFL et de la licence MIT de
+Phosphor), à laquelle renvoie la carte « À propos » des paramètres de l'app
+(« Licences : polices, icônes et voix », suivie de l'adresse, en texte simple
+— aucun lien sortant dans une app de la catégorie Enfants). La page doit être
+publiée sur `gh-pages` avant de cocher « Oui » (`../shared/privacy-policy/README.md`).
 
-### 1. Programme national tchadien — citation d'une publication officielle
+## Les sources tierces, et leur régime
 
-> *Programmes Réactualisés de l'Enseignement Primaire*, République du Tchad,
-> Ministère de l'Éducation Nationale — Centre National des Curricula (CNC),
-> N'Djaména, septembre 2004, 161 p.
+Détail, fichiers et notices : `../shared/licences-tierces.md`.
 
-Encodé dans `src/content/curriculum/official-program.ts`. Régime : **citation
-sourcée**. Chaque leçon porte un `officialReference` qui cite le contenu
-officiel **et sa page**. Le document n'est ni reproduit intégralement, ni
-redistribué, ni republié : les 308 leçons et les 1 625 exercices sont une
-création du projet, construite sur un référentiel public cité.
+| Source | Ce qui est embarqué | Licence | Obligation | État |
+|---|---|---|---|---|
+| **Polices** | Ecolna Sans (5 graisses), version modifiée et renommée de **Figtree** (© 2022 The Figtree Project Authors) ; **Andika** (© 2004-2022 SIL International, noms réservés « Andika » et « SIL »), non modifiée | SIL Open Font License 1.1 | le texte de la licence et les mentions de copyright accompagnent les polices ; une version modifiée ne porte pas de nom réservé | ✅ notices livrées dans `assets/fonts/` (`OFL-Figtree.txt`, `OFL-Andika.txt`, `FONTLOG-EcolnaSans.txt`) et publiées sur `support.html#licences` |
+| **Pictogrammes d'interface** | tracés de **Phosphor Icons** (boutons, onglets, médailles), embarqués comme données dans `src/design-system/icons/phosphor.generated.ts` | MIT, « Copyright (c) 2023 Phosphor Icons » | la mention de copyright et la licence accompagnent les copies ; la minification la retire du binaire, d'où sa publication | ✅ texte MIT complet sur `support.html#licences` ; notice en tête du fichier généré (`scripts/icons/build-icons.mjs`) |
+| **Voix de synthèse** | 824 sons produits **sur la machine de build** : **Kokoro**, voix `ff_siwis` (665 sons), et **Piper**, modèle `fr_FR-siwis-medium` (159 sons) — `assets/audio/voice-provenance.json` | Kokoro : Apache-2.0 ; Piper : MIT (`docs/audio-pipeline.md`) | ni l'un ni l'autre moteur n'est redistribué : seuls les sons le sont ; crédit donné sur la page de support | ✅ crédités sur `support.html#licences` |
+| **Jeu de données SIWIS** | voix française d'origine du locuteur `siwis` des deux modèles | licence **à attribution** | une attribution doit figurer dans l'app ou sur la fiche | 🔴 **À VÉRIFIER** : intitulé exact, version et formule d'attribution, sur la page de distribution du jeu de données. La page de support le dit « en cours de vérification » ; ne pas inscrire une version de licence non vérifiée |
+| **Programme national tchadien** | citations de *Programmes Réactualisés de l'Enseignement Primaire*, MEN — CNC, N'Djaména, septembre 2004, 161 p. (`src/content/curriculum/official-program.ts`) | citation sourcée | citer la source et ne pas laisser croire à une caution | ✅ chaque leçon porte son `officialReference` (contenu et page) ; phrase d'indépendance sur les deux fiches, dans l'app (carte « À propos ») et sur la page de support |
 
-ECOLNA n'est ni éditée, ni approuvée, ni cautionnée par le ministère, et les
-deux fiches le disent explicitement
-(`store/shared/mentions-programme-officiel.md`). Point à ne pas sous-estimer :
-c'est la mention qui sépare « app adossée à un programme officiel » de
-« app officielle », et la seconde serait un refus au titre de la règle 5.2.3.
-
-### 2. Voix de synthèse — Kokoro et Piper, locuteur `siwis`
-
-Les 824 enregistrements d'`assets/audio/` sont produits **sur la machine de
-build**, jamais sur l'appareil de l'enfant, et `voice-provenance.json` note
-quel modèle a enregistré quel son.
-
-| Élément | Licence |
-|---|---|
-| Kokoro, voix `ff_siwis` — 665 sons (phrases, mots, consignes) | Apache-2.0 |
-| Piper, modèle `fr_FR-siwis-medium` — 159 sons (sons isolés, syllabes, lettres, nombres) | MIT |
-| Jeu de données SIWIS, à l'origine du locuteur | licence **à attribution** |
-
-Apache-2.0 et MIT autorisent l'usage commercial et la redistribution des
-sorties. La licence du jeu de données SIWIS impose en revanche une
-**attribution** : elle doit figurer dans l'app ou sur la fiche.
-🔴 À VÉRIFIER : l'intitulé exact, la version et la formule d'attribution
-imposée, sur la page de distribution du jeu de données — ne pas inscrire une
-version de licence non vérifiée dans une réponse de store.
-
-### 3. Polices — SIL Open Font License 1.1
-
-Quicksand (4 graisses) et Plus Jakarta Sans SemiBold, déclarées dans
-`app.config.ts` et embarquées depuis `assets/fonts/`. L'OFL 1.1 autorise
-l'embarquement dans une app distribuée, y compris commercialement, et exige que
-**le texte de la licence accompagne les fichiers**.
-
-🔴 À FOURNIR : `assets/fonts/OFL.txt`, copié depuis la distribution amont de
-chaque police. Tant qu'il manque, la condition d'attribution n'est pas remplie
-alors que les polices sont déjà dans le bundle — c'est une obligation de
-licence, indépendante de la question d'Apple.
+Le programme officiel n'est ni reproduit intégralement, ni redistribué, ni
+republié : les 308 leçons et les 1 625 exercices sont une création du projet,
+construite sur un référentiel public cité. ECOLNA n'est ni éditée, ni
+approuvée, ni cautionnée par le ministère (`../shared/mentions-programme-officiel.md`) :
+c'est la mention qui sépare « app adossée à un programme officiel » de « app
+officielle », et la seconde serait un refus au titre de la règle 5.2.3.
 
 ## Ce qui n'est pas du contenu tiers
 
-Les **112 illustrations**, les pictogrammes, l'icône et le logo sont des
-créations du projet (`src/design-system/illustrations/`, `assets/icons/*.svg`).
-Aucune banque d'images, aucun jeu d'icônes tiers, aucun élément importé. La
+Les **112 illustrations** du contenu (`src/design-system/illustrations/`),
+l'icône, le logo et les visuels de store (`assets/icons/*.svg`) sont des
+créations du projet. Aucune banque d'images, aucun élément importé ; la
 planche de contact `docs/pictogrammes.html` montre exactement ce que l'app
-dessine.
+dessine. Seuls les pictogrammes d'**interface** viennent de Phosphor (ci-dessus).
 
-## Conséquence pour la fiche
+Les bibliothèques logicielles (Expo, React Native, Zod, Zustand…) sont sous
+licences permissives ; aucune console ne pose de question à leur sujet
+(`../shared/licences-tierces.md`, « Bibliothèques logicielles »).
 
-Deux attributions sont **obligatoires** et doivent être visibles : la licence
-OFL des polices et l'attribution du jeu de données SIWIS. Elles tiennent dans
-le bloc prêt à coller de `store/shared/licences-tierces.md`, destiné à l'écran
-« À propos » — et, si cet écran n'est pas branché pour la 1.0.0, à la page
-`https://aboky2.github.io/eduForAll/support.html`.
+## Ce qu'il reste à faire avant de cocher « Oui »
+
+1. Publier `support.html` sur `gh-pages` et vérifier
+   `https://aboky2.github.io/eduForAll/support.html` en 200.
+2. Vérifier l'attribution du jeu de données SIWIS, puis la reporter mot pour
+   mot dans `../shared/licences-tierces.md` et dans la section « Licences » de
+   `support.html`, à la place de la mention « en cours de vérification ».

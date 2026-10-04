@@ -43,8 +43,6 @@ livré.
 
 - **Plusieurs enfants sur un même appareil** : le schéma le permet, mais l'écran
   de choix du profil n'est pas exposé — un seul profil par appareil.
-- **Changer de classe** (CP1 → CP2) après la création du profil : aucun écran
-  ne le permet encore.
 - **Retours dits à voix haute** : « Bravo ! », « On réessaie, tout
   doucement. » s'affichent, avec la carte verte ou bleue et le visage de
   l'enfant qui réagit, mais ne sont pas dits. Les consignes, les sons, les
@@ -56,5 +54,8 @@ livré.
 
 - L'app fonctionne dès la première ouverture, sans réseau, sans compte.
 - L'espace parent (onglet « Parents ») s'ouvre en écrivant le résultat d'une
-  multiplication.
+  multiplication, tirée au hasard à chaque fois.
+- La classe se change dans les paramètres de l'espace parent (rubrique
+  « Classe ») : passer du CP1 au CP2 garde les leçons, les étoiles et les
+  badges.
 - « Réinitialiser la progression » efface tout, définitivement.

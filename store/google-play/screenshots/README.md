@@ -19,41 +19,41 @@ versions différentes de la même capture.
 
 ## État au 4 octobre 2026
 
-**Produites :** huit captures téléphone (1080 × 1920) et huit captures
-tablette (1920 × 1200, paysage). Le même jeu tablette va dans les **deux**
-emplacements de la console, 7" et 10". Play en accepte huit au plus par type
-d'appareil : `08-matieres` et `09-badges` sont écartés (`"play": false` dans
-`plan.json`). Téléverser dans l'ordre des noms.
+**Produites :** huit captures téléphone (1080 × 1920, 9:16) et huit captures
+tablette (**1920 × 1080, 16:9**, paysage). Le même jeu tablette va dans les
+**deux** emplacements de la console, 7" et 10". Play en accepte huit au plus
+par type d'appareil : `08-matieres` et `09-badges` sont écartés (`"play": false`
+dans `plan.json`). Téléverser dans l'ordre des noms.
 
 **Ce qu'elles sont :** le rendu du vrai code de l'app par le banc web
-(react-native-web). Le jeu téléphone vient de la capture iPhone 6,9", le jeu
-tablette de la capture iPad 13" paysage, et chacun est mis à l'échelle dans un
-cadre générique sans marque, puisque Google refuse les cadres d'appareils
-reconnaissables. Rien n'est dessiné ni retouché, mais ce ne sont **pas** des
-captures d'un appareil Android.
+(react-native-web), avec le profil fictif « Amina », dont les badges sont
+calculés par les règles de l'app et non choisis à la main. Le jeu téléphone
+vient de la capture iPhone 6,9" ; le jeu tablette a **sa propre capture**, une
+tablette Android 10" en paysage (1280 × 800 points ×2 = 2560 × 1600, 16:10),
+encadrée à 75 % au moins de la largeur, et non plus la capture de l'iPad (4:3).
+Chaque image est mise à l'échelle dans un cadre générique sans marque, puisque
+Google refuse les cadres d'appareils reconnaissables. Rien n'est dessiné ni
+retouché, mais ce ne sont **pas** des captures d'un appareil Android.
+
+Le 16:9 est le format qu'annonce la Play Console pour les tablettes, et celui
+qu'il faut pour la mise en avant sur grand écran (au moins quatre captures
+paysage) : le compositeur le vérifie (`"contraintes"` de `plan.json`).
 
 🔴 **Reste à faire, et c'est bloquant pour la promotion en production :**
 installer le build par le **test interne Play** sur une tablette et un
 téléphone Android (jamais par APK, voir `docs/deploiement-v1.md` § 5).
-Afficher les huit écrans dans le même état, puis comparer. Si un écran Android
-diffère visiblement, le signaler avant de soumettre : la chaîne ne connaît pas
-encore de capture brute propre à Android, puisque les fiches Play réutilisent
-les fichiers de l'iPhone et de l'iPad. Règle complète :
-`../../screenshots/README.md`, « La règle d'abord ».
-
-À vérifier au téléversement : 1920 × 1200 est un format **16:10**. Il respecte
-la règle générale de Play (côtés de 320 à 3 840 px, le grand au plus double du
-petit), mais des guides tiers indiquent que la **mise en avant** sur grands
-écrans demande au moins quatre captures en 16:9. Si la console le signale, il
-faut un rendu tablette en 1920 × 1080 (tâche du compositeur, pas des captures
-brutes).
+Afficher les huit écrans dans le même état, puis comparer. Tout écran qui
+diffère visiblement est remplacé par la capture de l'appareil, déposée sous le
+même nom dans `raw/` (`<id>@tablette-android.png` pour la tablette), puis la
+série est recomposée. Règle complète : `../../screenshots/README.md`, « La
+règle d'abord ».
 
 ## Formats exigés par Play Console
 
 | Emplacement de la fiche | Dimensions produites | Nombre |
 |---|---|---|
 | Téléphone | **1080 × 1920** | **2 minimum**, 8 maximum (8 fournies) |
-| Tablette 7" | **1920 × 1200** (paysage) | 8 maximum (8 fournies) |
+| Tablette 7" | **1920 × 1080** (paysage, 16:9) | 8 maximum (8 fournies) |
 | Tablette 10" | le même jeu que la 7" | 8 maximum (8 fournies) |
 | Image de mise en avant | 1024 × 500, sans transparence | livrée : `../graphics/feature-graphic-1024x500.png` |
 | Icône de la fiche | 512 × 512 | livrée : `../graphics/icon-512.png` |
@@ -73,7 +73,8 @@ Après toute modification d'interface :
 ECOLNA_WEB_PREVIEW=1 EXPO_NO_TELEMETRY=1 BROWSER=none npx expo start --web --port 8081
 # 2. les captures brutes, puis la composition des quatre formats
 scripts/tools/capture-store-screenshots.sh --composer
-# ou seulement les formats Play :
+# la seule capture brute de la tablette Android, puis les formats Play :
+scripts/tools/capture-store-screenshots.sh --appareil android
 npm run store:screenshots -- --format play-telephone
 npm run store:screenshots -- --format play-tablette
 ```

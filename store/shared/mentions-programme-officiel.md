@@ -1,7 +1,7 @@
 <!-- Mention d'indépendance vis-à-vis du ministère tchadien, à faire figurer
      sur les deux fiches. COMPTE RÉEL de la phrase : 156 caractères (vérifié
-     par script), identique dans les deux descriptions (App Store 3 299 / 4 000,
-     Play 3 407 / 4 000). -->
+     par script), identique dans les deux descriptions (App Store 3 440 / 4 000,
+     Play 3 488 / 4 000). -->
 
 # Citer le programme officiel sans se faire passer pour le ministère
 
@@ -60,7 +60,9 @@ phrase**. Un champ trop court pour la porter ne dit ni l'un ni l'autre.
 | Play — titre, description courte | `store/google-play/title-fr.md`, `short-description-fr.md` | ✅ sans objet : ni « officiel » ni « ministère » |
 | Notes de version | `store/shared/release-notes-1.0.0-fr.md` | ✅ sans objet : « d'après le programme de l'enseignement primaire du Tchad », sans « officiel » |
 | Légendes des captures | `store/screenshots/plan.json` | ✅ sans objet : aucune ne dit « officiel » (l'ancienne légende du plan 1 le disait) |
-| Image de mise en avant Play | `store/google-play/graphics/feature-graphic-src.svg` | 🔴 **à corriger** : sa ligne « Le programme officiel du CP. » dit « officiel » sans pouvoir porter la phrase. Proposition, alignée sur le sous-titre et la première légende : « Le CP tchadien, même sans internet. » |
+| Image de mise en avant Play | `store/google-play/graphics/feature-graphic-src.svg` et `feature-graphic-1024x500.png` | ✅ « Le CP tchadien, même sans internet. » : ni « officiel » ni « ministère » (l'ancienne ligne « Le programme officiel du CP. » est retirée) |
+| App — carte « À propos » des paramètres | `app/(settings)/index.tsx`, `fr.settings.aboutCompliance`, `aboutSource`, `aboutIndependence` | ✅ « Construit d'après les « Programmes Réactualisés de l'Enseignement Primaire » », la source (MEN / Centre national des curricula, N'Djaména, 2004), puis la phrase ci-dessus, mot pour mot — un test la compare au bloc de ce fichier (`tests/unit/settings-about.test.ts`) ; icône neutre, plus de sceau |
+| Page de support, section « Licences » | `store/shared/privacy-policy/support.html#licences` | ✅ la citation du programme, suivie de la phrase, mot pour mot |
 | Notes pour l'examen Apple | `store/app-store/review-notes-fr.md` | ✅ dit « publication indépendante, sans lien avec le ministère » (non publié) |
 
 ## Ce qu'il ne faut pas faire

@@ -62,7 +62,7 @@ Après toute modification d'interface :
 ```bash
 # 1. le banc web, dans un premier terminal (docs/visual-qa.md)
 ECOLNA_WEB_PREVIEW=1 EXPO_NO_TELEMETRY=1 BROWSER=none npx expo start --web --port 8081
-# 2. les vingt captures brutes, iPhone et iPad, puis la composition
+# 2. les captures brutes (iPhone, iPad, tablette Android), puis la composition
 scripts/tools/capture-store-screenshots.sh --composer
 # ou un seul format :
 npm run store:screenshots -- --format app-store-iphone
@@ -70,11 +70,12 @@ npm run store:screenshots -- --format app-store-ipad
 ```
 
 Pour une capture native sans appareil, il existe un chemin par simulateur iOS
-(macOS et Xcode requis) : `scripts/tools/seed-demo-profile.mjs`, puis
-`scripts/tools/capture-ios-screenshots.mjs [--suffixe @tablette]`. ⚠️ Ce
-second script suit encore **l'ancien plan de neuf captures** (`02-modules`,
-`09-parent`…, écrans d'avant la v4) : en l'état, il écrirait des fichiers que
-la composition ignore. L'aligner sur `plan.json` avant de s'en servir.
+(macOS et Xcode requis) : `scripts/tools/seed-demo-profile.mjs` (il affiche
+les badges que chaque leçon a débloqués), puis
+`scripts/tools/capture-ios-screenshots.mjs [--suffixe @tablette]`. Ce second
+script suit les dix plans de `plan.json` et refuse de tourner si un plan lui
+est inconnu ; la porte parentale (`10-parent`) et les défilements iPhone se
+font à la main, le script attend Entrée.
 
 **Ne pas dessiner, simuler ni retoucher une capture** : c'est un motif de
 rejet déclaré (règle 2.3.3 d'App Review). Le banc web et le simulateur

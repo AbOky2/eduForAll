@@ -13,18 +13,29 @@ manque, est tenu à jour dans `docs/store-readiness.md`.
 
 | Sujet | État |
 |---|---|
-| Contenu | version **2.1.1** : 308 leçons (147 en CP1, 161 en CP2), 1 625 exercices, 824 sons (`npm run validate:content`) |
+| Contenu | version **2.1.1** : 308 leçons (147 en CP1, 161 en CP2), 1 625 exercices, 824 sons (`npm run validate:content`) |
 | Textes des fiches | prêts, un fichier par champ de console : `store/README.md` |
-| Captures | **produites** : 36 images aux formats exacts des deux consoles, dans `store/screenshots/out/`. Rendu du vrai code par le banc web, à vérifier sur l'app installée avant la revue (§ 4) |
+| Captures | **produites, deuxième série** : 36 images aux formats exacts des deux consoles, dans `store/screenshots/out/`, dont la tablette Play en 16:9 depuis une capture de tablette Android ; badges du profil de démonstration calculés par les règles de l'app. Rendu du vrai code par le banc web, à vérifier sur l'app installée avant la revue (§ 4) |
 | Icône Play, image de mise en avant | produites (`store/google-play/graphics/`) |
-| Configuration de release | vérifiée hors ligne (§ 2.5) : identifiants, permissions bloquées, version, tablette, projet EAS |
+| Configuration de release | vérifiée hors ligne (§ 2.5) : identifiants, permissions bloquées (dont `ACCESS_NETWORK_STATE`), version, tablette, projet EAS ; `eas.json` validé par `@expo/eas-json` 24.9.0 |
+| Code, côté conformité | porte parentale tirée au hasard (deux facteurs de 6 à 9, une autre opération après chaque erreur) ; écrans de l'espace parent et des paramètres gardés par la porte, lien profond compris ; rubrique « Classe » (CP1 ↔ CP2) dans les paramètres ; carte « À propos » sans « conforme », avec la phrase d'indépendance et l'adresse des licences ; option de langue « bientôt disponible » retirée |
 | Gates automatisées | vertes, sauf `expo-doctor` : 3 échecs, dont 2 dus au réseau bloqué du conteneur de développement et 1 accepté jusqu'à la 1.1.0 (§ 2.5) |
-| Builds | **pas encore lancés**. Depuis le conteneur de développement, `expo.dev` est bloqué (réponse 403 « Host not in allowlist ») et aucun `EXPO_TOKEN` n'est configuré. Tout est prêt pour qu'une seule commande les lance (§ 2) |
+| Builds | **pas encore lancés**. Depuis le conteneur de développement, `expo.dev` est bloqué (réponse 403 « Host not in allowlist ») et aucun `EXPO_TOKEN` n'est configuré. Le chemin le plus simple : le secret `EXPO_TOKEN` dans le dépôt GitHub, puis *Actions → Release EAS → Run workflow* (§ 2.4). En local, une seule commande (§ 2) |
 | Comptes | Play Console et Apple Developer ouverts |
 
-Une application a déjà été publiée depuis ce compte Play : la vérification
-d'identité est faite, et la règle des 12 testeurs pendant 14 jours (qui ne vise
-que les comptes personnels récents n'ayant jamais publié) ne s'applique pas.
+**Test fermé Play : à vérifier dans la console, pas à écarter.** Les comptes
+développeur **personnels** créés **après le 13 novembre 2023** doivent faire
+tourner un **test fermé** d'au moins **12 testeurs**, inscrits pendant au moins
+**14 jours consécutifs**, avant de pouvoir demander l'accès à la production.
+L'exigence peut viser chaque nouvelle app du compte : qu'une app ait déjà été
+publiée depuis ce compte ne suffit pas à l'écarter. Pour le savoir, il suffit
+de regarder le tableau de bord de l'app dans la Play Console, une fois l'app
+créée : si la tâche **« Demander l'accès à la production »** y figure, la règle
+s'applique. Elle ne bloque ni le test interne ni `eas submit` (piste interne),
+mais elle repousse la production d'au moins 14 jours, plus le temps d'examen de
+la demande. Le test interne ne compte pas : il faut une piste *Test fermé*,
+où l'on peut promouvoir le même AAB. Le lancer tôt, en parallèle du pilote
+(§ 3, étape 3 bis).
 
 **Format visé : téléphone ET tablette, la tablette en priorité.**
 
@@ -56,20 +67,25 @@ Les builds tournent sur les serveurs d'Expo, au nom du compte `okimy`, projet
 pas renommer le `slug` (le commentaire d'`app.config.ts` explique pourquoi).
 
 - Créer un jeton sur **expo.dev → Settings → Access tokens**. De préférence le
-  jeton d'un **utilisateur robot** du compte, avec le rôle le plus restreint
-  qui permette de construire et soumettre ; sinon, un jeton d'accès personnel.
+  jeton d'un **utilisateur robot** du compte (*Add robot*), avec le rôle
+  **Developer** : la documentation d'Expo lui donne les builds et la gestion
+  des clés ; si `eas submit` le refuse, passer le robot en *Admin*. À défaut de
+  robot, un jeton d'accès personnel.
 - Le fournir dans la variable d'environnement **`EXPO_TOKEN`**, et nulle part
-  ailleurs : `export EXPO_TOKEN=…` dans le shell, ou un secret de la CI.
-  **Jamais** dans un fichier du dépôt. Le script de release le vérifie
-  (`git grep` de la valeur) et s'arrête s'il le trouve.
+  ailleurs : `export EXPO_TOKEN=…` dans le shell, ou **le secret `EXPO_TOKEN`
+  du dépôt GitHub** pour le workflow « Release EAS » (§ 2.4). **Jamais** dans
+  un fichier du dépôt. Le script de release le vérifie (`git grep` de la
+  valeur) et s'arrête s'il le trouve.
 - En cas de fuite : le révoquer sur la même page, en recréer un.
 
 ### 1.3 Les deux fiches et les clés de soumission
 
 Ces clés vivent **dans EAS** (expo.dev → projet → Credentials), jamais dans le
-dépôt. `.gitignore` exclut déjà `*.p8`, `*.p12`, `*.jks`, `*.key` ; un JSON de
-compte de service, lui, n'est pas exclu par motif. Le garder hors du dossier du
-projet (le script refuse aussi tout fichier sensible suivi par git).
+dépôt. `.gitignore` exclut `*.p8`, `*.p12`, `*.jks`, `*.keystore`, `*.key`,
+`credentials.json` et les noms usuels d'une clé JSON de compte de service
+Google (`*service-account*.json`, `pc-api-*.json`, `*play-console*.json`…).
+Un JSON renommé autrement échapperait au motif : le garder **hors du dossier du
+projet** (le script refuse aussi tout fichier sensible suivi par git).
 
 **App Store Connect (iOS)**
 
@@ -80,9 +96,13 @@ projet (le script refuse aussi tout fichier sensible suivi par git).
    passage interactif du script (§ 2.2) l'enregistre.
 2. Relever l'**Apple ID** numérique de la fiche (*Informations sur l'app →
    Informations générales*) et le reporter dans `eas.json`, sous
-   `submit.production.ios.ascAppId`. Sans lui, `eas submit` refuse de tourner
-   en mode non interactif : « Set ascAppId in the submit profile (eas.json) or
-   re-run this command in interactive mode ».
+   `submit.production.ios.ascAppId` (une chaîne de chiffres, par exemple
+   `"ascAppId": "1234567890"`, à côté de `bundleIdentifier` et `language`),
+   puis commiter. **C'est la seule valeur d'`eas.json` qui reste à fournir** :
+   elle n'existe qu'une fois la fiche créée, et le dépôt ne peut pas la
+   deviner. Sans elle, `eas submit` refuse de tourner en mode non interactif :
+   « Set ascAppId in the submit profile (eas.json) or re-run this command in
+   interactive mode » — et le script s'arrête avant de construire.
 3. Enregistrer une **clé API App Store Connect** dans EAS :
    `eas credentials -p ios` → profil `production` → *App Store Connect: Manage
    your API Key* → *Set up your project to use an API Key for EAS Submit*.
@@ -129,8 +149,9 @@ la revue, aux URL déjà inscrites dans les fiches :
 
 État vérifié le 4 octobre 2026 (clone de la branche `gh-pages`) : `gh-pages`
 porte une `index.html` du **5 septembre**, sans la phrase sur la sauvegarde
-Android désactivée ni la précision « question de multiplication ». Et
-**`support.html` n'y est pas**. Après commit des fichiers actuels :
+Android désactivée, ni celle sur la sauvegarde iCloud des iPhone et iPad, ni
+la précision « multiplication tirée au hasard ». Et **`support.html` n'y est
+pas** — ni donc sa section « Licences », à laquelle renvoie l'app. Après commit des fichiers actuels :
 
 ```bash
 git subtree push --prefix store/shared/privacy-policy origin gh-pages
@@ -178,12 +199,15 @@ Le premier contrôle qui échoue arrête tout, avec la marche à suivre.
    `.mobileprovision`, `.pem`, JSON de compte de service, `credentials.json`),
    et la valeur d'`EXPO_TOKEN` absente des fichiers suivis.
 5. **Configuration Expo de release** (`npx expo config --type public`, hors
-   ligne) : identifiants `td.ecolna.app`, `INTERNET` et `AD_ID` bloquées,
+   ligne) : identifiants `td.ecolna.app`, `INTERNET`, `ACCESS_NETWORK_STATE`
+   et `AD_ID` bloquées,
    sauvegarde Android coupée, `supportsTablet`, orientation libre, chiffrement
    déclaré, projet EAS présent, `contentVersion` identique dans
    `app.config.ts`, le manifeste et le générateur.
-6. **Profils `eas.json`** : AAB pour Play, piste `internal` en `draft`, et
-   `ascAppId` présent si iOS doit être envoyé sans interaction.
+6. **Profils `eas.json`** : AAB pour Play, piste `internal` en `draft`,
+   identifiants de soumission (`applicationId`, `bundleIdentifier`) égaux à
+   ceux du build, et `ascAppId` présent si iOS doit être envoyé sans
+   interaction.
 7. **`EXPO_TOKEN`** présent (sa valeur n'est jamais affichée).
 8. **Domaines joignables** (§ 2.3).
 9. **eas-cli** disponible, **`eas whoami`**, **`eas project:info`** égal à
@@ -205,8 +229,13 @@ temporaire dont le chemin est affiché.
 >    donc **`td.ecolna.app.dev`** et cherche la clé Play et la clé Apple… de
 >    l'app de développement. Le script exporte `ECOLNA_RELEASE`,
 >    `ECOLNA_ANDROID_PACKAGE` et `ECOLNA_IOS_BUNDLE_ID` avant toute commande.
->    À la main : préfixer ces trois variables, ou, mieux, inscrire les
->    identifiants dans le profil de soumission d'`eas.json` (§ 2.6).
+>    À la main, c'est désormais réglé par `eas.json` lui-même :
+>    `submit.production.android.applicationId` et
+>    `submit.production.ios.bundleIdentifier` valent `td.ecolna.app`, et
+>    eas-cli leur donne la priorité sur `app.config.ts` (code d'eas-cli
+>    24.10.0 : `AndroidSubmitCommand.js`, `AppProduce.js`,
+>    `AscApiKeySource.js`). Le script vérifie qu'ils restent égaux à ceux du
+>    profil de build.
 > 2. **`--latest` envoie le build « store » le plus récent de la plateforme**,
 >    quel que soit son profil (un `production-apk` compris), et même s'il est
 >    encore en cours. Le script envoie par identifiant (`--id`), jamais par
@@ -261,18 +290,67 @@ et `storage.googleapis.com` passent ; `api.expo.dev`, `expo.dev`,
 `reactnative.directory`, `logs.expo.dev` et `api.appstoreconnect.apple.com`
 sont refusés par le proxy.
 
-### 2.4 Les autres chemins
+### 2.4 Le chemin le plus simple : GitHub Actions, workflow « Release EAS »
+
+Les runners de GitHub joignent expo.dev : pas de domaine à autoriser, pas
+d'eas-cli à installer sur un poste. Le workflow
+`.github/workflows/release-eas.yml` se lance **uniquement à la main** et appelle
+`scripts/tools/eas-release.sh`, avec tous ses garde-fous ; il n'envoie jamais en
+revue.
+
+**Une fois pour toutes :**
+
+1. **Le jeton.** Sur expo.dev, compte `okimy` : *Settings → Access tokens*,
+   créer un **utilisateur robot** (rôle *Developer*, § 1.2), puis un jeton pour
+   ce robot. Copier sa valeur : elle ne sera plus affichée.
+2. **Le secret GitHub.** Dans le dépôt `AbOky2/eduForAll` : *Settings →
+   Secrets and variables → Actions → New repository secret*. Nom :
+   **`EXPO_TOKEN`** ; valeur : le jeton. Rien d'autre à configurer côté GitHub.
+3. **Les clés de signature dans EAS.** Le workflow tourne sans interaction :
+   - Android : eas-cli 24.10.0 génère le keystore sans interaction au premier
+     build ; pour envoyer, le JSON du compte de service doit être dans EAS
+     (§ 1.3) ;
+   - iOS : il faut soit une **clé API App Store Connect** enregistrée dans EAS
+     (§ 1.3, point 3), soit un premier passage
+     `scripts/tools/eas-release.sh --interactive` depuis un Mac ou un PC
+     (connexion Apple, § 2.2) ; et, pour envoyer vers TestFlight,
+     l'`ascAppId` dans `eas.json` (§ 1.3, point 2).
+
+**À chaque release :**
+
+1. GitHub → onglet **Actions** → **Release EAS** → **Run workflow**.
+2. Choisir la branche (celle du commit à publier), la **plateforme**
+   (`android`, `ios` ou `all`) et **soumettre** (`oui` : envoi en test interne
+   Play et TestFlight ; `non` : build seulement).
+3. *Run workflow*. Le journal montre chaque contrôle du script, puis l'adresse
+   de chaque build sur expo.dev. Compter 15 à 40 minutes de build par
+   plateforme, après une dizaine de minutes de `validate:release`.
+
+Ce qui arrête le workflow, et quoi faire :
+
+| Message | Cause | Remède |
+|---|---|---|
+| « Secret EXPO_TOKEN absent » | secret non créé, ou mal nommé | étape 2 ci-dessus |
+| « submit.production.ios.ascAppId absent » | fiche App Store Connect pas encore reportée dans `eas.json` | § 1.3, point 2 ; en attendant, choisir `android`, ou `soumettre : non` |
+| « eas whoami a échoué » | jeton révoqué ou expiré | recréer le jeton, mettre à jour le secret |
+| « Le build a échoué » sur iOS | aucune clé Apple dans EAS | clé API App Store Connect dans EAS, ou un passage `--interactive` |
+| « Envoi Android refusé » | compte de service sans droit sur l'app, API non activée, app absente de la Play Console | § 1.3, *Play Console* |
+| job expiré (4 h) | file d'attente d'EAS | les builds continuent sur expo.dev : les envoyer plus tard avec `scripts/tools/eas-release.sh --submit-only <id>` |
+
+Le workflow `CI` (`ci.yml`) se lance lui aussi à la main
+(*Actions → CI → Run workflow*) : il rejoue les vérifications et produit un APK
+`preview` interne, pour les essais du développeur — jamais pour les tablettes
+des enfants (§ 5).
+
+### 2.4 bis Les autres chemins
 
 - **Un poste avec Internet** (celui du propriétaire, où eas-cli est déjà
   connecté au compte `okimy`) : `EAS_CLI=eas scripts/tools/eas-release.sh`.
   C'est le plus simple pour le premier passage interactif.
-- **GitHub Actions** : les runners de GitHub joignent expo.dev. Il suffit d'un
-  secret `EXPO_TOKEN` dans le dépôt et d'un workflow qui appelle le script.
-  Celui de `.github/workflows/ci.yml` ne peut pas servir en l'état (§ 2.6).
 - **EAS Workflows** (`.eas/workflows/*.yml`) : les builds sont déclenchés par un
-  push GitHub, une fois l'app GitHub d'Expo liée au dépôt. Le conteneur n'a
-  alors besoin que de pousser sur GitHub. Cela demande un fichier de workflow,
-  absent aujourd'hui.
+  push GitHub, une fois l'app GitHub d'Expo liée au dépôt. Cela demande un
+  fichier de workflow, absent aujourd'hui, et contournerait les garde-fous du
+  script : le workflow GitHub ci-dessus est préféré.
 
 ### 2.5 Ce qui a été vérifié sans réseau (4 octobre 2026)
 
@@ -285,7 +363,7 @@ ECOLNA_RELEASE=1 ECOLNA_ANDROID_PACKAGE=td.ecolna.app ECOLNA_IOS_BUNDLE_ID=td.ec
 |---|---|
 | Nom, version | `ECOLNA`, `1.0.0` (numéros de build gérés par EAS : `appVersionSource: remote`, `autoIncrement`) |
 | Identifiants | Android `td.ecolna.app`, iOS `td.ecolna.app` |
-| Permissions Android | `INTERNET`, `SYSTEM_ALERT_WINDOW`, `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` et `AD_ID` bloquées ; liste `permissions` vide au prebuild |
+| Permissions Android | `INTERNET`, `ACCESS_NETWORK_STATE`, `SYSTEM_ALERT_WINDOW`, `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` et `AD_ID` bloquées (revérifié le 4 octobre 2026 après l'ajout d'`ACCESS_NETWORK_STATE`) ; liste `permissions` vide au prebuild. Restent attendues dans l'AAB : `VIBRATE` et `MODIFY_AUDIO_SETTINGS` |
 | Sauvegarde Android | `allowBackup: false` |
 | Orientation, tablette | `default` (les deux sens), `supportsTablet: true` |
 | Chiffrement | `ITSAppUsesNonExemptEncryption: false` (pas de question de conformité export à chaque build) |
@@ -311,20 +389,27 @@ autres. Depuis un poste, une CI ou un conteneur autorisé à joindre
 vérification de plus y échoue, c'est un vrai problème à traiter, pas à
 accepter.
 
-### 2.6 Modifications recommandées hors de ce document
+### 2.6 Modifications hors de ce document
 
-Ni `eas.json` ni `app.config.ts` n'ont été modifiés. Ce qu'il faudrait y
-changer :
+Faites le 4 octobre 2026 :
 
-| Fichier | Changement | Pourquoi |
+| Fichier | Changement |
+|---|---|
+| `eas.json` | `submit.production.android.applicationId` et `submit.production.ios.bundleIdentifier` : `td.ecolna.app` (piège 1 du § 2.1 réglé, schéma validé par `@expo/eas-json` 24.9.0) |
+| `scripts/tools/eas-release.sh` | vérifie aussi `ACCESS_NETWORK_STATE`, et que les identifiants de soumission égalent ceux du build |
+| `.github/workflows/ci.yml` | `workflow_dispatch` ajouté : le job `preview-build` peut enfin tourner |
+| `.github/workflows/release-eas.yml` | nouveau : build de production et envoi en test, à la main (§ 2.4) |
+| `.gitignore` | clés JSON de compte de service Google, `*.keystore`, `credentials.json`, jetons |
+| `app.config.ts` | `ACCESS_NETWORK_STATE` bloquée |
+| `scripts/tools/capture-ios-screenshots.mjs` | aligné sur les dix plans de `store/screenshots/plan.json` |
+
+Restent à faire :
+
+| Fichier | Changement | Par qui |
 |---|---|---|
-| `eas.json` | `submit.production.ios.ascAppId` : l'Apple ID numérique de la fiche | indispensable à `eas submit` iOS sans interaction |
-| `eas.json` | `submit.production.android.applicationId: "td.ecolna.app"` et `submit.production.ios.bundleIdentifier: "td.ecolna.app"` | rendre `eas submit` juste même lancé à la main, sans les variables (piège 1 du § 2.1) |
-| `app.config.ts` | remplacer le commentaire « Store identifiers are placeholders… » par la décision, une fois `td.ecolna.app` confirmé | le commentaire contredit `eas.json` et ce document |
-| `.github/workflows/ci.yml` | ajouter `workflow_dispatch:` sous `on:` | le job `preview-build` ne se déclenche que sur `workflow_dispatch`, absent des déclencheurs : il ne peut jamais tourner |
-| `.gitignore` | ajouter un motif pour les clés JSON de compte de service (par exemple `*service-account*.json`) | `*.p8` est couvert, un JSON Google ne l'est pas |
-| `scripts/tools/capture-ios-screenshots.mjs` | aligner sa liste sur les dix plans de `store/screenshots/plan.json` | il suit encore l'ancien plan de neuf captures |
-| `package.json` | `build:production` appelle `eas` sans les garde-fous | préférer `scripts/tools/eas-release.sh` |
+| `eas.json` | `submit.production.ios.ascAppId` : l'Apple ID numérique de la fiche App Store Connect | le propriétaire, une fois la fiche créée (§ 1.3) |
+| `app.config.ts` | remplacer le commentaire « Store identifiers are placeholders… » par la décision, une fois `td.ecolna.app` confirmé | tâche de code, après le § 1.1 |
+| `package.json` | `build:production` appelle `eas` sans les garde-fous | préférer `scripts/tools/eas-release.sh` ou le workflow |
 
 ---
 
@@ -333,8 +418,9 @@ changer :
 Dans cet ordre, sans en sauter une étape.
 
 1. **Préparer.** § 1 terminé ; `scripts/tools/eas-release.sh --dry-run` vert.
-2. **Construire et envoyer en test.** `scripts/tools/eas-release.sh`
-   (`--interactive` la toute première fois). Résultat : un AAB dans la Play
+2. **Construire et envoyer en test.** *Actions → Release EAS → Run workflow*
+   (§ 2.4), ou `scripts/tools/eas-release.sh` sur un poste (`--interactive` la
+   toute première fois). Résultat : un AAB dans la Play
    Console, piste *Test interne*, en **brouillon** ; un IPA dans App Store
    Connect.
 3. **Ouvrir le test interne Play.** *Tests → Test interne* : la version
@@ -343,6 +429,13 @@ Dans cet ordre, sans en sauter une étape.
    *Vérifier la version* → *Lancer le déploiement*. Le test interne ne passe
    pas par la revue et est disponible en quelques minutes ; partager le lien
    d'inscription aux testeurs.
+
+   **Étape 3 bis — si la console affiche « Demander l'accès à la production »** (§ 0) :
+   promouvoir le même AAB vers une piste *Test fermé*, y inscrire au moins
+   12 testeurs, et les garder inscrits 14 jours consécutifs ; puis remplir la
+   demande d'accès à la production. Les 14 jours ne comptent que tant qu'au
+   moins 12 testeurs restent inscrits sans interruption : s'y prendre dès le
+   premier build, avec quelques testeurs de plus que le minimum.
 4. **Ouvrir TestFlight.** Le build apparaît après traitement par Apple (10 à
    30 minutes). La conformité export est déjà réglée par
    `ITSAppUsesNonExemptEncryption: false`. Les testeurs internes (membres de
@@ -377,10 +470,14 @@ Dans cet ordre, sans en sauter une étape.
 
 ## 4. Captures d'écran
 
-**Produites** : 10 iPhone 6,9" (1320 × 2868), 10 iPad 13" paysage
-(2752 × 2064), 8 téléphone Play (1080 × 1920), 8 tablette Play
-(1920 × 1200, le même jeu pour les emplacements 7" et 10"), dans
-`store/screenshots/out/`. Les plans, leur ordre et leurs légendes vivent
+**Produites** (deuxième série, 4 octobre 2026) : 10 iPhone 6,9"
+(1320 × 2868), 10 iPad 13" paysage (2752 × 2064), 8 téléphone Play
+(1080 × 1920), 8 tablette Play (**1920 × 1080, 16:9**, depuis une capture de
+tablette Android 10" en 2560 × 1600, le même jeu pour les emplacements 7" et
+10"), dans `store/screenshots/out/`. Les badges du profil de démonstration
+sont calculés par les règles de l'app, l'écran de réussite est celui d'une
+leçon réellement terminée, et l'espace parent est photographié après avoir
+franchi la porte. Les plans, leur ordre et leurs légendes vivent
 **uniquement** dans `store/screenshots/plan.json`. Ce document ne les recopie
 pas, pour qu'ils ne divergent pas.
 
@@ -439,18 +536,21 @@ l'enseignant, pas pour les tablettes des enfants.
    `store/google-play/graphics/`.
 2. **Contenu de l'application** (index : `store/google-play/declarations.md`) :
    - Politique de confidentialité → l'URL du § 1.4.
-   - **Public cible** : enfants de moins de 13 ans, donc l'app entre dans le
-     **programme Familles**. ECOLNA y est conforme : aucune publicité, aucune
-     collecte, aucun SDK tiers, contrôle d'accès adulte
-     (`store/google-play/families-checklist.md`).
-   - **Sécurité des données** : aucune donnée collectée, aucune donnée
-     partagée (`store/google-play/data-safety.md`).
+   - **Public cible** : **6-8 ans**, et cette tranche seule : la **politique
+     Familles** s'applique d'office, sans candidature
+     (`store/google-play/target-audience.md`). ECOLNA en remplit les
+     exigences : aucune publicité, aucune collecte, aucun SDK tiers, porte
+     parentale (`store/google-play/families-checklist.md`).
+   - **Sécurité des données** : « Non » à la question de collecte ou de
+     partage ; le formulaire s'arrête là (`store/google-play/data-safety.md`).
    - **Classification du contenu** : questionnaire IARC
      (`store/google-play/content-rating-iarc.md`).
    - **Publicités** : « Non ». **Identifiant publicitaire** : non utilisé.
-3. **Test interne** : la liste de testeurs du § 1.3.
-4. **Build et envoi** : `scripts/tools/eas-release.sh --android`. `eas.json`
-   envoie sur la piste `internal` en statut `draft` ; la promotion vers la
+3. **Test interne** : la liste de testeurs du § 1.3. **Test fermé** : à
+   préparer si la tâche « Demander l'accès à la production » apparaît (§ 0).
+4. **Build et envoi** : *Actions → Release EAS* avec `android` (§ 2.4), ou
+   `scripts/tools/eas-release.sh --android`. `eas.json` envoie sur la piste
+   `internal` en statut `draft` ; la promotion vers la
    production se fait ensuite dans la Play Console (§ 3, étape 8).
 
 ## 7. App Store Connect
@@ -458,7 +558,8 @@ l'enseignant, pas pour les tablettes des enfants.
 1. **Fiche** créée au § 1.3, `ascAppId` reporté dans `eas.json`.
 2. **Informations sur l'app** : catégorie, URL de confidentialité et de
    support (§ 1.4), **Confidentialité de l'app** : « Données non collectées »
-   (`store/app-store/privacy-answers.md`), **Classification par âge**
+   (`store/app-store/privacy-answers.md`), **Classification par âge**,
+   questionnaire 2025 : 4+, « Made for Kids » 6–8 ans
    (`store/app-store/age-rating.md`).
 3. **Catégories** : décidé, **Enfants (6–8 ans)** en catégorie principale et
    Éducation en secondaire (`store/app-store/age-rating.md` § 1). ECOLNA en
@@ -468,8 +569,8 @@ l'enseignant, pas pour les tablettes des enfants.
    disent que l'app fonctionne hors connexion et **qu'aucun compte n'est
    nécessaire**, sinon un examinateur cherche un identifiant de test. Le
    téléphone du contact de revue reste à fournir.
-5. **Build et envoi** : `scripts/tools/eas-release.sh --ios`. Le build arrive
-   dans TestFlight ; la soumission en revue se fait à la main (§ 3, étape 8).
+5. **Build et envoi** : *Actions → Release EAS* avec `ios` (§ 2.4), ou
+   `scripts/tools/eas-release.sh --ios`. Le build arrive dans TestFlight ; la soumission en revue se fait à la main (§ 3, étape 8).
 
 ---
 

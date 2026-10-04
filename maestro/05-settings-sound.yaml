@@ -1,23 +1,17 @@
 # Couper le son depuis l'espace parent, et vérifier la persistance.
+# La porte pose une opération tirée au hasard : le sous-parcours la lit et la calcule.
 appId: td.ecolna.app.dev
 ---
 - launchApp
 - tapOn: 'Parents'
-# 7 × 6 = 42
-- tapOn: 'Pour entrer, écrivez le résultat de cette opération.:'
-- inputText: '42'
-- hideKeyboard
-- tapOn: 'Entrer'
-- assertVisible: 'Tableau de bord'
+- runFlow: subflows/passer-la-porte-parentale.yaml
 - tapOn: 'Paramètres'
 - assertVisible: 'Son'
 - tapOn: 'Son'
 - stopApp
+# Au relancement, la session parent est refermée : la porte se repose.
 - launchApp
 - tapOn: 'Parents'
-- tapOn: 'Pour entrer, écrivez le résultat de cette opération.:'
-- inputText: '42'
-- hideKeyboard
-- tapOn: 'Entrer'
+- runFlow: subflows/passer-la-porte-parentale.yaml
 - tapOn: 'Paramètres'
 - assertVisible: 'Son'

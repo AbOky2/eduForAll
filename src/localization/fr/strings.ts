@@ -321,7 +321,17 @@ export const fr = {
     gateQuestion: 'Pour entrer, écrivez le résultat de cette opération :',
     gatePlaceholder: 'Votre réponse',
     gateEnter: 'Entrer',
-    gateWrong: 'Ce n’est pas la bonne réponse.',
+    /**
+     * L'opération de la porte, tirée au hasard (deux facteurs de 6 à 9).
+     * Insécables partout : elle ne se coupe jamais en deux lignes.
+     */
+    gateOperation: (left: number, right: number) => `${left}\u00a0×\u00a0${right}\u00a0=\u00a0?`,
+    /**
+     * Après une erreur, l'opération change : le dire, sinon le parent croit
+     * s'être trompé de ligne. La seconde phrase est insécable : elle passe à
+     * la ligne d'un bloc, jamais « opération. » seul.
+     */
+    gateWrong: 'Ce n’est pas la bonne réponse. Voici\u00a0une\u00a0autre\u00a0opération.',
     dashboardTitle: (firstName: string) => `Tableau de bord ${of(firstName)}`,
     dashboardSubtitle: 'Suivez sa progression et ses réussites.',
     currentLevel: 'Niveau actuel',
@@ -354,21 +364,45 @@ export const fr = {
   settings: {
     title: 'Paramètres',
     sound: 'Son',
-    language: 'Langue',
-    french: 'Français',
-    chadianArabic: 'Arabe tchadien',
-    comingSoon: 'Bientôt disponible',
+    /**
+     * La classe de l'enfant actif, promise à la création du profil
+     * (`profile.levelAdultNote`). Changer de classe garde toute la progression.
+     */
+    levelTitle: (firstName: string) => `Classe ${of(firstName)}`,
+    levelChoice: { CP1: 'CP1, première année', CP2: 'CP2, deuxième année' },
+    levelNote: 'Changer de classe garde toutes ses leçons, ses étoiles et\u00a0ses\u00a0badges.',
+    levelConfirmTitle: (firstName: string, level: string) =>
+      `Passer ${firstName} en ${level}\u00a0?`,
+    levelConfirmMessage: (level: string) =>
+      `Ses leçons terminées, ses étoiles et ses badges sont gardés. L’accueil proposera ensuite les leçons du ${level}.`,
+    levelConfirm: (level: string) => `Oui, passer en ${level}`,
     offlineInfo: 'Sans internet',
     offlineStatus: 'Tout est téléchargé',
     about: 'À propos',
     /** La version de l'application, dans la carte « À propos ». */
     aboutVersion: (version: string) => `Version ${version}`,
     /**
-     * La source officielle : le titre EXACT de `OFFICIAL_SOURCE.title`
+     * La source du programme : le titre EXACT de `OFFICIAL_SOURCE.title`
      * (src/content/curriculum/official-program.ts) — un test le vérifie.
+     * « Construit d’après », jamais « conforme » : l'app cite le programme,
+     * elle n'en a reçu aucune validation (store/shared/mentions-programme-officiel.md).
      */
-    aboutCompliance: 'Conforme aux « Programmes Réactualisés de l’Enseignement Primaire »',
+    aboutCompliance:
+      'Construit d’après les «\u00a0Programmes Réactualisés de l’Enseignement Primaire\u00a0»',
     aboutSource: 'MEN / Centre national des curricula, N’Djaména, 2004',
+    /**
+     * La phrase d'indépendance, mot pour mot celle des deux fiches
+     * (store/shared/mentions-programme-officiel.md) — un test la compare.
+     * Tout endroit qui nomme le ministère la porte.
+     */
+    aboutIndependence:
+      'ECOLNA est une publication indépendante. Elle n’est ni éditée ni validée par le Ministère de l’Éducation Nationale du Tchad, auquel elle n’est pas affiliée.',
+    /**
+     * Les licences tierces, publiées sur la page de support : l'intitulé, puis
+     * l'adresse sur sa propre ligne. Texte simple, aucun lien (catégorie Enfants).
+     */
+    aboutLicences: 'Licences\u00a0: polices, icônes et voix',
+    aboutLicencesAddress: 'aboky2.github.io/eduForAll/support.html',
     privacy: 'Confidentialité',
     diagnostics: 'Diagnostic',
     resetProgress: 'Réinitialiser la progression',
@@ -386,6 +420,16 @@ export const fr = {
       'Le prénom et l’avatar servent uniquement à accueillir l’enfant dans l’application.',
       'Supprimer l’application supprime toutes les données.',
     ],
+    /**
+     * Sous les engagements : l'adresse de la politique complète et le contact
+     * de l'éditeur (store/shared/coordonnees-fiches.md), chacun sous son
+     * intitulé, en texte simple — aucun lien, donc ni navigateur ni sortie de
+     * l'app (catégorie Enfants).
+     */
+    privacyPolicyLabel: 'Politique de confidentialité complète',
+    privacyPolicyAddress: 'aboky2.github.io/eduForAll',
+    privacyContactLabel: 'Contact de l’éditeur',
+    privacyContact: 'issaokiabderamane@gmail.com',
     diagnosticsContent: 'Version du contenu',
     diagnosticsMigrations: 'Migrations appliquées',
     diagnosticsProfiles: 'Profils sur cet appareil',

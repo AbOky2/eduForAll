@@ -20,9 +20,12 @@
  *   grands moments. Aucune couleur n'est écrite ici : tout vient des jetons
  *   (src/design-system/tokens/colors.ts).
  *
- * Entrée  : store/screenshots/plan.json
- *           store/screenshots/raw/<id>.png           capture téléphone
- *           store/screenshots/raw/<id>@tablette.png  capture tablette (paysage)
+ * Entrée  : store/screenshots/plan.json — ses « formats » disent, pour chaque
+ *           fiche, sa taille, sa capture brute (suffixe et dimensions
+ *           exigées), son gabarit et les contraintes de la console :
+ *           store/screenshots/raw/<id>.png                    iPhone 6,9"
+ *           store/screenshots/raw/<id>@tablette.png           iPad 13" paysage
+ *           store/screenshots/raw/<id>@tablette-android.png   tablette Android 10" paysage
  * Sortie  : store/screenshots/out/<format>/<id>.png  dimensions exactes du format,
  *           PNG 24 bits sans transparence (exigé par Play, sûr pour Apple)
  *
@@ -33,7 +36,9 @@
  *        [--planche <fichier.png>]   planche de contrôle : toutes les sorties en
  *                                    vignettes de 300 px de haut, la taille d'une
  *                                    fiche de store (la légende doit s'y lire)
- *        [--plan <plan.json>] [--sortie <dossier>]   essais hors de la série livrée
+ *        [--plan <plan.json>] [--sortie <dossier>] [--brutes <dossier>]
+ *                                    essais hors de la série livrée (--brutes : un
+ *                                    tournage d'essai, au lieu de store/screenshots/raw)
  *
  * Moteur : Playwright, hors du dépôt (aucune dépendance npm ajoutée).
  *   PLAYWRIGHT_MODULE=<chemin du paquet playwright>  (défaut : « playwright »)
@@ -46,7 +51,6 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
-const RAW = join(ROOT, 'store/screenshots/raw');
 
 /** Limites des consoles : nombre de captures par type d'appareil, poids. */
 const MAX_APPLE = 10;
@@ -54,9 +58,16 @@ const MAX_PLAY = 8;
 const POIDS_MAX = 8 * 1024 * 1024;
 
 /**
- * Le gabarit, en unités relatives : u = 1 % de la largeur (téléphone, portrait)
- * ou de la hauteur (tablette, paysage). Un seul gabarit par famille de format :
- * l'App Store et Play montrent la même composition, à leurs dimensions.
+ * Les gabarits, en unités relatives : u = 1 % de la largeur (téléphone,
+ * portrait) ou de la hauteur (tablettes, paysage). Chaque format de plan.json
+ * nomme le sien (« gabarit »).
+ *
+ * - telephone, tablette : légende en deux lignes au plus au-dessus de
+ *   l'appareil, qui prend toute la hauteur restante.
+ * - tablette-large (Play, 16:9) : la capture d'abord. L'appareil occupe une
+ *   part fixe de la LARGEUR (« largeurEcran », 75 % : la consigne d'un
+ *   exercice doit se lire en vignette), la légende tient sur UNE ligne
+ *   au-dessus, et le tout est centré verticalement.
  */
 const GABARITS = {
   telephone: {
@@ -80,6 +91,17 @@ const GABARITS = {
     coteMin: 8,
     lisere: 0.85,
     rayon: 0.022,
+  },
+  'tablette-large': {
+    lignes: 1,
+    largeurEcran: 75, // en % de la LARGEUR du format
+    mesure: 92, // en % de la largeur : la ligne de légende
+    corpsMax: 6.2, // en u de hauteur
+    interligne: 1.1,
+    ecart: 2.6, // légende → appareil
+    margeMin: 3, // air minimal au-dessus et au-dessous
+    lisere: 0.75,
+    rayon: 0.016,
   },
 };
 
@@ -109,6 +131,7 @@ const planche = option('planche');
 // autre dossier de sortie.
 const PLAN_JSON = resolve(option('plan') ?? join(ROOT, 'store/screenshots/plan.json'));
 const OUT = resolve(option('sortie') ?? join(ROOT, 'store/screenshots/out'));
+const RAW = resolve(option('brutes') ?? join(ROOT, 'store/screenshots/raw'));
 
 // ── Jetons ─────────────────────────────────────────────────────────────────
 
@@ -280,10 +303,56 @@ const dataUri = (fichier) => `data:image/png;base64,${readFileSync(fichier).toSt
 
 // ── Gabarit ────────────────────────────────────────────────────────────────
 
-function gabarit(spec, brute, famille, corps) {
-  const G = GABARITS[famille];
+/** u : 1 % de la largeur en portrait, de la hauteur en paysage. */
+const uniteDe = (spec) => (spec.w > spec.h ? spec.h / 100 : spec.w / 100);
+
+/** Gabarit « tablette-large » : appareil à largeur fixe, légende sur une ligne. */
+function gabaritLarge(spec, brute, G, corps) {
   const { w: W, h: H } = spec;
-  const u = famille === 'tablette' ? H / 100 : W / 100;
+  const u = uniteDe(spec);
+  const lisere = Math.max(2, Math.round(G.lisere * u));
+  const ecranW = Math.round((G.largeurEcran / 100) * W);
+  const ecranH = (ecranW * brute.h) / brute.w;
+  const ligne = G.interligne * corps;
+  const ecart = G.ecart * u;
+  const haut = (H - (ligne + ecart + ecranH + 2 * lisere)) / 2;
+  return {
+    W,
+    H,
+    u,
+    legende: {
+      x: (W * (1 - G.mesure / 100)) / 2,
+      y: haut,
+      w: (W * G.mesure) / 100,
+      h: ligne,
+      corps,
+      interligne: G.interligne,
+    },
+    appareil: {
+      x: (W - ecranW - 2 * lisere) / 2,
+      y: haut + ligne + ecart,
+      ecranW,
+      ecranH,
+      lisere,
+      rayon: Math.round(ecranW * G.rayon),
+    },
+  };
+}
+
+/** Le plus grand corps que la hauteur laisse à la ligne de légende (tablette-large). */
+function corpsMaxLarge(spec, brute, G) {
+  const u = uniteDe(spec);
+  const lisere = Math.max(2, Math.round(G.lisere * u));
+  const ecranH = (Math.round((G.largeurEcran / 100) * spec.w) * brute.h) / brute.w;
+  const reste = spec.h - 2 * G.margeMin * u - G.ecart * u - ecranH - 2 * lisere;
+  return Math.min(G.corpsMax * u, reste / G.interligne);
+}
+
+function gabarit(spec, brute, nom, corps) {
+  const G = GABARITS[nom];
+  if (G.lignes === 1) return gabaritLarge(spec, brute, G, corps);
+  const { w: W, h: H } = spec;
+  const u = uniteDe(spec);
   const haut = G.haut * u;
   const bloc = 2 * G.interligne * corps;
   const ecart = G.ecart * u;
@@ -365,26 +434,26 @@ function pageComposition(css, g, theme, legende, image, J) {
   <div class="cadre"><img src="${image}" alt=""></div>`;
 }
 
-/** Plus grand corps (px entiers) où toutes les légendes tiennent en deux lignes. */
-async function corpsDeSerie(page, css, legendes, largeur, corpsMax, interligne) {
+/** Plus grand corps (px entiers) où toutes les légendes tiennent en `lignesMax` lignes. */
+async function corpsDeSerie(page, css, legendes, largeur, corpsMax, interligne, lignesMax) {
   await page.setContent(`<!doctype html><meta charset="utf-8"><style>${CSS_COMMUN(css)}
     .m{position:absolute;left:0;top:0;width:${largeur}px;display:block}
     .m h1{line-height:${interligne}}</style>
     ${legendes.map((h) => `<div class="legende m"><h1>${h}</h1></div>`).join('')}`);
   await page.evaluate(() => document.fonts.ready);
   return page.evaluate(
-    ({ max, interligne: lh }) => {
+    ({ max, interligne: lh, n }) => {
       const titres = [...document.querySelectorAll('.m h1')];
       const lignes = (h, c) => {
         h.style.fontSize = `${c}px`;
         return Math.round(h.getBoundingClientRect().height / (c * lh));
       };
       for (let c = Math.floor(max); c > 20; c -= 1) {
-        if (titres.every((h) => lignes(h, c) <= 2)) return c;
+        if (titres.every((h) => lignes(h, c) <= n)) return c;
       }
       return 20;
     },
-    { max: corpsMax, interligne },
+    { max: corpsMax, interligne, n: lignesMax },
   );
 }
 
@@ -510,6 +579,31 @@ async function rendrePlanche(browser, css, sorties, fichier) {
   console.log(`planche de contrôle : ${fichier}`);
 }
 
+// ── Contraintes des consoles ───────────────────────────────────────────────
+
+/**
+ * Les contraintes que plan.json déclare pour un format (« contraintes ») :
+ * rapport exact (« 16:9 »), côtés minimal et maximal, rapport long/court
+ * maximal. Vérifiées sur le format avant de composer, puis sur chaque sortie
+ * (ses dimensions doivent être exactement celles du format).
+ */
+function contraintesFormat(format, spec) {
+  const c = spec.contraintes ?? {};
+  const e = [];
+  const [court, long] = [Math.min(spec.w, spec.h), Math.max(spec.w, spec.h)];
+  if (c.ratio) {
+    const [a, b] = c.ratio.split(':').map(Number);
+    if (spec.w * b !== spec.h * a) e.push(`${spec.w}×${spec.h} n'est pas en ${c.ratio}`);
+  }
+  if (c.coteMin && court < c.coteMin) e.push(`côté de ${court} px, minimum ${c.coteMin}`);
+  if (c.coteMax && long > c.coteMax) e.push(`côté de ${long} px, maximum ${c.coteMax}`);
+  if (c.rapportMax && long / court > c.rapportMax)
+    e.push(`rapport ${(long / court).toFixed(2)}, maximum ${c.rapportMax}`);
+  if (format.startsWith('play-') && !spec.contraintes)
+    e.push('format Play sans « contraintes » dans plan.json');
+  return e;
+}
+
 // ── Programme ──────────────────────────────────────────────────────────────
 
 const PLAN = JSON.parse(readFileSync(PLAN_JSON, 'utf8'));
@@ -557,10 +651,19 @@ const sorties = {};
 let produites = 0;
 
 for (const [format, spec] of formats) {
-  const famille = format.includes('tablette') || format.includes('ipad') ? 'tablette' : 'telephone';
   const play = format.startsWith('play-');
   const plans = PLAN.plans.filter((p) => !play || p.play !== false);
-  const G = GABARITS[famille];
+  const G = GABARITS[spec.gabarit];
+  const source = spec.capture;
+  const avant = erreurs.length;
+  if (!G)
+    erreurs.push(
+      `${format} : gabarit « ${spec.gabarit} » inconnu (${Object.keys(GABARITS).join(', ')})`,
+    );
+  if (!source || typeof source.suffixe !== 'string' || !source.w || !source.h)
+    erreurs.push(`${format} : « capture » { suffixe, w, h } manquante dans plan.json`);
+  for (const e of contraintesFormat(format, spec)) erreurs.push(`${format} : ${e}`);
+  if (erreurs.length > avant) continue;
   const dossier = join(OUT, format);
   mkdirSync(dossier, { recursive: true });
 
@@ -571,10 +674,7 @@ for (const [format, spec] of formats) {
     erreurs.push(`${format} : ${plans.length} capture(s), il en faut ${spec.min}`);
 
   const brutes = Object.fromEntries(
-    plans.map((p) => [
-      p.id,
-      join(RAW, famille === 'tablette' ? `${p.id}@tablette.png` : `${p.id}.png`),
-    ]),
+    plans.map((p) => [p.id, join(RAW, `${p.id}${source.suffixe}.png`)]),
   );
   const manquantes = plans.filter((p) => !existsSync(brutes[p.id]));
   for (const p of manquantes)
@@ -582,13 +682,18 @@ for (const [format, spec] of formats) {
   const presentes = plans.filter((p) => existsSync(brutes[p.id]));
   if (presentes.length === 0) continue;
 
-  // Toutes les captures d'une famille ont les mêmes dimensions : le cadre est le même.
-  const dims = presentes.map((p) => ({ id: p.id, ...entetePng(brutes[p.id]) }));
-  const brute = dims[0];
-  for (const d of dims) {
-    if (d.w !== brute.w || d.h !== brute.h)
-      erreurs.push(`${d.id} (${famille}) : ${d.w}×${d.h}, attendu ${brute.w}×${brute.h}`);
-  }
+  // Chaque capture brute a les dimensions exactes de son appareil (plan.json) :
+  // le cadre est le même pour toute la série.
+  const brute = { w: source.w, h: source.h };
+  const conformes = presentes.filter((p) => {
+    const d = entetePng(brutes[p.id]);
+    if (d.w === brute.w && d.h === brute.h) return true;
+    erreurs.push(
+      `${relative(ROOT, brutes[p.id])} : ${d.w}×${d.h}, attendu ${brute.w}×${brute.h} (${format})`,
+    );
+    return false;
+  });
+  if (conformes.length < presentes.length) continue;
 
   // Une taille de légende pour toute la série du format, calculée sur TOUS ses
   // plans (et non sur les seuls --only) : une recomposition partielle reste
@@ -597,7 +702,7 @@ for (const [format, spec] of formats) {
     viewport: { width: spec.w, height: spec.h },
     deviceScaleFactor: 1,
   });
-  const u = famille === 'tablette' ? spec.h / 100 : spec.w / 100;
+  const u = uniteDe(spec);
   const legendes = Object.fromEntries(
     presentes.map((p) => {
       const theme = FONDS[p.fond ?? 'toile'];
@@ -608,13 +713,15 @@ for (const [format, spec] of formats) {
       return [p.id, legendeHtml(p, theme, J, format === formats[0][0] ? alertes : [])];
     }),
   );
+  const lignesMax = G.lignes ?? 2;
   const corps = await corpsDeSerie(
     page,
     css,
     Object.values(legendes).map((l) => l.html),
-    G.mesure * u,
-    G.corpsMax * u,
+    G.lignes === 1 ? (spec.w * G.mesure) / 100 : G.mesure * u,
+    G.lignes === 1 ? corpsMaxLarge(spec, brute, G) : G.corpsMax * u,
     G.interligne,
+    lignesMax,
   );
 
   sorties[format] = [];
@@ -636,7 +743,7 @@ for (const [format, spec] of formats) {
           `${format}/${p.id} : ${role} ${couleur} sur ${theme.fond} = ${ratio.toFixed(1)}:1 (< 4,5:1)`,
         );
     }
-    const g = gabarit(spec, brute, famille, corps);
+    const g = gabarit(spec, brute, spec.gabarit, corps);
     const image = dataUri(brutes[p.id]);
     await page.setContent(pageComposition(css, g, theme, legendes[p.id].html, image, J));
     await page.evaluate(() =>
@@ -649,7 +756,12 @@ for (const [format, spec] of formats) {
         h.getBoundingClientRect().height / parseFloat(getComputedStyle(h).lineHeight),
       );
     });
-    if (lignes > 2) erreurs.push(`${format}/${p.id} : légende sur ${lignes} lignes`);
+    if (lignes > lignesMax)
+      erreurs.push(`${format}/${p.id} : légende sur ${lignes} lignes (${lignesMax} au plus)`);
+    if (g.appareil.ecranW < ((G.largeurEcran ?? 0) / 100) * spec.w - 1)
+      erreurs.push(`${format}/${p.id} : capture à ${g.appareil.ecranW} px, moins de ${G.largeurEcran} % de la largeur`);
+    if (g.legende.y < 0 || g.appareil.y + g.appareil.ecranH + 2 * g.appareil.lisere > spec.h)
+      erreurs.push(`${format}/${p.id} : la composition déborde du format`);
 
     const pire = await verifierCoins(page, image, (g.appareil.rayon * brute.w) / g.appareil.ecranW);
     if (pire > 10)
@@ -679,7 +791,10 @@ for (const [format, spec] of formats) {
     );
   }
   await page.close();
-  console.log(`${format} : légende ${corps} px, ${sorties[format].length} capture(s)`);
+  const largeur = gabarit(spec, brute, spec.gabarit, corps).appareil.ecranW;
+  console.log(
+    `${format} : légende ${corps} px, capture ${largeur} px de large (${Math.round((largeur / spec.w) * 100)} %), ${sorties[format].length} capture(s)`,
+  );
 
   // Série complète : on retire ce qui n'appartient plus au plan (plan supprimé,
   // passé en « play » : false…) pour ne jamais téléverser une capture périmée.
