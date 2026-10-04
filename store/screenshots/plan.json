@@ -1,5 +1,6 @@
 {
   "_lisezMoi": "Un plan = une capture brute du VRAI code de l'app (store/screenshots/raw/), encadrée par scripts/tools/compose-store-screenshots.mjs. Les captures brutes sont tournées par le banc de rendu web (scripts/web-preview/capture.cjs, profil de démonstration « Amina ») aux résolutions exactes des appareils : iPhone 6,9\" (440 × 956 ×3) et iPad 13\" paysage (1376 × 1032 ×2). « play » : false = absent des fiches Play (8 captures au plus par type d'appareil).",
+  "_miseEnPage": "Champs de mise en page, lus par le compositeur (le texte des légendes n'en dépend pas). « fond » : nuit, toile, bleu, soleil, langage, lecture, ecriture, calcul — un fond de la palette v4, qui fixe aussi la couleur du texte, de l'accent et du cadre. « accent » : un groupe de mots (ou une liste) de la légende, mis en couleur ; s'il n'y figure plus, la légende est rendue sans accent et le compositeur le signale. « accentCouleurs » (facultatif) : un jeton par accent, ex. subjectColors.language.deep.",
   "formats": {
     "app-store-iphone": {
       "w": 1320,
@@ -30,62 +31,83 @@
     {
       "id": "01-accueil",
       "ecran": "Accueil enfant : la leçon du jour, la révision, les quatre matières",
-      "legende": "Le programme officiel du CP, sans internet.",
-      "play": true
+      "legende": "Le CP tchadien, même sans internet.",
+      "play": true,
+      "fond": "nuit",
+      "accent": "sans internet"
     },
     {
       "id": "02-image",
       "ecran": "Langage — écouter le mot, toucher l'image (tambour, ballon, boubou)",
       "legende": "Écouter le mot, trouver l'image.",
-      "play": true
+      "play": true,
+      "fond": "langage",
+      "accent": "trouver l'image"
     },
     {
       "id": "03-ecriture",
       "ecran": "Écriture — l'ardoise : tracer la lettre « a », la bille montre le chemin",
       "legende": "Ses premières lettres, tracées du doigt.",
-      "play": true
+      "play": true,
+      "fond": "ecriture",
+      "accent": "tracées du doigt"
     },
     {
       "id": "04-parcours",
       "ecran": "Parcours CP1 : les mondes de l'année, « tu es ici »",
       "legende": "Toute l'année du CP, semaine après semaine.",
-      "play": true
+      "play": true,
+      "fond": "bleu",
+      "accent": "Toute l'année"
     },
     {
       "id": "05-lecture",
       "ecran": "Lecture — toucher la syllabe entendue",
       "legende": "Les sons et les syllabes, dits à voix haute.",
-      "play": true
+      "play": true,
+      "fond": "lecture",
+      "accent": "à voix haute"
     },
     {
       "id": "06-calcul",
       "ecran": "Calcul — compter les arbres",
       "legende": "Compter avec des objets familiers.",
-      "play": true
+      "play": true,
+      "fond": "calcul",
+      "accent": "objets familiers"
     },
     {
       "id": "07-reussite",
       "ecran": "Réussite : trois étoiles et deux nouveaux badges",
       "legende": "Des encouragements, jamais de pression.",
-      "play": true
+      "play": true,
+      "fond": "soleil",
+      "accent": "jamais de pression"
     },
     {
       "id": "08-matieres",
       "ecran": "Apprendre : les quatre disciplines du programme",
       "legende": "Langage, lecture, écriture, calcul.",
-      "play": false
+      "play": false,
+      "fond": "toile",
+      "accent": ["Langage", "lecture", "écriture", "calcul"],
+      "accentCouleurs": ["subjectColors.language.deep", "subjectColors.reading.deep", "subjectColors.writing.deep", "subjectColors.math.deep"]
     },
     {
       "id": "09-badges",
       "ecran": "Mon profil : chiffres, anneaux des matières, étagère de badges",
       "legende": "Des badges qui récompensent un vrai progrès.",
-      "play": false
+      "play": false,
+      "fond": "nuit",
+      "accent": "vrai progrès"
     },
     {
       "id": "10-parent",
       "ecran": "Espace parent : chiffres, cette semaine, par discipline",
-      "legende": "Suivez ses progrès, simplement.",
-      "play": true
+      "legende": "Pour vous, ses progrès expliqués simplement.",
+      "play": true,
+      "fond": "toile",
+      "accent": "simplement"
     }
   ]
 }

@@ -1,18 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500">
-  <!-- Bannière Google Play, 1024 x 500. Google peut rogner les bords et
-       superposer un bouton de lecture au centre : tout le contenu tient dans
-       les 80 % centraux. La police est fournie au rendu
-       (scripts/tools/render-brand-assets.mjs), pas embarquée ici. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500">
+  <!-- Image de mise en avant Google Play, 1024 × 500 — v4 « Épure ».
+       Rendue par scripts/tools/render-brand-assets.mjs, qui fournit la police
+       (Ecolna Sans, assets/fonts) et vérifie que chaque couleur ci-dessous est
+       un jeton de src/design-system/tokens/colors.ts.
+
+       La même langue que la série de captures (store/screenshots/) : la nuit
+       des grands moments, le symbole de l'icône d'app, la légende de la
+       première capture (« sans internet » au soleil), et la vannerie en
+       pointillé rond de l'écran de réussite, avec les quatre emblèmes de
+       discipline (src/design-system/icons/subject-art.tsx, mêmes tracés).
+
+       Règles Google : pas de prix, pas de classement, peu de texte ; tout
+       l'essentiel tient dans les 80 % centraux (x 102 → 922), rien d'utile
+       près des bords, que certaines surfaces rognent ou recouvrent.
+
+       Jetons : night #1c2554 · nightSoft #28367a · brand #2f5bdb ·
+       reward #ffb81c · white #ffffff · slateChalk #6f769b ·
+       subjectColors.<discipline>.solid / .tintStrong. -->
+  <defs>
+    <radialGradient id="halo" cx="512" cy="250" r="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#28367a"/>
+      <stop offset="1" stop-color="#1c2554"/>
+    </radialGradient>
+  </defs>
+
   <rect width="1024" height="500" fill="#1c2554"/>
-  <g transform="translate(286 250) scale(0.26) translate(-512 -512)">
-    <path d="M512 370 C444 300 344 286 256 294 L256 740 C344 732 444 746 512 816 Z" fill="#ffffff"/>
-    <path d="M512 370 C580 300 680 286 768 294 L768 740 C680 732 580 746 512 816 Z" fill="#ffb81c"/>
-    <path d="M512 370 L512 816" stroke="#1c2554" stroke-width="40" stroke-linecap="round"/>
+  <rect width="1024" height="500" fill="url(#halo)"/>
+
+  <!-- La vannerie : deux cercles en pointillé rond autour du message. Le pas
+       divise la circonférence en un nombre entier de points (100 et 95) :
+       aucune couture. -->
+  <circle cx="512" cy="250" r="262" fill="none" stroke="#6f769b" stroke-width="5"
+          stroke-linecap="round" stroke-dasharray="0 16.462" opacity="0.32"/>
+  <circle cx="512" cy="250" r="340" fill="none" stroke="#6f769b" stroke-width="6"
+          stroke-linecap="round" stroke-dasharray="0 22.487" opacity="0.55"/>
+
+  <!-- Les quatre disciplines, en satellites sur le cercle extérieur (± 20°). -->
+  <!-- Langage — lac Tchad : deux bulles qui se répondent. -->
+  <g transform="translate(160.5 102) scale(1.3333)">
+    <circle cx="24" cy="24" r="24" fill="#0f9aa8"/>
+    <path d="M23 11.5H35.5C37.4 11.5 39 13.1 39 15V23.5C39 25.4 37.4 27 35.5 27H35V30.5L31 27H23C21.1 27 19.5 25.4 19.5 23.5V15C19.5 13.1 21.1 11.5 23 11.5Z" fill="#bfe7ea"/>
+    <path d="M12.5 18.5H28C30.2 18.5 32 20.3 32 22.5V32C32 34.2 30.2 36 28 36H18L13 40V36H12.5C10.3 36 8.5 34.2 8.5 32V22.5C8.5 20.3 10.3 18.5 12.5 18.5Z" fill="#ffffff"/>
+    <circle cx="14.6" cy="27.2" r="2" fill="#0f9aa8"/>
+    <circle cx="20.2" cy="27.2" r="2" fill="#0f9aa8"/>
+    <circle cx="25.8" cy="27.2" r="2" fill="#0f9aa8"/>
   </g>
-  <text x="400" y="232" font-family="Ecolna Sans" font-size="82" font-weight="700"
-        fill="#ffffff" letter-spacing="4">ECOLNA</text>
-  <text x="404" y="294" font-family="Ecolna Sans" font-size="30" font-weight="600"
-        fill="#ffd27a">Le programme officiel du CP.</text>
-  <text x="404" y="336" font-family="Ecolna Sans" font-size="30" font-weight="600"
-        fill="#ffd27a">Entièrement hors connexion.</text>
+  <!-- Lecture — terre cuite : un livre ouvert. -->
+  <g transform="translate(160.5 334) scale(1.3333)">
+    <circle cx="24" cy="24" r="24" fill="#e0592a"/>
+    <path d="M24 15.5C20.5 13 15.5 12.2 10 12.8C9.1 12.9 8.5 13.6 8.5 14.5V33C8.5 34 9.4 34.8 10.4 34.6C15.4 33.9 20.3 34.6 24 37Z" fill="#ffffff"/>
+    <path d="M24 15.5C27.5 13 32.5 12.2 38 12.8C38.9 12.9 39.5 13.6 39.5 14.5V33C39.5 34 38.6 34.8 37.6 34.6C32.6 33.9 27.7 34.6 24 37Z" fill="#f9d3c3"/>
+    <path d="M12.5 19.5C15.4 19.3 18.2 19.8 20.5 21M12.5 25C15.4 24.8 18.2 25.3 20.5 26.5" stroke="#e0592a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M27.5 21C29.8 19.8 32.6 19.3 35.5 19.5M27.5 26.5C29.8 25.3 32.6 24.8 35.5 25" stroke="#e0592a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  </g>
+  <!-- Écriture — encre violette : un crayon qui trace une boucle. -->
+  <g transform="translate(799.5 102) scale(1.3333)">
+    <circle cx="24" cy="24" r="24" fill="#7a5af5"/>
+    <path d="M8.5 36.5C11.5 36.5 13 31.5 16 31.5C19 31.5 18 36.5 21 36.5C22.6 36.5 23.8 35.4 24.8 34" stroke="#ddd5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <g transform="rotate(45 30 21)">
+      <rect x="25" y="6" width="10" height="22" rx="2.5" fill="#ffffff"/>
+      <path d="M25 28H35L30 36Z" fill="#ddd5ff"/>
+      <rect x="25" y="9.5" width="10" height="2.6" fill="#7a5af5"/>
+    </g>
+  </g>
+  <!-- Calcul — bissap : un escalier de cubes. -->
+  <g transform="translate(799.5 334) scale(1.3333)">
+    <circle cx="24" cy="24" r="24" fill="#c9407e"/>
+    <rect x="9" y="29" width="8.5" height="8.5" rx="2.2" fill="#ffffff"/>
+    <rect x="19.75" y="29" width="8.5" height="8.5" rx="2.2" fill="#ffffff"/>
+    <rect x="19.75" y="19.25" width="8.5" height="8.5" rx="2.2" fill="#f5cbdf"/>
+    <rect x="30.5" y="29" width="8.5" height="8.5" rx="2.2" fill="#ffffff"/>
+    <rect x="30.5" y="19.25" width="8.5" height="8.5" rx="2.2" fill="#f5cbdf"/>
+    <rect x="30.5" y="9.5" width="8.5" height="8.5" rx="2.2" fill="#ffffff"/>
+  </g>
+
+  <!-- Le logo : le symbole de l'icône (brand/ecolna-mark.tsx) et le nom. -->
+  <g transform="translate(341 142) scale(0.09375)">
+    <rect width="1024" height="1024" rx="236" fill="#2f5bdb"/>
+    <path d="M512 370C444 300 344 286 256 294L256 740C344 732 444 746 512 816Z" fill="#ffffff"/>
+    <path d="M512 370C580 300 680 286 768 294L768 740C680 732 580 746 512 816Z" fill="#ffb81c"/>
+    <path d="M512 370L512 816" stroke="#2f5bdb" stroke-width="40" stroke-linecap="round"/>
+  </g>
+  <text x="457" y="209.6" font-family="Ecolna Sans" font-weight="700" font-size="56"
+        letter-spacing="-0.8" fill="#ffffff">ECOLNA</text>
+
+  <!-- La légende de la première capture, coupée au même endroit. Jamais
+       « officiel » ici : la bannière ne peut pas porter la phrase
+       d'indépendance (store/shared/mentions-programme-officiel.md). -->
+  <g font-family="Ecolna Sans" font-weight="800" font-size="40" letter-spacing="-0.9"
+     text-anchor="middle" fill="#ffffff">
+    <text x="512" y="300">Le CP tchadien,</text>
+    <text x="512" y="348">même <tspan fill="#ffb81c">sans internet</tspan>.</text>
+  </g>
 </svg>

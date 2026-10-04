@@ -1,103 +1,93 @@
-# Notes pour la review Apple (brouillon)
+<!-- App Store Connect → page de la version → « Informations pour la
+     vérification de l'app » (App Review Information) : champ « Notes » et bloc
+     de contact. COMPTE RÉEL du bloc à coller : 3 447 caractères sur 4 000
+     (espaces et retours compris, vérifié par script). Non publié. -->
 
-À coller dans le champ **Notes** de la section *App Review Information*
-d'App Store Connect (4 000 caractères maximum). Le bloc contient la version
-française puis la version anglaise : l'interface de l'app est intégralement en
-français, mais l'examen Apple se conduit en anglais, et c'est le seul endroit
-qui explique à l'examinateur le mode avion et l'accès à l'espace parent.
+# Notes pour l'examen Apple — 3 447 caractères sur 4 000
 
-## App Review Information — les quatre valeurs à saisir
+Le bloc contient la version française puis la version anglaise : l'interface
+est entièrement en français, l'examen se conduit le plus souvent en anglais, et
+c'est le seul endroit qui dit à l'examinateur comment examiner l'app en mode
+avion et comment entrer dans l'espace parent.
 
-La console demande ce bloc de contact **en même temps** que les notes, sur le
-même écran. Il n'est pas publié : il sert à joindre l'éditeur pendant l'examen.
+## Bloc de contact — à saisir sur le même écran
+
+La console demande ces valeurs **en même temps** que les notes. Elles ne sont
+pas publiées : elles servent à joindre l'éditeur pendant l'examen.
 
 | Champ | Valeur |
 |---|---|
 | Prénom | `Issa Oki` |
 | Nom | `ABDRAMANE` |
-| Téléphone | 🔴 À FOURNIR — format international, p. ex. `+33 6 XX XX XX XX` |
+| Téléphone | 🔴 À FOURNIR par le propriétaire — format international, p. ex. `+33 6 XX XX XX XX` |
 | E-mail | `issaokiabderamane@gmail.com` |
 | Connexion requise (*Sign-in required*) | **Non** |
 
-L'e-mail est celui de la politique de confidentialité (§10) et de la page de
-support : une adresse différente ici donnerait deux interlocuteurs pour une app
-éditée par une seule personne (`../shared/coordonnees-fiches.md`).
+L'e-mail est celui de la politique de confidentialité et de la page de
+support : une seule adresse pour une app éditée par une seule personne
+(`../shared/coordonnees-fiches.md`).
 
-« Connexion requise : **non** » est la ligne qui évite un aller-retour :
-sans elle, un examinateur cherche un compte de démonstration, n'en trouve
-aucun, et la version repart en attente. Aucun identifiant, aucun code, aucune
-pièce jointe — le parcours complet est accessible dès l'installation, en mode
-avion.
+« Connexion requise : **non** » évite un aller-retour : sans elle, un
+examinateur cherche un compte de démonstration qui n'existe pas. Aucun
+identifiant, aucun code, aucune pièce jointe : tout le parcours est accessible
+dès l'installation, en mode avion.
 
-## Bloc à copier (2 775 caractères, limite 4 000)
+## TEXTE EXACT À COLLER
 
-```
-ECOLNA 1.0.0 — notes pour l'examen
+<!-- début du texte à coller -->
+ECOLNA 1.0.0 — notes pour l’examen
 
-1. Application éducative en français pour les enfants de 6 à 8 ans (CP1 et
-   CP2), adossée au programme national de l'enseignement primaire de la
-   République du Tchad (Ministère de l'Éducation Nationale / Centre National
-   des Curricula, 2004). Toute l'interface est en français ; il n'existe pas
-   d'autre langue.
-2. Aucun compte, aucune identification, aucun mot de passe. Le profil (prénom
-   choisi librement, avatar, niveau) est créé en trois écrans et reste dans
-   une base de données locale.
-3. Aucun appel réseau à l'exécution : l'application peut être examinée
-   intégralement en mode avion, dès le premier lancement. Les 308 leçons, les
-   1 625 exercices et les 824 enregistrements de voix sont embarqués.
-4. L'espace « Parents » (progression, réglages, réinitialisation) est placé
-   derrière une question de multiplication, hors de portée d'un enfant de cet
-   âge. Pour entrer : répondre 42 à « 7 × 6 ». Après une réponse incorrecte,
-   la question change ; les réponses attendues sont 42, 56, 54, 56, 48.
-5. Le bouton « Partager la progression », dans l'espace Parents, ouvre la
-   feuille de partage du système, à l'initiative du parent et avec le texte
-   visible avant l'envoi. C'est la seule sortie de données de l'application.
-6. Aucune collecte de données, aucun SDK tiers, aucune publicité, aucun achat
-   intégré, aucune mesure d'audience. Politique de confidentialité :
-   https://aboky2.github.io/eduForAll/
+1. Application éducative en français pour les enfants de 6 à 8 ans (CP1 et CP2), construite d’après le programme de l’enseignement primaire de la République du Tchad (2004). ECOLNA est une publication indépendante, sans lien avec le ministère. Toute l’interface est en français.
+2. Aucun compte, aucune connexion, aucun mot de passe. Au premier lancement : trois pages d’accueil, puis « Créer mon profil » (personnage, prénom libre, classe). Le profil reste dans une base de données locale, sur l’appareil.
+3. Aucun appel réseau : l’app s’examine entièrement en mode avion, dès le premier lancement. Les 308 leçons, 1 625 exercices et 824 fichiers audio sont embarqués. Le son joue même en mode silencieux.
+4. Pour voir un exercice : sur l’Accueil, toucher « Commencer » sur la carte de la leçon du jour. Chaque consigne est dite à voix haute. Sur iPad, l’app tourne dans les deux orientations.
+5. Espace parent : onglet « Parents », en bas de l’écran. Une multiplication s’affiche (la première est « 7 × 6 ») : écrire le résultat au clavier numérique, 42, puis toucher « Entrer ». Après une réponse fausse, une autre multiplication s’affiche : en écrire le résultat. Derrière : le tableau de bord, les paramètres (son, confidentialité, diagnostic, réinitialisation) et les deux seuls partages de l’app.
+6. Ces deux partages — « Partager » sur le tableau de bord, « Exporter le diagnostic » dans les paramètres — ouvrent la feuille de partage du système, à l’initiative du parent, avec un texte court visible avant l’envoi. L’app n’envoie rien elle-même.
+7. Aucune collecte de données, aucun SDK tiers, aucune publicité, aucun achat intégré, aucune mesure d’audience, aucun lien sortant. Politique de confidentialité : https://aboky2.github.io/eduForAll/
 
 ECOLNA 1.0.0 — review notes
 
-1. Educational app for children aged 6 to 8 in Chad (first two primary
-   grades), built on the official Chadian primary curriculum (Ministry of
-   Education / Centre National des Curricula, 2004). The whole interface is in
-   French, the language of instruction in Chad; there is no English version.
-2. No account, no sign-in, no password. The profile (first name typed freely,
-   avatar, grade) is created in three screens and stays in a local database.
-3. The app works fully in airplane mode: there is no network call at runtime,
-   from the first launch onwards. The 308 lessons, 1,625 exercises and 824
-   voice recordings all ship inside the app.
-4. The Parents area (progress, settings, reset) is behind a multiplication
-   question a child of that age cannot solve. To get in: answer 42 to
-   "7 × 6". After a wrong answer the question changes; the expected answers
-   are 42, 56, 54, 56, 48.
-5. "Partager la progression" (Share progress), inside the Parents area, opens
-   the system share sheet on the parent's own action, with the text visible
-   before sending. It is the only way any data leaves the app.
-6. No data collection, no third-party SDK, no advertising, no in-app
-   purchase, no analytics. Privacy policy:
-   https://aboky2.github.io/eduForAll/
-```
+1. Educational app in French for children aged 6 to 8 in Chad (first two primary grades, CP1 and CP2), built from the Chadian primary curriculum (2004). ECOLNA is an independent publication, not affiliated with the Ministry of Education. The whole interface is in French, the language of instruction in Chad.
+2. No account, no sign-in, no password. On first launch: three welcome pages, then “Créer mon profil” (character, first name typed freely, grade). The profile stays in a local database on the device.
+3. No network call: the app can be reviewed entirely in airplane mode, from the first launch. The 308 lessons, 1,625 exercises and 824 audio files ship inside the app. Sound plays even with the silent switch on.
+4. To see an exercise: on the home screen (“Accueil”), tap “Commencer” on the lesson card. Every instruction is read aloud. On iPad the app runs in both orientations.
+5. Parents area: the “Parents” tab at the bottom of the screen. A multiplication is shown (the first one is “7 × 6”): type the result on the number pad, 42, then tap “Entrer”. After a wrong answer another multiplication is shown: type its result. Behind it: the dashboard, the settings (sound, privacy, diagnostics, reset) and the app’s only two sharing actions.
+6. Both — “Partager” on the dashboard and “Exporter le diagnostic” in the settings — open the system share sheet on the parent’s own action, with a short text visible before sending. The app itself sends nothing.
+7. No data collection, no third-party SDK, no advertising, no in-app purchase, no analytics, no external link. Privacy policy: https://aboky2.github.io/eduForAll/
+<!-- fin du texte à coller -->
 
 ## Ne pas copier dans App Store Connect
 
-**Portail parental — durci, plus de point bloquant.**
-`app/(parent)/gate.tsx` a longtemps affiché trois réponses au choix
-(« 7 × 6 » → 36 / 42 / 48), sans limite de tentatives ni délai : une chance
-sur trois à chaque essai, en boucle. Un portail parental devinable est un
-motif de rejet connu de la catégorie Enfants (App Review Guidelines 1.3).
-Le résultat se **saisit** désormais au clavier numérique, sans réponse
-affichée, et l'opération change à chaque échec : le hasard ne porte plus.
+**Ce que le bloc décrit, et où le vérifier dans le build soumis.**
 
-Les trois fiches qui affirment que l'espace parent est « protégé » —
-`store/app-store/description-fr.md`, `store/app-store/privacy-answers.md` et
-`store/google-play/families-checklist.md` — sont donc exactes. Le point 4 des
-deux versions ci-dessus décrit la saisie : la
-question citée et sa réponse doivent correspondre au build soumis.
+| Point | Source |
+|---|---|
+| Portail : multiplication saisie au clavier numérique, aucune réponse proposée, opération changée à chaque échec | `app/(parent)/gate.tsx` |
+| La première question est « 7 × 6 » | premier élément de `CHALLENGES` dans `gate.tsx` — à recontrôler si la liste change |
+| Onglet « Parents » | `app/(child)/(tabs)/_layout.tsx` → `/(parent)/gate` |
+| Deux partages, tous deux derrière le portail | `app/(parent)/dashboard.tsx` (« Partager », résumé : prénom, leçons terminées, classe) et `app/(settings)/diagnostics.tsx` (« Exporter le diagnostic » : version du contenu, compteurs, derniers avertissements, sans prénom) |
+| Son en mode silencieux | `learning-audio-service.ts` : `playsInSilentMode: true` |
+| Trois pages d'accueil, puis profil en trois étapes | `app/(onboarding)/index.tsx`, `create-profile.tsx` |
 
-Autres champs de la même section, hors champ Notes :
+Le bloc ne liste **pas** les réponses suivantes du portail ni leur ordre :
+l'examinateur n'en a pas besoin (il suffit de calculer), et ce fichier vit dans
+le dépôt. Écrire la suite des réponses ici reviendrait à publier le moyen de
+franchir le portail sans calculer.
 
-- *Sign-in required* : **non**. Aucun compte de démonstration, aucune pièce
-  jointe nécessaire — le parcours complet est accessible dès l'installation.
-- Le bloc de contact (nom, téléphone, e-mail) est en tête de ce fichier. Seul
-  le téléphone reste 🔴 À FOURNIR.
+Les deux versions ne disent plus « Partager la progression » ni « c'est la
+seule sortie de données » : le bouton s'appelle « Partager », et l'export du
+diagnostic est une seconde sortie, elle aussi à l'initiative du parent. Une
+note qui contredit le build est un motif de rejet.
+
+**Portail parental — durci, plus de point bloquant.** `gate.tsx` affichait
+autrefois trois réponses au choix (une chance sur trois par essai, sans limite).
+Le résultat se saisit désormais au clavier numérique, sans réponse affichée, et
+l'opération change à chaque échec. Les fiches qui disent l'espace parent
+« protégé » sont exactes.
+
+Autres champs de la même section :
+
+- *Sign-in required* : **non**. Aucun compte de démonstration, aucune pièce
+  jointe.
+- Le bloc de contact est en tête de ce fichier ; seul le téléphone reste
+  🔴 À FOURNIR.

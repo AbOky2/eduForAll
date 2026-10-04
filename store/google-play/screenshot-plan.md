@@ -1,74 +1,72 @@
-# Plan de captures Google Play
+<!-- Plan des captures Play — pas un champ de console. Les plans, leur ordre
+     et leurs légendes vivent dans store/screenshots/plan.json (seule source) ;
+     ce fichier dit lesquels vont sur Play, pourquoi, et ce que Play exige. -->
 
-Les plans, leur ordre et leurs légendes vivent dans
-`store/screenshots/plan.json` : **9 plans**, mis en scène sur le profil fictif
-« Amina », CP1, une douzaine de leçons terminées. Aucune donnée réelle, aucun
-écran de développement.
+# Plan des captures Google Play
 
-Ce fichier ne recopie pas la liste. `plan.json` en est la seule source, et
-c'est lui que lit `npm run store:screenshots`. Les mêmes plans servent à
-l'App Store, dans le même ordre ; seuls les formats changent
-(`store/app-store/screenshot-plan.md`).
+**Huit plans sur dix** (Play en accepte 8 au plus par type d'appareil) : ceux
+dont `"play": true` dans `store/screenshots/plan.json`. Les légendes ne sont
+pas recopiées ici : `plan.json` est la seule source, et c'est lui que lit
+`npm run store:screenshots`.
+
+## Les huit plans retenus
+
+| # | Plan (`id`) | Rôle dans l'histoire |
+|---|---|---|
+| 1 | `01-accueil` | la promesse : le CP tchadien, sans internet |
+| 2 | `02-image` | la voix : écouter le mot, trouver l'image |
+| 3 | `03-ecriture` | le geste : tracer la lettre du doigt |
+| 4 | `04-parcours` | l'année entière, semaine après semaine |
+| 5 | `05-lecture` | les sons et les syllabes, dits à voix haute |
+| 6 | `06-calcul` | compter avec des objets familiers |
+| 7 | `07-reussite` | des encouragements, jamais de pression |
+| 8 | `10-parent` | l'adulte : ses progrès expliqués simplement |
+
+Écartés : `08-matieres` (les quatre disciplines se lisent déjà sur
+l'accueil) et `09-badges` (les badges apparaissent sur l'écran de réussite).
+Les huit légendes se suffisent : aucune ne renvoie à une capture absente.
+
+Règles Play pour les visuels de fiche, captures comprises : ni prix ni
+« gratuit », ni classement ni superlatif, ni appel à l'action (« Télécharge »),
+ni émoji en série. Aucune légende ne nomme le ministère ni ne dit
+« officiel » (`../shared/mentions-programme-officiel.md`), aucune ne dit
+« tablette » : la même légende sert au téléphone.
+
+## Formats exigés
+
+| Cible | Dimensions produites | Nombre |
+|---|---|---|
+| Téléphone | 1080 × 1920 (9:16) | 2 minimum, 8 maximum |
+| Tablette 7" | 1920 × 1200, paysage | 8 maximum — nécessaire pour la fiche tablette |
+| Tablette 10" | même rendu que la 7" | 8 maximum — nécessaire pour la fiche tablette |
+| Image de mise en avant | 1024 × 500, sans transparence | 1, obligatoire |
+| Icône | 512 × 512 PNG | 1 |
+
+ECOLNA vise la tablette : renseigner les deux formats tablette, sinon Play
+présente la fiche comme une « application téléphone » sur les tablettes.
 
 ## Fabrication
 
-Les pixels de l'application viennent d'un appareil, le cadre et la légende du
-script :
+Les captures brutes (`store/screenshots/raw/`) sont le rendu du **vrai code**
+de l'app par le banc web (`scripts/web-preview/capture.cjs`, react-native-web),
+profil de démonstration « Amina », aux résolutions exactes des appareils ;
+aucun pixel n'est dessiné. Le script ne fait qu'encadrer et légender :
 
 ```bash
-# captures brutes attendues dans store/screenshots/raw/
-#   <id>.png            → téléphone      (ex. 01-accueil.png)
-#   <id>@tablette.png   → tablette
 npm run store:screenshots -- --format play-telephone
 npm run store:screenshots -- --format play-tablette
 ```
 
-Les identifiants attendus sont ceux de `plan.json` ; le script liste les
-fichiers manquants. Dessiner, simuler ou retoucher une capture est un motif de
-rejet déclaré chez Google comme chez Apple (App Review 2.3.3).
-
-🔴 À FOURNIR : les captures brutes des 9 plans, prises depuis un build
-installé, sur une vraie tablette Android **et** sur un vrai téléphone Android.
-
-## Formats exigés
-
-| Cible | Dimensions | Nombre |
-|---|---|---|
-| Téléphone | 16:9 ou 9:16, côté 320–3840 px — produites en 1080 × 1920 | 2 min, 8 max |
-| Tablette 7" | idem — produites en 1920 × 1200, paysage | 8 max — nécessaire pour la fiche tablette |
-| Tablette 10" | idem — même rendu que la tablette 7" | 8 max — nécessaire pour la fiche tablette |
-| Image de mise en avant | **1024 × 500**, sans transparence | 1, obligatoire |
-| Icône | 512 × 512 PNG | 1 |
-
-ECOLNA vise la tablette : renseigner les deux formats tablette, sinon la
-fiche s'affiche en « application téléphone » sur les tablettes. Les captures
-tablette se prennent en paysage, puisque c'est ainsi que l'enfant tient
-l'appareil et que les mises en page passent en deux volets.
+Avant l'envoi, comparer chaque plan à un build Android installé : un écart
+visible se corrige en retournant la capture, jamais en la retouchant (règles
+Play sur les métadonnées trompeuses).
 
 ## Image de mise en avant
 
-Livrée : `graphics/feature-graphic-1024x500.png`, rendue depuis
-`graphics/feature-graphic-src.svg` par `npm run brand:assets`. Fond bleu
-pétrole **#1f5473**, le livre ouvert aux deux pages jointes, le mot-symbole
-ECOLNA en sable (#fbf3e4) et deux lignes en #e0b184 :
-
-```text
-Le programme officiel du CP.
-Entièrement hors connexion.
-```
-
-Tout le contenu tient dans les 80 % centraux : Google rogne les bords et
-superpose un bouton de lecture au centre. La police Quicksand est injectée au
-rendu, pas embarquée dans le SVG.
-
-### Le bleu de la marque est #1f5473
-
-Tranché : **#1f5473**. C'est la valeur de l'icône
-(`assets/icons/ecolna-logo-source.svg`), de l'écran de lancement, de l'icône
-adaptative Android, de cette bannière et de la page de confidentialité.
-
-Le jeton `secondary` de `src/design-system/tokens/colors.ts` vaut encore
-#2b6485 et reste le bleu de l'interface : 23 fichiers s'appuient sur lui, le
-changer déplacerait la palette de toute l'app et sort du périmètre de la
-v1.0.0. Les assets de store, eux, n'utilisent que #1f5473 — ne plus décrire
-#2b6485 comme « la couleur de l'icône », ce n'est plus vrai.
+Livrée : `graphics/feature-graphic-1024x500.png`, rendue depuis
+`graphics/feature-graphic-src.svg` par `npm run brand:assets`. Ses deux lignes
+de texte vivent dans le SVG ; la même règle s'y applique qu'aux légendes : ni
+prix, ni classement, et pas d'« officiel » sans phrase d'indépendance — or
+une bannière ne peut pas la porter (voir
+`../shared/mentions-programme-officiel.md`, tableau « Où elle doit
+apparaître »).

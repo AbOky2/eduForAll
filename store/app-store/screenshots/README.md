@@ -1,69 +1,83 @@
-<!-- Où sont les captures App Store, et pourquoi ce dossier ne les contient
-     pas. Aucune limite de caractères ; des limites de DIMENSIONS, elles,
-     sont impératives : App Store Connect refuse un pixel d'écart. -->
+<!-- Où sont les captures App Store, ce qu'elles sont, et ce qu'il reste à
+     vérifier avant de les soumettre. Aucune limite de caractères ; des limites
+     de DIMENSIONS, elles, sont impératives : App Store Connect refuse un pixel
+     d'écart. -->
 
-# Captures App Store — où elles vivent
+# Captures App Store : où elles vivent
 
-Ce dossier **ne contient pas** d'images, et n'en contiendra pas : une seule
+Ce dossier **ne contient pas** d'images, et n'en contiendra pas : une seule
 chaîne produit les captures des deux stores, et une deuxième copie des mêmes
 fichiers divergerait au premier recadrage.
 
 | Étape | Emplacement |
 |---|---|
-| Captures brutes, prises sur un appareil réel | `../../screenshots/raw/` |
+| Captures brutes (rendu du vrai code, voir plus bas) | `../../screenshots/raw/` |
 | Plans, ordre et légendes (source unique) | `../../screenshots/plan.json` |
-| Fichiers prêts à téléverser — iPhone 6,9" | `../../screenshots/out/app-store-iphone/` |
-| Fichiers prêts à téléverser — iPad 13" | `../../screenshots/out/app-store-ipad/` |
-| Mode d'emploi complet | `../../screenshots/README.md` |
+| **À téléverser : iPhone 6,9"** | `../../screenshots/out/app-store-iphone/` |
+| **À téléverser : iPad 13"** | `../../screenshots/out/app-store-ipad/` |
+| Règle, formats, mode d'emploi complet | `../../screenshots/README.md` |
 
-```bash
-npm run store:screenshots -- --format app-store-iphone
-npm run store:screenshots -- --format app-store-ipad
-```
+## État au 4 octobre 2026
+
+**Produites :** dix captures iPhone 6,9" (1320 × 2868, portrait) et dix
+captures iPad 13" (2752 × 2064, paysage), de `01-accueil` à `10-parent`. Les
+téléverser **dans l'ordre des noms** : Apple montre les premières dans les
+résultats de recherche, et la série a été ordonnée pour cela (accueil, puis
+une activité par matière).
+
+**Ce qu'elles sont :** le rendu du vrai code de l'app par le banc web
+(react-native-web), aux résolutions exactes de ces deux appareils, avec le
+profil fictif « Amina ». Rien n'est dessiné ni retouché. Ce ne sont pas pour
+autant des captures d'appareil.
+
+🔴 **Reste à faire, et c'est bloquant pour la soumission en revue :** installer
+le build par TestFlight sur un iPhone et un iPad, afficher les dix écrans dans
+le même état, et comparer. Tout écran qui diffère est remplacé par la capture
+de l'appareil. Un iPhone 6,9" (16 Pro Max, 17 Pro Max) capture en
+1320 × 2868 et un iPad Pro 13" (M4 ou plus récent) en 2752 × 2064 : les
+dimensions exactes de `raw/`. Il suffit de déposer le fichier sous le même nom,
+puis de recomposer. Attention : un iPad Air 13" capture en 2732 × 2048, et la
+composition exige des dimensions identiques pour toute la série tablette.
+Règle complète : `../../screenshots/README.md`, « La règle d'abord ».
 
 ## Formats exigés par App Store Connect
 
 | Cible | Dimensions produites | Nombre |
 |---|---|---|
-| iPhone 6,9" | **1320 × 2868** (portrait) | 1 minimum, 10 maximum |
-| iPad 13" | **2752 × 2064** (paysage) | 1 minimum — **obligatoire** |
+| iPhone 6,9" | **1320 × 2868** (portrait) | 1 minimum, 10 maximum (10 fournies) |
+| iPad 13" | **2752 × 2064** (paysage) | 1 minimum, **obligatoire** (10 fournies) |
 
-L'iPad n'est pas optionnel : `app.config.ts` déclare `supportsTablet: true`,
+L'iPad n'est pas optionnel : `app.config.ts` déclare `supportsTablet: true`,
 et Apple exige alors le jeu iPad. Apple accepte l'iPad 13" en portrait
-(2064 × 2752) comme en paysage ; **le paysage est retenu**, parce que c'est
-ainsi que l'enfant tient la tablette et que les mises en page passent en deux
-volets. Les captures tablette se prennent donc d'abord.
+(2064 × 2752) comme en paysage. **Le paysage est retenu**, parce que c'est
+ainsi que l'enfant tient la tablette et que les écrans y passent en deux
+volets.
 
-## Ce qui manque
+Fichiers : PNG RVB 8 bits sans transparence, ce qu'App Store Connect accepte.
 
-🔴 À FOURNIR : les 9 captures brutes, en portrait iPhone **et** en paysage iPad.
-Deux chemins, le même résultat.
+## Refaire les captures
 
-**Chemin automatisé, sur simulateur iOS** — l'app tourne vraiment, affiche ses
-propres données, et `xcrun simctl io booted screenshot` enregistre ce que
-l'écran montre :
+Après toute modification d'interface :
 
 ```bash
-node scripts/tools/seed-demo-profile.mjs        # profil « Amina », CP1, leçons terminées
-node scripts/tools/capture-ios-screenshots.mjs  # iPhone amorcé
-node scripts/tools/capture-ios-screenshots.mjs --suffixe @tablette   # iPad amorcé
+# 1. le banc web, dans un premier terminal (docs/visual-qa.md)
+ECOLNA_WEB_PREVIEW=1 EXPO_NO_TELEMETRY=1 BROWSER=none npx expo start --web --port 8081
+# 2. les vingt captures brutes, iPhone et iPad, puis la composition
+scripts/tools/capture-store-screenshots.sh --composer
+# ou un seul format :
+npm run store:screenshots -- --format app-store-iphone
+npm run store:screenshots -- --format app-store-ipad
 ```
 
-**Chemin appareil en main** — un iPhone et un iPad réels, un build
-`eas build --profile preview` installé, l'app mise dans l'état décrit par
-`../../screenshots/README.md` (profil fictif « Amina », CP1, une douzaine de
-leçons terminées, quelques badges, aucune donnée réelle d'enfant, aucun écran de
-développement), puis les 9 plans de `plan.json` déposés dans
-`../../screenshots/raw/` aux noms attendus (`01-accueil.png`,
-`01-accueil@tablette.png`, …).
+Pour une capture native sans appareil, il existe un chemin par simulateur iOS
+(macOS et Xcode requis) : `scripts/tools/seed-demo-profile.mjs`, puis
+`scripts/tools/capture-ios-screenshots.mjs [--suffixe @tablette]`. ⚠️ Ce
+second script suit encore **l'ancien plan de neuf captures** (`02-modules`,
+`09-parent`…, écrans d'avant la v4) : en l'état, il écrirait des fichiers que
+la composition ignore. L'aligner sur `plan.json` avant de s'en servir.
 
-Dans les deux cas, finir par les commandes de composition ci-dessus.
-
-**Ne pas dessiner, simuler ni retoucher une capture** : c'est un motif de rejet
-déclaré (App Review 2.3.3). Un simulateur qui exécute l'app n'est pas une
-capture fabriquée — une image composée à la main en est une, et la chaîne refuse
-de la produire : elle encadre des pixels venus de l'app, elle n'en invente
-aucun.
-
-Tant que ces fichiers n'existent pas, la soumission est incomplète : une
-capture iPhone 6,9" et une capture iPad 13" sont le minimum absolu.
+**Ne pas dessiner, simuler ni retoucher une capture** : c'est un motif de
+rejet déclaré (règle 2.3.3 d'App Review). Le banc web et le simulateur
+exécutent le code de l'app : leurs images ne sont pas fabriquées. Une image
+composée ou retouchée à la main le serait, et la chaîne refuse d'en produire :
+elle encadre des pixels venus de l'app, elle n'en invente aucun.

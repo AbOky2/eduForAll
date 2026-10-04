@@ -1,66 +1,78 @@
-# Description complète Google Play
+<!-- Play Console → Fiche Play Store → « Description complète ».
+     COMPTE RÉEL : 3 407 caractères sur 4 000, balises comprises
+     (3 326 sans les balises) — vérifié par script. -->
 
-Google Play ne rend qu'un petit sous-ensemble HTML dans ce champ :
-`<b>`, `<i>`, `<u>`, `<em>`, `<strong>`, `<br>`, `<p>`, `<ul>`, `<ol>`, `<li>`.
-Le Markdown n'est pas interprété : des `**astérisques**` s'afficheraient tels
-quels dans la fiche publiée. Les sauts de ligne simples étant recollés, chaque
-ligne de liste se termine par un `<br>` et les paragraphes sont séparés par une
-ligne vide.
+# Description complète Google Play — 3 407 caractères sur 4 000
 
-Coller uniquement le bloc « TEXTE EXACT À COLLER », de la première à la
-dernière ligne, sans y ajouter de retour à la ligne : une ligne du bloc est une
-ligne de la fiche. Puis relire l'aperçu de Play Console : s'il montre une ligne
-vide entre chaque puce, c'est que le champ a conservé les retours à la ligne —
-supprimer alors les `<br>`.
+Google Play ne rend qu'un petit sous-ensemble HTML dans ce champ : `<b>`,
+`<i>`, `<u>`, `<em>`, `<strong>`, `<br>`, `<p>`, `<ul>`, `<ol>`, `<li>`. Le
+Markdown n'est pas interprété. Chaque ligne de liste se termine par `<br>` et
+les paragraphes sont séparés par une ligne vide.
+
+Coller uniquement le bloc ci-dessous, de la première à la dernière ligne, sans
+y ajouter de retour à la ligne. Il contient des espaces insécables (devant
+: ; ! ? », après «, dans « 1 625 ») : copier depuis le fichier brut. Puis
+relire l'aperçu de Play Console : s'il montre une ligne vide entre chaque
+puce, le champ a conservé les retours — supprimer alors les `<br>`.
+
+Play montre la description courte en tête de fiche et le début de ce texte
+dans « À propos de cette appli » : le premier paragraphe porte donc toute la
+promesse.
 
 ## TEXTE EXACT À COLLER
 
 <!-- début du texte à coller -->
-<b>ECOLNA — Apprendre partout, même sans internet.</b>
+Lire, écrire, compter : votre enfant suit les deux années du CP tchadien, à son rythme, dans une application qui fonctionne entièrement sans internet. Chaque consigne est dite à voix haute — pas besoin de savoir lire pour commencer.
 
-ECOLNA accompagne les enfants de CP1 et CP2 dans l'apprentissage du langage, de la lecture, de l'écriture et du calcul. Tout est dans l'application : les 308 leçons, les 824 enregistrements, les images. Aucune connexion n'est nécessaire, ni au premier lancement ni ensuite.
+308 leçons (147 en CP1, 161 en CP2) et 1 625 exercices, construits d’après le programme officiel de l’enseignement primaire du Tchad et répartis sur l’année scolaire, trimestre après trimestre. Aucune publicité, aucun achat intégré, aucun compte, aucune donnée collectée.
 
-Le contenu suit le programme officiel de l'enseignement primaire tchadien. Les quatre disciplines du CP y tiennent la même place que dans la grille horaire du ministère, et les leçons se répartissent sur les trois trimestres de l'année.
+<b>Pour l’enfant</b><br>
+• Des leçons courtes, d’une dizaine de minutes, dans les quatre disciplines du CP : langage, lecture, écriture, calcul<br>
+• Écouter un mot et toucher son image, retrouver la syllabe entendue, remettre les mots d’une phrase dans l’ordre, écouter une petite histoire puis répondre<br>
+• Tracer ses lettres et ses chiffres du doigt, sur une ardoise aux lignes du cahier : une bille montre le chemin, trait après trait<br>
+• Des lettres dessinées comme à l’école : un seul « a », celui du cahier, et des b, d, p, q faciles à distinguer<br>
+• Des mots de tous les jours : la case, le puits, le mil, la calebasse, le boubou, le marché, la pirogue<br>
+• Le calcul en images : compter, ajouter, retirer et partager des chèvres, des mangues, des poules ; écouter un petit problème et le résoudre ; compter les pièces de 5 à 500 francs CFA<br>
+• Une erreur n’est jamais une sanction : l’enfant réécoute, un indice lui est dit à voix haute, et au bout de trois essais il passe à la suite — la notion reviendra plus tard<br>
+• Des étoiles à chaque leçon et 14 badges qui récompensent un vrai progrès
 
-<b>Pour l'enfant</b><br>
-• Les deux années du CP : 147 leçons en CP1, 161 en CP2 — 308 leçons et 1 625 exercices en tout<br>
-• Les quatre disciplines du CP : langage, lecture, écriture, calcul<br>
-• Toutes les consignes sont lues à voix haute : pas besoin de savoir lire pour commencer<br>
-• 27 types d'activités : écouter, toucher, tracer, composer des syllabes, compter, compter la monnaie, résoudre de petits problèmes de la vie courante<br>
-• Le calcul se fait en images, avec des objets du quotidien : chèvres, mangues, calebasses<br>
-• Un vocabulaire familier : la case, le puits, le mil, la calebasse, le marché, le berger, la pirogue<br>
-• 14 badges qui récompensent un vrai progrès, réunis dans l'écran « Mon profil »<br>
-• Étoiles, parcours illustré et progression visible
-
-Quand une notion résiste — le b confondu avec le d, le p avec le q — l'application la repère et la ramène dans les révisions des jours suivants. L'enfant ne voit pas une sanction : il revoit, simplement.
+Quand une notion résiste — le b confondu avec le d, le son « ou » avec le son « on » —, ECOLNA la repère et la propose de nouveau dans « On revoit ensemble ? ». L’enfant ne voit pas une sanction : il revoit, simplement.
 
 <b>Pour les parents</b><br>
-• Espace parent protégé : progression, notions à revoir, temps d'apprentissage, en phrases simples plutôt qu'en pourcentages<br>
-• Aucune publicité, aucun achat intégré, aucun abonnement<br>
-• Aucun compte, aucune adresse email, aucun mot de passe<br>
-• Aucune donnée collectée : le prénom, l'avatar et la progression restent sur l'appareil<br>
-• Pensée d'abord pour la tablette, elle fonctionne aussi sur téléphone, à la verticale comme à l'horizontale<br>
-• Fonctionne sans carte SIM et sans forfait : l'application ne consomme aucune donnée mobile
+• Un espace parent protégé par une multiplication à écrire : leçons terminées, minutes d’apprentissage jour après jour, progression par discipline, notions à revoir expliquées en phrases simples<br>
+• Aucune publicité, aucun achat intégré, aucun abonnement, aucun outil de mesure d’audience<br>
+• Aucun compte, aucune adresse e-mail, aucun mot de passe<br>
+• Le prénom, l’avatar et la progression restent sur l’appareil : rien n’est envoyé, sauf le résumé que vous décidez vous-même de partager<br>
+• L’application ne demande même pas l’autorisation d’accéder à internet : elle fonctionne sans carte SIM, sans wifi, et ne consomme aucune donnée mobile<br>
+• Pensée pour la tablette, en paysage comme en portrait ; elle fonctionne aussi sur téléphone
 
-<b>Pour l'enseignant</b><br>
-Le contenu est tiré des Programmes Réactualisés de l'Enseignement Primaire, Ministère de l'Éducation Nationale — Centre National des Curricula, N'Djaména, septembre 2004. Chaque leçon cite le contenu officiel et sa page, et porte son trimestre et sa semaine. Les quatre disciplines respectent le poids horaire de la grille de la page 128. ECOLNA est une publication indépendante : elle n'est ni éditée ni validée par le ministère.
+<b>Pour l’enseignant</b><br>
+Le contenu est tiré des Programmes Réactualisés de l’Enseignement Primaire (Ministère de l’Éducation Nationale — Centre National des Curricula, N’Djaména, septembre 2004). Chaque leçon porte son trimestre, sa semaine et la référence du contenu officiel, page comprise. Le nombre de leçons de chaque discipline suit la grille horaire officielle de la page 128 : la lecture d’abord, puis le langage, le calcul et l’écriture. Les dix-huit thèmes de langage du programme y figurent, comme les voyelles, les consonnes, les sons complexes et les syllabes inverses.
 
-Gratuit, sans compte, sans internet. L'école qui accompagne votre enfant, partout.
+ECOLNA est une publication indépendante. Elle n’est ni éditée ni validée par le Ministère de l’Éducation Nationale du Tchad, auquel elle n’est pas affiliée.
+
+Apprendre partout, même sans internet.
 <!-- fin du texte à coller -->
 
 ## Notes de rédaction
 
-- Longueur du bloc : 2 681 caractères, balises comprises, pour une limite Play
-  de 4 000. Recompter après toute retouche.
-- Les chiffres sont ceux de `docs/couverture-programme.md` (artefact généré) :
-  308 leçons pour les deux niveaux réunis, 147 en CP1 et 161 en CP2. Ne jamais
-  écrire « une année scolaire complète par niveau » : ce sont des totaux CP1 + CP2.
-- Les 14 badges viennent de `src/features/achievements/domain/achievements.ts`,
-  l'écran « Mon profil » de `app/(child)/profile.tsx`.
-- La tenue sur tablette d'entrée de gamme n'est volontairement pas revendiquée :
-  `docs/known-limitations.md` classe comme bloquante la régression mémoire
-  d'Hermes V1 (RN 0.85.3 / SDK 56, corrigée en SDK 57) et aucune mesure n'a été
-  faite sur l'appareil cible. La mention ne revient qu'après une mesure réelle
-  ou la montée en SDK 57 prévue en 1.1.0.
-- La phrase d'indépendance vis-à-vis du ministère est obligatoire : elle évite
-  de laisser croire à une publication officielle, côté Play comme côté Apple.
+- Le texte est celui de la fiche App Store (`../app-store/description-fr.md`),
+  à deux différences près : les intertitres en `<b>` et les fins de ligne en
+  `<br>`, et la puce sur l'autorisation internet, propre à Android. Les deux
+  fiches disent la même chose : toute retouche se fait des deux côtés. Le
+  tableau « D'où vient chaque affirmation » de la fiche App Store vaut aussi
+  pour celle-ci.
+- « L'application ne demande même pas l'autorisation d'accéder à internet » :
+  vrai des builds livrés, où `app.config.ts` bloque
+  `android.permission.INTERNET` (`ECOLNA_RELEASE=1`, profils preview et
+  production d'`eas.json`). Un build de développement la garde : ne jamais
+  vérifier cette phrase sur un build de développement.
+- Ni prix ni « gratuit » : la console affiche le prix ; le programme Familles
+  et les règles de métadonnées de Play écartent les mentions de prix et de
+  promotion. « Aucun achat intégré, aucun abonnement » décrit l'app.
+- Aucun lien sortant, aucune adresse web dans le texte (programme Familles).
+- La phrase d'indépendance est celle de
+  `../shared/mentions-programme-officiel.md`, identique sur les deux fiches.
+- La tenue sur tablette d'entrée de gamme n'est pas revendiquée : aucune mesure
+  sur l'appareil cible, régression mémoire d'Hermes ouverte
+  (`docs/known-limitations.md`).
