@@ -12,8 +12,24 @@ import type { ExpoConfig } from 'expo/config';
 
 function loadConfig(env: Record<string, string | undefined>): ExpoConfig {
   jest.resetModules();
-  const saved = { ...process.env };
-  Object.assign(process.env, env);
+  const saved = process.env;
+  // Hermétique : scripts/tools/eas-release.sh exporte déjà les ECOLNA_* du
+  // profil production avant de lancer les gates. Mêlées au scénario du test,
+  // elles masqueraient le cas « identifiant absent » et bloqueraient la release.
+  const scenario: NodeJS.ProcessEnv = { ...saved };
+  for (const key of Object.keys(scenario)) {
+    if (key.startsWith('ECOLNA_')) {
+      delete scenario[key];
+    }
+  }
+  for (const [key, value] of Object.entries(env)) {
+    if (value === undefined) {
+      delete scenario[key];
+    } else {
+      scenario[key] = value;
+    }
+  }
+  process.env = scenario;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const loaded = require('../../app.config') as { default: ExpoConfig };
