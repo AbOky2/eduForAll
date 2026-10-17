@@ -305,7 +305,7 @@ if [ "$DRY" = 1 ]; then
       echo "   ${EAS[*]} submit --platform android --profile production --id <build Android>${NI:+ $NI} --wait"
     fi
     if [ "$VEUT_IOS" = 1 ]; then
-      echo "   ${EAS[*]} submit --platform ios --profile production --id <build iOS>${NI:+ $NI} --wait --what-to-test \"…\""
+      echo "   ${EAS[*]} submit --platform ios --profile production --id <build iOS>${NI:+ $NI} --wait"
     fi
   fi
   echo
@@ -476,13 +476,17 @@ while read -r plat id v bv url; do
       ok "Android $v ($bv) → Play Console, test interne, brouillon"
       ;;
     ios)
+      # Pas de --what-to-test : EAS le refuse hors forfait Enterprise
+      # (« Changelog submission is currently available for Enterprise plan
+      # only », 17 octobre 2026), et l'envoi entier échoue. Le texte « À
+      # tester » se colle à la main dans TestFlight (affiché ci-dessous).
       lancer "${EAS[@]}" submit --platform ios --profile production --id "$id" \
-        $NI --wait \
-        --what-to-test "ECOLNA $v ($bv) — contenu $CONTENU. Parcourir accueil, une leçon de chaque matière, réussite, espace parent, en paysage et en portrait, en mode avion." ||
+        $NI --wait ||
         stop "Envoi iOS refusé." \
           "Causes fréquentes : ascAppId erroné, clé API App Store Connect absente d'EAS, conformité" \
           "export ou accords non signés dans App Store Connect. Relancer : --submit-only $id"
       ok "iOS $v ($bv) → App Store Connect ; visible dans TestFlight après traitement Apple (10 à 30 min)"
+      info "« À tester » à coller dans TestFlight : ECOLNA $v ($bv) — contenu $CONTENU. Parcourir accueil, une leçon de chaque matière, réussite, espace parent, en paysage et en portrait, en mode avion."
       ;;
   esac
 done <<<"$LIGNES"
