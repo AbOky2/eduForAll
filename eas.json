@@ -53,7 +53,8 @@
       },
       "ios": {
         "bundleIdentifier": "td.ecolna.app",
-        "language": "fr-FR"
+        "language": "fr-FR",
+        "ascAppId": "6812057771"
       }
     }
   }
